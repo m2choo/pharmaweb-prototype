@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웰체크 약사웹 — 단골고객 목록</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #F4F5F7;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ── LNB ── */
+.lnb {
+  position: fixed; left: 0; top: 0;
+  width: 200px; height: 100vh;
+  background: #fff;
+  border-right: 1px solid #E8EAED;
+  display: flex; flex-direction: column;
+  z-index: 10;
+}
+.lnb-logo { padding: 20px 20px 16px; border-bottom: 1px solid #E8EAED; }
+.lnb-logo svg { width: 100px; }
+.lnb-section { padding: 8px 0; }
+.lnb-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 20px; font-size: 13px; color: #555;
+  cursor: pointer; transition: background .1s;
+  position: relative; text-decoration: none;
+}
+.lnb-item:hover { background: #F4F5F7; }
+.lnb-item.active { background: #EBF2FF; color: #2563EB; font-weight: 600; }
+.lnb-item.active::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: #2563EB; border-radius: 0 2px 2px 0;
+}
+.lnb-badge {
+  margin-left: auto;
+  background: #EF4444; color: #fff;
+  font-size: 10px; font-weight: 700;
+  width: 16px; height: 16px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.lnb-icon { width: 16px; height: 16px; flex-shrink: 0; opacity: .6; }
+.lnb-item.active .lnb-icon { opacity: 1; }
+.lnb-bottom {
+  margin-top: auto;
+  border-top: 1px solid #E8EAED;
+  padding: 12px 16px;
+}
+.lnb-user { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.lnb-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #EBF2FF; color: #2563EB;
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.lnb-username { font-size: 12px; font-weight: 600; color: #111; }
+.lnb-pharmacy { font-size: 11px; color: #888; }
+.lnb-btns { display: flex; gap: 6px; }
+.lnb-btn-sm {
+  flex: 1; padding: 6px; font-size: 11px; color: #555;
+  border: 1px solid #E0E0E0; border-radius: 6px;
+  background: #fff; cursor: pointer; text-align: center;
+}
+
+/* ── MAIN ── */
+.main {
+  margin-left: 200px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.page-header {
+  height: 56px; flex-shrink: 0;
+  background: #fff; border-bottom: 1px solid #E8EAED;
+  display: flex; align-items: center; padding: 0 28px; gap: 12px;
+}
+.page-title { font-size: 17px; font-weight: 700; color: #111; }
+.page-count { font-size: 13px; color: #888; }
+.page-header-actions { margin-left: auto; display: flex; gap: 8px; }
+.btn-ghost {
+  padding: 7px 14px; font-size: 13px; color: #555;
+  border: 1px solid #E0E0E0; border-radius: 8px;
+  background: #fff; cursor: pointer; font-family: inherit;
+}
+.btn-primary-sm {
+  padding: 7px 14px; font-size: 13px; color: #fff;
+  background: #2563EB; border: none; border-radius: 8px;
+  cursor: pointer; font-family: inherit; font-weight: 600;
+}
+
+/* ── Filter Bar ── */
+.filter-bar {
+  background: #fff; border-bottom: 1px solid #E8EAED;
+  padding: 12px 28px; display: flex; align-items: center; gap: 10px;
+}
+.search-wrap {
+  position: relative; flex: 1; max-width: 320px;
+}
+.search-wrap svg {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  opacity: .4;
+}
+.search-input {
+  width: 100%; padding: 8px 12px 8px 34px;
+  font-size: 13px; font-family: inherit;
+  border: 1px solid #E0E0E0; border-radius: 8px;
+  background: #F8F9FA; outline: none;
+}
+.search-input:focus { border-color: #2563EB; background: #fff; }
+.filter-select {
+  padding: 7px 12px; font-size: 13px; font-family: inherit;
+  border: 1px solid #E0E0E0; border-radius: 8px;
+  background: #fff; color: #555; outline: none; cursor: pointer;
+}
+
+/* ── Table ── */
+.table-wrap {
+  flex: 1; overflow-y: auto; padding: 20px 28px;
+}
+.customer-table {
+  width: 100%; border-collapse: collapse;
+  background: #fff; border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.07);
+  overflow: hidden;
+}
+.customer-table thead tr {
+  background: #F8F9FA;
+  border-bottom: 2px solid #E8EAED;
+}
+.customer-table th {
+  padding: 12px 16px;
+  font-size: 12px; font-weight: 600; color: #888;
+  text-align: left; white-space: nowrap;
+}
+.customer-table tbody tr {
+  border-bottom: 1px solid #F2F4F6;
+  transition: background .1s;
+  cursor: pointer;
+}
+.customer-table tbody tr:last-child { border-bottom: none; }
+.customer-table tbody tr:hover { background: #F8FBFF; }
+.customer-table td {
+  padding: 14px 16px;
+  font-size: 13px; color: #333;
+  vertical-align: middle;
+}
+
+.cust-name-cell { display: flex; align-items: center; gap: 10px; }
+.cust-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #EBF2FF; color: #2563EB;
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.cust-name { font-weight: 600; color: #111; }
+.cust-birth { font-size: 11px; color: #888; margin-top: 2px; }
+
+.badge-reg {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #EBF2FF; color: #2563EB;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 8px; border-radius: 20px;
+}
+.badge-drug {
+  display: inline-flex; align-items: center;
+  background: #FEF3C7; color: #D97706;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 8px; border-radius: 20px;
+}
+
+.last-visit { font-size: 12px; color: #555; }
+.rx-count { font-weight: 600; color: #111; }
+
+.btn-detail {
+  padding: 5px 12px; font-size: 12px; font-family: inherit;
+  border: 1px solid #2563EB; color: #2563EB;
+  border-radius: 6px; background: #fff; cursor: pointer;
+  white-space: nowrap;
+}
+.btn-detail:hover { background: #EBF2FF; }
+</style>
+</head>
+<body>
+
+<!-- ── LNB ── -->
+<nav class="lnb">
+  <div class="lnb-logo">
+    <svg viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <text x="0" y="22" font-family="'Noto Sans KR', sans-serif" font-size="20" font-weight="700" fill="#2563EB">Wellcheck</text>
+    </svg>
+  </div>
+  <div class="lnb-section">
+    <div class="lnb-item active">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="#2563EB" stroke-width="1.4"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#2563EB" stroke-width="1.4" stroke-linecap="round"/></svg>
+      단골고객
+    </div>
+    <a class="lnb-item" href="처방전 목록 진입.html" style="text-decoration:none;color:inherit;">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#555" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
+      처방전
+      <span class="lnb-badge">N</span>
+    </a>
+    <div class="lnb-item" style="font-size:12px;color:#999;">앱 설치 문자 발송</div>
+  </div>
+  <div class="lnb-bottom">
+    <div class="lnb-user">
+      <div class="lnb-avatar">김</div>
+      <div>
+        <div class="lnb-username">김체크 약사</div>
+        <div class="lnb-pharmacy">하나누리 약국</div>
+      </div>
+    </div>
+    <div class="lnb-btns">
+      <button class="lnb-btn-sm">내 정보</button>
+      <button class="lnb-btn-sm">로그아웃</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main class="main">
+  <div class="page-header">
+    <span class="page-title">단골고객</span>
+    <span class="page-count">총 10명</span>
+    <div class="page-header-actions">
+      <button class="btn-ghost">내보내기 ↓</button>
+      <button class="btn-primary-sm">+ 단골 등록</button>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#555" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input class="search-input" type="text" placeholder="이름, 생년월일, 전화번호 검색">
+    </div>
+    <select class="filter-select">
+      <option>전체</option>
+      <option>다제복약 위험</option>
+      <option>최근 방문</option>
+    </select>
+    <select class="filter-select">
+      <option>최근 방문순</option>
+      <option>이름순</option>
+      <option>처방전 많은순</option>
+    </select>
+  </div>
+
+  <div class="table-wrap">
+    <table class="customer-table">
+      <thead>
+        <tr>
+          <th>고객명</th>
+          <th>성별 / 나이</th>
+          <th>연락처</th>
+          <th>최근 방문</th>
+          <th>누적 처방</th>
+          <th>다제복약</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="customerBody"></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+const customers = [
+  { name: '김철수', birth: '1980-01-01', age: 45, gender: '남', phone: '010-1234-5678', lastVisit: '2026-06-18', rxCount: 12, poly: true },
+  { name: '박지현', birth: '1992-03-15', age: 33, gender: '여', phone: '010-2345-6789', lastVisit: '2026-06-15', rxCount: 8,  poly: false },
+  { name: '이수민', birth: '1975-07-22', age: 50, gender: '여', phone: '010-3456-7890', lastVisit: '2026-06-12', rxCount: 21, poly: true },
+  { name: '김태양', birth: '1988-11-05', age: 37, gender: '남', phone: '010-4567-8901', lastVisit: '2026-06-10', rxCount: 5,  poly: false },
+  { name: '정하은', birth: '1995-02-28', age: 30, gender: '여', phone: '010-5678-9012', lastVisit: '2026-06-08', rxCount: 3,  poly: false },
+  { name: '홍재원', birth: '1968-09-14', age: 57, gender: '남', phone: '010-6789-0123', lastVisit: '2026-06-05', rxCount: 34, poly: true },
+  { name: '임소연', birth: '1983-05-30', age: 42, gender: '여', phone: '010-7890-1234', lastVisit: '2026-06-01', rxCount: 15, poly: false },
+  { name: '권도현', birth: '1990-12-03', age: 35, gender: '남', phone: '010-8901-2345', lastVisit: '2026-05-28', rxCount: 7,  poly: false },
+  { name: '오현석', birth: '1972-04-19', age: 53, gender: '남', phone: '010-9012-3456', lastVisit: '2026-05-20', rxCount: 28, poly: true },
+  { name: '강서연', birth: '1998-08-07', age: 27, gender: '여', phone: '010-0123-4567', lastVisit: '2026-05-15', rxCount: 2,  poly: false },
+];
+
+function render() {
+  const tbody = document.getElementById('customerBody');
+  tbody.innerHTML = customers.map(c => `
+    <tr onclick="goDetail()">
+      <td>
+        <div class="cust-name-cell">
+          <div class="cust-avatar">${c.name[0]}</div>
+          <div>
+            <div class="cust-name">${c.name}</div>
+            <div class="cust-birth">${c.birth}</div>
+          </div>
+        </div>
+      </td>
+      <td>${c.gender}성 · ${c.age}세</td>
+      <td>${c.phone}</td>
+      <td class="last-visit">${c.lastVisit}</td>
+      <td class="rx-count">${c.rxCount}건</td>
+      <td>${c.poly ? '<span class="badge-drug">⚠ 다제복약</span>' : '<span style="color:#aaa;font-size:12px">—</span>'}</td>
+      <td><button class="btn-detail" onclick="event.stopPropagation();goDetail()">상세보기</button></td>
+    </tr>
+  `).join('');
+}
+
+function goDetail() {
+  location.href = '단골 상세 진입.html';
+}
+
+render();
+</script>
+</body>
+</html>

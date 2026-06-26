@@ -40,11 +40,8 @@ body {
   position: relative;
 }
 .lnb-item:hover { background: #F4F5F7; }
-.lnb-item.active { background: #EBF2FF; color: #2563EB; font-weight: 600; }
-.lnb-item.active::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-  width: 3px; background: #2563EB; border-radius: 0 2px 2px 0;
-}
+.lnb-item.active { background: #2563EB; color: #fff; font-weight: 600; border-radius: 6px; margin: 0 8px; padding: 10px 12px; }
+.lnb-item.active svg path,.lnb-item.active svg circle,.lnb-item.active svg rect { stroke: #fff; }
 .lnb-badge {
   margin-left: auto;
   background: #EF4444; color: #fff;

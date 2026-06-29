@@ -1094,15 +1094,9 @@ function toggleCheck(id) {
     selectedRxIds.push(id);
     const rx = PRESCRIPTIONS.find(r => r.id === id);
     editingDrugsMap[id] = rx.drugs.map(d => Object.assign({}, d));
-    // 체크 시 자동 펼침
-    const expand = document.getElementById('rxexpand_' + id);
-    expand.innerHTML = renderDrugTableHTML(rx);
-    expand.classList.add('open');
-    document.getElementById('rxcard_' + id).classList.add('checked');
   } else {
     selectedRxIds.splice(idx, 1);
     delete editingDrugsMap[id];
-    // 체크 해제 시 닫힘
     document.getElementById('rxexpand_' + id).classList.remove('open');
     document.getElementById('rxcard_' + id).classList.remove('checked');
   }

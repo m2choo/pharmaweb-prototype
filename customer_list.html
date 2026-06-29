@@ -187,10 +187,15 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 .s2-drug-table tbody tr:last-child td{border-bottom:none;}
 .s2-drug-name{font-weight:500;color:#111;}
 .s2-drug-sub{font-size:11px;color:#888;margin-top:1px;}
-.s2-consent-row{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;background:#FFF8F0;border-top:1px solid #FDE8C8;}
-.s2-consent-check{width:16px;height:16px;accent-color:#F59E0B;cursor:pointer;flex-shrink:0;margin-top:1px;}
-.s2-consent-txt{font-size:12px;color:#7C5C00;line-height:1.6;}
-.s2-consent-txt strong{font-weight:700;}
+.s2-consent-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px;background:#FFF1F1;border-top:1px solid #FCA5A5;}
+.s2-consent-left{display:flex;align-items:flex-start;gap:10px;}
+.s2-consent-icon{width:20px;height:20px;border-radius:50%;border:2px solid #DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.s2-consent-icon span{font-size:11px;font-weight:900;color:#DC2626;line-height:1;}
+.s2-consent-title{font-size:13px;font-weight:700;color:#DC2626;}
+.s2-consent-sub{font-size:11.5px;color:#EF4444;margin-top:2px;}
+.s2-consent-radios{display:flex;align-items:center;gap:16px;flex-shrink:0;}
+.s2-consent-radio{display:flex;align-items:center;gap:5px;font-size:13px;color:#333;cursor:pointer;font-weight:500;}
+.s2-consent-radio input[type="radio"]{width:16px;height:16px;accent-color:#2563EB;cursor:pointer;}
 .s2-empty-tip{text-align:center;padding:40px 0;color:#AAA;font-size:13px;}
 
 /* Step 2 처방 변경 */
@@ -1037,10 +1042,21 @@ function renderDrugTableHTML(rx) {
       </div>
       ${hasSub ? `
       <div class="s2-consent-row">
-        <input type="checkbox" class="s2-consent-check" id="subConsent_${rx.id}">
-        <label for="subConsent_${rx.id}" class="s2-consent-txt" style="cursor:pointer;">
-          <strong>대체조제 동의</strong> — 위 처방전 중 대체조제 표시 의약품에 대해 동일 성분·동일 함량의 다른 제조사 의약품으로 조제하는 것에 동의합니다.
-        </label>
+        <div class="s2-consent-left">
+          <div class="s2-consent-icon"><span>!</span></div>
+          <div>
+            <div class="s2-consent-title">대체 조제인가요?</div>
+            <div class="s2-consent-sub">환자에게 대체조제 사실을 알려야 합니다.</div>
+          </div>
+        </div>
+        <div class="s2-consent-radios">
+          <label class="s2-consent-radio">
+            <input type="radio" name="subConsent_${rx.id}" value="yes"> 네
+          </label>
+          <label class="s2-consent-radio">
+            <input type="radio" name="subConsent_${rx.id}" value="no"> 아니오
+          </label>
+        </div>
       </div>` : ''}
     </div>
   `;

@@ -109,7 +109,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 @keyframes mIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
 /* 왼쪽: 모달 패널 */
-.modal-panel{width:520px;flex-shrink:0;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;max-height:86vh;}
+.modal-panel{width:520px;flex-shrink:0;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;height:86vh;}
 .modal-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid #E8EAED;flex-shrink:0;}
 .modal-title{font-size:18px;font-weight:700;color:#111;}
 .modal-x{width:30px;height:30px;background:none;border:none;cursor:pointer;color:#888;font-size:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:inherit;}
@@ -119,6 +119,8 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 .modal-pt-avatar{width:32px;height:32px;border-radius:50%;background:#EBF2FF;color:#2563EB;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-pt-name{font-size:14px;font-weight:700;color:#111;}
 .modal-pt-info{font-size:12px;color:#888;margin-left:4px;}
+.modal-pt-remove{margin-left:auto;padding:4px 10px;background:none;border:1px solid #E0E0E0;border-radius:6px;font-size:11.5px;color:#888;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.modal-pt-remove:hover{background:#FEE2E2;border-color:#FCA5A5;color:#DC2626;}
 .step-tabs{display:flex;border-bottom:1px solid #E8EAED;flex-shrink:0;}
 .step-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:11px 0;font-size:11.5px;color:#BBB;border-bottom:2px solid transparent;white-space:nowrap;}
 .step-tab.on{color:#2563EB;border-bottom-color:#2563EB;font-weight:600;}
@@ -152,7 +154,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 .btn-cancel{height:40px;padding:0 20px;background:#fff;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;color:#555;cursor:pointer;font-family:inherit;}
 
 /* 오른쪽: 퍼즐 AI 패널 — 폰 화면 스타일 (흰색 배경) */
-.puzzle-panel{width:300px;flex-shrink:0;background:#fff;border-radius:24px;box-shadow:0 8px 40px rgba(0,0,0,.18);display:flex;flex-direction:column;height:86vh;overflow:hidden;border:1px solid #E8EBF0;}
+.puzzle-panel{width:320px;flex-shrink:0;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;height:86vh;overflow:hidden;border:1px solid #E8EBF0;}
 .pz-header{padding:16px 16px 10px;border-bottom:1px solid #F0F2F5;flex-shrink:0;background:#fff;}
 .pz-name-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .pz-name{font-size:16px;font-weight:700;color:#111;}
@@ -320,6 +322,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
           <span class="modal-pt-name" id="ptName"></span>
           <span class="modal-pt-info" id="ptInfo"></span>
         </div>
+        <button class="modal-pt-remove" onclick="removeCustomer()">✕ 고객 삭제</button>
       </div>
       <div class="step-tabs">
         <div class="step-tab on" id="st1"><span class="step-num">1</span> 고객 선택</div>
@@ -443,6 +446,25 @@ function closeModal() {
   document.getElementById('bd').classList.remove('on');
   stopTimer();
   stopStream();
+}
+
+function removeCustomer() {
+  selectedCustomer = null;
+  showAddForm = false;
+  // 모달 고객 헤더 초기화
+  const pt = document.getElementById('modalPt');
+  pt.classList.remove('on');
+  document.getElementById('ptAvatar').textContent = '';
+  document.getElementById('ptName').textContent = '';
+  document.getElementById('ptInfo').textContent = '';
+  // 퍼즐 AI 헤더 초기화
+  document.getElementById('pzName').innerHTML = '고객 선택 대기 중';
+  document.getElementById('pzVisit').textContent = '고객을 선택하면 방문 정보가 표시됩니다';
+  // Step1 다시 렌더
+  renderStep1();
+  // 스트림/타이머 재시작
+  stopStream(); stopTimer();
+  startTimer(); startStream();
 }
 
 const DEMO_LINES = [

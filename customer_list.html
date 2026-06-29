@@ -159,24 +159,33 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 
 /* Step 2 처방전 선택 */
 .s2-label{font-size:12px;font-weight:600;color:#555;margin-bottom:10px;display:block;}
-/* 처방전 체크박스 카드 목록 */
-.s2-rx-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
-.s2-rx-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid #E8EAED;border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none;}
+/* 일자 그룹 */
+.s2-date-group{margin-bottom:14px;}
+.s2-date-header{font-size:11.5px;font-weight:700;color:#888;padding:0 2px 6px;display:flex;align-items:center;gap:6px;}
+.s2-date-count{font-size:11px;background:#F0F0F0;color:#777;padding:1px 7px;border-radius:10px;font-weight:600;}
+/* 처방전 카드 */
+.s2-rx-list{display:flex;flex-direction:column;gap:0;}
+.s2-rx-card{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid #E8EAED;border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none;margin-bottom:6px;}
 .s2-rx-card:hover{border-color:#A0B4FF;background:#FAFBFF;}
-.s2-rx-card.checked{border-color:#2563EB;background:#EBF2FF;}
-.s2-rx-card-check{width:18px;height:18px;accent-color:#2563EB;cursor:pointer;flex-shrink:0;}
+.s2-rx-card.checked{border-color:#2563EB;background:#EBF2FF;border-bottom-left-radius:0;border-bottom-right-radius:0;margin-bottom:0;}
+.s2-rx-card-check{width:17px;height:17px;accent-color:#2563EB;cursor:pointer;flex-shrink:0;}
 .s2-rx-card-body{flex:1;min-width:0;}
-.s2-rx-card-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.s2-rx-card-top{display:flex;align-items:center;gap:8px;}
 .s2-rx-card-hospital{font-size:13px;font-weight:700;color:#111;}
 .s2-rx-card-dept{font-size:12px;color:#888;}
-.s2-rx-card-meta{font-size:11.5px;color:#888;margin-top:2px;}
-.s2-rx-card-chips{display:flex;gap:6px;margin-left:auto;flex-shrink:0;}
-.s2-rx-card-chip{font-size:11px;padding:2px 8px;border-radius:10px;background:#F4F5F7;color:#555;white-space:nowrap;}
+.s2-rx-card-meta{font-size:11.5px;color:#AAA;margin-top:1px;}
+.s2-rx-card-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.s2-rx-card-chip{font-size:11px;padding:2px 8px;border-radius:10px;background:#F4F5F7;color:#666;white-space:nowrap;}
 .s2-rx-card.checked .s2-rx-card-chip{background:#D1E0FF;color:#1D4ED8;}
+.s2-rx-chevron{transition:transform .18s;color:#BBB;flex-shrink:0;}
+.s2-rx-card.checked .s2-rx-chevron{transform:rotate(180deg);color:#2563EB;}
+/* 인라인 확장 (약품 테이블) */
+.s2-rx-expand{display:none;border:1.5px solid #2563EB;border-top:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;overflow:hidden;margin-bottom:6px;}
+.s2-rx-expand.open{display:block;}
 /* 선택된 처방전 약품 테이블 */
-.s2-rx-box{margin-bottom:14px;border:1px solid #E8EAED;border-radius:10px;overflow:hidden;}
-.s2-rx-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#F8F9FA;border-bottom:1px solid #E8EAED;}
-.s2-rx-hd-info{font-size:13px;color:#333;}
+.s2-rx-box{border:none;}
+.s2-rx-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#F0F5FF;border-bottom:1px solid #D1E0FF;}
+.s2-rx-hd-info{font-size:12.5px;color:#333;}
 .s2-rx-hd-info strong{font-weight:700;color:#111;}
 .s2-rx-img-btn{padding:5px 12px;border:1px solid #E0E0E0;border-radius:6px;background:#fff;font-size:11.5px;color:#555;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;white-space:nowrap;}
 .s2-rx-img-btn:hover{background:#F4F5F7;}
@@ -810,9 +819,9 @@ const PRESCRIPTIONS = [
   {
     id: 'rx5',
     date: '2026.06.22',
-    hospital: '웰빙내과의원',
+    hospital: '웰체크내과의원',
     dept: '내과',
-    doctor: '이상훈',
+    doctor: '김의사',
     days: 30,
     drugs: [
       { name: '아토르바스타틴정 10mg', ingredient: '아토르바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 30, sub: false },
@@ -825,9 +834,9 @@ const PRESCRIPTIONS = [
   {
     id: 'rx4',
     date: '2026.06.22',
-    hospital: '하나로안과의원',
+    hospital: '네모안과의원',
     dept: '안과',
-    doctor: '정수연',
+    doctor: '이의사',
     days: 7,
     drugs: [
       { name: '오플록사신점안액 0.3%', ingredient: '오플록사신', dosage: '1~2방울', freq: '1일 4회', days: 7, sub: false },
@@ -837,9 +846,9 @@ const PRESCRIPTIONS = [
   {
     id: 'rx3',
     date: '2026.05.15',
-    hospital: '웰체크의원',
+    hospital: '엠서클의원',
     dept: '내과',
-    doctor: '박지현',
+    doctor: '정의사',
     days: 90,
     drugs: [
       { name: '글리메피리드정 2mg', ingredient: '글리메피리드', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
@@ -851,9 +860,9 @@ const PRESCRIPTIONS = [
   {
     id: 'rx2',
     date: '2026.04.03',
-    hospital: '미소가정의학과의원',
+    hospital: '세모가정의학과의원',
     dept: '가정의학과',
-    doctor: '김민준',
+    doctor: '최의사',
     days: 30,
     drugs: [
       { name: '에소메프라졸마그네슘삼수화물캡슐 20mg', ingredient: '에소메프라졸마그네슘', dosage: '1캡슐', freq: '1일 1회', days: 30, sub: false },
@@ -865,9 +874,9 @@ const PRESCRIPTIONS = [
   {
     id: 'rx1',
     date: '2026.04.03',
-    hospital: '튼튼정형외과의원',
+    hospital: '네모네모정형외과의원',
     dept: '정형외과',
-    doctor: '최동훈',
+    doctor: '이의사',
     days: 5,
     drugs: [
       { name: '세레콕시브캡슐 200mg', ingredient: '세레콕시브', dosage: '1캡슐', freq: '1일 1회', days: 5, sub: false },
@@ -896,27 +905,45 @@ function renderStep2() {
   const B = document.getElementById('mbody');
   const F = document.getElementById('mfoot');
 
-  const cards = PRESCRIPTIONS.map(rx => `
-    <div class="s2-rx-card" id="rxcard_${rx.id}" onclick="toggleRxCard('${rx.id}')">
-      <input type="checkbox" class="s2-rx-card-check" id="rxchk_${rx.id}" onclick="event.stopPropagation();toggleRxCard('${rx.id}')">
-      <div class="s2-rx-card-body">
-        <div class="s2-rx-card-top">
-          <span class="s2-rx-card-hospital">${rx.hospital}</span>
-          <span class="s2-rx-card-dept">${rx.dept} · ${rx.doctor} 원장</span>
+  // 날짜별 그룹핑
+  const groups = {};
+  PRESCRIPTIONS.forEach(rx => {
+    if (!groups[rx.date]) groups[rx.date] = [];
+    groups[rx.date].push(rx);
+  });
+
+  const chevronSVG = `<svg class="s2-rx-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+
+  const groupHTML = Object.entries(groups).map(([date, rxList]) => `
+    <div class="s2-date-group">
+      <div class="s2-date-header">
+        ${date}
+        <span class="s2-date-count">${rxList.length}건</span>
+      </div>
+      ${rxList.map(rx => `
+        <div class="s2-rx-card" id="rxcard_${rx.id}" onclick="toggleRxCard('${rx.id}')">
+          <input type="checkbox" class="s2-rx-card-check" id="rxchk_${rx.id}" onclick="event.stopPropagation();toggleRxCard('${rx.id}')">
+          <div class="s2-rx-card-body">
+            <div class="s2-rx-card-top">
+              <span class="s2-rx-card-hospital">${rx.hospital}</span>
+              <span class="s2-rx-card-dept">${rx.dept} · ${rx.doctor}</span>
+            </div>
+            <div class="s2-rx-card-meta">${rx.days}일분 · ${rx.drugs.length}품목</div>
+          </div>
+          <div class="s2-rx-card-right">
+            <span class="s2-rx-card-chip">${rx.drugs.length}품목</span>
+            ${chevronSVG}
+          </div>
         </div>
-        <div class="s2-rx-card-meta">${rx.date} &nbsp;·&nbsp; ${rx.days}일분</div>
-      </div>
-      <div class="s2-rx-card-chips">
-        <span class="s2-rx-card-chip">${rx.drugs.length}품목</span>
-        <span class="s2-rx-card-chip">${rx.days}일</span>
-      </div>
+        <div class="s2-rx-expand" id="rxexpand_${rx.id}"></div>
+      `).join('')}
     </div>
   `).join('');
 
   B.innerHTML = `
-    <label class="s2-label">처방전 선택 <span style="color:#888;font-weight:400;">(최근 3개월, 최신순 · 복수 선택 가능)</span></label>
-    <div class="s2-rx-list">${cards}</div>
-    <div id="s2detail"></div>
+    <label class="s2-label">처방전 선택 <span style="color:#888;font-weight:400;">(최근 3개월 · 복수 선택 가능)</span></label>
+    <div id="s2polyAlert"></div>
+    <div class="s2-rx-list">${groupHTML}</div>
   `;
 
   F.innerHTML = `
@@ -927,50 +954,60 @@ function renderStep2() {
 
 function toggleRxCard(id) {
   const idx = selectedRxIds.indexOf(id);
-  if (idx === -1) {
+  const isChecking = idx === -1;
+
+  if (isChecking) {
     selectedRxIds.push(id);
-    // 편집용 약품 목록 초기화
     const rx = PRESCRIPTIONS.find(r => r.id === id);
     editingDrugsMap[id] = rx.drugs.map(d => Object.assign({}, d));
   } else {
     selectedRxIds.splice(idx, 1);
     delete editingDrugsMap[id];
   }
-  // 카드 스타일 업데이트
+
+  // 카드 스타일 + 확장 패널 토글
   PRESCRIPTIONS.forEach(rx => {
     const card = document.getElementById('rxcard_' + rx.id);
     const chk = document.getElementById('rxchk_' + rx.id);
+    const expand = document.getElementById('rxexpand_' + rx.id);
     const on = selectedRxIds.includes(rx.id);
     card.classList.toggle('checked', on);
     chk.checked = on;
+    if (on) {
+      expand.innerHTML = renderDrugTableHTML(rx);
+      expand.classList.add('open');
+    } else {
+      expand.classList.remove('open');
+      expand.innerHTML = '';
+    }
   });
+
   document.getElementById('btnNext2').disabled = selectedRxIds.length === 0;
-  // selectedRx는 마지막 선택 처방전으로 (편집 컨텍스트용)
   selectedRx = selectedRxIds.length > 0
     ? PRESCRIPTIONS.find(r => r.id === selectedRxIds[selectedRxIds.length - 1])
     : null;
-  renderAllDrugTables();
+  updatePolyAlert();
 }
 
-function renderAllDrugTables() {
-  const detail = document.getElementById('s2detail');
-  if (selectedRxIds.length === 0) { detail.innerHTML = ''; return; }
-
-  // 선택된 처방전의 총 약품 수 합산
-  const totalDrugs = selectedRxIds.reduce((sum, id) => {
-    return sum + (editingDrugsMap[id] || []).length;
-  }, 0);
-
-  const alert = totalDrugs >= 10 ? `
-    <div class="s2-poly-alert">
+function updatePolyAlert() {
+  const totalDrugs = selectedRxIds.reduce((sum, id) => sum + (editingDrugsMap[id] || []).length, 0);
+  const el = document.getElementById('s2polyAlert');
+  if (!el) return;
+  el.innerHTML = totalDrugs >= 10 ? `
+    <div class="s2-poly-alert" style="margin-bottom:14px;">
       <div class="s2-poly-alert-icon"><span>!</span></div>
       <span class="s2-poly-alert-txt">다제약물관리사업 대상자 확인이 필요합니다</span>
     </div>` : '';
+}
 
-  detail.innerHTML = alert + selectedRxIds.map(id => {
+function renderAllDrugTables() {
+  // 편집/삭제/추가 후 열린 expand 패널만 재렌더
+  selectedRxIds.forEach(id => {
     const rx = PRESCRIPTIONS.find(r => r.id === id);
-    return renderDrugTableHTML(rx);
-  }).join('');
+    const expand = document.getElementById('rxexpand_' + id);
+    if (expand) expand.innerHTML = renderDrugTableHTML(rx);
+  });
+  updatePolyAlert();
 }
 
 function getEditingDrugs(rxId) {
@@ -1013,8 +1050,8 @@ function renderDrugTableHTML(rx) {
     <div class="s2-rx-box">
       <div class="s2-rx-hd">
         <div class="s2-rx-hd-info">
-          <strong>${rx.hospital}</strong> &nbsp;${rx.dept} · ${rx.doctor} 원장
-          &nbsp;<span style="color:#888;font-size:12px;">${rx.date} · ${rx.days}일분</span>
+          <strong>${rx.hospital}</strong>
+          <span style="color:#888;font-size:12px;margin-left:6px;">${rx.days}일분</span>
         </div>
         <button class="s2-rx-img-btn" onclick="openRxViewer('${rx.date} ${rx.hospital}')">
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="2" stroke="#555" stroke-width="1.3"/><circle cx="5.5" cy="6.5" r="1.5" stroke="#555" stroke-width="1.3"/><path d="M1 11l4-3 3 3 2-2 5 4" stroke="#555" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>

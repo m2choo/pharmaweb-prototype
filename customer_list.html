@@ -921,8 +921,8 @@ function renderStep2() {
         <span class="s2-date-count">${rxList.length}건</span>
       </div>
       ${rxList.map(rx => `
-        <div class="s2-rx-card" id="rxcard_${rx.id}" onclick="toggleRxCard('${rx.id}')">
-          <input type="checkbox" class="s2-rx-card-check" id="rxchk_${rx.id}" onclick="event.stopPropagation();toggleRxCard('${rx.id}')">
+        <div class="s2-rx-card" id="rxcard_${rx.id}" onclick="toggleExpand('${rx.id}')">
+          <input type="checkbox" class="s2-rx-card-check" id="rxchk_${rx.id}" onclick="event.stopPropagation();toggleCheck('${rx.id}')">
           <div class="s2-rx-card-body">
             <div class="s2-rx-card-top">
               <span class="s2-rx-card-hospital">${rx.hospital}</span>
@@ -952,7 +952,31 @@ function renderStep2() {
   `;
 }
 
-function toggleRxCard(id) {
+// 카드 클릭: 접기/펼치기만 (선택 상태 유지)
+function toggleExpand(id) {
+  const expand = document.getElementById('rxexpand_' + id);
+  const card = document.getElementById('rxcard_' + id);
+  const isOpen = expand.classList.contains('open');
+  if (isOpen) {
+    expand.classList.remove('open');
+    card.classList.remove('checked');
+  } else {
+    // 펼칠 때 선택돼 있으면 테이블 렌더, 아니면 선택 없이 그냥 열기
+    const rx = PRESCRIPTIONS.find(r => r.id === id);
+    if (selectedRxIds.includes(id)) {
+      expand.innerHTML = renderDrugTableHTML(rx);
+    } else {
+      // 선택 안 된 상태로 펼치면 체크도 함께
+      toggleCheck(id);
+      return;
+    }
+    expand.classList.add('open');
+    card.classList.add('checked');
+  }
+}
+
+// 체크박스 클릭: 선택 토글 (펼침도 연동)
+function toggleCheck(id) {
   const idx = selectedRxIds.indexOf(id);
   const isChecking = idx === -1;
 
@@ -960,28 +984,20 @@ function toggleRxCard(id) {
     selectedRxIds.push(id);
     const rx = PRESCRIPTIONS.find(r => r.id === id);
     editingDrugsMap[id] = rx.drugs.map(d => Object.assign({}, d));
+    // 체크 시 자동 펼침
+    const expand = document.getElementById('rxexpand_' + id);
+    expand.innerHTML = renderDrugTableHTML(rx);
+    expand.classList.add('open');
+    document.getElementById('rxcard_' + id).classList.add('checked');
   } else {
     selectedRxIds.splice(idx, 1);
     delete editingDrugsMap[id];
+    // 체크 해제 시 닫힘
+    document.getElementById('rxexpand_' + id).classList.remove('open');
+    document.getElementById('rxcard_' + id).classList.remove('checked');
   }
 
-  // 카드 스타일 + 확장 패널 토글
-  PRESCRIPTIONS.forEach(rx => {
-    const card = document.getElementById('rxcard_' + rx.id);
-    const chk = document.getElementById('rxchk_' + rx.id);
-    const expand = document.getElementById('rxexpand_' + rx.id);
-    const on = selectedRxIds.includes(rx.id);
-    card.classList.toggle('checked', on);
-    chk.checked = on;
-    if (on) {
-      expand.innerHTML = renderDrugTableHTML(rx);
-      expand.classList.add('open');
-    } else {
-      expand.classList.remove('open');
-      expand.innerHTML = '';
-    }
-  });
-
+  document.getElementById('rxchk_' + id).checked = isChecking;
   document.getElementById('btnNext2').disabled = selectedRxIds.length === 0;
   selectedRx = selectedRxIds.length > 0
     ? PRESCRIPTIONS.find(r => r.id === selectedRxIds[selectedRxIds.length - 1])

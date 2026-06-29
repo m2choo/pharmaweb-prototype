@@ -1341,14 +1341,16 @@ let s3Msg = '';
 function buildMsgDefault() {
   const c = selectedCustomer;
   let drugLines = [];
+  let methodLines = [];
   let idx = 1;
   selectedRxIds.forEach(function(id) {
     var drugs = editingDrugsMap[id] || [];
     drugs.forEach(function(d) {
       drugLines.push(idx++ + '. ' + d.name + ' - 1회 ' + d.dosage + ', ' + d.freq + ', ' + d.days + '일분');
+      methodLines.push('• ' + d.name + ': ' + d.freq + ', 1회 ' + d.dosage + '씩 복용하세요.');
     });
   });
-  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n';
+  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n' + methodLines.join('\n') + '\n';
 }
 
 function goStep3() {

@@ -223,6 +223,11 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 .s2-add-form-row{background:#F8FBFF;}
 .s2-add-form-row td{padding:12px 14px;}
 .s2-changed-badge{display:inline-block;background:#EBF2FF;color:#2563EB;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+/* 다제약물 경고 */
+.s2-poly-alert{display:flex;align-items:center;gap:10px;padding:11px 14px;background:#FFF1F1;border:1.5px solid #FCA5A5;border-radius:8px;margin-bottom:16px;}
+.s2-poly-alert-icon{width:20px;height:20px;border-radius:50%;border:2px solid #DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s2-poly-alert-icon span{font-size:11px;font-weight:900;color:#DC2626;line-height:1;}
+.s2-poly-alert-txt{font-size:12.5px;font-weight:600;color:#DC2626;}
 
 /* 처방전 이미지 뷰어 레이어 */
 .rx-viewer-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;align-items:center;justify-content:center;}
@@ -808,6 +813,8 @@ const PRESCRIPTIONS = [
       { name: '아토르바스타틴정 10mg', ingredient: '아토르바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 30, sub: false },
       { name: '메트포르민염산염정 500mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 2회', days: 30, sub: false },
       { name: '암로디핀베실산염정 5mg', ingredient: '암로디핀베실산염', dosage: '1정', freq: '1일 1회', days: 30, sub: true },
+      { name: '텔미사르탄정 40mg', ingredient: '텔미사르탄', dosage: '1정', freq: '1일 1회', days: 30, sub: false },
+      { name: '아스피린장용정 100mg', ingredient: '아세틸살리실산', dosage: '1정', freq: '1일 1회', days: 30, sub: false },
     ]
   },
   {
@@ -828,10 +835,12 @@ const PRESCRIPTIONS = [
     hospital: '웰체크의원',
     dept: '내과',
     doctor: '박지현',
-    days: 28,
+    days: 90,
     drugs: [
-      { name: '글리메피리드정 2mg', ingredient: '글리메피리드', dosage: '1정', freq: '1일 1회', days: 28, sub: false },
-      { name: '로수바스타틴정 10mg', ingredient: '로수바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 28, sub: true },
+      { name: '글리메피리드정 2mg', ingredient: '글리메피리드', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+      { name: '로수바스타틴정 10mg', ingredient: '로수바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: true },
+      { name: '메트포르민서방정 1000mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+      { name: '알로퓨리놀정 100mg', ingredient: '알로퓨리놀', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
     ]
   },
   {
@@ -840,12 +849,12 @@ const PRESCRIPTIONS = [
     hospital: '미소가정의학과의원',
     dept: '가정의학과',
     doctor: '김민준',
-    days: 14,
+    days: 30,
     drugs: [
-      { name: '에소메프라졸마그네슘삼수화물캡슐 20mg', ingredient: '에소메프라졸마그네슘', dosage: '1캡슐', freq: '1일 1회', days: 14, sub: false },
-      { name: '돔페리돈정 10mg', ingredient: '돔페리돈', dosage: '1정', freq: '1일 3회', days: 14, sub: false },
-      { name: '레바미피드정 100mg', ingredient: '레바미피드', dosage: '1정', freq: '1일 3회', days: 14, sub: false },
-      { name: '트리메부틴말레산염정 100mg', ingredient: '트리메부틴말레산염', dosage: '1정', freq: '1일 3회', days: 14, sub: true },
+      { name: '에소메프라졸마그네슘삼수화물캡슐 20mg', ingredient: '에소메프라졸마그네슘', dosage: '1캡슐', freq: '1일 1회', days: 30, sub: false },
+      { name: '돔페리돈정 10mg', ingredient: '돔페리돈', dosage: '1정', freq: '1일 3회', days: 30, sub: false },
+      { name: '레바미피드정 100mg', ingredient: '레바미피드', dosage: '1정', freq: '1일 3회', days: 30, sub: false },
+      { name: '트리메부틴말레산염정 100mg', ingredient: '트리메부틴말레산염', dosage: '1정', freq: '1일 3회', days: 30, sub: true },
     ]
   },
   {
@@ -941,7 +950,19 @@ function toggleRxCard(id) {
 function renderAllDrugTables() {
   const detail = document.getElementById('s2detail');
   if (selectedRxIds.length === 0) { detail.innerHTML = ''; return; }
-  detail.innerHTML = selectedRxIds.map(id => {
+
+  // 선택된 처방전의 총 약품 수 합산
+  const totalDrugs = selectedRxIds.reduce((sum, id) => {
+    return sum + (editingDrugsMap[id] || []).length;
+  }, 0);
+
+  const alert = totalDrugs >= 10 ? `
+    <div class="s2-poly-alert">
+      <div class="s2-poly-alert-icon"><span>!</span></div>
+      <span class="s2-poly-alert-txt">다제약물관리사업 대상자 확인이 필요합니다</span>
+    </div>` : '';
+
+  detail.innerHTML = alert + selectedRxIds.map(id => {
     const rx = PRESCRIPTIONS.find(r => r.id === id);
     return renderDrugTableHTML(rx);
   }).join('');

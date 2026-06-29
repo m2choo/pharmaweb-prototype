@@ -754,7 +754,7 @@ function addNewCustomer() {
 // ── 처방전 더미 데이터 ──
 const PRESCRIPTIONS = [
   {
-    id: 'rx3',
+    id: 'rx5',
     date: '2026.06.22',
     hospital: '고려대학교 안암병원',
     dept: '내과',
@@ -767,7 +767,19 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx2',
+    id: 'rx4',
+    date: '2026.06.22',
+    hospital: '웰체크의원',
+    dept: '안과',
+    doctor: '정수연',
+    days: 7,
+    drugs: [
+      { name: '오플록사신점안액 0.3%', ingredient: '오플록사신', dosage: '1~2방울', freq: '1일 4회', days: 7, sub: false },
+      { name: '케토롤락트로메타민점안액 0.5%', ingredient: '케토롤락트로메타민', dosage: '1방울', freq: '1일 4회', days: 7, sub: true },
+    ]
+  },
+  {
+    id: 'rx3',
     date: '2026.05.15',
     hospital: '서울아산병원',
     dept: '내분비내과',
@@ -779,7 +791,7 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx1',
+    id: 'rx2',
     date: '2026.04.03',
     hospital: '웰체크의원',
     dept: '가정의학과',
@@ -790,6 +802,19 @@ const PRESCRIPTIONS = [
       { name: '돔페리돈정 10mg', ingredient: '돔페리돈', dosage: '1정', freq: '1일 3회', days: 14, sub: false },
       { name: '레바미피드정 100mg', ingredient: '레바미피드', dosage: '1정', freq: '1일 3회', days: 14, sub: false },
       { name: '트리메부틴말레산염정 100mg', ingredient: '트리메부틴말레산염', dosage: '1정', freq: '1일 3회', days: 14, sub: true },
+    ]
+  },
+  {
+    id: 'rx1',
+    date: '2026.04.03',
+    hospital: '고려대학교 안암병원',
+    dept: '정형외과',
+    doctor: '최동훈',
+    days: 5,
+    drugs: [
+      { name: '세레콕시브캡슐 200mg', ingredient: '세레콕시브', dosage: '1캡슐', freq: '1일 1회', days: 5, sub: false },
+      { name: '티잔이딘염산염정 2mg', ingredient: '티잔이딘염산염', dosage: '1정', freq: '1일 3회', days: 5, sub: true },
+      { name: '트라마돌염산염정 37.5mg/아세트아미노펜정 325mg', ingredient: '트라마돌/아세트아미노펜', dosage: '1정', freq: '1일 2회', days: 5, sub: false },
     ]
   },
 ];

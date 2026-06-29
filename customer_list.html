@@ -436,6 +436,16 @@ let timerSec = 0;
 function openModal() {
   selectedCustomer = null;
   showAddForm = false;
+  // 고객 헤더 초기화
+  document.getElementById('modalPt').classList.remove('on');
+  document.getElementById('ptAvatar').textContent = '';
+  document.getElementById('ptName').textContent = '';
+  document.getElementById('ptInfo').textContent = '';
+  document.getElementById('pzName').innerHTML = '고객 선택 대기 중';
+  document.getElementById('pzVisit').textContent = '고객을 선택하면 방문 정보가 표시됩니다';
+  // 녹음 바 복원
+  const recBar = document.querySelector('.pz-rec-bar');
+  if (recBar) recBar.style.display = '';
   document.getElementById('bd').classList.add('on');
   renderStep1();
   startTimer();

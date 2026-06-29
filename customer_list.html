@@ -1309,7 +1309,7 @@ function buildMsgDefault() {
       drugLines.push(idx++ + '. ' + d.name + ' - 1회 ' + d.dosage + ', ' + d.freq + ', ' + d.days + '일분');
     });
   });
-  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n\n\n[약사 상담 메모]\n';
+  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n';
 }
 
 function goStep3() {
@@ -1387,7 +1387,7 @@ function insertSummaryIntoMsg(text, summary) {
   var marker = '[약사 상담 메모]\n';
   var idx = text.indexOf(marker);
   if (idx !== -1) return text.slice(0, idx + marker.length) + summary;
-  return text + '\n' + summary;
+  return text + '\n\n[약사 상담 메모]\n' + summary;
 }
 
 function s3ToggleTag(i, t) {

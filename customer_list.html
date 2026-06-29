@@ -180,6 +180,37 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 .s2-consent-txt strong{font-weight:700;}
 .s2-empty-tip{text-align:center;padding:40px 0;color:#AAA;font-size:13px;}
 
+/* Step 2 처방 변경 */
+.s2-drug-table th:last-child,.s2-drug-table td:last-child{text-align:center;width:64px;}
+.s2-drug-table th.th-action{width:36px;}
+.s2-drug-table td.td-action{text-align:center;padding:6px 8px;}
+.s2-row-edit-btn{width:26px;height:26px;border:none;background:none;cursor:pointer;color:#BBB;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;}
+.s2-row-edit-btn:hover{background:#F4F5F7;color:#555;}
+.s2-row-del-btn{width:26px;height:26px;border:none;background:none;cursor:pointer;color:#BBB;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;}
+.s2-row-del-btn:hover{background:#FEE2E2;color:#DC2626;}
+.s2-add-drug-row{display:flex;align-items:center;justify-content:center;padding:10px 12px;border-top:1px dashed #E0E4EF;}
+.s2-add-drug-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border:1.5px dashed #2563EB;border-radius:6px;background:#F0F6FF;color:#2563EB;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
+.s2-add-drug-btn:hover{background:#E0EDFF;}
+/* 인라인 편집 폼 */
+.s2-edit-row td{background:#F0F6FF;padding:10px 12px;}
+.s2-edit-form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;}
+.s2-edit-field{display:flex;flex-direction:column;gap:3px;}
+.s2-edit-field label{font-size:10.5px;color:#666;font-weight:600;}
+.s2-edit-field input,.s2-edit-field select{height:32px;border:1px solid #C7D7F5;border-radius:6px;padding:0 8px;font-size:12px;font-family:inherit;outline:none;background:#fff;min-width:0;}
+.s2-edit-field input:focus,.s2-edit-field select:focus{border-color:#2563EB;}
+.s2-edit-field.f-name input{width:200px;}
+.s2-edit-field.f-ing input{width:130px;}
+.s2-edit-field.f-dosage input{width:70px;}
+.s2-edit-field.f-freq input{width:90px;}
+.s2-edit-field.f-days input{width:60px;}
+.s2-edit-actions{display:flex;gap:6px;margin-left:auto;}
+.s2-edit-save{height:32px;padding:0 14px;background:#2563EB;border:none;border-radius:6px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
+.s2-edit-cancel{height:32px;padding:0 12px;background:#fff;border:1px solid #E0E0E0;border-radius:6px;font-size:12px;color:#555;cursor:pointer;font-family:inherit;}
+/* 약품 추가 폼 */
+.s2-add-form-row{background:#F8FBFF;}
+.s2-add-form-row td{padding:12px 14px;}
+.s2-changed-badge{display:inline-block;background:#EBF2FF;color:#2563EB;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+
 /* 처방전 이미지 뷰어 레이어 */
 .rx-viewer-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;align-items:center;justify-content:center;}
 .rx-viewer-bd.on{display:flex;}
@@ -853,27 +884,50 @@ function renderStep2() {
   `;
 }
 
+// 현재 편집 중인 처방전의 약품 목록 (mutable copy)
+let editingDrugs = [];
+
 function onRxSelect(id) {
   const rx = PRESCRIPTIONS.find(r => r.id === id);
   selectedRx = rx || null;
   document.getElementById('btnNext2').disabled = !rx;
+  if (!rx) { document.getElementById('s2detail').innerHTML = ''; return; }
+  // 원본 복사 (편집용)
+  editingDrugs = rx.drugs.map(d => Object.assign({}, d));
+  renderDrugTable(rx);
+}
 
+function renderDrugTable(rx) {
   const detail = document.getElementById('s2detail');
-  if (!rx) { detail.innerHTML = ''; return; }
+  const hasSub = editingDrugs.some(d => d.sub);
+  const origDrugs = rx.drugs;
 
-  const hasSub = rx.drugs.some(d => d.sub);
-  const drugRows = rx.drugs.map(d => `
-    <tr>
+  const drugRows = editingDrugs.map((d, i) => {
+    const changed = JSON.stringify(d) !== JSON.stringify(origDrugs[i]);
+    const isNew = i >= origDrugs.length;
+    const badge = (changed || isNew) ? `<span class="s2-changed-badge">${isNew ? '추가' : '변경'}</span>` : '';
+    return `
+    <tr id="drow_${i}">
       <td>
-        <div class="s2-drug-name">${d.name}</div>
+        <div class="s2-drug-name">${d.name}${badge}</div>
         <div class="s2-drug-sub">${d.ingredient}</div>
       </td>
       <td style="text-align:center;">${d.dosage}</td>
       <td style="text-align:center;">${d.freq}</td>
       <td style="text-align:center;">${d.days}일</td>
-      <td style="text-align:center;">${d.sub ? '<span style="background:#FFF3E0;color:#E07800;font-size:11px;padding:2px 7px;border-radius:10px;font-weight:600;">대체</span>' : '<span style="color:#CCC;font-size:12px;">—</span>'}</td>
-    </tr>
-  `).join('');
+      <td style="text-align:center;">${d.sub
+        ? '<span style="background:#FFF3E0;color:#E07800;font-size:11px;padding:2px 7px;border-radius:10px;font-weight:600;">대체</span>'
+        : '<span style="color:#CCC;font-size:12px;">—</span>'}</td>
+      <td class="td-action">
+        <button class="s2-row-edit-btn" onclick="openEditRow(${i})" title="편집">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="s2-row-del-btn" onclick="deleteDrug(${i})" title="삭제">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
 
   detail.innerHTML = `
     <div class="s2-rx-box">
@@ -887,7 +941,7 @@ function onRxSelect(id) {
           처방전 원본 이미지 보기
         </button>
       </div>
-      <table class="s2-drug-table">
+      <table class="s2-drug-table" id="drugTable">
         <thead>
           <tr>
             <th>약품명 / 성분</th>
@@ -895,10 +949,17 @@ function onRxSelect(id) {
             <th style="text-align:center;">복용 횟수</th>
             <th style="text-align:center;">투약 일수</th>
             <th style="text-align:center;">대체조제</th>
+            <th class="th-action"></th>
           </tr>
         </thead>
-        <tbody>${drugRows}</tbody>
+        <tbody id="drugTbody">${drugRows}</tbody>
       </table>
+      <div class="s2-add-drug-row">
+        <button class="s2-add-drug-btn" onclick="openAddRow()">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          약품 추가
+        </button>
+      </div>
       ${hasSub ? `
       <div class="s2-consent-row">
         <input type="checkbox" class="s2-consent-check" id="subConsent">
@@ -908,6 +969,149 @@ function onRxSelect(id) {
       </div>` : ''}
     </div>
   `;
+}
+
+function openEditRow(i) {
+  // 이미 열려있으면 닫기
+  const existing = document.getElementById('editForm_' + i);
+  if (existing) { closeEditRow(i); return; }
+  // 다른 열린 폼 닫기
+  document.querySelectorAll('[id^="editForm_"]').forEach(el => {
+    const idx = parseInt(el.id.replace('editForm_', ''));
+    closeEditRow(idx);
+  });
+  const d = editingDrugs[i];
+  const tbody = document.getElementById('drugTbody');
+  const row = document.getElementById('drow_' + i);
+  const formRow = document.createElement('tr');
+  formRow.id = 'editForm_' + i;
+  formRow.className = 's2-edit-row';
+  formRow.innerHTML = `<td colspan="6">
+    <div class="s2-edit-form">
+      <div class="s2-edit-field f-name">
+        <label>약품명</label>
+        <input id="ef_name_${i}" value="${d.name}">
+      </div>
+      <div class="s2-edit-field f-ing">
+        <label>성분명</label>
+        <input id="ef_ing_${i}" value="${d.ingredient}">
+      </div>
+      <div class="s2-edit-field f-dosage">
+        <label>1회 용량</label>
+        <input id="ef_dosage_${i}" value="${d.dosage}">
+      </div>
+      <div class="s2-edit-field f-freq">
+        <label>복용 횟수</label>
+        <input id="ef_freq_${i}" value="${d.freq}">
+      </div>
+      <div class="s2-edit-field f-days">
+        <label>투약 일수</label>
+        <input id="ef_days_${i}" type="number" min="1" value="${d.days}">
+      </div>
+      <div class="s2-edit-field">
+        <label>대체조제</label>
+        <select id="ef_sub_${i}">
+          <option value="0" ${!d.sub ? 'selected' : ''}>—</option>
+          <option value="1" ${d.sub ? 'selected' : ''}>대체</option>
+        </select>
+      </div>
+      <div class="s2-edit-actions">
+        <button class="s2-edit-cancel" onclick="closeEditRow(${i})">취소</button>
+        <button class="s2-edit-save" onclick="saveEditRow(${i})">저장</button>
+      </div>
+    </div>
+  </td>`;
+  row.after(formRow);
+  document.getElementById('ef_name_' + i).focus();
+}
+
+function closeEditRow(i) {
+  const el = document.getElementById('editForm_' + i);
+  if (el) el.remove();
+}
+
+function saveEditRow(i) {
+  editingDrugs[i] = {
+    name: document.getElementById('ef_name_' + i).value.trim() || editingDrugs[i].name,
+    ingredient: document.getElementById('ef_ing_' + i).value.trim() || editingDrugs[i].ingredient,
+    dosage: document.getElementById('ef_dosage_' + i).value.trim() || editingDrugs[i].dosage,
+    freq: document.getElementById('ef_freq_' + i).value.trim() || editingDrugs[i].freq,
+    days: parseInt(document.getElementById('ef_days_' + i).value) || editingDrugs[i].days,
+    sub: document.getElementById('ef_sub_' + i).value === '1',
+  };
+  renderDrugTable(selectedRx);
+}
+
+function deleteDrug(i) {
+  if (!confirm(`"${editingDrugs[i].name}" 을(를) 목록에서 삭제할까요?`)) return;
+  editingDrugs.splice(i, 1);
+  renderDrugTable(selectedRx);
+}
+
+function openAddRow() {
+  // 이미 추가 폼 열려있으면 무시
+  if (document.getElementById('addFormRow')) return;
+  // 다른 편집 폼 닫기
+  document.querySelectorAll('[id^="editForm_"]').forEach(el => {
+    const idx = parseInt(el.id.replace('editForm_', ''));
+    closeEditRow(idx);
+  });
+  const addRow = document.createElement('tr');
+  addRow.id = 'addFormRow';
+  addRow.className = 's2-add-form-row';
+  addRow.innerHTML = `<td colspan="6" style="padding:12px 14px;background:#F8FBFF;">
+    <div style="font-size:11.5px;font-weight:700;color:#2563EB;margin-bottom:8px;">약품 추가</div>
+    <div class="s2-edit-form">
+      <div class="s2-edit-field f-name">
+        <label>약품명</label>
+        <input id="af_name" placeholder="약품명 입력">
+      </div>
+      <div class="s2-edit-field f-ing">
+        <label>성분명</label>
+        <input id="af_ing" placeholder="성분명">
+      </div>
+      <div class="s2-edit-field f-dosage">
+        <label>1회 용량</label>
+        <input id="af_dosage" placeholder="예: 1정">
+      </div>
+      <div class="s2-edit-field f-freq">
+        <label>복용 횟수</label>
+        <input id="af_freq" placeholder="예: 1일 2회">
+      </div>
+      <div class="s2-edit-field f-days">
+        <label>투약 일수</label>
+        <input id="af_days" type="number" min="1" placeholder="30">
+      </div>
+      <div class="s2-edit-field">
+        <label>대체조제</label>
+        <select id="af_sub">
+          <option value="0">—</option>
+          <option value="1">대체</option>
+        </select>
+      </div>
+      <div class="s2-edit-actions">
+        <button class="s2-edit-cancel" onclick="document.getElementById('addFormRow').remove()">취소</button>
+        <button class="s2-edit-save" onclick="saveAddRow()">추가</button>
+      </div>
+    </div>
+  </td>`;
+  // 추가 버튼 행 앞에 삽입
+  const addBtnRow = document.querySelector('.s2-add-drug-row');
+  addBtnRow.before(addRow);
+  document.getElementById('af_name').focus();
+}
+
+function saveAddRow() {
+  const name = document.getElementById('af_name').value.trim();
+  const ingredient = document.getElementById('af_ing').value.trim();
+  const dosage = document.getElementById('af_dosage').value.trim();
+  const freq = document.getElementById('af_freq').value.trim();
+  const days = parseInt(document.getElementById('af_days').value) || 0;
+  if (!name || !dosage || !freq || !days) {
+    alert('약품명, 용량, 복용 횟수, 투약 일수를 모두 입력해 주세요.'); return;
+  }
+  editingDrugs.push({ name, ingredient: ingredient || '—', dosage, freq, days, sub: document.getElementById('af_sub').value === '1' });
+  renderDrugTable(selectedRx);
 }
 
 function openRxViewer(title) {

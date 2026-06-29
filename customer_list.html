@@ -577,7 +577,10 @@ function renderStep1() {
       </span>
     </div>
     <div id="s1results"></div>
-    <div id="s1addarea"></div>
+    <div id="s1addarea">
+      <button class="s1-add-btn" onclick="toggleAddForm(this)">+ 새 고객 추가</button>
+      <div id="addFormInner"></div>
+    </div>
   `;
   F.innerHTML = `
     <button class="btn-cancel" onclick="closeModal()">취소</button>
@@ -599,7 +602,7 @@ function onSearch(val) {
   selectedCustomer = null;
   document.getElementById('btnNext').disabled = true;
 
-  if (!q) { res.innerHTML = ''; addArea.innerHTML = ''; return; }
+  if (!q) { res.innerHTML = ''; return; }
 
   const matched = (KIMCHECK.name.includes(q) || KIMCHECK.phone.includes(q)) ? [KIMCHECK] : [];
 
@@ -612,10 +615,8 @@ function onSearch(val) {
         </div>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/></svg>
       </div>`;
-    addArea.innerHTML = '';
   } else {
     res.innerHTML = `<div class="s1-empty">검색 결과가 없습니다.</div>`;
-    addArea.innerHTML = `<button class="s1-add-btn" onclick="toggleAddForm(this)">+ 새 고객 추가</button><div id="addFormInner"></div>`;
   }
 }
 

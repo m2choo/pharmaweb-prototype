@@ -602,9 +602,9 @@ function toggleAddForm(btn) {
       <div>
         <label>주민번호</label>
         <div class="rr-row">
-          <input class="rr-front" type="text" id="addRrFront" placeholder="생년월일 6자리" maxlength="6">
+          <input class="rr-front" type="text" id="addRrFront" placeholder="생년월일 6자리" maxlength="6" oninput="if(this.value.length===6)document.getElementById('addRrBack').focus()">
           <span class="rr-sep">—</span>
-          <input class="rr-back" type="password" id="addRrBack" placeholder="●" maxlength="1">
+          <input class="rr-back" type="password" id="addRrBack" placeholder="1자리" maxlength="1">
         </div>
       </div>
       <button class="btn-next" style="width:100%;margin-top:4px" onclick="addNewCustomer()">고객 추가</button>

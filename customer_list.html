@@ -357,7 +357,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
       <!-- 채팅 영역 + ✦ 플로팅 버튼 -->
       <div style="flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;">
         <div class="pz-chat" id="pzChat"></div>
-        <button class="pz-sparkle-btn" style="position:absolute;right:12px;bottom:10px;">✦ 복약지도 요약하기</button>
+        <button class="pz-sparkle-btn" style="position:absolute;right:12px;bottom:10px;" onclick="showSummary()">✦ 복약지도 요약하기</button>
       </div>
 
       <!-- 녹음 상태 바 -->
@@ -449,16 +449,26 @@ const DEMO_LINES = [
   '요즘 속이 더부룩하고 밥 먹고 나면 소화가 잘 안되는 느낌이 있는데요.',
   '어떤 걸 먹으면 좋을까요?',
   '언제부터 그런 느낌이 드셨어요?',
-  '한 두 달 정도 된 것 같아요.',
+  '한 두 달 정도 된 거 같아요.',
   '일도 좀 바빠지고 요즘 잠을 잘 못 잤거든요.',
   '혹시 드시고 계신 약 있으실까요?',
   '콜레스테롤이랑 당뇨약 먹고 있어요.',
-  '다른 지병이나 알레르기 있으실까요?',
+  '다른 질병이나 알레르기 있으실까요?',
   '고혈압이 있고 페니실린 알레르기가 있어요.',
   '흡연이나 음주는 하실까요?',
-  '담배는 가끔 피우고 술은 일주일에 한두 번 정도는 마시는 거 같아요.',
-  '말씀하신 증상이라면 비타민 B군이랑 철분 같은 영양제도 도움이 될 수 있어요.',
+  '담배는 가끔 피우고 술은 일주일에 한두 번 정도는 마시는 것 같아요.',
+  '말씀하신 증상이라면 비타민 B군이랑 철분 같은 건강기능식품이 도움될 수 있어요.',
+  '헤모큐라는 철분제랑 임팩타민 영양제 같이 드릴 테니까',
+  '한번 드셔보세요.',
+  '식후에 드시는 게 좋고 공복에 드시면 속이 불편할 수 있어요.',
+  '또 수면이 부족하거나 카페인 많이 드시면 효과가 떨어질 수 있으니 생활습관도 같이 관리하시면 좋을 것 같아요.',
+  '네.',
+  '혹시 추가로 밀크시슬 좋은 걸로 같이 주실래요?',
+  '밀크시슬은 재고 확인해보니 품절돼서 내일 오전에 입고 예정이라 12시 이후에 방문 가능하실까요?',
+  '네.',
+  '내일 오후에 방문할게요.',
 ];
+const SUMMARY_TEXT = '오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편 가능함. 수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요. 밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능함.';
 let streamInterval = null;
 let lineIdx = 0;
 let charIdx = 0;
@@ -503,6 +513,22 @@ function startStream() {
 function stopStream() {
   clearInterval(streamInterval);
   streamInterval = null;
+}
+
+function showSummary() {
+  stopStream();
+  stopTimer();
+  const chat = document.getElementById('pzChat');
+  // 녹음 바 숨기기
+  const recBar = document.querySelector('.pz-rec-bar');
+  if (recBar) recBar.style.display = 'none';
+  // 채팅 내용 → 요약 카드로 교체
+  chat.innerHTML = `
+    <div style="background:#F0F6FF;border-left:3px solid #2563EB;border-radius:8px;padding:14px 16px;font-size:13px;color:#1E3A5F;line-height:1.85;">
+      <div style="font-size:11px;font-weight:700;color:#2563EB;margin-bottom:8px;letter-spacing:.5px;">복약지도 요약</div>
+      ${SUMMARY_TEXT}
+    </div>`;
+  chat.scrollTop = 0;
 }
 
 function stopTimer() {

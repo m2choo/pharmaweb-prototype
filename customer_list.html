@@ -265,6 +265,16 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 .msg-ta{width:100%;height:260px;border:1.5px solid #E0E0E0;border-radius:10px;padding:14px;font-size:12.5px;line-height:1.8;color:#333;resize:none;font-family:inherit;transition:border-color .15s;}
 .msg-ta:focus{outline:none;border-color:#2563EB;}
 .msg-cnt{text-align:right;font-size:11px;color:#BBB;margin-top:4px;}
+/* Step 4 미리보기 */
+.prev-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.prev-msg{background:#FFF9E6;border-radius:10px;padding:16px;font-size:12px;line-height:1.9;color:#333;min-height:200px;overflow-y:auto;max-height:260px;}
+.sum-tbl{width:100%;border-collapse:collapse;}
+.sum-tbl tr{border-bottom:1px solid #F2F4F6;}
+.sum-tbl td{padding:11px 4px;font-size:13px;vertical-align:middle;}
+.sum-tbl td:first-child{color:#888;width:90px;white-space:nowrap;}
+.sum-tbl td:last-child{color:#333;font-weight:500;}
+.s4-phone-input{width:100%;height:36px;border:1px solid #E0E0E0;border-radius:6px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;margin-top:4px;}
+.s4-phone-input:focus{border-color:#2563EB;}
 /* Toast */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(16px);background:#1E293B;color:#fff;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:opacity .22s,transform .22s;z-index:999;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -458,6 +468,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
         <div class="step-tab on" id="st1"><span class="step-num">1</span> 고객 선택</div>
         <div class="step-tab" id="st2"><span class="step-num">2</span> 처방전 선택</div>
         <div class="step-tab" id="st3"><span class="step-num">3</span> 복약지도 전송</div>
+        <div class="step-tab" id="st4"><span class="step-num">4</span> 전송 확인</div>
       </div>
       <div class="modal-body" id="mbody"></div>
       <div class="modal-ft" id="mfoot"></div>
@@ -720,20 +731,22 @@ function showSummary() {
   const chat = document.getElementById('pzChat');
   const recBar = document.querySelector('.pz-rec-bar');
   if (recBar) recBar.style.display = 'none';
-  // 전체 문서 + 구분선 + 요약 카드
-  chat.innerHTML = `
-    <div style="background:#F8F9FA;border-radius:8px;padding:14px 16px;margin-bottom:14px;">
-      ${SUMMARY_DOC}
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-      <div style="flex:1;height:1px;background:#E8EBF0;"></div>
-      <span style="font-size:11px;color:#AAA;white-space:nowrap;">AI 요약</span>
-      <div style="flex:1;height:1px;background:#E8EBF0;"></div>
-    </div>
-    <div style="background:#F0F6FF;border-left:3px solid #2563EB;border-radius:8px;padding:14px 16px;font-size:13px;color:#1E3A5F;line-height:1.85;">
-      ${SUMMARY_TEXT}
-    </div>`;
-  chat.scrollTop = 0;
+  // 기존 스트리밍 텍스트 보존 + 아래에 복약지도 기록 + AI 요약 추가
+  chat.insertAdjacentHTML('beforeend', `
+    <div style="margin-top:16px;margin-bottom:14px;">
+      <div style="background:#F8F9FA;border-radius:8px;padding:14px 16px;margin-bottom:14px;">
+        ${SUMMARY_DOC}
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <div style="flex:1;height:1px;background:#E8EBF0;"></div>
+        <span style="font-size:11px;color:#AAA;white-space:nowrap;">AI 요약</span>
+        <div style="flex:1;height:1px;background:#E8EBF0;"></div>
+      </div>
+      <div style="background:#F0F6FF;border-left:3px solid #2563EB;border-radius:8px;padding:14px 16px;font-size:13px;color:#1E3A5F;line-height:1.85;">
+        ${SUMMARY_TEXT}
+      </div>
+    </div>`);
+  chat.scrollTop = chat.scrollHeight;
   // AI 요약 텍스트 저장
   aiSummaryText = SUMMARY_TEXT;
   // Step 3가 열려 있으면 textarea에 자동 삽입
@@ -777,7 +790,7 @@ function renderStep1() {
 }
 
 function setStepTab(n) {
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 4; i++) {
     const el = document.getElementById('st' + i);
     if (el) el.className = 'step-tab' + (i === n ? ' on' : '');
   }
@@ -1322,8 +1335,52 @@ function renderStep3Body() {
   F.innerHTML = `
     <button class="btn-cancel" onclick="renderStep2()">← 이전</button>
     <button class="btn-cancel" onclick="saveDraft()" style="color:#2563EB;border-color:#A0B4FF;">임시저장</button>
-    <button class="btn-next" onclick="sendConsult()">발송</button>
+    <button class="btn-next" onclick="goStep4()">다음</button>
   `;
+}
+
+function goStep4() {
+  var ta = document.getElementById('s3mta');
+  if (ta) s3Msg = ta.value;
+  currentStep = 4;
+  setStepTab(4);
+  var B = document.getElementById('mbody');
+  var F = document.getElementById('mfoot');
+  var c = selectedCustomer;
+  var isNew = (!c.phone || c.phone === '-');
+
+  var phoneRow = isNew
+    ? '<tr><td>휴대폰 번호</td><td><input class="s4-phone-input" id="s4phone" type="tel" placeholder="010-0000-0000" value=""></td></tr>'
+    : '<tr><td>휴대폰 번호</td><td>' + c.phone + '</td></tr>';
+
+  B.innerHTML = '<div class="prev-grid">'
+    + '<div><div class="tag-ttl" style="margin-bottom:10px">웰체크 메시지 미리보기</div>'
+    + '<div class="prev-msg">' + s3Msg.replace(/</g,'&lt;').replace(/\n/g,'<br>') + '</div></div>'
+    + '<div><div class="tag-ttl" style="margin-bottom:10px">전송 요약</div>'
+    + '<table class="sum-tbl">'
+    + '<tr><td>고객명</td><td>' + c.name + '</td></tr>'
+    + '<tr><td>생년월일</td><td>' + (c.birth || '—') + '</td></tr>'
+    + '<tr><td>나이</td><td>' + (c.age !== '-' ? c.age + '세' : '—') + '</td></tr>'
+    + '<tr><td>성별</td><td>' + c.gender + '</td></tr>'
+    + phoneRow
+    + '</table></div></div>';
+
+  F.innerHTML = `
+    <button class="btn-cancel" onclick="renderStep3Body();setStepTab(3);currentStep=3;">← 이전</button>
+    <button class="btn-cancel" onclick="saveDraft()" style="color:#2563EB;border-color:#A0B4FF;">임시저장</button>
+    <button class="btn-next" onclick="sendFinal()">➤ 전송하기</button>
+  `;
+}
+
+function sendFinal() {
+  var isNew = (!selectedCustomer.phone || selectedCustomer.phone === '-');
+  if (isNew) {
+    var ph = (document.getElementById('s4phone') || {}).value || '';
+    if (!ph.trim()) { alert('휴대폰 번호를 입력해 주세요.'); return; }
+    selectedCustomer.phone = ph.trim();
+  }
+  showToast('복약지도가 발송되었습니다.');
+  setTimeout(function() { closeModal(); }, 600);
 }
 
 function insertSummaryIntoMsg(text, summary) {
@@ -1371,12 +1428,6 @@ function saveDraft() {
   showToast('복약지도가 임시저장되었습니다.');
 }
 
-function sendConsult() {
-  var ta = document.getElementById('s3mta');
-  if (!ta || !ta.value.trim()) { alert('복약지도 내용을 입력해 주세요.'); return; }
-  showToast('복약지도가 발송되었습니다.');
-  setTimeout(function() { closeModal(); }, 600);
-}
 </script>
 </body>
 </html>

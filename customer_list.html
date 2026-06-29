@@ -151,44 +151,48 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 .btn-next:disabled{opacity:.4;cursor:not-allowed;}
 .btn-cancel{height:40px;padding:0 20px;background:#fff;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;color:#555;cursor:pointer;font-family:inherit;}
 
-/* 오른쪽: 퍼즐 AI 패널 */
-.puzzle-panel{width:310px;flex-shrink:0;background:#1C2333;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;color:#fff;height:86vh;}
-.pz-header{padding:14px 16px 12px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;}
-.pz-name-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.pz-name{font-size:17px;font-weight:700;color:#fff;}
-.pz-name-sub{font-size:13px;font-weight:400;color:#9BA8B8;margin-left:4px;}
-.pz-icons{display:flex;gap:6px;}
-.pz-icon-btn{width:28px;height:28px;background:rgba(255,255,255,.08);border:none;border-radius:6px;color:#aaa;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.pz-visit-bar{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border-radius:20px;padding:5px 12px;font-size:11px;color:#9BA8B8;cursor:pointer;}
-.pz-visit-dot{color:#15C784;font-size:8px;}
-.pz-chat{flex:1;overflow-y:auto;padding:16px 18px;font-size:13px;color:#C8D4E0;line-height:1.8;}
-.pz-chat::-webkit-scrollbar{width:4px;}
-.pz-chat::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px;}
-.pz-rec-bar{display:flex;align-items:center;gap:8px;padding:6px 16px 2px;flex-shrink:0;}
-.pz-rec-dot{width:8px;height:8px;border-radius:50%;background:#EF4444;animation:blink 1s ease-in-out infinite;}
+/* 오른쪽: 퍼즐 AI 패널 — 폰 화면 스타일 (흰색 배경) */
+.puzzle-panel{width:300px;flex-shrink:0;background:#fff;border-radius:24px;box-shadow:0 8px 40px rgba(0,0,0,.18);display:flex;flex-direction:column;height:86vh;overflow:hidden;border:1px solid #E8EBF0;}
+.pz-header{padding:16px 16px 10px;border-bottom:1px solid #F0F2F5;flex-shrink:0;background:#fff;}
+.pz-name-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.pz-name{font-size:16px;font-weight:700;color:#111;}
+.pz-name-sub{font-size:13px;font-weight:400;color:#666;margin-left:2px;}
+.pz-icons{display:flex;gap:4px;}
+.pz-icon-btn{width:28px;height:28px;background:none;border:none;color:#888;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:6px;}
+.pz-icon-btn:hover{background:#F5F6F8;}
+.pz-visit-bar{display:inline-flex;align-items:center;gap:0;background:#F4F6FA;border-radius:20px;padding:5px 12px;font-size:11px;color:#555;cursor:pointer;flex-wrap:wrap;gap:4px;}
+.pz-visit-dot{width:6px;height:6px;border-radius:50%;background:#3B82F6;display:inline-block;flex-shrink:0;}
+.pz-visit-sep{color:#CCC;margin:0 4px;}
+.pz-chat{flex:1;overflow-y:auto;padding:16px 18px;font-size:13px;color:#333;line-height:1.85;background:#fff;}
+.pz-chat::-webkit-scrollbar{width:3px;}
+.pz-chat::-webkit-scrollbar-thumb{background:#DDD;border-radius:2px;}
+.pz-sparkle-wrap{position:relative;flex-shrink:0;}
+.pz-sparkle-btn{position:absolute;right:14px;bottom:8px;background:#fff;border:1.5px solid #E0E4EF;border-radius:20px;padding:6px 14px;color:#555;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:2;}
+.pz-sparkle-btn:hover{background:#F5F6FF;border-color:#C7CEFF;}
+.pz-bottom{flex-shrink:0;border-top:1px solid #F0F2F5;background:#fff;}
+.pz-chips{display:flex;gap:8px;padding:10px 14px 8px;overflow-x:auto;}
+.pz-chips::-webkit-scrollbar{display:none;}
+.pz-chip{padding:6px 12px;border:1px solid #E0E4EF;border-radius:20px;font-size:11.5px;color:#444;cursor:pointer;white-space:nowrap;background:#fff;font-family:inherit;flex-shrink:0;}
+.pz-chip:hover{background:#F0F4FF;border-color:#A0B4FF;}
+.pz-input-row{display:flex;align-items:center;gap:8px;padding:6px 14px 14px;}
+.pz-mic-btn{width:40px;height:40px;border-radius:50%;background:#2563EB;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:micPulse 1.5s ease-in-out infinite;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 3px rgba(37,99,235,.18)}50%{box-shadow:0 0 0 8px rgba(37,99,235,.05)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
-.pz-rec-label{font-size:11.5px;color:#9BA8B8;font-weight:500;}
-.pz-rec-time{margin-left:auto;font-size:12px;color:#9BA8B8;font-variant-numeric:tabular-nums;}
-.pz-sparkle-row{display:flex;justify-content:flex-end;padding:4px 16px 6px;flex-shrink:0;}
-.pz-sparkle-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:6px 14px;color:#B8C5D6;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;}
-.pz-sparkle-btn:hover{background:rgba(255,255,255,.12);}
-.pz-bottom{flex-shrink:0;border-top:1px solid rgba(255,255,255,.08);}
-.pz-chips{display:flex;gap:8px;padding:10px 16px 8px;}
-.pz-chip{padding:6px 12px;border:1px solid rgba(255,255,255,.15);border-radius:20px;font-size:11.5px;color:#9BA8B8;cursor:pointer;white-space:nowrap;background:none;font-family:inherit;}
-.pz-chip:hover{background:rgba(255,255,255,.07);}
-.pz-input-row{display:flex;align-items:center;gap:10px;padding:8px 16px 16px;}
-.pz-mic-btn{width:40px;height:40px;border-radius:50%;background:#15C784;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:micPulse 1.5s ease-in-out infinite;}
-@keyframes micPulse{0%,100%{box-shadow:0 0 0 4px rgba(21,199,132,.22)}50%{box-shadow:0 0 0 9px rgba(21,199,132,.06)}}
-.pz-input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:9px 14px;font-size:12.5px;color:#D4DCE8;font-family:inherit;outline:none;}
-.pz-input::placeholder{color:#50606E;}
-.pz-wave{display:flex;align-items:center;gap:3px;padding-right:4px;}
-.pz-wave span{display:inline-block;width:3px;background:#15C784;border-radius:2px;animation:wave .8s ease-in-out infinite;}
-.pz-wave span:nth-child(1){height:5px;animation-delay:0s;}
-.pz-wave span:nth-child(2){height:10px;animation-delay:.12s;}
-.pz-wave span:nth-child(3){height:16px;animation-delay:.24s;}
-.pz-wave span:nth-child(4){height:10px;animation-delay:.36s;}
-.pz-wave span:nth-child(5){height:5px;animation-delay:.48s;}
+.pz-input-box{flex:1;display:flex;align-items:center;gap:6px;background:#F4F6FA;border:1px solid #E8EBF0;border-radius:20px;padding:8px 12px;}
+.pz-input{flex:1;background:none;border:none;font-size:12px;color:#333;font-family:inherit;outline:none;min-width:0;}
+.pz-input::placeholder{color:#AAB2C0;}
+.pz-wave{display:flex;align-items:center;gap:2px;flex-shrink:0;}
+.pz-wave span{display:inline-block;width:2.5px;background:#2563EB;border-radius:2px;animation:wave .8s ease-in-out infinite;}
+.pz-wave span:nth-child(1){height:4px;animation-delay:0s;}
+.pz-wave span:nth-child(2){height:9px;animation-delay:.12s;}
+.pz-wave span:nth-child(3){height:14px;animation-delay:.24s;}
+.pz-wave span:nth-child(4){height:9px;animation-delay:.36s;}
+.pz-wave span:nth-child(5){height:4px;animation-delay:.48s;}
 @keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.7)}}
+.pz-rec-bar{display:flex;align-items:center;gap:8px;padding:4px 16px 0;flex-shrink:0;}
+.pz-rec-dot{width:7px;height:7px;border-radius:50%;background:#EF4444;animation:blink 1s ease-in-out infinite;}
+.pz-rec-label{font-size:11px;color:#888;font-weight:500;}
+.pz-rec-time{margin-left:auto;font-size:11px;color:#888;font-variant-numeric:tabular-nums;}
 </style>
 </head>
 <body>
@@ -326,32 +330,43 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
       <div class="modal-ft" id="mfoot"></div>
     </div>
 
-    <!-- 오른쪽: 퍼즐 AI 패널 -->
+    <!-- 오른쪽: 퍼즐 AI 패널 (폰 화면 스타일) -->
     <div class="puzzle-panel">
       <div class="pz-header">
         <div class="pz-name-row">
           <div class="pz-name" id="pzName">고객 선택 대기 중<span class="pz-name-sub" id="pzSub"></span></div>
           <div class="pz-icons">
-            <button class="pz-icon-btn">✎</button>
-            <button class="pz-icon-btn">🔔</button>
-            <button class="pz-icon-btn">☰</button>
+            <button class="pz-icon-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="#888" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="pz-icon-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="#888" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="pz-icon-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="#888" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
           </div>
         </div>
         <div class="pz-visit-bar">
-          <span class="pz-visit-dot">●</span>
+          <span class="pz-visit-dot"></span>
           <span id="pzVisit">고객을 선택하면 방문 정보가 표시됩니다</span>
-          <span>∨</span>
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style="margin-left:2px"><path d="M2 4l4 4 4-4" stroke="#999" stroke-width="1.5" stroke-linecap="round"/></svg>
         </div>
       </div>
-      <div class="pz-chat" id="pzChat"></div>
+
+      <!-- 채팅 영역 + ✦ 플로팅 버튼 -->
+      <div style="flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;">
+        <div class="pz-chat" id="pzChat"></div>
+        <button class="pz-sparkle-btn" style="position:absolute;right:12px;bottom:10px;">✦ 복약지도 요약하기</button>
+      </div>
+
+      <!-- 녹음 상태 바 -->
       <div class="pz-rec-bar">
         <div class="pz-rec-dot"></div>
         <span class="pz-rec-label">녹음 중</span>
         <span class="pz-rec-time" id="pzTimer">00:00</span>
       </div>
-      <div class="pz-sparkle-row">
-        <button class="pz-sparkle-btn">✦ 복약지도 요약하기</button>
-      </div>
+
       <div class="pz-bottom">
         <div class="pz-chips">
           <button class="pz-chip">의약품 복용 이력</button>
@@ -359,11 +374,13 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
         </div>
         <div class="pz-input-row">
           <button class="pz-mic-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="8.5" y="1" width="7" height="11" rx="3.5" fill="#fff"/><path d="M5 11c0 3.866 3.134 7 7 7s7-3.134 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M12 18v3M9 21h6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="8.5" y="1" width="7" height="11" rx="3.5" fill="#fff"/><path d="M5 11c0 3.866 3.134 7 7 7s7-3.134 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M12 18v3M9 21h6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
           </button>
-          <input class="pz-input" placeholder="버튼을 눌러 수정사항을 알려보세요">
-          <div class="pz-wave">
-            <span></span><span></span><span></span><span></span><span></span>
+          <div class="pz-input-box">
+            <input class="pz-input" placeholder="버튼을 눌러 수정사항을 알려보세요">
+            <div class="pz-wave">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
           </div>
         </div>
       </div>

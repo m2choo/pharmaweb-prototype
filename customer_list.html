@@ -251,6 +251,30 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 .s2-poly-alert-icon span{font-size:11px;font-weight:900;color:#DC2626;line-height:1;}
 .s2-poly-alert-txt{font-size:12.5px;font-weight:600;color:#DC2626;}
 
+/* ── Step 3 복약지도 전송 ── */
+.s3-section{margin-bottom:20px;}
+.s3-label{font-size:12px;font-weight:600;color:#555;margin-bottom:8px;display:block;}
+.s3-recipient-box{background:#F8F9FA;border:1px solid #E8EAED;border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;}
+.s3-recipient-avatar{width:32px;height:32px;border-radius:50%;background:#EBF2FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s3-recipient-name{font-size:14px;font-weight:700;color:#111;}
+.s3-recipient-meta{font-size:12px;color:#888;margin-top:2px;}
+.s3-textarea{width:100%;min-height:220px;border:1px solid #E0E0E0;border-radius:8px;padding:12px 14px;font-size:13px;font-family:inherit;line-height:1.85;resize:vertical;outline:none;color:#222;}
+.s3-textarea:focus{border-color:#2563EB;}
+.s3-ai-hint{display:flex;align-items:center;gap:6px;margin-top:8px;padding:8px 12px;background:#F0F6FF;border-radius:6px;border:1px dashed #A0B4FF;}
+.s3-ai-hint-text{font-size:11.5px;color:#2563EB;}
+.s3-ai-insert-btn{background:none;border:none;cursor:pointer;font-family:inherit;font-size:11.5px;font-weight:700;color:#2563EB;padding:0;display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.s3-ai-insert-btn:hover{text-decoration:underline;}
+.s3-send-method{display:flex;gap:10px;}
+.s3-method-opt{flex:1;border:1.5px solid #E0E0E0;border-radius:8px;padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-family:inherit;background:#fff;transition:border-color .12s,background .12s;text-align:left;}
+.s3-method-opt.selected{border-color:#2563EB;background:#EBF2FF;}
+.s3-method-opt-ico{width:32px;height:32px;border-radius:8px;background:#E8EAED;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s3-method-opt.selected .s3-method-opt-ico{background:#D1E0FF;}
+.s3-method-opt-label{font-size:13px;font-weight:600;color:#111;}
+.s3-method-opt-sub{font-size:11px;color:#888;margin-top:2px;}
+/* Toast */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(16px);background:#1E293B;color:#fff;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:opacity .22s,transform .22s;z-index:999;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
 /* 처방전 이미지 뷰어 레이어 */
 .rx-viewer-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;align-items:center;justify-content:center;}
 .rx-viewer-bd.on{display:flex;}
@@ -504,6 +528,9 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
   </div>
 </div>
 
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
 <!-- 처방전 이미지 뷰어 레이어 -->
 <div class="rx-viewer-bd" id="rxViewerBd">
   <div class="rx-viewer-box">
@@ -581,9 +608,26 @@ function openModal() {
 }
 
 function closeModal() {
+  // Step 3에서 X 누르면 임시저장 토스트
+  if (currentStep === 3) {
+    const ta = document.getElementById('s3textarea');
+    if (ta && ta.value.trim()) {
+      showToast('복약지도가 임시저장되었습니다.');
+      document.getElementById('bd').classList.remove('on');
+      stopTimer(); stopStream();
+      return;
+    }
+  }
   document.getElementById('bd').classList.remove('on');
   stopTimer();
   stopStream();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
 
 function removeCustomer() {
@@ -696,6 +740,10 @@ function showSummary() {
       ${SUMMARY_TEXT}
     </div>`;
   chat.scrollTop = 0;
+  // AI 요약 텍스트 저장
+  aiSummaryText = SUMMARY_TEXT;
+  // Step 3가 열려 있으면 textarea에 자동 삽입
+  if (currentStep === 3) insertAiSummary();
 }
 
 function stopTimer() {
@@ -710,6 +758,7 @@ function updateTimerDisplay() {
 }
 
 function renderStep1() {
+  currentStep = 1;
   setStepTab(1);
   const B = document.getElementById('mbody');
   const F = document.getElementById('mfoot');
@@ -899,6 +948,10 @@ let selectedRx = null;
 let selectedRxIds = [];
 // rxId → editingDrugs 맵
 let editingDrugsMap = {};
+// AI 요약 텍스트 (showSummary 호출 시 저장)
+let aiSummaryText = '';
+// 현재 스텝
+let currentStep = 1;
 
 function goNext() {
   if (!selectedCustomer) return;
@@ -906,6 +959,7 @@ function goNext() {
 }
 
 function renderStep2() {
+  currentStep = 2;
   setStepTab(2);
   selectedRx = null;
   selectedRxIds = [];
@@ -1236,7 +1290,97 @@ function closeRxViewer() {
 
 function goStep3() {
   if (!selectedRxIds.length) return;
-  alert(`처방전 ${selectedRxIds.length}건 선택 완료!\n(다음 단계: 복약지도 전송)`);
+  currentStep = 3;
+  setStepTab(3);
+
+  const c = selectedCustomer;
+  const rxCount = selectedRxIds.length;
+  const totalDrugs = selectedRxIds.reduce((s, id) => s + (editingDrugsMap[id] || []).length, 0);
+
+  const B = document.getElementById('mbody');
+  const F = document.getElementById('mfoot');
+
+  B.innerHTML = `
+    <div class="s3-section">
+      <span class="s3-label">수신 고객</span>
+      <div class="s3-recipient-box">
+        <div class="s3-recipient-avatar">${c.name.charAt(0)}</div>
+        <div>
+          <div class="s3-recipient-name">${c.name}</div>
+          <div class="s3-recipient-meta">${c.age !== '-' ? c.age + '세 · ' : ''}${c.gender} · ${c.phone} · 처방전 ${rxCount}건 · 약품 ${totalDrugs}종</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="s3-section">
+      <span class="s3-label">복약지도 내용 <span style="color:#888;font-weight:400;">(편집 가능)</span></span>
+      <textarea class="s3-textarea" id="s3textarea" placeholder="복약지도 내용을 입력하거나 AI 요약을 삽입하세요.">${aiSummaryText}</textarea>
+      <div class="s3-ai-hint">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.5 3.5L13 5.5 10.5 8l.5 3.5L8 10l-3 1.5.5-3.5L3 5.5l3.5-1L8 1z" stroke="#2563EB" stroke-width="1.3" stroke-linejoin="round"/></svg>
+        <span class="s3-ai-hint-text">퍼즐 AI 패널에서 <strong>✦ 복약지도 요약하기</strong>를 클릭하면 요약이 자동 삽입됩니다.</span>
+        ${aiSummaryText ? `<button class="s3-ai-insert-btn" onclick="insertAiSummary()">지금 삽입</button>` : ''}
+      </div>
+    </div>
+
+    <div class="s3-section">
+      <span class="s3-label">전송 방법</span>
+      <div class="s3-send-method">
+        <button class="s3-method-opt selected" id="sndApp" onclick="selectMethod('sndApp')">
+          <div class="s3-method-opt-ico">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="3" stroke="#2563EB" stroke-width="1.8"/><circle cx="12" cy="18" r="1" fill="#2563EB"/></svg>
+          </div>
+          <div>
+            <div class="s3-method-opt-label">앱 알림</div>
+            <div class="s3-method-opt-sub">웰체크 앱으로 전송</div>
+          </div>
+        </button>
+        <button class="s3-method-opt" id="sndSms" onclick="selectMethod('sndSms')">
+          <div class="s3-method-opt-ico">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 4h16a2 2 0 012 2v10a2 2 0 01-2 2H7l-4 4V6a2 2 0 012-2z" stroke="#888" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="s3-method-opt-label">문자 메시지</div>
+            <div class="s3-method-opt-sub">SMS / LMS 발송</div>
+          </div>
+        </button>
+      </div>
+    </div>
+  `;
+
+  F.innerHTML = `
+    <button class="btn-cancel" onclick="renderStep2()">← 이전</button>
+    <button class="btn-cancel" onclick="saveDraft()" style="color:#2563EB;border-color:#A0B4FF;">임시저장</button>
+    <button class="btn-next" onclick="sendConsult()">발송</button>
+  `;
+}
+
+function insertAiSummary() {
+  const ta = document.getElementById('s3textarea');
+  if (!ta || !aiSummaryText) return;
+  ta.value = aiSummaryText;
+  ta.focus();
+  showToast('AI 요약이 삽입되었습니다.');
+}
+
+function selectMethod(id) {
+  document.querySelectorAll('.s3-method-opt').forEach(el => el.classList.remove('selected'));
+  const opt = document.getElementById(id);
+  if (opt) opt.classList.add('selected');
+  // 아이콘 색상 변경
+  opt.querySelectorAll('svg path, svg rect, svg circle').forEach(p => {
+    p.setAttribute('stroke', '#2563EB');
+  });
+}
+
+function saveDraft() {
+  showToast('복약지도가 임시저장되었습니다.');
+}
+
+function sendConsult() {
+  const ta = document.getElementById('s3textarea');
+  if (!ta || !ta.value.trim()) { alert('복약지도 내용을 입력해 주세요.'); return; }
+  showToast('복약지도가 발송되었습니다.');
+  setTimeout(() => closeModal(), 600);
 }
 </script>
 </body>

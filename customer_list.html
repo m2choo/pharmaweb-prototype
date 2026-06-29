@@ -506,6 +506,7 @@ const DEMO_LINES = [
   '내일 오후에 방문할게요.',
 ];
 const SUMMARY_TEXT = '오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편 가능함. 수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요. 밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능함.';
+const SUMMARY_DOC = `<div style="font-size:11px;font-weight:700;color:#2563EB;margin-bottom:10px;letter-spacing:.5px;">복약지도 기록</div><div style="font-size:12.5px;color:#222;line-height:2;"><strong>2026.06.30 (첫방문)</strong><br><br><strong>알레르기 및 기저질환</strong><br>고혈압<br>페니실린 알레르기<br>소화불량<br><br><strong>복용 중인 의약품</strong><br>두통약<br>콜레스테롤약<br>당뇨약<br><br><strong>구매제품</strong><br>오메가3<br>헤모큐<br>임팩타민<br>밀크시슬<br><br><strong>복약지도</strong><br>오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편 가능함. 수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요. 밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능함.</div>`;
 let streamInterval = null;
 let lineIdx = 0;
 let charIdx = 0;
@@ -556,13 +557,19 @@ function showSummary() {
   stopStream();
   stopTimer();
   const chat = document.getElementById('pzChat');
-  // 녹음 바 숨기기
   const recBar = document.querySelector('.pz-rec-bar');
   if (recBar) recBar.style.display = 'none';
-  // 채팅 내용 → 요약 카드로 교체
+  // 전체 문서 + 구분선 + 요약 카드
   chat.innerHTML = `
+    <div style="background:#F8F9FA;border-radius:8px;padding:14px 16px;margin-bottom:14px;">
+      ${SUMMARY_DOC}
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;height:1px;background:#E8EBF0;"></div>
+      <span style="font-size:11px;color:#AAA;white-space:nowrap;">AI 요약</span>
+      <div style="flex:1;height:1px;background:#E8EBF0;"></div>
+    </div>
     <div style="background:#F0F6FF;border-left:3px solid #2563EB;border-radius:8px;padding:14px 16px;font-size:13px;color:#1E3A5F;line-height:1.85;">
-      <div style="font-size:11px;font-weight:700;color:#2563EB;margin-bottom:8px;letter-spacing:.5px;">복약지도 요약</div>
       ${SUMMARY_TEXT}
     </div>`;
   chat.scrollTop = 0;

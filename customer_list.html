@@ -331,9 +331,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
           <span>∨</span>
         </div>
       </div>
-      <div class="pz-chat" id="pzChat">
-        <span style="color:#50606E;font-size:12.5px;">녹음이 시작되었습니다. 대화 내용이 여기에 실시간으로 표시됩니다.</span>
-      </div>
+      <div class="pz-chat" id="pzChat"></div>
       <div class="pz-rec-bar">
         <div class="pz-rec-dot"></div>
         <span class="pz-rec-label">녹음 중</span>
@@ -409,12 +407,32 @@ function openModal() {
   document.getElementById('bd').classList.add('on');
   renderStep1();
   startTimer();
+  startStream();
 }
 
 function closeModal() {
   document.getElementById('bd').classList.remove('on');
   stopTimer();
+  stopStream();
 }
+
+const DEMO_LINES = [
+  '요즘 속이 더부룩하고 밥 먹고 나면 소화가 잘 안되는 느낌이 있는데요.',
+  '어떤 걸 먹으면 좋을까요?',
+  '언제부터 그런 느낌이 드셨어요?',
+  '한 두 달 정도 된 것 같아요.',
+  '일도 좀 바빠지고 요즘 잠을 잘 못 잤거든요.',
+  '혹시 드시고 계신 약 있으실까요?',
+  '콜레스테롤이랑 당뇨약 먹고 있어요.',
+  '다른 지병이나 알레르기 있으실까요?',
+  '고혈압이 있고 페니실린 알레르기가 있어요.',
+  '흡연이나 음주는 하실까요?',
+  '담배는 가끔 피우고 술은 일주일에 한두 번 정도는 마시는 거 같아요.',
+  '말씀하신 증상이라면 비타민 B군이랑 철분 같은 영양제도 도움이 될 수 있어요.',
+];
+let streamInterval = null;
+let lineIdx = 0;
+let charIdx = 0;
 
 function startTimer() {
   timerSec = 0;
@@ -423,6 +441,39 @@ function startTimer() {
     timerSec++;
     updateTimerDisplay();
   }, 1000);
+}
+
+function startStream() {
+  const chat = document.getElementById('pzChat');
+  chat.innerHTML = '<span style="color:#50606E;font-size:12px;">녹음이 시작되었습니다.</span><br><br>';
+  lineIdx = 0; charIdx = 0;
+  streamInterval = setInterval(() => {
+    const chat = document.getElementById('pzChat');
+    if (!chat) { clearInterval(streamInterval); return; }
+    if (lineIdx >= DEMO_LINES.length) { clearInterval(streamInterval); return; }
+    const line = DEMO_LINES[lineIdx];
+    if (charIdx === 0) {
+      // 새 줄 span 추가
+      const span = document.createElement('span');
+      span.id = 'sline_' + lineIdx;
+      chat.appendChild(span);
+    }
+    const span = document.getElementById('sline_' + lineIdx);
+    if (span) span.textContent = line.slice(0, charIdx + 1);
+    charIdx++;
+    if (charIdx >= line.length) {
+      // 줄 끝: 공백 + 다음 줄로
+      if (span) span.insertAdjacentHTML('afterend', ' ');
+      lineIdx++;
+      charIdx = 0;
+    }
+    chat.scrollTop = chat.scrollHeight;
+  }, 40);
+}
+
+function stopStream() {
+  clearInterval(streamInterval);
+  streamInterval = null;
 }
 
 function stopTimer() {

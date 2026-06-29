@@ -165,14 +165,16 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 .s2-date-count{font-size:11px;background:#F0F0F0;color:#777;padding:1px 7px;border-radius:10px;font-weight:600;}
 /* 처방전 카드 */
 .s2-rx-list{display:flex;flex-direction:column;gap:0;}
-.s2-rx-card{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid #E8EAED;border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none;margin-bottom:6px;}
+/* 카드+확장을 감싸는 wrapper — 너비 기준점 */
+.s2-rx-item{width:100%;margin-bottom:6px;}
+.s2-rx-card{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid #E8EAED;border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none;width:100%;box-sizing:border-box;}
 .s2-rx-card:hover{border-color:#A0B4FF;background:#FAFBFF;}
-.s2-rx-card.checked{border-color:#2563EB;background:#EBF2FF;border-bottom-left-radius:0;border-bottom-right-radius:0;margin-bottom:0;}
+.s2-rx-card.checked{border-color:#2563EB;background:#EBF2FF;border-bottom-left-radius:0;border-bottom-right-radius:0;}
 .s2-rx-card-check{width:17px;height:17px;accent-color:#2563EB;cursor:pointer;flex-shrink:0;}
-.s2-rx-card-body{flex:1;min-width:0;}
-.s2-rx-card-top{display:flex;align-items:center;gap:8px;}
-.s2-rx-card-hospital{font-size:13px;font-weight:700;color:#111;}
-.s2-rx-card-dept{font-size:12px;color:#888;}
+.s2-rx-card-body{flex:1;min-width:0;overflow:hidden;}
+.s2-rx-card-top{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
+.s2-rx-card-hospital{font-size:13px;font-weight:700;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.s2-rx-card-dept{font-size:12px;color:#888;white-space:nowrap;flex-shrink:0;}
 .s2-rx-card-meta{font-size:11.5px;color:#AAA;margin-top:1px;}
 .s2-rx-card-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .s2-rx-card-chip{font-size:11px;padding:2px 8px;border-radius:10px;background:#F4F5F7;color:#666;white-space:nowrap;}
@@ -180,20 +182,26 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 .s2-rx-chevron{transition:transform .18s;color:#BBB;flex-shrink:0;}
 .s2-rx-card.checked .s2-rx-chevron{transform:rotate(180deg);color:#2563EB;}
 /* 인라인 확장 (약품 테이블) */
-.s2-rx-expand{display:none;border:1.5px solid #2563EB;border-top:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;overflow:hidden;margin-bottom:6px;}
+.s2-rx-expand{display:none;width:100%;box-sizing:border-box;border:1.5px solid #2563EB;border-top:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;overflow:hidden;}
 .s2-rx-expand.open{display:block;}
 /* 선택된 처방전 약품 테이블 */
 .s2-rx-box{border:none;}
-.s2-rx-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#F0F5FF;border-bottom:1px solid #D1E0FF;}
-.s2-rx-hd-info{font-size:12.5px;color:#333;}
+.s2-rx-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#F0F5FF;border-bottom:1px solid #D1E0FF;gap:8px;}
+.s2-rx-hd-info{font-size:12.5px;color:#333;min-width:0;}
 .s2-rx-hd-info strong{font-weight:700;color:#111;}
-.s2-rx-img-btn{padding:5px 12px;border:1px solid #E0E0E0;border-radius:6px;background:#fff;font-size:11.5px;color:#555;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.s2-rx-img-btn{padding:5px 12px;border:1px solid #E0E0E0;border-radius:6px;background:#fff;font-size:11.5px;color:#555;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0;}
 .s2-rx-img-btn:hover{background:#F4F5F7;}
-.s2-drug-table{width:100%;border-collapse:collapse;}
+.s2-drug-table{width:100%;border-collapse:collapse;table-layout:fixed;}
 .s2-drug-table thead tr{background:#F8F9FA;}
 .s2-drug-table th{padding:8px 12px;font-size:11px;font-weight:600;color:#888;text-align:left;border-bottom:1px solid #E8EAED;}
-.s2-drug-table td{padding:10px 12px;font-size:12.5px;color:#333;border-bottom:1px solid #F2F4F6;}
+.s2-drug-table td{padding:10px 12px;font-size:12.5px;color:#333;border-bottom:1px solid #F2F4F6;word-break:keep-all;overflow-wrap:break-word;}
 .s2-drug-table tbody tr:last-child td{border-bottom:none;}
+.s2-drug-table th:nth-child(1),.s2-drug-table td:nth-child(1){width:38%;}
+.s2-drug-table th:nth-child(2),.s2-drug-table td:nth-child(2){width:13%;text-align:center;}
+.s2-drug-table th:nth-child(3),.s2-drug-table td:nth-child(3){width:16%;text-align:center;}
+.s2-drug-table th:nth-child(4),.s2-drug-table td:nth-child(4){width:12%;text-align:center;}
+.s2-drug-table th:nth-child(5),.s2-drug-table td:nth-child(5){width:11%;text-align:center;}
+.s2-drug-table th:nth-child(6),.s2-drug-table td:nth-child(6){width:10%;text-align:center;}
 .s2-drug-name{font-weight:500;color:#111;}
 .s2-drug-sub{font-size:11px;color:#888;margin-top:1px;}
 .s2-consent-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px;background:#FFF1F1;border-top:1px solid #FCA5A5;}
@@ -921,21 +929,23 @@ function renderStep2() {
         <span class="s2-date-count">${rxList.length}건</span>
       </div>
       ${rxList.map(rx => `
-        <div class="s2-rx-card" id="rxcard_${rx.id}" onclick="toggleExpand('${rx.id}')">
-          <input type="checkbox" class="s2-rx-card-check" id="rxchk_${rx.id}" onclick="event.stopPropagation();toggleCheck('${rx.id}')">
-          <div class="s2-rx-card-body">
-            <div class="s2-rx-card-top">
-              <span class="s2-rx-card-hospital">${rx.hospital}</span>
-              <span class="s2-rx-card-dept">${rx.dept} · ${rx.doctor}</span>
+        <div class="s2-rx-item">
+          <div class="s2-rx-card" id="rxcard_${rx.id}" onclick="toggleExpand('${rx.id}')">
+            <input type="checkbox" class="s2-rx-card-check" id="rxchk_${rx.id}" onclick="event.stopPropagation();toggleCheck('${rx.id}')">
+            <div class="s2-rx-card-body">
+              <div class="s2-rx-card-top">
+                <span class="s2-rx-card-hospital">${rx.hospital}</span>
+                <span class="s2-rx-card-dept">${rx.dept} · ${rx.doctor}</span>
+              </div>
+              <div class="s2-rx-card-meta">${rx.days}일분 · ${rx.drugs.length}품목</div>
             </div>
-            <div class="s2-rx-card-meta">${rx.days}일분 · ${rx.drugs.length}품목</div>
+            <div class="s2-rx-card-right">
+              <span class="s2-rx-card-chip">${rx.drugs.length}품목</span>
+              ${chevronSVG}
+            </div>
           </div>
-          <div class="s2-rx-card-right">
-            <span class="s2-rx-card-chip">${rx.drugs.length}품목</span>
-            ${chevronSVG}
-          </div>
+          <div class="s2-rx-expand" id="rxexpand_${rx.id}"></div>
         </div>
-        <div class="s2-rx-expand" id="rxexpand_${rx.id}"></div>
       `).join('')}
     </div>
   `).join('');

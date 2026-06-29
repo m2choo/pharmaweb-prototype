@@ -541,7 +541,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
   <div class="lnb-section">
     <a class="lnb-item" href="customer_list.html" style="text-decoration:none;color:inherit;">
       <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="#555" stroke-width="1.4"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
-      단골고객
+      약국 고객
     </a>
     <div class="lnb-item active">
       <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#2563EB" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="#2563EB" stroke-width="1.4" stroke-linecap="round"/></svg>
@@ -607,7 +607,6 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
           <th style="width:110px">수령 방법</th>
           <th style="width:155px">발행 병원</th>
           <th style="width:130px">상태 ⓘ</th>
-          <th style="width:200px">AI 복약 상담</th>
         </tr>
       </thead>
       <tbody id="tableBody"></tbody>
@@ -711,14 +710,6 @@ function renderTable() {
       <td>${r.method}</td>
       <td>${r.hospital}</td>
       <td><span class="tag-status ${r.status}">${r.status} <span style="font-size:10px">▾</span></span></td>
-      <td>
-        ${r.ai === '전송완료'
-          ? '<button class="btn-sent">전송완료</button>'
-          : r.active
-            ? `<button class="btn-start" onclick="openModal()">시작하기</button>`
-            : `<button class="btn-start disabled" disabled>시작하기</button>`
-        }
-      </td>
     </tr>`).join('');
 }
 renderTable();

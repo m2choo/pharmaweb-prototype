@@ -109,132 +109,231 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
 .ai-fab:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(56,189,248,.5);}
 .ai-fab-text{font-size:16px;font-weight:700;color:#fff;}
 
-/* ═══ BACKDROP ═══ */
-.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none;align-items:center;justify-content:center;}
+/* ── BACKDROP ── */
+.backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;}
 .backdrop.on{display:flex;}
 
-/* ═══ MODAL ═══ */
-.modal{background:#fff;border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.22);width:830px;max-height:92vh;overflow:hidden;position:relative;animation:mIn .2s ease;}
-@keyframes mIn{from{opacity:0;transform:scale(.97) translateY(8px);}to{opacity:1;transform:scale(1) translateY(0);}}
-.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid #E8EAED;}
+/* ── 투 패널 오버레이 ── */
+.overlay-wrap{display:flex;gap:14px;align-items:flex-start;animation:mIn .2s ease;}
+@keyframes mIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* 왼쪽: 모달 패널 */
+.modal-panel{width:680px;flex-shrink:0;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;height:86vh;}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid #E8EAED;flex-shrink:0;}
 .modal-title{font-size:18px;font-weight:700;color:#111;}
 .modal-x{width:30px;height:30px;background:none;border:none;cursor:pointer;color:#888;font-size:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:inherit;}
 .modal-x:hover{background:#F4F5F7;}
-.modal-pt{display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid #E8EAED;}
-.pt-ava{width:36px;height:36px;border-radius:50%;background:#EBF2FF;color:#2563EB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.pt-name{font-size:14px;font-weight:700;color:#111;}
-.pt-info{font-size:11.5px;color:#888;margin-top:1px;}
-.step-tabs{display:flex;border-bottom:1px solid #E8EAED;}
-.step-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 0;font-size:12.5px;color:#BBB;border-bottom:2px solid transparent;white-space:nowrap;}
+.modal-pt{display:none;align-items:center;gap:12px;padding:10px 24px;border-bottom:1px solid #E8EAED;flex-shrink:0;background:#F8FBFF;}
+.modal-pt.on{display:flex;}
+.modal-pt-avatar{width:32px;height:32px;border-radius:50%;background:#EBF2FF;color:#2563EB;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.modal-pt-name{font-size:14px;font-weight:700;color:#111;}
+.modal-pt-info{font-size:12px;color:#888;margin-left:4px;}
+.modal-pt-remove{margin-left:auto;padding:4px 10px;background:none;border:1px solid #E0E0E0;border-radius:6px;font-size:11.5px;color:#888;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.modal-pt-remove:hover{background:#FEE2E2;border-color:#FCA5A5;color:#DC2626;}
+.step-tabs{display:flex;border-bottom:1px solid #E8EAED;flex-shrink:0;}
+.step-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:11px 0;font-size:11.5px;color:#BBB;border-bottom:2px solid transparent;white-space:nowrap;}
 .step-tab.on{color:#2563EB;border-bottom-color:#2563EB;font-weight:600;}
-.step-num{width:18px;height:18px;border-radius:50%;background:#E8EAED;color:#AAA;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-num{width:17px;height:17px;border-radius:50%;background:#E8EAED;color:#AAA;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .step-tab.on .step-num{background:#2563EB;color:#fff;}
-.modal-body{padding:24px;}
-.modal-ft{padding:14px 24px 20px;display:flex;align-items:center;justify-content:center;gap:10px;}
-.btn-prev{height:44px;padding:0 28px;background:#fff;border:1.5px solid #D0D0D0;border-radius:9px;font-size:14px;font-weight:600;color:#444;cursor:pointer;font-family:inherit;}
-.btn-next{height:44px;padding:0 44px;background:#2563EB;border:none;border-radius:9px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
-.btn-next:disabled{background:#C8D7F5;cursor:not-allowed;}
-.btn-send-modal{height:44px;padding:0 32px;background:#2563EB;border:none;border-radius:9px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit;}
-.btn-close{height:44px;padding:0 56px;background:#2563EB;border:none;border-radius:10px;font-size:15px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
+.modal-body{padding:16px 24px;overflow-y:auto;flex:1;}
+.modal-ft{padding:14px 24px 20px;display:flex;justify-content:flex-end;gap:10px;border-top:1px solid #E8EAED;flex-shrink:0;}
 
-/* step1 */
-.s1-guide{font-size:12.5px;color:#777;}
-.s1-title{font-size:15px;font-weight:700;color:#111;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-.rx-pick-tbl{width:100%;border-collapse:collapse;}
-.rx-pick-tbl thead tr{background:#F8F9FA;border-bottom:2px solid #E8EAED;}
-.rx-pick-tbl th{padding:10px 14px;font-size:12px;color:#888;font-weight:500;text-align:left;}
-.rx-pick-tbl tbody tr{border-bottom:1px solid #F2F4F6;cursor:pointer;transition:background .1s;}
-.rx-pick-tbl tbody tr:hover{background:#F8FAFF;}
-.rx-pick-tbl tbody tr.sel{background:#EBF2FF;}
-.rx-pick-tbl td{padding:14px;font-size:13px;color:#333;vertical-align:middle;}
-.rx-pick-tbl td:first-child{width:42px;}
-.radio{width:17px;height:17px;border-radius:50%;border:2px solid #D0D0D0;display:flex;align-items:center;justify-content:center;transition:border-color .15s;}
-.radio.on{border-color:#2563EB;}
-.radio-dot{width:8px;height:8px;border-radius:50%;background:#2563EB;display:none;}
-.radio.on .radio-dot{display:block;}
-.rx-pick-tbl tbody tr.sel td{color:#111;font-weight:500;}
-.sbadge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:500;background:#F0FDF4;color:#059669;border:1px solid #059669;}
+/* Step 1 고객 선택 */
+.s1-guide{font-size:13px;color:#888;margin-bottom:16px;}
+.s1-search-wrap{position:relative;margin-bottom:16px;}
+.s1-search{width:100%;height:40px;border:1px solid #E0E0E0;border-radius:8px;padding:0 36px 0 12px;font-size:13px;font-family:inherit;outline:none;}
+.s1-search:focus{border-color:#2563EB;}
+.s1-search-icon{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:#aaa;pointer-events:none;}
+.s1-result-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid #E8EAED;border-radius:8px;cursor:pointer;transition:background .1s;margin-bottom:6px;}
+.s1-result-item:hover{background:#F8FBFF;border-color:#2563EB;}
+.s1-result-item.selected{background:#EBF2FF;border-color:#2563EB;}
+.s1-result-name{font-size:14px;font-weight:600;color:#111;}
+.s1-result-info{font-size:12px;color:#888;margin-top:2px;}
+.s1-empty{text-align:center;padding:20px 0 8px;color:#AAA;font-size:13px;}
+.s1-add-btn{width:100%;margin-top:12px;padding:11px;border:1.5px dashed #2563EB;border-radius:8px;background:#F0F6FF;color:#2563EB;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .1s;}
+.s1-add-btn:hover{background:#E0EDFF;}
+.s1-add-form{margin-top:14px;padding:16px;background:#F8F9FA;border-radius:8px;display:flex;flex-direction:column;gap:12px;}
+.s1-add-form label{font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px;}
+.s1-add-form input{width:100%;height:38px;border:1px solid #E0E0E0;border-radius:6px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;}
+.s1-add-form input:focus{border-color:#2563EB;}
+.rr-row{display:flex;align-items:center;gap:8px;}
+.rr-front{flex:1;min-width:0;}
+.rr-sep{color:#888;font-size:16px;flex-shrink:0;}
+.s1-add-form .rr-back-digit{width:38px !important;height:38px;border:1px solid #E0E0E0;border-radius:6px;text-align:center;font-size:13px;font-family:inherit;outline:none;flex-shrink:0;padding:0;}
+.s1-add-form .rr-back-digit:focus{border-color:#2563EB;}
+.rr-back-mask{font-size:13px;color:#888;letter-spacing:3px;user-select:none;flex-shrink:0;}
+.btn-next{height:40px;padding:0 28px;background:#2563EB;border:none;border-radius:8px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
+.btn-next:disabled{opacity:.4;cursor:not-allowed;}
+.btn-cancel{height:40px;padding:0 20px;background:#fff;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;color:#555;cursor:pointer;font-family:inherit;}
 
-/* step2 */
-.s2-grid{display:grid;grid-template-columns:220px 1fr;gap:20px;}
-.rx-prev{border:1px solid #E8EAED;border-radius:8px;overflow:hidden;}
-.rx-prev-lbl{padding:8px 12px;font-size:11.5px;font-weight:600;color:#666;background:#F8F9FA;border-bottom:1px solid #E8EAED;}
-.rx-img{background:#fff;padding:10px;}
-.rx-fake{font-size:7.5px;line-height:1.7;color:#333;border:1px solid #DDD;padding:8px;}
-.rx-fake-ttl{text-align:center;font-size:12px;font-weight:700;margin-bottom:6px;letter-spacing:4px;}
-.rx-fake table{width:100%;border-collapse:collapse;}
-.rx-fake td{border:1px solid #CCC;padding:2px 4px;vertical-align:top;}
-.rx-fake .dr{background:#FAFAFA;}
-.s2-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
-.s2-ttl{font-size:14px;font-weight:700;color:#111;}
-.s2-sub{font-size:11.5px;color:#2563EB;cursor:pointer;}
-.dtbl{width:100%;border-collapse:collapse;}
-.dtbl thead tr{border-bottom:2px solid #E8EAED;}
-.dtbl th{font-size:11.5px;color:#999;font-weight:500;padding:0 0 8px;text-align:left;}
-.dtbl tbody tr{border-bottom:1px solid #F2F4F6;}
-.dtbl td{padding:10px 0;font-size:12.5px;vertical-align:middle;}
-.d-no{color:#BBB;width:22px;}
-.d-main{font-weight:600;color:#111;}
-.d-sub{font-size:10.5px;color:#999;margin-top:1px;}
-.d-days{color:#555;}
-.d-acts{display:flex;gap:4px;justify-content:flex-end;}
-.ico{background:none;border:none;cursor:pointer;font-size:14px;color:#D0D0D0;padding:2px;}
-.ico:hover{color:#555;}
-.add-drug{width:100%;margin-top:10px;padding:9px;background:none;border:1.5px dashed #D5D5D5;border-radius:7px;color:#AAA;font-size:12.5px;cursor:pointer;font-family:inherit;}
-.add-drug:hover{border-color:#2563EB;color:#2563EB;}
+/* Step 2 처방전 선택 */
+.s2-label{font-size:12px;font-weight:600;color:#555;margin-bottom:10px;display:block;}
+.s2-date-group{margin-bottom:14px;}
+.s2-date-header{font-size:11.5px;font-weight:700;color:#888;padding:0 2px 6px;display:flex;align-items:center;gap:6px;}
+.s2-date-count{font-size:11px;background:#F0F0F0;color:#777;padding:1px 7px;border-radius:10px;font-weight:600;}
+.s2-rx-list{display:flex;flex-direction:column;gap:0;}
+.s2-rx-item{width:100%;margin-bottom:6px;}
+.s2-rx-card{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid #E8EAED;border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none;width:100%;box-sizing:border-box;}
+.s2-rx-card:hover{border-color:#A0B4FF;background:#FAFBFF;}
+.s2-rx-card.checked{border-color:#2563EB;background:#EBF2FF;border-bottom-left-radius:0;border-bottom-right-radius:0;}
+.s2-rx-card-check{width:17px;height:17px;accent-color:#2563EB;cursor:pointer;flex-shrink:0;}
+.s2-rx-card-body{flex:1;min-width:0;overflow:hidden;}
+.s2-rx-card-top{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
+.s2-rx-card-hospital{font-size:13px;font-weight:700;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.s2-rx-card-dept{font-size:12px;color:#888;white-space:nowrap;flex-shrink:0;}
+.s2-rx-card-meta{font-size:11.5px;color:#AAA;margin-top:1px;}
+.s2-rx-card-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.s2-rx-card-chip{font-size:11px;padding:2px 8px;border-radius:10px;background:#F4F5F7;color:#666;white-space:nowrap;}
+.s2-rx-card.checked .s2-rx-card-chip{background:#D1E0FF;color:#1D4ED8;}
+.s2-rx-chevron{transition:transform .18s;color:#BBB;flex-shrink:0;}
+.s2-rx-card.checked .s2-rx-chevron{transform:rotate(180deg);color:#2563EB;}
+.s2-rx-expand{display:none;width:100%;box-sizing:border-box;border:1.5px solid #2563EB;border-top:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;overflow:hidden;}
+.s2-rx-expand.open{display:block;}
+.s2-rx-box{border:none;}
+.s2-rx-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#F0F5FF;border-bottom:1px solid #D1E0FF;gap:8px;}
+.s2-rx-hd-info{font-size:12.5px;color:#333;min-width:0;}
+.s2-rx-hd-info strong{font-weight:700;color:#111;}
+.s2-rx-img-btn{padding:5px 12px;border:1px solid #E0E0E0;border-radius:6px;background:#fff;font-size:11.5px;color:#555;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0;}
+.s2-rx-img-btn:hover{background:#F4F5F7;}
+.s2-drug-table{width:100%;border-collapse:collapse;table-layout:fixed;}
+.s2-drug-table thead tr{background:#F8F9FA;}
+.s2-drug-table th{padding:8px 12px;font-size:11px;font-weight:600;color:#888;text-align:left;border-bottom:1px solid #E8EAED;}
+.s2-drug-table td{padding:10px 12px;font-size:12.5px;color:#333;border-bottom:1px solid #F2F4F6;word-break:keep-all;overflow-wrap:break-word;}
+.s2-drug-table tbody tr:last-child td{border-bottom:none;}
+.s2-drug-table th:nth-child(1),.s2-drug-table td:nth-child(1){width:38%;}
+.s2-drug-table th:nth-child(2),.s2-drug-table td:nth-child(2){width:13%;text-align:center;}
+.s2-drug-table th:nth-child(3),.s2-drug-table td:nth-child(3){width:16%;text-align:center;}
+.s2-drug-table th:nth-child(4),.s2-drug-table td:nth-child(4){width:12%;text-align:center;}
+.s2-drug-table th:nth-child(5),.s2-drug-table td:nth-child(5){width:11%;text-align:center;}
+.s2-drug-table th:nth-child(6),.s2-drug-table td:nth-child(6){width:10%;text-align:center;}
+.s2-drug-name{font-weight:500;color:#111;}
+.s2-drug-sub{font-size:11px;color:#888;margin-top:1px;}
+.s2-consent-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px;background:#FFF1F1;border-top:1px solid #FCA5A5;}
+.s2-consent-left{display:flex;align-items:flex-start;gap:10px;}
+.s2-consent-icon{width:20px;height:20px;border-radius:50%;border:2px solid #DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.s2-consent-icon span{font-size:11px;font-weight:900;color:#DC2626;line-height:1;}
+.s2-consent-title{font-size:13px;font-weight:700;color:#DC2626;}
+.s2-consent-sub{font-size:11.5px;color:#EF4444;margin-top:2px;}
+.s2-consent-radios{display:flex;align-items:center;gap:16px;flex-shrink:0;}
+.s2-consent-radio{display:flex;align-items:center;gap:5px;font-size:13px;color:#333;cursor:pointer;font-weight:500;}
+.s2-consent-radio input[type="radio"]{width:16px;height:16px;accent-color:#2563EB;cursor:pointer;}
+.s2-empty-tip{text-align:center;padding:40px 0;color:#AAA;font-size:13px;}
+.s2-drug-table th:last-child,.s2-drug-table td:last-child{text-align:center;width:64px;}
+.s2-drug-table th.th-action{width:36px;}
+.s2-drug-table td.td-action{text-align:center;padding:6px 8px;}
+.s2-row-edit-btn{width:26px;height:26px;border:none;background:none;cursor:pointer;color:#BBB;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;}
+.s2-row-edit-btn:hover{background:#F4F5F7;color:#555;}
+.s2-row-del-btn{width:26px;height:26px;border:none;background:none;cursor:pointer;color:#BBB;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;}
+.s2-row-del-btn:hover{background:#FEE2E2;color:#DC2626;}
+.s2-add-drug-row{display:flex;align-items:center;justify-content:center;padding:10px 12px;border-top:1px dashed #E0E4EF;}
+.s2-add-drug-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border:1.5px dashed #2563EB;border-radius:6px;background:#F0F6FF;color:#2563EB;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
+.s2-add-drug-btn:hover{background:#E0EDFF;}
+.s2-edit-row td{background:#F0F6FF;padding:10px 12px;}
+.s2-edit-form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;}
+.s2-edit-field{display:flex;flex-direction:column;gap:3px;}
+.s2-edit-field label{font-size:10.5px;color:#666;font-weight:600;}
+.s2-edit-field input,.s2-edit-field select{height:32px;border:1px solid #C7D7F5;border-radius:6px;padding:0 8px;font-size:12px;font-family:inherit;outline:none;background:#fff;min-width:0;}
+.s2-edit-field input:focus,.s2-edit-field select:focus{border-color:#2563EB;}
+.s2-edit-field.f-name input{width:200px;}
+.s2-edit-field.f-ing input{width:130px;}
+.s2-edit-field.f-dosage input{width:70px;}
+.s2-edit-field.f-freq input{width:90px;}
+.s2-edit-field.f-days input{width:60px;}
+.s2-edit-actions{display:flex;gap:6px;margin-left:auto;}
+.s2-edit-save{height:32px;padding:0 14px;background:#2563EB;border:none;border-radius:6px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
+.s2-edit-cancel{height:32px;padding:0 12px;background:#fff;border:1px solid #E0E0E0;border-radius:6px;font-size:12px;color:#555;cursor:pointer;font-family:inherit;}
+.s2-add-form-row{background:#F8FBFF;}
+.s2-add-form-row td{padding:12px 14px;}
+.s2-changed-badge{display:inline-block;background:#EBF2FF;color:#2563EB;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+.s2-poly-alert{display:flex;align-items:center;gap:10px;padding:11px 14px;background:#FFF1F1;border:1.5px solid #FCA5A5;border-radius:8px;margin-bottom:16px;}
+.s2-poly-alert-icon{width:20px;height:20px;border-radius:50%;border:2px solid #DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s2-poly-alert-icon span{font-size:11px;font-weight:900;color:#DC2626;line-height:1;}
+.s2-poly-alert-txt{font-size:12.5px;font-weight:600;color:#DC2626;}
 
-/* step3 */
-.mic-area{display:flex;flex-direction:column;align-items:center;padding:4px 0 18px;gap:10px;}
-.mic-outer{position:relative;width:86px;height:86px;display:flex;align-items:center;justify-content:center;}
-.mic-pulse{position:absolute;inset:0;border-radius:50%;border:3px solid #15C784;opacity:0;pointer-events:none;}
-.mic-pulse.on{animation:pulse 1.5s ease-in-out infinite;}
-@keyframes pulse{0%{transform:scale(.9);opacity:.8;}50%{transform:scale(1.15);opacity:.3;}100%{transform:scale(.9);opacity:.8;}}
-.mic-btn{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;position:relative;z-index:1;transition:transform .15s,background .2s;}
-.mic-btn:hover{transform:scale(1.05);}
-.mic-btn.idle{background:#fff;border:2px solid #E0E0E0;box-shadow:0 2px 12px rgba(0,0,0,.1);}
-.mic-btn.rec{background:#15C784;box-shadow:0 0 0 4px rgba(21,199,132,.2);}
-.mic-btn.sum,.mic-btn.done{background:#15C784;}
-.mic-tip{background:#2E3A47;color:#fff;font-size:12.5px;padding:8px 18px;border-radius:24px;white-space:nowrap;position:relative;}
-.mic-tip::before{content:'';position:absolute;top:-7px;left:50%;transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:8px solid #2E3A47;}
-.summ-tabs{display:flex;border-bottom:1px solid #E8EAED;}
-.summ-tab{padding:9px 14px;font-size:12.5px;color:#AAA;cursor:pointer;border-bottom:2px solid transparent;}
-.summ-tab.on{color:#2563EB;border-bottom-color:#2563EB;font-weight:600;}
-.summ-body{border:1px solid #E8EAED;border-top:none;min-height:180px;padding:16px;font-size:12.5px;line-height:1.9;color:#333;border-radius:0 0 8px 8px;}
-.summ-empty{color:#C0C0C0;text-align:center;padding-top:55px;font-size:12.5px;}
-.skel{height:13px;background:#EEEEEE;border-radius:6px;margin-bottom:9px;animation:sk 1.4s ease-in-out infinite;}
-@keyframes sk{0%,100%{opacity:1}50%{opacity:.4}}
-.spin-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;padding-top:18px;}
-.spin{width:18px;height:18px;border:2.5px solid #2563EB;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* step4 */
-.s4-grid{display:grid;grid-template-columns:220px 1fr;gap:24px;}
-.tag-ttl{font-size:14px;font-weight:700;color:#111;margin-bottom:12px;}
+/* ── Step 3 복약지도 전송 ── */
+.s4-grid{display:grid;grid-template-columns:200px 1fr;gap:20px;}
+.tag-ttl{font-size:13px;font-weight:700;color:#111;margin-bottom:12px;}
 .tag-chips{display:flex;flex-direction:column;gap:8px;}
-.tag-chip{padding:10px 14px;border:1.5px solid #E0E0E0;border-radius:8px;font-size:13px;color:#444;cursor:pointer;line-height:1.4;transition:all .12s;}
+.tag-chip{padding:9px 13px;border:1.5px solid #E0E0E0;border-radius:8px;font-size:12.5px;color:#444;cursor:pointer;line-height:1.4;transition:all .12s;font-family:inherit;background:#fff;text-align:left;}
 .tag-chip:hover{border-color:#A5BCEC;background:#F4F8FF;}
 .tag-chip.on{border-color:#2563EB;background:#EBF2FF;color:#2563EB;font-weight:600;}
 .msg-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
-.msg-ttl{font-size:14px;font-weight:700;color:#111;}
+.msg-ttl{font-size:13px;font-weight:700;color:#111;}
 .msg-reset{font-size:12px;color:#AAA;cursor:pointer;background:none;border:none;font-family:inherit;}
 .msg-reset:hover{color:#2563EB;}
-.msg-ta{width:100%;height:232px;border:1.5px solid #E0E0E0;border-radius:10px;padding:14px;font-size:13px;line-height:1.8;color:#333;resize:none;font-family:inherit;transition:border-color .15s;}
+.msg-ta{width:100%;height:260px;border:1.5px solid #E0E0E0;border-radius:10px;padding:14px;font-size:12.5px;line-height:1.8;color:#333;resize:none;font-family:inherit;transition:border-color .15s;}
 .msg-ta:focus{outline:none;border-color:#2563EB;}
 .msg-cnt{text-align:right;font-size:11px;color:#BBB;margin-top:4px;}
-
-/* step4 preview */
-.prev-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-.prev-msg{background:#FFF9E6;border-radius:10px;padding:16px;font-size:12px;line-height:1.9;color:#333;min-height:200px;overflow-y:auto;max-height:240px;}
-.sum-tbl{width:100%;border-collapse:collapse;}
-.sum-tbl tr{border-bottom:1px solid #F2F4F6;}
-.sum-tbl td{padding:11px 4px;font-size:13px;vertical-align:top;}
-.sum-tbl td:first-child{color:#888;width:90px;white-space:nowrap;}
-.sum-tbl td:last-child{color:#333;font-weight:500;}
-
-/* complete */
 .cpl-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 40px;gap:16px;text-align:center;}
 .cpl-ttl{font-size:18px;font-weight:700;color:#111;}
 .cpl-sub{font-size:14px;color:#777;}
+.btn-close-cpl{height:44px;padding:0 48px;background:#2563EB;border:none;border-radius:10px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
+.prev-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.prev-msg{background:#FFF9E6;border-radius:10px;padding:16px;font-size:12px;line-height:1.9;color:#333;min-height:calc(52vh - 110px);overflow-y:auto;max-height:calc(52vh - 110px);}
+.sum-tbl{width:100%;border-collapse:collapse;}
+.sum-tbl tr{border-bottom:1px solid #F2F4F6;}
+.sum-tbl td{padding:11px 4px;font-size:13px;vertical-align:middle;}
+.sum-tbl td:first-child{color:#888;width:90px;white-space:nowrap;}
+.sum-tbl td:last-child{color:#333;font-weight:500;}
+.s4-phone-input{width:100%;height:36px;border:1px solid #E0E0E0;border-radius:6px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;margin-top:4px;}
+.s4-phone-input:focus{border-color:#2563EB;}
+/* Toast */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(16px);background:#1E293B;color:#fff;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:opacity .22s,transform .22s;z-index:999;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* 처방전 이미지 뷰어 레이어 */
+.rx-viewer-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;align-items:center;justify-content:center;}
+.rx-viewer-bd.on{display:flex;}
+.rx-viewer-box{background:#fff;border-radius:12px;width:480px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.4);}
+.rx-viewer-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #E8EAED;flex-shrink:0;}
+.rx-viewer-title{font-size:15px;font-weight:700;color:#111;}
+.rx-viewer-x{width:30px;height:30px;background:none;border:none;cursor:pointer;color:#888;font-size:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+.rx-viewer-x:hover{background:#F4F5F7;}
+.rx-viewer-img{flex:1;overflow-y:auto;padding:16px;display:flex;align-items:center;justify-content:center;background:#F8F9FA;}
+.rx-viewer-placeholder{text-align:center;padding:40px 20px;color:#888;}
+.rx-viewer-placeholder .rx-icon{font-size:48px;margin-bottom:12px;}
+.rx-viewer-placeholder p{font-size:13px;line-height:1.7;}
+
+/* 오른쪽: 퍼즐 AI 패널 */
+.puzzle-panel{width:320px;flex-shrink:0;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;height:86vh;overflow:hidden;border:1px solid #E8EBF0;}
+.pz-header{padding:16px 16px 10px;border-bottom:1px solid #F0F2F5;flex-shrink:0;background:#fff;}
+.pz-name-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.pz-name{font-size:16px;font-weight:700;color:#111;}
+.pz-name-sub{font-size:13px;font-weight:400;color:#666;margin-left:2px;}
+.pz-icons{display:flex;gap:4px;}
+.pz-icon-btn{width:28px;height:28px;background:none;border:none;color:#888;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:6px;}
+.pz-icon-btn:hover{background:#F5F6F8;}
+.pz-visit-bar{display:inline-flex;align-items:center;gap:0;background:#F4F6FA;border-radius:20px;padding:5px 12px;font-size:11px;color:#555;cursor:pointer;flex-wrap:wrap;gap:4px;}
+.pz-visit-dot{width:6px;height:6px;border-radius:50%;background:#3B82F6;display:inline-block;flex-shrink:0;}
+.pz-chat{flex:1;overflow-y:auto;padding:16px 18px;font-size:13px;color:#333;line-height:1.85;background:#fff;}
+.pz-chat::-webkit-scrollbar{width:3px;}
+.pz-chat::-webkit-scrollbar-thumb{background:#DDD;border-radius:2px;}
+.pz-sparkle-btn{position:absolute;right:14px;bottom:8px;background:#fff;border:1.5px solid #E0E4EF;border-radius:20px;padding:6px 14px;color:#555;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:2;}
+.pz-sparkle-btn:hover{background:#F5F6FF;border-color:#C7CEFF;}
+.pz-bottom{flex-shrink:0;border-top:1px solid #F0F2F5;background:#fff;}
+.pz-chips{display:flex;gap:8px;padding:10px 14px 8px;overflow-x:auto;}
+.pz-chips::-webkit-scrollbar{display:none;}
+.pz-chip{padding:6px 12px;border:1px solid #E0E4EF;border-radius:20px;font-size:11.5px;color:#444;cursor:pointer;white-space:nowrap;background:#fff;font-family:inherit;flex-shrink:0;}
+.pz-chip:hover{background:#F0F4FF;border-color:#A0B4FF;}
+.pz-input-row{display:flex;align-items:center;gap:8px;padding:6px 14px 14px;}
+.pz-mic-btn{width:40px;height:40px;border-radius:50%;background:#2563EB;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:micPulse 1.5s ease-in-out infinite;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 3px rgba(37,99,235,.18)}50%{box-shadow:0 0 0 8px rgba(37,99,235,.05)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+.pz-input-box{flex:1;display:flex;align-items:center;gap:6px;background:#F4F6FA;border:1px solid #E8EBF0;border-radius:20px;padding:8px 12px;}
+.pz-input{flex:1;background:none;border:none;font-size:12px;color:#333;font-family:inherit;outline:none;min-width:0;}
+.pz-input::placeholder{color:#AAB2C0;}
+.pz-wave{display:flex;align-items:center;gap:2px;flex-shrink:0;}
+.pz-wave span{display:inline-block;width:2.5px;background:#2563EB;border-radius:2px;animation:wave .8s ease-in-out infinite;}
+.pz-wave span:nth-child(1){height:4px;animation-delay:0s;}
+.pz-wave span:nth-child(2){height:9px;animation-delay:.12s;}
+.pz-wave span:nth-child(3){height:14px;animation-delay:.24s;}
+.pz-wave span:nth-child(4){height:9px;animation-delay:.36s;}
+.pz-wave span:nth-child(5){height:4px;animation-delay:.48s;}
+@keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.7)}}
+.pz-rec-bar{display:flex;align-items:center;gap:8px;padding:4px 16px 0;flex-shrink:0;}
+.pz-rec-dot{width:7px;height:7px;border-radius:50%;background:#EF4444;animation:blink 1s ease-in-out infinite;}
+.pz-rec-label{font-size:11px;color:#888;font-weight:500;}
+.pz-rec-time{margin-left:auto;font-size:11px;color:#888;font-variant-numeric:tabular-nums;}
 footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:10.5px;color:#999;display:flex;justify-content:space-between;align-items:flex-end;}
 .footer-links{display:flex;gap:12px;margin-bottom:6px;}
 .footer-links a{color:#999;text-decoration:none;}
@@ -404,7 +503,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 </footer>
 
 <!-- AI 복약 상담 FAB -->
-<button class="ai-fab" onclick="location.href='customer_list.html?openModal=1'">
+<button class="ai-fab" onclick="openModal()">
   <svg width="44" height="33" viewBox="0 0 44 33" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_264_5121)">
 <path d="M35.2488 26.6409L25.2811 9.97327L19.855 17.848L27.6524 30.8692C28.8582 32.8993 31.5511 33.5846 33.6412 32.4209C35.7446 31.2571 36.4546 28.658 35.2488 26.6409Z" fill="#113694"/>
@@ -423,28 +522,109 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
   <span class="ai-fab-text">CL note 복약 상담</span>
 </button>
 
-<!-- BACKDROP + MODAL -->
+<!-- BACKDROP -->
 <div class="backdrop" id="bd" onclick="closeModal()">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-hd">
-      <span class="modal-title">AI 복약 상담</span>
-      <button class="modal-x" onclick="closeModal()">✕</button>
+  <div class="overlay-wrap" onclick="event.stopPropagation()">
+
+    <!-- 왼쪽: 모달 -->
+    <div class="modal-panel">
+      <div class="modal-hd">
+        <span class="modal-title">AI 복약 상담</span>
+        <button class="modal-x" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-pt" id="modalPt">
+        <div class="modal-pt-avatar" id="ptAvatar"></div>
+        <div>
+          <span class="modal-pt-name" id="ptName"></span>
+          <span class="modal-pt-info" id="ptInfo"></span>
+        </div>
+        <button class="modal-pt-remove" onclick="removeCustomer()">✕ 고객 삭제</button>
+      </div>
+      <div class="step-tabs">
+        <div class="step-tab on" id="st1"><span class="step-num">1</span> 고객 선택</div>
+        <div class="step-tab" id="st2"><span class="step-num">2</span> 처방전 선택</div>
+        <div class="step-tab" id="st3"><span class="step-num">3</span> 복약지도 전송</div>
+        <div class="step-tab" id="st4"><span class="step-num">4</span> 전송 확인</div>
+      </div>
+      <div class="modal-body" id="mbody"></div>
+      <div class="modal-ft" id="mfoot"></div>
     </div>
-    <div class="modal-pt">
-      <div class="pt-ava">김</div>
-      <div>
-        <div class="pt-name">김철수</div>
-        <div class="pt-info">1980-01-01 · 40세 · 남성 · 010-1234-5678</div>
+
+    <!-- 오른쪽: 퍼즐 AI 패널 (폰 화면 스타일) -->
+    <div class="puzzle-panel">
+      <div class="pz-header">
+        <div class="pz-name-row">
+          <div class="pz-name" id="pzName">고객 선택 대기 중<span class="pz-name-sub" id="pzSub"></span></div>
+          <div class="pz-icons">
+            <button class="pz-icon-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="#888" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="pz-icon-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="#888" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="pz-icon-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="#888" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="pz-visit-bar">
+          <span class="pz-visit-dot"></span>
+          <span id="pzVisit">고객을 선택하면 방문 정보가 표시됩니다</span>
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style="margin-left:2px"><path d="M2 4l4 4 4-4" stroke="#999" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+
+      <!-- 채팅 영역 + ✦ 플로팅 버튼 -->
+      <div style="flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;">
+        <div class="pz-chat" id="pzChat"></div>
+        <button class="pz-sparkle-btn" style="position:absolute;right:12px;bottom:10px;" onclick="showSummary()">✦ 복약지도 요약하기</button>
+      </div>
+
+      <!-- 녹음 상태 바 -->
+      <div class="pz-rec-bar">
+        <div class="pz-rec-dot"></div>
+        <span class="pz-rec-label">녹음 중</span>
+        <span class="pz-rec-time" id="pzTimer">00:00</span>
+      </div>
+
+      <div class="pz-bottom">
+        <div class="pz-chips">
+          <button class="pz-chip">의약품 복용 이력</button>
+          <button class="pz-chip">과거 복약지도 이력</button>
+        </div>
+        <div class="pz-input-row">
+          <button class="pz-mic-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="8.5" y="1" width="7" height="11" rx="3.5" fill="#fff"/><path d="M5 11c0 3.866 3.134 7 7 7s7-3.134 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M12 18v3M9 21h6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <div class="pz-input-box">
+            <input class="pz-input" placeholder="버튼을 눌러 수정사항을 알려보세요">
+            <div class="pz-wave">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="step-tabs" id="stabs">
-      <div class="step-tab" id="s1"><span class="step-num">1</span> 처방전 선택</div>
-      <div class="step-tab" id="s2"><span class="step-num">2</span> 처방전 확인</div>
-      <div class="step-tab" id="s3"><span class="step-num">3</span> AI 녹음·요약</div>
-      <div class="step-tab" id="s4"><span class="step-num">4</span> 복약지도 전송</div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- 처방전 이미지 뷰어 레이어 -->
+<div class="rx-viewer-bd" id="rxViewerBd">
+  <div class="rx-viewer-box">
+    <div class="rx-viewer-hd">
+      <span class="rx-viewer-title" id="rxViewerTitle">처방전 원본</span>
+      <button class="rx-viewer-x" onclick="closeRxViewer()">✕</button>
     </div>
-    <div id="mbody" class="modal-body"></div>
-    <div id="mfoot" class="modal-ft"></div>
+    <div class="rx-viewer-img">
+      <div class="rx-viewer-placeholder">
+        <div class="rx-icon">📋</div>
+        <p>처방전 원본 이미지<br>준비 중입니다.</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -468,177 +648,832 @@ const rows=[
     </tr>`).join('');
 })();
 
-// ── State ─────────────────────────────
-let sc='s1', selRx=-1;
-const DRUGS=[['메트포르민 500mg','1회 1정, 하루 3회','30일분'],['글리메피리드 2mg','1회 1정, 하루 1회','30일분'],['로수바스타틴 10mg','1회 1정, 하루 1회','30일분'],['오메프라졸 20mg','1회 1정, 하루 1회','30일분']];
-const RXS=[{date:'2026-05-11',hospital:'연세세브란스병원',cnt:'5종'},{date:'2024-10-15',hospital:'연세세브란스병원',cnt:'4종'},{date:'2024-09-18',hospital:'강남성심병원',cnt:'6종'}];
-const SUMM=`오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편 가능함. 수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요. 밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능함.`;
-const FULL=`흡연이나 음주는 하실까요?\n담배는 가끔 피우고 술은 일주일에 한두 번 정도는 마시는 것 같아요.\n말씀하신 증상이라면 비타민 B군이랑 철분 같은 건강기능식품이 도움될 수 있어요. 헤모큐라는 철분제랑 임팩타민 영양제 같이 드릴 테니까 한번 드셔보세요. 식후에 드시는 게 좋고 공복에 드시면 속이 불편할 수 있어요.\n네. 혹시 추가로 밀크시슬 좋은 걸로 같이 주실래요?\n밀크시슬은 재고 확인해보니 품절돼서 내일 오전에 입고 예정이라 12시 이후에 방문 가능하실까요?\n네. 내일 오후에 방문할게요.`;
-const MSGDEF=`[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n1. 크라목신듀오정 500mg - 1회 1정, 하루 3회, 5일분\n2. 비오플 250캡슐 - 1회 1정, 하루 2회, 5일분\n3. 엘도테인정 300mg - 1회 1정, 하루 3회, 5일분\n4. 투리온정 10mg - 1회 1정, 하루 2회, 5일분\n5. 덱스핀정 300mg - 1회 1정, 하루 2회, 5일분\n6. 펙수클루정 10mg - 1회 1정, 하루 2회, 5일분\n\n[복약 방법]\n하루 3번, 아침, 점심, 저녁 식후 30분에 복약하세요.\n\n[약사 상담 메모]\n오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편할 수 있습니다.\n수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요합니다.\n밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능합니다.`;
-const TAGS=['공복에 복용하세요.','충분한 물과 함께 드세요.','잠이 올 수 있으니 주의하세요.','술을 드시지 마세요.','임의로 복용을 중단하지 마세요.'];
-let selTags=new Set(), msg=MSGDEF;
+// ── 모달 + 퍼즐 AI ──
+const KIMCHECK = { name:'김체크', birth:'1982-03-15', phone:'010-1234-5678', gender:'여성', age:44 };
+let selectedCustomer = null;
+let showAddForm = false;
+let timerInterval = null;
+let timerSec = 0;
 
-function openModal(){sc='s1';selRx=-1;document.getElementById('bd').classList.add('on');render();}
-function openModalStep2(){sc='s2';selRx=0;document.getElementById('bd').classList.add('on');render();}
-function closeModal(){document.getElementById('bd').classList.remove('on');}
-function go(s){sc=s;render();}
-
-function updateTabs(){
-  const map={s1:1,s2:2,s3a:3,s3b:3,s3l:3,s3d:3,s3f:3,s4:4,s4p:4,cpl:null};
-  const cur=map[sc];
-  document.getElementById('stabs').style.display=sc==='cpl'?'none':'flex';
-  for(let i=1;i<=4;i++){const el=document.getElementById('s'+i);el.className='step-tab';if(i===cur)el.classList.add('on');}
+function openModal() {
+  selectedCustomer = null;
+  showAddForm = false;
+  document.getElementById('modalPt').classList.remove('on');
+  document.getElementById('ptAvatar').textContent = '';
+  document.getElementById('ptName').textContent = '';
+  document.getElementById('ptInfo').textContent = '';
+  document.getElementById('pzName').innerHTML = '고객 선택 대기 중';
+  document.getElementById('pzVisit').textContent = '고객을 선택하면 방문 정보가 표시됩니다';
+  const recBar = document.querySelector('.pz-rec-bar');
+  if (recBar) recBar.style.display = '';
+  document.getElementById('bd').classList.add('on');
+  renderStep1();
+  startTimer();
+  startStream();
 }
 
-function render(){
-  updateTabs();
-  const B=document.getElementById('mbody'),F=document.getElementById('mfoot');
-  B.innerHTML='';F.innerHTML='';
-  ({s1:rS1,s2:rS2,s3a:rS3a,s3b:rS3b,s3l:rS3l,s3d:rS3d,s3f:rS3f,s4:rS4,s4p:rS4p,cpl:rCpl}[sc]||rS1)(B,F);
+function closeModal() {
+  if (currentStep === 3) {
+    const ta = document.getElementById('s3mta');
+    if (ta && ta.value.trim()) {
+      showToast('복약지도가 임시저장되었습니다.');
+      document.getElementById('bd').classList.remove('on');
+      stopTimer(); stopStream();
+      return;
+    }
+  }
+  document.getElementById('bd').classList.remove('on');
+  stopTimer();
+  stopStream();
 }
 
-// ── Step 1 ────────────────────────────
-function rS1(B,F){
-  B.innerHTML=`<div class="s1-title">처방전을 선택하세요 <span class="s1-guide">선택한 처방전을 기반으로 AI 복약 상담이 진행됩니다.</span></div>
-  <table class="rx-pick-tbl"><thead><tr><th></th><th>날짜</th><th>병원명</th><th>처방약 수</th><th>상태</th></tr></thead><tbody>
-  ${RXS.map((r,i)=>`<tr class="${selRx===i?'sel':''}" onclick="pickRx(${i})">
-    <td><div class="radio ${selRx===i?'on':''}"><div class="radio-dot"></div></div></td>
-    <td>${r.date}</td><td>${r.hospital}</td><td>${r.cnt}</td>
-    <td><span class="sbadge">조제 완료</span></td>
-  </tr>`).join('')}
-  </tbody></table>`;
-  F.innerHTML=`<button class="btn-next"${selRx<0?' disabled':''} onclick="go('s2')">다음</button>`;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
-function pickRx(i){selRx=i;rS1(document.getElementById('mbody'),document.getElementById('mfoot'));}
 
-// ── Step 2 ────────────────────────────
-function rS2(B,F){
-  B.innerHTML=`<div class="s2-grid">
-    <div><div class="rx-prev"><div class="rx-prev-lbl">처방전 원본</div><div class="rx-img"><div class="rx-fake">
-      <div class="rx-fake-ttl">처 방 전</div>
-      <table><tr><td style="width:40%">요양기관명</td><td>연세세브란스병원</td></tr>
-      <tr><td>환자명</td><td>김철수</td></tr><tr><td>주민번호</td><td>800101-1×××××</td></tr>
-      <tr><td>처방일</td><td>2026-05-11</td></tr></table><br>
-      <table><tr style="background:#f0f0f0"><td>약품명</td><td>1회량</td><td>횟수</td><td>일수</td></tr>
-      ${DRUGS.map(d=>`<tr class="dr"><td>${d[0]}</td><td>1</td><td>3</td><td>30</td></tr>`).join('')}
+function removeCustomer() {
+  selectedCustomer = null;
+  showAddForm = false;
+  const pt = document.getElementById('modalPt');
+  pt.classList.remove('on');
+  document.getElementById('ptAvatar').textContent = '';
+  document.getElementById('ptName').textContent = '';
+  document.getElementById('ptInfo').textContent = '';
+  document.getElementById('pzName').innerHTML = '고객 선택 대기 중';
+  document.getElementById('pzVisit').textContent = '고객을 선택하면 방문 정보가 표시됩니다';
+  renderStep1();
+  stopStream(); stopTimer();
+  startTimer(); startStream();
+}
+
+const DEMO_LINES = [
+  '요즘 속이 더부룩하고 밥 먹고 나면 소화가 잘 안되는 느낌이 있는데요.',
+  '어떤 걸 먹으면 좋을까요?',
+  '언제부터 그런 느낌이 드셨어요?',
+  '한 두 달 정도 된 거 같아요.',
+  '일도 좀 바빠지고 요즘 잠을 잘 못 잤거든요.',
+  '혹시 드시고 계신 약 있으실까요?',
+  '콜레스테롤이랑 당뇨약 먹고 있어요.',
+  '다른 질병이나 알레르기 있으실까요?',
+  '고혈압이 있고 페니실린 알레르기가 있어요.',
+  '흡연이나 음주는 하실까요?',
+  '담배는 가끔 피우고 술은 일주일에 한두 번 정도는 마시는 것 같아요.',
+  '말씀하신 증상이라면 비타민 B군이랑 철분 같은 건강기능식품이 도움될 수 있어요.',
+  '헤모큐라는 철분제랑 임팩타민 영양제 같이 드릴 테니까',
+  '한번 드셔보세요.',
+  '식후에 드시는 게 좋고 공복에 드시면 속이 불편할 수 있어요.',
+  '또 수면이 부족하거나 카페인 많이 드시면 효과가 떨어질 수 있으니 생활습관도 같이 관리하시면 좋을 것 같아요.',
+  '네.',
+  '혹시 추가로 밀크시슬 좋은 걸로 같이 주실래요?',
+  '밀크시슬은 재고 확인해보니 품절돼서 내일 오전에 입고 예정이라 12시 이후에 방문 가능하실까요?',
+  '네.',
+  '내일 오후에 방문할게요.',
+];
+const SUMMARY_TEXT = '오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편 가능함. 수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요. 밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능함.';
+const SUMMARY_DOC = `<div style="font-size:11px;font-weight:700;color:#2563EB;margin-bottom:10px;letter-spacing:.5px;">복약지도 기록</div><div style="font-size:12.5px;color:#222;line-height:2;"><strong>2026.06.30 (첫방문)</strong><br><br><strong>알레르기 및 기저질환</strong><br>고혈압<br>페니실린 알레르기<br>소화불량<br><br><strong>복용 중인 의약품</strong><br>두통약<br>콜레스테롤약<br>당뇨약<br><br><strong>구매제품</strong><br>오메가3<br>헤모큐<br>임팩타민<br>밀크시슬<br><br><strong>복약지도</strong><br>오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편 가능함. 수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요. 밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능함.</div>`;
+let streamInterval = null;
+let lineIdx = 0;
+let charIdx = 0;
+
+function startTimer() {
+  timerSec = 0;
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timerSec++;
+    updateTimerDisplay();
+  }, 1000);
+}
+
+function startStream() {
+  const chat = document.getElementById('pzChat');
+  chat.innerHTML = '<span style="color:#50606E;font-size:12px;">녹음이 시작되었습니다.</span><br><br>';
+  lineIdx = 0; charIdx = 0;
+  streamInterval = setInterval(() => {
+    const chat = document.getElementById('pzChat');
+    if (!chat) { clearInterval(streamInterval); return; }
+    if (lineIdx >= DEMO_LINES.length) { clearInterval(streamInterval); return; }
+    const line = DEMO_LINES[lineIdx];
+    if (charIdx === 0) {
+      const span = document.createElement('span');
+      span.id = 'sline_' + lineIdx;
+      chat.appendChild(span);
+    }
+    const span = document.getElementById('sline_' + lineIdx);
+    if (span) span.textContent = line.slice(0, charIdx + 1);
+    charIdx++;
+    if (charIdx >= line.length) {
+      if (span) span.insertAdjacentHTML('afterend', ' ');
+      lineIdx++;
+      charIdx = 0;
+    }
+    chat.scrollTop = chat.scrollHeight;
+  }, 120);
+}
+
+function stopStream() {
+  clearInterval(streamInterval);
+  streamInterval = null;
+}
+
+function showSummary() {
+  stopStream();
+  stopTimer();
+  const chat = document.getElementById('pzChat');
+  const recBar = document.querySelector('.pz-rec-bar');
+  if (recBar) recBar.style.display = 'none';
+  chat.insertAdjacentHTML('beforeend', `
+    <div style="margin-top:16px;margin-bottom:14px;">
+      <div style="background:#F8F9FA;border-radius:8px;padding:14px 16px;margin-bottom:14px;">
+        ${SUMMARY_DOC}
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <div style="flex:1;height:1px;background:#E8EBF0;"></div>
+        <span style="font-size:11px;color:#AAA;white-space:nowrap;">AI 요약</span>
+        <div style="flex:1;height:1px;background:#E8EBF0;"></div>
+      </div>
+      <div style="background:#F0F6FF;border-left:3px solid #2563EB;border-radius:8px;padding:14px 16px;font-size:13px;color:#1E3A5F;line-height:1.85;">
+        ${SUMMARY_TEXT}
+      </div>
+    </div>`);
+  chat.scrollTop = chat.scrollHeight;
+  aiSummaryText = SUMMARY_TEXT;
+  if (currentStep === 3) insertAiSummary();
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
+
+function updateTimerDisplay() {
+  const m = String(Math.floor(timerSec / 60)).padStart(2, '0');
+  const s = String(timerSec % 60).padStart(2, '0');
+  document.getElementById('pzTimer').textContent = m + ':' + s;
+}
+
+function renderStep1() {
+  currentStep = 1;
+  setStepTab(1);
+  const B = document.getElementById('mbody');
+  const F = document.getElementById('mfoot');
+  B.innerHTML = `
+    <p class="s1-guide">고객 이름 또는 휴대전화 번호를 검색하세요.</p>
+    <div class="s1-search-wrap">
+      <input class="s1-search" id="s1input" type="text" placeholder="이름 또는 휴대전화 번호" oninput="onSearch(this.value)" autocomplete="off">
+      <span class="s1-search-icon">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#aaa" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </span>
+    </div>
+    <div id="s1results"></div>
+    <div id="s1addarea">
+      <button class="s1-add-btn" onclick="toggleAddForm(this)">+ 새 고객 추가</button>
+      <div id="addFormInner"></div>
+    </div>
+  `;
+  F.innerHTML = `
+    <button class="btn-cancel" onclick="closeModal()">취소</button>
+    <button class="btn-next" id="btnNext" disabled onclick="goNext()">다음</button>
+  `;
+}
+
+function setStepTab(n) {
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById('st' + i);
+    if (el) el.className = 'step-tab' + (i === n ? ' on' : '');
+  }
+}
+
+function onSearch(val) {
+  const q = val.trim();
+  const res = document.getElementById('s1results');
+  selectedCustomer = null;
+  document.getElementById('btnNext').disabled = true;
+  if (!q) { res.innerHTML = ''; return; }
+  const matched = (KIMCHECK.name.includes(q) || KIMCHECK.phone.includes(q)) ? [KIMCHECK] : [];
+  if (matched.length) {
+    res.innerHTML = `
+      <div class="s1-result-item" id="ri0" onclick="selectCustomer()">
+        <div>
+          <div class="s1-result-name">${KIMCHECK.name}</div>
+          <div class="s1-result-info">${KIMCHECK.birth} · ${KIMCHECK.gender} · ${KIMCHECK.phone}</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>`;
+  } else {
+    res.innerHTML = `<div class="s1-empty">검색 결과가 없습니다.</div>`;
+  }
+}
+
+function setCustomerHeader(name, info, pzVisitTxt) {
+  const pt = document.getElementById('modalPt');
+  document.getElementById('ptAvatar').textContent = name.charAt(0);
+  document.getElementById('ptName').textContent = name;
+  document.getElementById('ptInfo').textContent = info;
+  pt.classList.add('on');
+  document.getElementById('pzName').innerHTML = name + `<span class="pz-name-sub" id="pzSub">${info ? ' (' + info.split('·')[0].trim() + ')' : ''}</span>`;
+  document.getElementById('pzVisit').textContent = pzVisitTxt;
+}
+
+function selectCustomer() {
+  selectedCustomer = KIMCHECK;
+  const el = document.getElementById('ri0');
+  if (el) el.className = 's1-result-item selected';
+  document.getElementById('btnNext').disabled = false;
+  setCustomerHeader(KIMCHECK.name, `${KIMCHECK.age}세 · ${KIMCHECK.gender} · ${KIMCHECK.phone}`, '3회 방문  최근 26.06.22 · 처방전 8건');
+}
+
+function toggleAddForm(btn) {
+  showAddForm = !showAddForm;
+  document.getElementById('addFormInner').innerHTML = showAddForm ? `
+    <div class="s1-add-form">
+      <div>
+        <label>이름</label>
+        <input type="text" id="addName" placeholder="고객 이름">
+      </div>
+      <div>
+        <label>주민번호</label>
+        <div class="rr-row">
+          <input class="rr-front" type="text" id="addRrFront" placeholder="생년월일 6자리" maxlength="6" oninput="if(this.value.length===6)document.getElementById('addRrBack').focus()">
+          <span class="rr-sep">—</span>
+          <input class="rr-back-digit" type="text" id="addRrBack" maxlength="1" inputmode="numeric" oninput="this.value=this.value.replace(/\D/,'')">
+          <span class="rr-back-mask">••••••</span>
+        </div>
+      </div>
+      <button class="btn-next" style="width:100%;margin-top:4px" onclick="addNewCustomer()">고객 추가</button>
+    </div>` : '';
+  if (showAddForm) document.getElementById('btnNext').disabled = true;
+}
+
+function addNewCustomer() {
+  const name = (document.getElementById('addName').value || '').trim();
+  const rrFront = (document.getElementById('addRrFront').value || '').trim();
+  const rrBack = (document.getElementById('addRrBack').value || '').trim();
+  if (!name || rrFront.length < 6 || rrBack.length < 1) {
+    alert('이름과 주민번호를 모두 입력해 주세요.'); return;
+  }
+  const genderMap = {'1':'남성','3':'남성','2':'여성','4':'여성'};
+  const gender = genderMap[rrBack] || '-';
+  const century = (rrBack === '3' || rrBack === '4') ? '20' : '19';
+  const birthYear = parseInt(century + rrFront.slice(0,2));
+  const birthMonth = parseInt(rrFront.slice(2,4));
+  const birthDay = parseInt(rrFront.slice(4,6));
+  const birth = birthYear + '-' + String(birthMonth).padStart(2,'0') + '-' + String(birthDay).padStart(2,'0');
+  const today = new Date(2026, 5, 29);
+  let age = today.getFullYear() - birthYear;
+  if (today.getMonth() + 1 < birthMonth || (today.getMonth() + 1 === birthMonth && today.getDate() < birthDay)) age--;
+  selectedCustomer = { name, birth, gender, phone: '-', age, isNew: true };
+  setCustomerHeader(name, `${age}세 · ${gender}`, '방문 이력 없음');
+  document.getElementById('btnNext').disabled = false;
+  document.getElementById('addFormInner').innerHTML = `<p style="font-size:12px;color:#16A34A;margin-top:8px;">✓ "${name}" 고객이 추가되었습니다.</p>`;
+  showAddForm = false;
+}
+
+// ── 처방전 더미 데이터 ──
+const PRESCRIPTIONS = [
+  {
+    id: 'rx5', date: '2026.06.22', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 30,
+    drugs: [
+      { name: '아토르바스타틴정 10mg', ingredient: '아토르바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 30, sub: false },
+      { name: '메트포르민염산염정 500mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 2회', days: 30, sub: false },
+      { name: '암로디핀베실산염정 5mg', ingredient: '암로디핀베실산염', dosage: '1정', freq: '1일 1회', days: 30, sub: true },
+      { name: '텔미사르탄정 40mg', ingredient: '텔미사르탄', dosage: '1정', freq: '1일 1회', days: 30, sub: false },
+      { name: '아스피린장용정 100mg', ingredient: '아세틸살리실산', dosage: '1정', freq: '1일 1회', days: 30, sub: false },
+    ]
+  },
+  {
+    id: 'rx4', date: '2026.06.22', hospital: '네모안과의원', dept: '안과', doctor: '이의사', days: 7,
+    drugs: [
+      { name: '오플록사신점안액 0.3%', ingredient: '오플록사신', dosage: '1~2방울', freq: '1일 4회', days: 7, sub: false },
+      { name: '케토롤락트로메타민점안액 0.5%', ingredient: '케토롤락트로메타민', dosage: '1방울', freq: '1일 4회', days: 7, sub: true },
+    ]
+  },
+  {
+    id: 'rx3', date: '2026.05.15', hospital: '엠서클의원', dept: '내과', doctor: '정의사', days: 90,
+    drugs: [
+      { name: '글리메피리드정 2mg', ingredient: '글리메피리드', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+      { name: '로수바스타틴정 10mg', ingredient: '로수바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: true },
+      { name: '메트포르민서방정 1000mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+      { name: '알로퓨리놀정 100mg', ingredient: '알로퓨리놀', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+    ]
+  },
+  {
+    id: 'rx2', date: '2026.04.03', hospital: '세모가정의학과의원', dept: '가정의학과', doctor: '최의사', days: 30,
+    drugs: [
+      { name: '에소메프라졸마그네슘삼수화물캡슐 20mg', ingredient: '에소메프라졸마그네슘', dosage: '1캡슐', freq: '1일 1회', days: 30, sub: false },
+      { name: '돔페리돈정 10mg', ingredient: '돔페리돈', dosage: '1정', freq: '1일 3회', days: 30, sub: false },
+      { name: '레바미피드정 100mg', ingredient: '레바미피드', dosage: '1정', freq: '1일 3회', days: 30, sub: false },
+      { name: '트리메부틴말레산염정 100mg', ingredient: '트리메부틴말레산염', dosage: '1정', freq: '1일 3회', days: 30, sub: true },
+    ]
+  },
+  {
+    id: 'rx1', date: '2026.04.03', hospital: '네모네모정형외과의원', dept: '정형외과', doctor: '이의사', days: 5,
+    drugs: [
+      { name: '세레콕시브캡슐 200mg', ingredient: '세레콕시브', dosage: '1캡슐', freq: '1일 1회', days: 5, sub: false },
+      { name: '티잔이딘염산염정 2mg', ingredient: '티잔이딘염산염', dosage: '1정', freq: '1일 3회', days: 5, sub: true },
+      { name: '트라마돌염산염정 37.5mg/아세트아미노펜정 325mg', ingredient: '트라마돌/아세트아미노펜', dosage: '1정', freq: '1일 2회', days: 5, sub: false },
+    ]
+  },
+];
+
+let selectedRx = null;
+let selectedRxIds = [];
+let editingDrugsMap = {};
+let aiSummaryText = '';
+let currentStep = 1;
+
+function goNext() {
+  if (!selectedCustomer) return;
+  renderStep2();
+}
+
+function renderStep2() {
+  currentStep = 2;
+  setStepTab(2);
+  selectedRx = null;
+  selectedRxIds = [];
+  editingDrugsMap = {};
+  const B = document.getElementById('mbody');
+  const F = document.getElementById('mfoot');
+
+  const groups = {};
+  PRESCRIPTIONS.forEach(rx => {
+    if (!groups[rx.date]) groups[rx.date] = [];
+    groups[rx.date].push(rx);
+  });
+
+  const chevronSVG = `<svg class="s2-rx-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+
+  const groupHTML = Object.entries(groups).map(([date, rxList]) => `
+    <div class="s2-date-group">
+      <div class="s2-date-header">
+        ${date}
+        <span class="s2-date-count">${rxList.length}건</span>
+      </div>
+      ${rxList.map(rx => `
+        <div class="s2-rx-item">
+          <div class="s2-rx-card" id="rxcard_${rx.id}" onclick="toggleExpand('${rx.id}')">
+            <input type="checkbox" class="s2-rx-card-check" id="rxchk_${rx.id}" onclick="event.stopPropagation();toggleCheck('${rx.id}')">
+            <div class="s2-rx-card-body">
+              <div class="s2-rx-card-top">
+                <span class="s2-rx-card-hospital">${rx.hospital}</span>
+                <span class="s2-rx-card-dept">${rx.dept} · ${rx.doctor}</span>
+              </div>
+              <div class="s2-rx-card-meta">${rx.days}일분 · ${rx.drugs.length}품목</div>
+            </div>
+            <div class="s2-rx-card-right">
+              <span class="s2-rx-card-chip">${rx.drugs.length}품목</span>
+              ${chevronSVG}
+            </div>
+          </div>
+          <div class="s2-rx-expand" id="rxexpand_${rx.id}"></div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+
+  B.innerHTML = `
+    <label class="s2-label">처방전 선택 <span style="color:#888;font-weight:400;">(최근 3개월 · 복수 선택 가능)</span></label>
+    <div id="s2polyAlert"></div>
+    <div class="s2-rx-list">${groupHTML}</div>
+  `;
+
+  F.innerHTML = `
+    <button class="btn-cancel" onclick="renderStep1()">← 이전</button>
+    <button class="btn-next" id="btnNext2" disabled onclick="goStep3()">다음</button>
+  `;
+}
+
+function toggleExpand(id) {
+  const expand = document.getElementById('rxexpand_' + id);
+  const card = document.getElementById('rxcard_' + id);
+  const isOpen = expand.classList.contains('open');
+  if (isOpen) {
+    expand.classList.remove('open');
+    card.classList.remove('checked');
+  } else {
+    const rx = PRESCRIPTIONS.find(r => r.id === id);
+    if (selectedRxIds.includes(id)) {
+      expand.innerHTML = renderDrugTableHTML(rx);
+    } else {
+      toggleCheck(id);
+      return;
+    }
+    expand.classList.add('open');
+    card.classList.add('checked');
+  }
+}
+
+function toggleCheck(id) {
+  const idx = selectedRxIds.indexOf(id);
+  const isChecking = idx === -1;
+  if (isChecking) {
+    selectedRxIds.push(id);
+    const rx = PRESCRIPTIONS.find(r => r.id === id);
+    editingDrugsMap[id] = rx.drugs.map(d => Object.assign({}, d));
+  } else {
+    selectedRxIds.splice(idx, 1);
+    delete editingDrugsMap[id];
+    document.getElementById('rxexpand_' + id).classList.remove('open');
+    document.getElementById('rxcard_' + id).classList.remove('checked');
+  }
+  document.getElementById('rxchk_' + id).checked = isChecking;
+  document.getElementById('btnNext2').disabled = selectedRxIds.length === 0;
+  selectedRx = selectedRxIds.length > 0 ? PRESCRIPTIONS.find(r => r.id === selectedRxIds[selectedRxIds.length - 1]) : null;
+  updatePolyAlert();
+}
+
+function updatePolyAlert() {
+  const totalDrugs = selectedRxIds.reduce((sum, id) => sum + (editingDrugsMap[id] || []).length, 0);
+  const el = document.getElementById('s2polyAlert');
+  if (!el) return;
+  el.innerHTML = totalDrugs >= 10 ? `
+    <div class="s2-poly-alert" style="margin-bottom:14px;">
+      <div class="s2-poly-alert-icon"><span>!</span></div>
+      <span class="s2-poly-alert-txt">다제약물관리사업 대상자 확인이 필요합니다</span>
+    </div>` : '';
+}
+
+function renderAllDrugTables() {
+  selectedRxIds.forEach(id => {
+    const rx = PRESCRIPTIONS.find(r => r.id === id);
+    const expand = document.getElementById('rxexpand_' + id);
+    if (expand) expand.innerHTML = renderDrugTableHTML(rx);
+  });
+  updatePolyAlert();
+}
+
+function getEditingDrugs(rxId) {
+  return editingDrugsMap[rxId] || [];
+}
+
+function renderDrugTableHTML(rx) {
+  const drugs = editingDrugsMap[rx.id] || [];
+  const hasSub = drugs.some(d => d.sub);
+  const origDrugs = rx.drugs;
+
+  const drugRows = drugs.map((d, i) => {
+    const changed = JSON.stringify(d) !== JSON.stringify(origDrugs[i]);
+    const isNew = i >= origDrugs.length;
+    const badge = (changed || isNew) ? `<span class="s2-changed-badge">${isNew ? '추가' : '변경'}</span>` : '';
+    return `
+    <tr id="drow_${rx.id}_${i}">
+      <td>
+        <div class="s2-drug-name">${d.name}${badge}</div>
+        <div class="s2-drug-sub">${d.ingredient}</div>
+      </td>
+      <td style="text-align:center;">${d.dosage}</td>
+      <td style="text-align:center;">${d.freq}</td>
+      <td style="text-align:center;">${d.days}일</td>
+      <td style="text-align:center;">${d.sub
+        ? '<span style="background:#FFF3E0;color:#E07800;font-size:11px;padding:2px 7px;border-radius:10px;font-weight:600;">대체</span>'
+        : '<span style="color:#CCC;font-size:12px;">—</span>'}</td>
+      <td class="td-action">
+        <button class="s2-row-edit-btn" onclick="openEditRow('${rx.id}',${i})" title="편집">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="s2-row-del-btn" onclick="deleteDrug('${rx.id}',${i})" title="삭제">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  return `
+    <div class="s2-rx-box">
+      <div class="s2-rx-hd">
+        <div class="s2-rx-hd-info">
+          <strong>${rx.hospital}</strong>
+          <span style="color:#888;font-size:12px;margin-left:6px;">${rx.days}일분</span>
+        </div>
+        <button class="s2-rx-img-btn" onclick="openRxViewer('${rx.date} ${rx.hospital}')">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="2" stroke="#555" stroke-width="1.3"/><circle cx="5.5" cy="6.5" r="1.5" stroke="#555" stroke-width="1.3"/><path d="M1 11l4-3 3 3 2-2 5 4" stroke="#555" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          처방전 원본 이미지 보기
+        </button>
+      </div>
+      <table class="s2-drug-table">
+        <thead>
+          <tr>
+            <th>약품명 / 성분</th>
+            <th style="text-align:center;">1회 용량</th>
+            <th style="text-align:center;">복용 횟수</th>
+            <th style="text-align:center;">투약 일수</th>
+            <th style="text-align:center;">대체조제</th>
+            <th class="th-action"></th>
+          </tr>
+        </thead>
+        <tbody id="drugTbody_${rx.id}">${drugRows}</tbody>
       </table>
-      <br><div style="font-size:7px;color:#999">의사면허번호: 제12345호 / 이○○</div>
-    </div></div></div></div>
-    <div><div class="s2-top"><span class="s2-ttl">조제 내역</span><span class="s2-sub">대체 조제 시 직접 수정하세요</span></div>
-    <table class="dtbl"><thead><tr><th style="width:26px">NO</th><th>약명</th><th style="width:65px">복용일</th><th style="width:55px"></th></tr></thead><tbody>
-    ${DRUGS.map((d,i)=>`<tr><td class="d-no">${i+1}</td><td><div class="d-main">${d[0]}</div><div class="d-sub">${d[1]}</div></td><td class="d-days">${d[2]}</td><td><div class="d-acts"><button class="ico">✏️</button><button class="ico">🗑</button></div></td></tr>`).join('')}
-    </tbody></table>
-    <button class="add-drug">+ 약품 추가</button></div>
-  </div>`;
-  F.innerHTML=`<button class="btn-next" onclick="go('s3a')">다음</button>`;
+      <div class="s2-add-drug-row">
+        <button class="s2-add-drug-btn" onclick="openAddRow('${rx.id}')">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          약품 추가
+        </button>
+      </div>
+      ${hasSub ? `
+      <div class="s2-consent-row">
+        <div class="s2-consent-left">
+          <div class="s2-consent-icon"><span>!</span></div>
+          <div>
+            <div class="s2-consent-title">대체 조제인가요?</div>
+            <div class="s2-consent-sub">환자에게 대체조제 사실을 알려야 합니다.</div>
+          </div>
+        </div>
+        <div class="s2-consent-radios">
+          <label class="s2-consent-radio">
+            <input type="radio" name="subConsent_${rx.id}" value="yes"> 네
+          </label>
+          <label class="s2-consent-radio">
+            <input type="radio" name="subConsent_${rx.id}" value="no"> 아니오
+          </label>
+        </div>
+      </div>` : ''}
+    </div>
+  `;
 }
 
-// ── Step 3a ───────────────────────────
-function rS3a(B,F){
-  B.innerHTML=`<div class="mic-area"><div class="mic-outer"><div class="mic-pulse"></div>
-    <button class="mic-btn idle" onclick="go('s3b')">${micSvg('idle')}</button></div>
-    <div class="mic-tip">녹음 버튼을 눌러 상담을 시작하세요.</div></div>
-  <div class="summ-tabs"><div class="summ-tab on">요약</div><div class="summ-tab">전체 내용</div></div>
-  <div class="summ-body"><div class="summ-empty">녹음을 완료하면 결과 요약이 여기에 표시됩니다.</div></div>`;
-  F.innerHTML=`<button class="btn-prev" onclick="go('s2')">취소</button><button class="btn-next" disabled style="opacity:.4;cursor:not-allowed">다음</button>`;
+function openEditRow(rxId, i) {
+  const key = rxId + '_' + i;
+  const existing = document.getElementById('editForm_' + key);
+  if (existing) { closeEditRow(key); return; }
+  document.querySelectorAll('[id^="editForm_"]').forEach(el => el.remove());
+  const d = editingDrugsMap[rxId][i];
+  const row = document.getElementById('drow_' + key);
+  const formRow = document.createElement('tr');
+  formRow.id = 'editForm_' + key;
+  formRow.className = 's2-edit-row';
+  formRow.innerHTML = `<td colspan="6">
+    <div class="s2-edit-form">
+      <div class="s2-edit-field f-name"><label>약품명</label><input id="ef_name_${key}" value="${d.name}"></div>
+      <div class="s2-edit-field f-ing"><label>성분명</label><input id="ef_ing_${key}" value="${d.ingredient}"></div>
+      <div class="s2-edit-field f-dosage"><label>1회 용량</label><input id="ef_dosage_${key}" value="${d.dosage}"></div>
+      <div class="s2-edit-field f-freq"><label>복용 횟수</label><input id="ef_freq_${key}" value="${d.freq}"></div>
+      <div class="s2-edit-field f-days"><label>투약 일수</label><input id="ef_days_${key}" type="number" min="1" value="${d.days}"></div>
+      <div class="s2-edit-field"><label>대체조제</label>
+        <select id="ef_sub_${key}">
+          <option value="0" ${!d.sub?'selected':''}>—</option>
+          <option value="1" ${d.sub?'selected':''}>대체</option>
+        </select>
+      </div>
+      <div class="s2-edit-actions">
+        <button class="s2-edit-cancel" onclick="document.getElementById('editForm_${key}').remove()">취소</button>
+        <button class="s2-edit-save" onclick="saveEditRow('${rxId}',${i})">저장</button>
+      </div>
+    </div>
+  </td>`;
+  row.after(formRow);
+  document.getElementById('ef_name_' + key).focus();
 }
 
-// ── Step 3b ───────────────────────────
-function rS3b(B,F){
-  B.innerHTML=`<div class="mic-area"><div class="mic-outer"><div class="mic-pulse on"></div>
-    <button class="mic-btn rec" onclick="stopRec()">${micSvg('rec')}</button></div>
-    <div class="mic-tip">녹음 중입니다. 다시 누르면 요약합니다.</div></div>
-  <div class="summ-tabs"><div class="summ-tab on">요약</div><div class="summ-tab">전체 내용</div></div>
-  <div class="summ-body"><div class="summ-empty" style="color:#DDD;font-size:12px">상담이 진행 중입니다...</div></div>`;
-  F.innerHTML=`<button class="btn-prev" onclick="go('s3a')">취소</button><button class="btn-next" disabled style="opacity:.4;cursor:not-allowed">다음</button>`;
-}
-function stopRec(){go('s3l');setTimeout(()=>go('s3d'),1200);}
-
-// ── Step 3l ───────────────────────────
-function rS3l(B,F){
-  B.innerHTML=`<div class="mic-area"><div class="mic-outer"><div class="mic-pulse on"></div>
-    <button class="mic-btn sum">${micSvg('rec')}</button></div>
-    <div class="mic-tip">AI가 요약하고 있습니다...</div></div>
-  <div class="summ-tabs"><div class="summ-tab on">요약</div><div class="summ-tab">전체 내용</div></div>
-  <div class="summ-body"><div class="skel" style="width:90%"></div><div class="skel" style="width:74%"></div><div class="skel" style="width:52%"></div>
-    <div class="spin-wrap"><div class="spin"></div><span style="font-size:12px;color:#2563EB">요약 중...</span></div></div>`;
-  F.innerHTML=`<button class="btn-prev" onclick="go('s3a')">취소</button><button class="btn-next" disabled style="opacity:.4;cursor:not-allowed">다음</button>`;
+function closeEditRow(key) {
+  const el = document.getElementById('editForm_' + key);
+  if (el) el.remove();
 }
 
-// ── Step 3d ───────────────────────────
-function rS3d(B,F){
-  B.innerHTML=`<div class="mic-area"><div class="mic-outer"><div class="mic-pulse"></div>
-    <button class="mic-btn done">${micSvg('rec')}</button></div>
-    <div class="mic-tip">요약이 완료되었습니다.</div></div>
-  <div class="summ-tabs"><div class="summ-tab on">요약</div><div class="summ-tab" onclick="go('s3f')" style="cursor:pointer">전체 내용</div></div>
-  <div class="summ-body">${SUMM}</div>`;
-  F.innerHTML=`<button class="btn-prev" onclick="go('s3a')">취소</button><button class="btn-next" onclick="go('s4')">다음</button>`;
+function saveEditRow(rxId, i) {
+  const key = rxId + '_' + i;
+  const prev = editingDrugsMap[rxId][i];
+  editingDrugsMap[rxId][i] = {
+    name: document.getElementById('ef_name_' + key).value.trim() || prev.name,
+    ingredient: document.getElementById('ef_ing_' + key).value.trim() || prev.ingredient,
+    dosage: document.getElementById('ef_dosage_' + key).value.trim() || prev.dosage,
+    freq: document.getElementById('ef_freq_' + key).value.trim() || prev.freq,
+    days: parseInt(document.getElementById('ef_days_' + key).value) || prev.days,
+    sub: document.getElementById('ef_sub_' + key).value === '1',
+  };
+  renderAllDrugTables();
 }
 
-// ── Step 3f ───────────────────────────
-function rS3f(B,F){
-  B.innerHTML=`<div class="mic-area"><div class="mic-outer"><div class="mic-pulse"></div>
-    <button class="mic-btn done">${micSvg('rec')}</button></div>
-    <div class="mic-tip">요약이 완료되었습니다.</div></div>
-  <div class="summ-tabs"><div class="summ-tab" onclick="go('s3d')" style="cursor:pointer">요약</div><div class="summ-tab on">전체 내용</div></div>
-  <div class="summ-body" style="font-size:12px;line-height:2;overflow-y:auto;max-height:190px">${FULL.replace(/\n/g,'<br>')}</div>`;
-  F.innerHTML=`<button class="btn-prev" onclick="go('s3a')">취소</button><button class="btn-next" onclick="go('s4')">다음</button>`;
+function deleteDrug(rxId, i) {
+  if (!confirm(`"${editingDrugsMap[rxId][i].name}" 을(를) 목록에서 삭제할까요?`)) return;
+  editingDrugsMap[rxId].splice(i, 1);
+  renderAllDrugTables();
 }
 
-// ── Step 4 ────────────────────────────
-function rS4(B,F){
-  B.innerHTML=`<div class="s4-grid">
-    <div><div class="tag-ttl">자주 사용하는 태그</div><div class="tag-chips">
-      ${TAGS.map((t,i)=>`<div class="tag-chip${selTags.has(i)?' on':''}" onclick="toggleTag(${i},'${t.replace(/'/g,"\\'")}')">${t}</div>`).join('')}
-    </div></div>
-    <div><div class="msg-hdr"><span class="msg-ttl">메시지 편집</span><button class="msg-reset" onclick="resetMsg()">초기화 ↺</button></div>
-    <textarea class="msg-ta" id="mta" oninput="onMsg(this)">${msg}</textarea>
-    <div class="msg-cnt" id="mcnt">${msg.length} / 500자</div></div>
-  </div>`;
-  F.innerHTML=`<button class="btn-prev" onclick="go('s3d')">이전</button><button class="btn-next" onclick="go('s4p')">다음</button>`;
-}
-function toggleTag(i,t){const ta=document.getElementById('mta');if(selTags.has(i)){selTags.delete(i);if(ta)ta.value=ta.value.replace('\n'+t,'').replace(t+'\n','');}else{selTags.add(i);if(ta)ta.value+='\n'+t;}if(ta){msg=ta.value;document.getElementById('mcnt').textContent=ta.value.length+' / 500자';}document.querySelectorAll('.tag-chip').forEach((el,idx)=>el.classList.toggle('on',selTags.has(idx)));}
-function onMsg(el){msg=el.value;document.getElementById('mcnt').textContent=el.value.length+' / 500자';}
-function resetMsg(){msg=MSGDEF;selTags.clear();rS4(document.getElementById('mbody'),document.getElementById('mfoot'));}
-
-// ── Step 4p ───────────────────────────
-function rS4p(B,F){
-  B.innerHTML=`<div class="prev-grid">
-    <div><div class="tag-ttl" style="margin-bottom:10px">웰체크 메시지 미리보기</div>
-    <div class="prev-msg">${msg.replace(/\n/g,'<br>')}</div></div>
-    <div><div class="tag-ttl" style="margin-bottom:10px">전송 요약</div>
-    <table class="sum-tbl">
-      <tr><td>고객명</td><td>김철수</td></tr>
-      <tr><td>생년월일</td><td>1980-01-01</td></tr>
-      <tr><td>나이</td><td>40세</td></tr>
-      <tr><td>성별</td><td>남성</td></tr>
-      <tr><td>휴대폰 번호</td><td>010-1234-5678</td></tr>
-      <tr><td>단골 여부</td><td>단골 등록됨</td></tr>
-    </table></div>
-  </div>`;
-  F.innerHTML=`<button class="btn-prev" onclick="go('s4')">이전</button><button class="btn-send-modal" onclick="go('cpl')">➤ 전송하기</button>`;
+function openAddRow(rxId) {
+  const formId = 'addFormRow_' + rxId;
+  if (document.getElementById(formId)) return;
+  document.querySelectorAll('[id^="editForm_"]').forEach(el => el.remove());
+  const addRow = document.createElement('tr');
+  addRow.id = formId;
+  addRow.className = 's2-add-form-row';
+  addRow.innerHTML = `<td colspan="6" style="padding:12px 14px;background:#F8FBFF;">
+    <div style="font-size:11.5px;font-weight:700;color:#2563EB;margin-bottom:8px;">약품 추가</div>
+    <div class="s2-edit-form">
+      <div class="s2-edit-field f-name"><label>약품명</label><input id="af_name_${rxId}" placeholder="약품명 입력"></div>
+      <div class="s2-edit-field f-ing"><label>성분명</label><input id="af_ing_${rxId}" placeholder="성분명"></div>
+      <div class="s2-edit-field f-dosage"><label>1회 용량</label><input id="af_dosage_${rxId}" placeholder="예: 1정"></div>
+      <div class="s2-edit-field f-freq"><label>복용 횟수</label><input id="af_freq_${rxId}" placeholder="예: 1일 2회"></div>
+      <div class="s2-edit-field f-days"><label>투약 일수</label><input id="af_days_${rxId}" type="number" min="1" placeholder="30"></div>
+      <div class="s2-edit-field"><label>대체조제</label>
+        <select id="af_sub_${rxId}"><option value="0">—</option><option value="1">대체</option></select>
+      </div>
+      <div class="s2-edit-actions">
+        <button class="s2-edit-cancel" onclick="document.getElementById('${formId}').remove()">취소</button>
+        <button class="s2-edit-save" onclick="saveAddRow('${rxId}')">추가</button>
+      </div>
+    </div>
+  </td>`;
+  const addBtnRow = document.getElementById('drugTbody_' + rxId).closest('table').nextElementSibling;
+  addBtnRow.before(addRow);
+  document.getElementById('af_name_' + rxId).focus();
 }
 
-// ── Complete ──────────────────────────
-function rCpl(B,F){
-  B.innerHTML=`<div class="cpl-wrap">
-    <svg width="100" height="100" viewBox="0 0 112 112" fill="none">
-      <rect x="10" y="38" width="92" height="60" rx="6" fill="#E4E4E4"/>
-      <path d="M10 44 L56 68 L102 44" stroke="#CACACA" stroke-width="2" fill="none"/>
-      <rect x="26" y="16" width="60" height="58" rx="4" fill="white" stroke="#E8E8E8"/>
-      <rect x="36" y="28" width="40" height="4" rx="2" fill="#E4E4E4"/>
-      <rect x="36" y="38" width="34" height="3" rx="1.5" fill="#EEEEEE"/>
-      <rect x="36" y="46" width="26" height="3" rx="1.5" fill="#EEEEEE"/>
-      <circle cx="78" cy="36" r="15" fill="#15C784"/>
-      <path d="M70 36 L76 42 L88 30" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+function saveAddRow(rxId) {
+  const name = document.getElementById('af_name_' + rxId).value.trim();
+  const ingredient = document.getElementById('af_ing_' + rxId).value.trim();
+  const dosage = document.getElementById('af_dosage_' + rxId).value.trim();
+  const freq = document.getElementById('af_freq_' + rxId).value.trim();
+  const days = parseInt(document.getElementById('af_days_' + rxId).value) || 0;
+  if (!name || !dosage || !freq || !days) {
+    alert('약품명, 용량, 복용 횟수, 투약 일수를 모두 입력해 주세요.'); return;
+  }
+  editingDrugsMap[rxId].push({ name, ingredient: ingredient || '—', dosage, freq, days, sub: document.getElementById('af_sub_' + rxId).value === '1' });
+  renderAllDrugTables();
+}
+
+function openRxViewer(title) {
+  document.getElementById('rxViewerTitle').textContent = title + ' 처방전';
+  document.getElementById('rxViewerBd').classList.add('on');
+}
+
+function closeRxViewer() {
+  document.getElementById('rxViewerBd').classList.remove('on');
+}
+
+const S3_TAGS = ['공복에 복용하세요.','충분한 물과 함께 드세요.','잠이 올 수 있으니 주의하세요.','술을 드시지 마세요.','임의로 복용을 중단하지 마세요.'];
+let s3SelTags = new Set();
+let s3Msg = '';
+
+function buildMsgDefault() {
+  const c = selectedCustomer;
+  let drugLines = [];
+  let methodLines = [];
+  let idx = 1;
+  selectedRxIds.forEach(function(id) {
+    var drugs = editingDrugsMap[id] || [];
+    drugs.forEach(function(d) {
+      drugLines.push(idx++ + '. ' + d.name + ' - 1회 ' + d.dosage + ', ' + d.freq + ', ' + d.days + '일분');
+      methodLines.push('• ' + d.name + ': ' + d.freq + ', 1회 ' + d.dosage + '씩 복용하세요.');
+    });
+  });
+  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n' + methodLines.join('\n') + '\n';
+}
+
+function goStep3() {
+  if (!selectedRxIds.length) return;
+  currentStep = 3;
+  setStepTab(3);
+  s3SelTags = new Set();
+  s3Msg = buildMsgDefault();
+  if (aiSummaryText) s3Msg = insertSummaryIntoMsg(s3Msg, aiSummaryText);
+  renderStep3Body();
+}
+
+function renderStep3Body() {
+  const B = document.getElementById('mbody');
+  const F = document.getElementById('mfoot');
+  B.innerHTML = '<div class="s4-grid"><div><div class="tag-ttl">자주 사용하는 태그</div><div class="tag-chips">'
+    + S3_TAGS.map(function(t, i) {
+        return '<button class="tag-chip' + (s3SelTags.has(i) ? ' on' : '') + '" onclick="s3ToggleTag(' + i + ',\'' + t.replace(/'/g, "\\'") + '\')">' + t + '</button>';
+      }).join('')
+    + '</div></div><div><div class="msg-hdr"><span class="msg-ttl">메시지 편집</span><button class="msg-reset" onclick="s3ResetMsg()">초기화 ↺</button></div>'
+    + '<textarea class="msg-ta" id="s3mta" oninput="s3OnMsg(this)">' + s3Msg.replace(/</g,'&lt;') + '</textarea>'
+    + '<div class="msg-cnt" id="s3mcnt">' + s3Msg.length + ' / 500자</div></div></div>';
+  F.innerHTML = `
+    <button class="btn-cancel" onclick="renderStep2()">← 이전</button>
+    <button class="btn-cancel" onclick="saveDraft()" style="color:#2563EB;border-color:#A0B4FF;">임시저장</button>
+    <button class="btn-next" onclick="goStep4()">다음</button>
+  `;
+}
+
+function goStep4() {
+  var ta = document.getElementById('s3mta');
+  if (ta) s3Msg = ta.value;
+  currentStep = 4;
+  setStepTab(4);
+  var B = document.getElementById('mbody');
+  var F = document.getElementById('mfoot');
+  var c = selectedCustomer;
+  var isNew = c.isNew || (!c.phone || c.phone === '-');
+
+  var previewMsg = s3Msg;
+  if (isNew) {
+    var linkNote = '\n\n[웰체크 앱 가입 안내]\n아래 링크에서 웰체크 앱에 가입하시면 저희 약국이 단골 약국으로 자동 연결됩니다.\nhttps://wellcheck.co.kr/join?ref=pharmacy';
+    if (!previewMsg.includes('웰체크 앱 가입 안내')) previewMsg += linkNote;
+  }
+
+  var phoneRow = isNew
+    ? '<tr><td>휴대폰 번호</td><td><input class="s4-phone-input" id="s4phone" type="tel" placeholder="010-0000-0000"></td></tr>'
+    : '<tr><td>휴대폰 번호</td><td>' + c.phone + '</td></tr>';
+
+  var regularRow = isNew
+    ? '<tr><td>단골 여부</td><td style="color:#888;">신규 회원</td></tr>'
+    : '<tr><td>단골 여부</td><td style="color:#16A34A;font-weight:600;">단골 등록됨</td></tr>';
+
+  B.innerHTML = '<div class="prev-grid">'
+    + '<div><div class="tag-ttl" style="margin-bottom:10px">웰체크 메시지 미리보기</div>'
+    + '<div class="prev-msg">' + previewMsg.replace(/</g,'&lt;').replace(/\n/g,'<br>') + '</div></div>'
+    + '<div><div class="tag-ttl" style="margin-bottom:10px">전송 요약</div>'
+    + '<table class="sum-tbl">'
+    + '<tr><td>고객명</td><td>' + c.name + '</td></tr>'
+    + '<tr><td>생년월일</td><td>' + (c.birth || '—') + '</td></tr>'
+    + '<tr><td>나이</td><td>' + (c.age !== '-' && c.age !== undefined ? c.age + '세' : '—') + '</td></tr>'
+    + '<tr><td>성별</td><td>' + (c.gender !== '-' ? c.gender : '—') + '</td></tr>'
+    + phoneRow
+    + regularRow
+    + '</table>'
+    + (isNew ? '<p style="font-size:11px;color:#2563EB;margin-top:10px;line-height:1.6;">신규 고객입니다. 휴대폰 번호로 웰체크 앱 가입 및<br>단골 약국 연결 링크가 함께 발송됩니다.</p>' : '')
+    + '</div></div>';
+
+  F.innerHTML = `
+    <button class="btn-cancel" onclick="renderStep3Body();setStepTab(3);currentStep=3;">← 이전</button>
+    <button class="btn-cancel" onclick="saveDraft()" style="color:#2563EB;border-color:#A0B4FF;">임시저장</button>
+    <button class="btn-next" onclick="sendFinal()">➤ 전송하기</button>
+  `;
+}
+
+function sendFinal() {
+  var isNew = selectedCustomer.isNew || (!selectedCustomer.phone || selectedCustomer.phone === '-');
+  if (isNew) {
+    var ph = (document.getElementById('s4phone') || {}).value || '';
+    if (!ph.trim()) { alert('휴대폰 번호를 입력해 주세요.'); return; }
+    selectedCustomer.phone = ph.trim();
+  }
+  var name = selectedCustomer.name;
+  var B = document.getElementById('mbody');
+  var F = document.getElementById('mfoot');
+  document.querySelector('.step-tabs').style.visibility = 'hidden';
+  document.getElementById('modalPt').classList.remove('on');
+  B.innerHTML = `<div class="cpl-wrap">
+    <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="24" y="56" width="112" height="76" rx="8" fill="#E8EAED"/>
+      <path d="M24 64l56 40 56-40" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="44" y="28" width="72" height="80" rx="6" fill="#fff" stroke="#DDE1E7" stroke-width="1.5"/>
+      <rect x="56" y="48" width="48" height="4" rx="2" fill="#DDE1E7"/>
+      <rect x="56" y="58" width="48" height="4" rx="2" fill="#DDE1E7"/>
+      <rect x="56" y="68" width="32" height="4" rx="2" fill="#DDE1E7"/>
+      <g transform="translate(104,18) rotate(-20)">
+        <path d="M0 0l-18 8 4 4-6 10 6-2 4 4 10-18z" fill="#C5CAD3"/>
+      </g>
+      <circle cx="116" cy="108" r="20" fill="#10B981"/>
+      <path d="M107 108l6 6 10-10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="38" cy="44" r="3" fill="#DDE1E7"/>
+      <circle cx="128" cy="52" r="2" fill="#DDE1E7"/>
+      <circle cx="42" cy="118" r="2" fill="#DDE1E7"/>
     </svg>
     <div class="cpl-ttl">AI 복약 상담 전송 완료</div>
-    <div class="cpl-sub">김철수 님께 복약 안내 메시지가 발송되었습니다.</div>
+    <div class="cpl-sub">${name} 님께 복약 안내 메시지가 발송되었습니다.</div>
   </div>`;
-  F.innerHTML=`<button class="btn-close" onclick="closeModal()">닫기</button>`;
+  F.innerHTML = `<button class="btn-close-cpl" onclick="closeModal()">닫기</button>`;
 }
 
-function micSvg(s){const c=s==='idle'?'#15C784':'#fff';return`<svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="8.5" y="1" width="7" height="11" rx="3.5" fill="${c}"/><path d="M5 11c0 3.866 3.134 7 7 7s7-3.134 7-7" stroke="${c}" stroke-width="2" stroke-linecap="round"/><path d="M12 18v3M9 21h6" stroke="${c}" stroke-width="2" stroke-linecap="round"/></svg>`;}
+function insertSummaryIntoMsg(text, summary) {
+  var marker = '[약사 상담 메모]\n';
+  var idx = text.indexOf(marker);
+  if (idx !== -1) return text.slice(0, idx + marker.length) + summary;
+  return text + '\n\n[약사 상담 메모]\n' + summary;
+}
+
+function s3ToggleTag(i, t) {
+  var ta = document.getElementById('s3mta');
+  if (s3SelTags.has(i)) {
+    s3SelTags.delete(i);
+    if (ta) ta.value = ta.value.replace('\n' + t, '').replace(t + '\n', '').replace(t, '');
+  } else {
+    s3SelTags.add(i);
+    if (ta) ta.value += (ta.value.endsWith('\n') ? '' : '\n') + t;
+  }
+  if (ta) { s3Msg = ta.value; document.getElementById('s3mcnt').textContent = ta.value.length + ' / 500자'; }
+  document.querySelectorAll('.tag-chip').forEach(function(el, idx) { el.classList.toggle('on', s3SelTags.has(idx)); });
+}
+
+function s3OnMsg(el) {
+  s3Msg = el.value;
+  document.getElementById('s3mcnt').textContent = el.value.length + ' / 500자';
+}
+
+function s3ResetMsg() {
+  s3SelTags = new Set();
+  s3Msg = buildMsgDefault();
+  if (aiSummaryText) s3Msg = insertSummaryIntoMsg(s3Msg, aiSummaryText);
+  renderStep3Body();
+}
+
+function insertAiSummary() {
+  var ta = document.getElementById('s3mta');
+  if (!ta || !aiSummaryText) return;
+  ta.value = insertSummaryIntoMsg(ta.value, aiSummaryText);
+  s3Msg = ta.value;
+  document.getElementById('s3mcnt').textContent = ta.value.length + ' / 500자';
+  showToast('AI 요약이 삽입되었습니다.');
+}
+
+function saveDraft() {
+  showToast('복약지도가 임시저장되었습니다.');
+}
 </script>
 </body>
 </html>

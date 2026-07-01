@@ -612,7 +612,6 @@ function render() {
   `).join('');
 }
 render();
-if (new URLSearchParams(location.search).get('openModal') === '1') openModal();
 
 // ── 모달 + 퍼즐 AI ──
 const KIMCHECK = { name:'김체크', birth:'1982-03-15', phone:'010-1234-5678', gender:'여성', age:44 };
@@ -999,6 +998,8 @@ let editingDrugsMap = {};
 let aiSummaryText = '';
 // 현재 스텝
 let currentStep = 1;
+
+if (new URLSearchParams(location.search).get('openModal') === '1') openModal();
 
 function goNext() {
   if (!selectedCustomer) return;

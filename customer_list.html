@@ -463,8 +463,8 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 </button>
 
 <!-- BACKDROP -->
-<div class="backdrop" id="bd">
-  <div class="overlay-wrap">
+<div class="backdrop" id="bd" onclick="closeModal()">
+  <div class="overlay-wrap" onclick="event.stopPropagation()">
 
     <!-- 왼쪽: 모달 -->
     <div class="modal-panel">

@@ -424,8 +424,8 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 </button>
 
 <!-- BACKDROP + MODAL -->
-<div class="backdrop" id="bd">
-  <div class="modal">
+<div class="backdrop" id="bd" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-hd">
       <span class="modal-title">AI 복약 상담</span>
       <button class="modal-x" onclick="closeModal()">✕</button>

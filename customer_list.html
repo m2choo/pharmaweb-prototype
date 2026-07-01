@@ -999,6 +999,8 @@ let aiSummaryText = '';
 // 현재 스텝
 let currentStep = 1;
 
+if (new URLSearchParams(location.search).get('openModal') === '1') openModal();
+
 function goNext() {
   if (!selectedCustomer) return;
   renderStep2();

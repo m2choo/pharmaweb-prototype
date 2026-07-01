@@ -152,6 +152,11 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
 .s1-empty{text-align:center;padding:20px 0 8px;color:#AAA;font-size:13px;}
 .s1-add-btn{width:100%;margin-top:12px;padding:11px;border:1.5px dashed #2563EB;border-radius:8px;background:#F0F6FF;color:#2563EB;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .1s;}
 .s1-add-btn:hover{background:#E0EDFF;}
+.s1-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #E8EAED;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:100;overflow:hidden;}
+.s1-dropdown .s1-result-item{border-radius:0;border:none;border-bottom:1px solid #F0F0F0;margin-bottom:0;}
+.s1-add-btn-dd{display:block;width:100%;padding:12px 14px;border:none;border-top:1px solid #E8EAED;background:#F8FBFF;color:#2563EB;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;text-align:left;}
+.s1-add-btn-dd:hover{background:#E0EDFF;}
+.s1-empty-dd{text-align:center;padding:16px 0 8px;color:#AAA;font-size:13px;}
 .s1-add-form{margin-top:14px;padding:16px;background:#F8F9FA;border-radius:8px;display:flex;flex-direction:column;gap:12px;}
 .s1-add-form label{font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px;}
 .s1-add-form input{width:100%;height:38px;border:1px solid #E0E0E0;border-radius:6px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;}
@@ -826,12 +831,9 @@ function renderStep1() {
       <span class="s1-search-icon">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#aaa" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/></svg>
       </span>
+      <div id="s1dropdown" class="s1-dropdown" style="display:none"></div>
     </div>
-    <div id="s1results"></div>
-    <div id="s1addarea">
-      <button class="s1-add-btn" onclick="toggleAddForm(this)">+ 새 고객 추가</button>
-      <div id="addFormInner"></div>
-    </div>
+    <div id="addFormOuter"></div>
   `;
   F.innerHTML = `
     <button class="btn-cancel" onclick="closeModal()">취소</button>
@@ -848,22 +850,28 @@ function setStepTab(n) {
 
 function onSearch(val) {
   const q = val.trim();
-  const res = document.getElementById('s1results');
+  const dd = document.getElementById('s1dropdown');
   selectedCustomer = null;
   document.getElementById('btnNext').disabled = true;
-  if (!q) { res.innerHTML = ''; return; }
+  document.getElementById('addFormOuter').innerHTML = '';
+  showAddForm = false;
+  if (!q) { dd.style.display = 'none'; dd.innerHTML = ''; return; }
   const matched = (KIMCHECK.name.includes(q) || KIMCHECK.phone.includes(q)) ? [KIMCHECK] : [];
+  dd.style.display = 'block';
   if (matched.length) {
-    res.innerHTML = `
+    dd.innerHTML = `
       <div class="s1-result-item" id="ri0" onclick="selectCustomer()">
         <div>
           <div class="s1-result-name">${KIMCHECK.name}</div>
           <div class="s1-result-info">${KIMCHECK.birth} · ${KIMCHECK.gender} · ${KIMCHECK.phone}</div>
         </div>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/></svg>
-      </div>`;
+      </div>
+      <button class="s1-add-btn-dd" onclick="toggleAddForm()">+ 새 고객 추가</button>`;
   } else {
-    res.innerHTML = `<div class="s1-empty">검색 결과가 없습니다.</div>`;
+    dd.innerHTML = `
+      <div class="s1-empty-dd">검색 결과가 없습니다. 고객을 추가해 주세요.</div>
+      <button class="s1-add-btn-dd" onclick="toggleAddForm()">+ 새 고객 추가</button>`;
   }
 }
 
@@ -885,9 +893,11 @@ function selectCustomer() {
   setCustomerHeader(KIMCHECK.name, `${KIMCHECK.age}세 · ${KIMCHECK.gender} · ${KIMCHECK.phone}`, '3회 방문  최근 26.06.22 · 처방전 8건');
 }
 
-function toggleAddForm(btn) {
+function toggleAddForm() {
   showAddForm = !showAddForm;
-  document.getElementById('addFormInner').innerHTML = showAddForm ? `
+  const dd = document.getElementById('s1dropdown');
+  if (dd) dd.style.display = 'none';
+  document.getElementById('addFormOuter').innerHTML = showAddForm ? `
     <div class="s1-add-form">
       <div>
         <label>이름</label>
@@ -927,7 +937,7 @@ function addNewCustomer() {
   selectedCustomer = { name, birth, gender, phone: '-', age, isNew: true };
   setCustomerHeader(name, `${age}세 · ${gender}`, '방문 이력 없음');
   document.getElementById('btnNext').disabled = false;
-  document.getElementById('addFormInner').innerHTML = `<p style="font-size:12px;color:#16A34A;margin-top:8px;">✓ "${name}" 고객이 추가되었습니다.</p>`;
+  document.getElementById('addFormOuter').innerHTML = `<p style="font-size:12px;color:#16A34A;margin-top:8px;">✓ "${name}" 고객이 추가되었습니다.</p>`;
   showAddForm = false;
 }
 

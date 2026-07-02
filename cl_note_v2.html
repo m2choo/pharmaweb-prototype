@@ -77,10 +77,11 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 .badge-new-txt{color:#888;}
 
 /* 관리 버튼 */
-.mgmt-link{background:none;border:none;font-family:inherit;font-size:12.5px;font-weight:600;color:#2563EB;cursor:pointer;padding:4px 8px;border-radius:6px;white-space:nowrap;}
-.mgmt-link:hover{background:#F0F6FF;text-decoration:underline;}
-.mgmt-link.view{color:#666;}
-.mgmt-link.view:hover{background:#F4F5F7;}
+.mgmt-btn{height:30px;padding:0 14px;border-radius:6px;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.mgmt-btn-outline{background:#fff;border:1px solid #D1D7E0;color:#333D48;}
+.mgmt-btn-outline:hover{background:#F4F5F7;}
+.mgmt-btn-solid{background:#3E71F0;border:none;color:#fff;}
+.mgmt-btn-solid:hover{background:#2f5fd9;}
 
 /* 빈 상태 */
 .empty-wrap{padding:80px 20px;text-align:center;color:#AAA;}
@@ -134,14 +135,14 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
       <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#555" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
       처방전
     </a>
-    <div class="lnb-item">
-      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="#555" stroke-width="1.4"/><path d="M1 6h14" stroke="#555" stroke-width="1.4"/></svg>
-      앱 설치 문자 발송
-    </div>
     <a class="lnb-item active" href="cl_note_v2.html" style="text-decoration:none;">
       <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><path d="M4.5 1.5h5l3 3v9a1 1 0 01-1 1h-7a1 1 0 01-1-1v-11a1 1 0 011-1z" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 7.5h4M6 10h4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg>
       CL note 복약 상담
     </a>
+    <div class="lnb-item">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="#555" stroke-width="1.4"/><path d="M1 6h14" stroke="#555" stroke-width="1.4"/></svg>
+      앱 설치 문자 발송
+    </div>
   </div>
   <div class="lnb-bottom">
     <div class="lnb-user">
@@ -328,8 +329,8 @@ function rowHTML(n) {
     ? '<span class="badge-new-txt">신규</span>'
     : '<span class="badge-regular-txt">단골</span>';
   const action = n.status === '발송완료'
-    ? `<button class="mgmt-link view" onclick="openView('${n.id}')">내용 보기</button>`
-    : `<button class="mgmt-link" onclick="goResume('${n.id}')">이어서 작성</button>`;
+    ? `<button class="mgmt-btn mgmt-btn-outline" onclick="openView('${n.id}')">전송완료</button>`
+    : `<button class="mgmt-btn mgmt-btn-solid" onclick="goResume('${n.id}')">전송하기</button>`;
   return `
     <tr>
       <td class="td-date">${n.updatedAt || '—'}</td>

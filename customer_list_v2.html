@@ -1394,7 +1394,21 @@ function goStep3() {
   s3SelTags = new Set();
   s3Msg = buildMsgDefault();
   if (aiSummaryText) s3Msg = insertSummaryIntoMsg(s3Msg, aiSummaryText);
+  s3Msg = appendJoinNoteIfNew(s3Msg);
   renderStep3Body();
+}
+
+// 신규 고객: 메시지 하단(약사 메모 아래)에 웰체크 앱 가입 안내 추가
+function appendJoinNoteIfNew(text) {
+  if (!(selectedCustomer && selectedCustomer.isNew)) return text;
+  if (text.includes('웰체크 앱 가입 안내')) return text;
+  return text + '\n\n[웰체크 앱 가입 안내]\n아래 링크에서 웰체크 앱에 가입하시면 저희 약국이 단골 약국으로 자동 연결됩니다.\nhttps://wellcheck.co.kr/join?ref=pharmacy';
+}
+
+// 가입 안내가 항상 약사 메모 아래(맨 끝)에 오도록, 재삽입 전 기존 안내문 제거
+function stripJoinNote(text) {
+  var idx = text.indexOf('\n\n[웰체크 앱 가입 안내]');
+  return idx === -1 ? text : text.slice(0, idx);
 }
 
 function renderStep3Body() {
@@ -1531,13 +1545,14 @@ function s3ResetMsg() {
   s3SelTags = new Set();
   s3Msg = buildMsgDefault();
   if (aiSummaryText) s3Msg = insertSummaryIntoMsg(s3Msg, aiSummaryText);
+  s3Msg = appendJoinNoteIfNew(s3Msg);
   renderStep3Body();
 }
 
 function insertAiSummary() {
   var ta = document.getElementById('s3mta');
   if (!ta || !aiSummaryText) return;
-  ta.value = insertSummaryIntoMsg(ta.value, aiSummaryText);
+  ta.value = appendJoinNoteIfNew(insertSummaryIntoMsg(stripJoinNote(ta.value), aiSummaryText));
   s3Msg = ta.value;
   document.getElementById('s3mcnt').textContent = ta.value.length + ' / 500자';
   showToast('AI 요약이 삽입되었습니다.');

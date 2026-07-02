@@ -101,6 +101,8 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 .view-info-table{width:100%;border-collapse:collapse;}
 .view-info-table th{width:76px;text-align:left;font-size:12.5px;font-weight:600;color:#888;padding:10px 8px 10px 0;vertical-align:top;white-space:nowrap;}
 .view-info-table td{font-size:13.5px;color:#111;padding:10px 0;font-weight:500;}
+.view-phone-input{width:100%;max-width:180px;height:34px;padding:0 10px;font-size:13px;font-family:inherit;border:1px solid #AEB7C6;border-radius:6px;outline:none;}
+.view-phone-input:focus{border-color:#2563EB;}
 .view-msg-box{width:100%;background:#F8F9FA;border:1px solid #E8EAED;border-radius:10px;padding:16px;font-size:13px;color:#333;line-height:1.7;white-space:pre-wrap;height:44vh;overflow-y:auto;font-family:inherit;resize:none;}
 .view-msg-box[readonly]{background:#F8F9FA;}
 .view-msg-box:not([readonly]){background:#fff;border-color:#AEB7C6;}
@@ -230,27 +232,27 @@ function seedDummyNotes() {
   const dummies = [
     {
       id: 'seed_1', name: '이체크', phone: '010-2233-4455', birth: '1978-05-12', gender: '여성', age: 48, isNew: false, status: '임시저장',
-      message: '[약사 상담 메모]\n혈압약 복용 시간이 불규칙하다고 하셔서 아침 식후 고정 복용을 권장드렸습니다. 다음 방문 시 혈압 수치 확인 예정입니다.',
+      message: '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n이체크 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n1. 암로디핀정 5mg - 1회 1정, 1일 1회, 30일분\n2. 발사르탄정 80mg - 1회 1정, 1일 1회, 30일분\n\n[복약 방법]\n• 암로디핀정 5mg: 1일 1회, 1회 1정씩 복용하세요.\n• 발사르탄정 80mg: 1일 1회, 1회 1정씩 복용하세요.\n\n\n[약사 상담 메모]\n혈압약 복용 시간이 불규칙하다고 하셔서 아침 식후 고정 복용을 권장드렸습니다. 다음 방문 시 혈압 수치 확인 예정입니다.',
       createdAt: '2026-07-01 14:20', updatedAt: '2026-07-01 14:30'
     },
     {
       id: 'seed_2', name: '김체크', phone: '010-1234-5678', birth: '1990-11-02', gender: '남성', age: 36, isNew: true, status: '발송완료',
-      message: '[약사 상담 메모]\n오늘 처방받으신 약은 하루 3회 식후 30분에 복용해 주세요. 졸음을 유발할 수 있어 운전이나 기계 조작 시 주의가 필요합니다.' + JOIN_NOTE,
+      message: '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n김체크 고객님, 지속적인 복약 관리를 위해 안내드립니다.\n\n[약사 상담 메모]\n처음 방문해 주셔서 감사합니다. 복용 중인 약물 확인 결과 특이사항 없었으며, 졸음을 유발할 수 있는 성분이 포함되어 있어 운전이나 기계 조작 시 주의가 필요합니다.' + JOIN_NOTE,
       createdAt: '2026-07-01 09:00', updatedAt: '2026-07-01 09:15'
     },
     {
       id: 'seed_3', name: '이웰빙', phone: '010-3344-5566', birth: '1965-02-20', gender: '여성', age: 61, isNew: false, status: '발송완료',
-      message: '[약사 상담 메모]\n항생제는 증상이 호전되어도 처방된 기간 동안 끝까지 복용하셔야 내성이 생기지 않습니다. 유산균은 항생제와 2시간 간격을 두고 드세요.',
+      message: '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n이웰빙 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n1. 아목시실린캡슐 500mg - 1회 1캡슐, 1일 3회, 5일분\n2. 프로바이오틱스캡슐 - 1회 1캡슐, 1일 2회, 5일분\n\n[복약 방법]\n• 아목시실린캡슐 500mg: 1일 3회, 1회 1캡슐씩 복용하세요.\n• 프로바이오틱스캡슐: 1일 2회, 1회 1캡슐씩 복용하세요.\n\n\n[약사 상담 메모]\n항생제는 증상이 호전되어도 처방된 기간 동안 끝까지 복용하셔야 내성이 생기지 않습니다. 유산균은 항생제와 2시간 간격을 두고 드세요.',
       createdAt: '2026-06-30 10:50', updatedAt: '2026-06-30 11:00'
     },
     {
       id: 'seed_4', name: '김네모', phone: '010-4455-6677', birth: '1955-08-09', gender: '남성', age: 71, isNew: false, status: '발송완료',
-      message: '[약사 상담 메모]\n당뇨약과 함께 처방된 위장약은 공복에 드시면 속쓰림이 완화됩니다. 저혈당 증상(어지러움, 식은땀) 발생 시 바로 당분을 섭취하시고 병원에 문의해 주세요.',
+      message: '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n김네모 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n1. 메트포르민정 500mg - 1회 1정, 1일 2회, 30일분\n2. 라베프라졸정 20mg - 1회 1정, 1일 1회, 30일분\n\n[복약 방법]\n• 메트포르민정 500mg: 1일 2회, 1회 1정씩 복용하세요.\n• 라베프라졸정 20mg: 1일 1회, 1회 1정씩 복용하세요.\n\n\n[약사 상담 메모]\n당뇨약과 함께 처방된 위장약은 공복에 드시면 속쓰림이 완화됩니다. 저혈당 증상(어지러움, 식은땀) 발생 시 바로 당분을 섭취하시고 병원에 문의해 주세요.',
       createdAt: '2026-06-29 16:30', updatedAt: '2026-06-29 16:45'
     },
     {
-      id: 'seed_5', name: '최세모', phone: '010-5566-7788', birth: '2001-09-30', gender: '여성', age: 25, isNew: true, status: '임시저장',
-      message: '[약사 상담 메모]\n감기약 처방분에 진해거담제가 포함되어 있어 물을 충분히 드시는 것이 좋습니다.' + JOIN_NOTE,
+      id: 'seed_5', name: '최세모', phone: '', birth: '2001-09-30', gender: '여성', age: 25, isNew: true, status: '임시저장',
+      message: '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n최세모 고객님, 지속적인 복약 관리를 위해 안내드립니다.\n\n[약사 상담 메모]\n감기 증상으로 처음 내원하셨습니다. 처방된 약에 진해거담제가 포함되어 있어 물을 충분히 드시는 것이 좋습니다.' + JOIN_NOTE,
       createdAt: '2026-06-28 10:10', updatedAt: '2026-06-28 10:20'
     }
   ];
@@ -352,14 +354,21 @@ function nowStr() {
   return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
 }
 
-function fillModalInfo(rec) {
+function fillModalInfo(rec, editable) {
   document.getElementById('viewName').textContent = rec.name || '—';
   document.getElementById('viewBirth').textContent = rec.birth || '—';
   document.getElementById('viewAge').textContent = rec.age ? (rec.age + '세') : '—';
   document.getElementById('viewGender').textContent = rec.gender || '—';
-  document.getElementById('viewPhone').textContent = rec.phone || '—';
   document.getElementById('viewRegular').textContent = rec.isNew ? '신규' : '단골';
   document.getElementById('viewBody').value = rec.message || '';
+
+  const phoneCell = document.getElementById('viewPhone');
+  const needsPhoneInput = editable && rec.isNew && rec.status !== '발송완료';
+  if (needsPhoneInput) {
+    phoneCell.innerHTML = '<input type="tel" id="viewPhoneInput" class="view-phone-input" placeholder="010-0000-0000" value="' + (rec.phone || '') + '">';
+  } else {
+    phoneCell.textContent = rec.phone || '번호 미확인';
+  }
 }
 
 function openView(id) {
@@ -368,7 +377,7 @@ function openView(id) {
   currentModalId = id;
   currentModalMode = 'view';
   document.getElementById('viewTitle').textContent = '복약 상담 상세';
-  fillModalInfo(rec);
+  fillModalInfo(rec, false);
   document.getElementById('viewBody').readOnly = true;
   document.getElementById('viewFt').innerHTML = '<button class="view-confirm-btn" onclick="closeView()">확인</button>';
   document.getElementById('viewLayer').classList.add('on');
@@ -380,7 +389,7 @@ function goResume(id) {
   currentModalId = id;
   currentModalMode = 'resume';
   document.getElementById('viewTitle').textContent = '복약 상담 이어서 작성';
-  fillModalInfo(rec);
+  fillModalInfo(rec, true);
   document.getElementById('viewBody').readOnly = false;
   document.getElementById('viewFt').innerHTML = `
     <button class="view-draft-btn" onclick="saveResumeDraft()">임시저장</button>
@@ -389,15 +398,23 @@ function goResume(id) {
   document.getElementById('viewLayer').classList.add('on');
 }
 
+function currentModalPhone() {
+  const input = document.getElementById('viewPhoneInput');
+  return input ? input.value.trim() : null;
+}
+
 function updateModalRecord(status) {
   const notes = loadNotes();
   const idx = notes.findIndex(n => n.id === currentModalId);
   if (idx === -1) return;
-  notes[idx] = Object.assign({}, notes[idx], {
+  const phone = currentModalPhone();
+  const patch = {
     message: document.getElementById('viewBody').value,
     status,
     updatedAt: nowStr()
-  });
+  };
+  if (phone !== null) patch.phone = phone;
+  notes[idx] = Object.assign({}, notes[idx], patch);
   saveNotes(notes);
 }
 
@@ -410,6 +427,11 @@ function saveResumeDraft() {
 }
 
 function sendResumeFinal() {
+  const phone = currentModalPhone();
+  if (phone !== null && !phone) {
+    alert('휴대폰 번호를 입력해 주세요.');
+    return;
+  }
   updateModalRecord('발송완료');
   closeView();
   renderFilterTabs();

@@ -66,6 +66,8 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 .td-date{color:#666;font-size:12px;white-space:nowrap;}
 .td-name{font-weight:600;color:#111;white-space:nowrap;}
 .td-phone{color:#555;white-space:nowrap;}
+/* 삭제 아이콘 칸이 관리 버튼과 동떨어져 보이지 않도록 왼쪽 여백을 좁혀 붙임 */
+.td-del{padding-left:2px;}
 
 /* 발송 현황 칩 */
 .chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;}
@@ -339,7 +341,7 @@ function renderTable() {
 
   wrap.innerHTML = `
     <table>
-      <colgroup><col style="width:13%"><col style="width:11%"><col style="width:14%"><col style="width:12%"><col style="width:12%"><col style="width:12%"><col style="width:10%"><col style="width:6%"></colgroup>
+      <colgroup><col style="width:13%"><col style="width:11%"><col style="width:14%"><col style="width:12%"><col style="width:12%"><col style="width:12%"><col style="width:9%"><col style="width:4%"></colgroup>
       <thead>
         <tr>
           <th>작성일시</th>
@@ -385,7 +387,7 @@ function rowHTML(n) {
       <td>${regular}</td>
       <td>${chip}</td>
       <td>${action}</td>
-      <td>${del}</td>
+      <td class="td-del">${del}</td>
     </tr>
   `;
 }

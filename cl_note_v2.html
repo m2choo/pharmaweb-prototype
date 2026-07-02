@@ -184,6 +184,43 @@ function loadNotes() {
   try { return JSON.parse(localStorage.getItem(CL_NOTES_KEY) || '[]'); } catch (e) { return []; }
 }
 
+function seedDummyNotes() {
+  const notes = loadNotes();
+  if (notes.some(n => (n.id || '').startsWith('seed_'))) return;
+  const dummies = [
+    {
+      id: 'seed_1', name: '이체크', phone: '010-2233-4455', isNew: false, status: '임시저장',
+      message: '[약사 상담 메모]\n혈압약 복용 시간이 불규칙하다고 하셔서 아침 식후 고정 복용을 권장드렸습니다. 다음 방문 시 혈압 수치 확인 예정입니다.',
+      createdAt: '2026-07-01 14:20', updatedAt: '2026-07-01 14:30'
+    },
+    {
+      id: 'seed_2', name: '김체크', phone: '010-1234-5678', isNew: true, status: '발송완료',
+      message: '[약사 상담 메모]\n오늘 처방받으신 약은 하루 3회 식후 30분에 복용해 주세요. 졸음을 유발할 수 있어 운전이나 기계 조작 시 주의가 필요합니다.\n\n[웰체크 앱 가입 안내]\n웰체크 앱에서 복약 알림과 상담 기록을 편하게 확인하실 수 있어요. 아래 링크로 가입해 보세요!',
+      createdAt: '2026-07-01 09:00', updatedAt: '2026-07-01 09:15'
+    },
+    {
+      id: 'seed_3', name: '이웰빙', phone: '010-3344-5566', isNew: false, status: '발송완료',
+      message: '[약사 상담 메모]\n항생제는 증상이 호전되어도 처방된 기간 동안 끝까지 복용하셔야 내성이 생기지 않습니다. 유산균은 항생제와 2시간 간격을 두고 드세요.',
+      createdAt: '2026-06-30 10:50', updatedAt: '2026-06-30 11:00'
+    },
+    {
+      id: 'seed_4', name: '김네모', phone: '010-4455-6677', isNew: false, status: '발송완료',
+      message: '[약사 상담 메모]\n당뇨약과 함께 처방된 위장약은 공복에 드시면 속쓰림이 완화됩니다. 저혈당 증상(어지러움, 식은땀) 발생 시 바로 당분을 섭취하시고 병원에 문의해 주세요.',
+      createdAt: '2026-06-29 16:30', updatedAt: '2026-06-29 16:45'
+    },
+    {
+      id: 'seed_5', name: '최세모', phone: '010-5566-7788', isNew: true, status: '임시저장',
+      message: '[약사 상담 메모]\n감기약 처방분에 진해거담제가 포함되어 있어 물을 충분히 드시는 것이 좋습니다.\n\n[웰체크 앱 가입 안내]\n웰체크 앱에서 복약 알림과 상담 기록을 편하게 확인하실 수 있어요. 아래 링크로 가입해 보세요!',
+      createdAt: '2026-06-28 10:10', updatedAt: '2026-06-28 10:20'
+    }
+  ];
+  saveNotes(notes.concat(dummies));
+}
+function saveNotes(list) {
+  localStorage.setItem(CL_NOTES_KEY, JSON.stringify(list));
+}
+seedDummyNotes();
+
 const FILTERS = [
   { key: 'all', label: '전체' },
   { key: '임시저장', label: '임시저장' },

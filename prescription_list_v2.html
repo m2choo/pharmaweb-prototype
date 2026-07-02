@@ -488,6 +488,10 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
       <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><path d="M14 2H8l-2-2H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" stroke="#555" stroke-width="1.4"/></svg>
       앱 설치 문자 발송
     </div>
+    <a class="lnb-item" href="cl_note_v2.html" style="text-decoration:none;color:inherit;">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><path d="M4.5 1.5h5l3 3v9a1 1 0 01-1 1h-7a1 1 0 01-1-1v-11a1 1 0 011-1z" stroke="#555" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 7.5h4M6 10h4" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
+      CL note 복약 상담
+    </a>
   </div>
   <div class="lnb-bottom">
     <div class="lnb-user">
@@ -736,6 +740,7 @@ let timerSec = 0;
 function openModal() {
   selectedCustomer = null;
   showAddForm = false;
+  currentDraftId = null;
   document.getElementById('modalPt').classList.remove('on');
   document.getElementById('ptAvatar').textContent = '';
   document.getElementById('ptName').textContent = '';
@@ -754,6 +759,8 @@ function closeModal() {
   if (currentStep === 3) {
     const ta = document.getElementById('s3mta');
     if (ta && ta.value.trim()) {
+      s3Msg = ta.value;
+      upsertNoteRecord('임시저장');
       showToast('복약지도가 임시저장되었습니다.');
       document.getElementById('bd').classList.remove('on');
       stopTimer(); stopStream();
@@ -763,6 +770,39 @@ function closeModal() {
   document.getElementById('bd').classList.remove('on');
   stopTimer();
   stopStream();
+}
+
+// ── CL note (복약 상담 임시저장/발송 기록) ──
+const CL_NOTES_KEY = 'wcCLNotes';
+function loadNotes() {
+  try { return JSON.parse(localStorage.getItem(CL_NOTES_KEY) || '[]'); } catch (e) { return []; }
+}
+function saveNotes(list) {
+  localStorage.setItem(CL_NOTES_KEY, JSON.stringify(list));
+}
+function nowStr() {
+  const d = new Date();
+  const p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function upsertNoteRecord(status) {
+  const notes = loadNotes();
+  const id = currentDraftId || ('note_' + Date.now());
+  currentDraftId = id;
+  const now = nowStr();
+  const idx = notes.findIndex(n => n.id === id);
+  const rec = {
+    id,
+    name: selectedCustomer.name,
+    phone: (selectedCustomer.phone && selectedCustomer.phone !== '-') ? selectedCustomer.phone : '',
+    isNew: !!selectedCustomer.isNew,
+    status,
+    message: s3Msg,
+    createdAt: idx !== -1 ? notes[idx].createdAt : now,
+    updatedAt: now
+  };
+  if (idx !== -1) notes[idx] = rec; else notes.unshift(rec);
+  saveNotes(notes);
 }
 
 function showToast(msg) {
@@ -1077,6 +1117,8 @@ let selectedRxIds = [];
 let editingDrugsMap = {};
 let aiSummaryText = '';
 let currentStep = 1;
+// CL note(복약 상담 임시저장/발송) 레코드 ID — 저장 시 upsert 대상 식별용
+let currentDraftId = null;
 
 function goNext() {
   if (!selectedCustomer) return;
@@ -1529,6 +1571,7 @@ function sendFinal() {
     if (!ph.trim()) { alert('휴대폰 번호를 입력해 주세요.'); return; }
     selectedCustomer.phone = ph.trim();
   }
+  upsertNoteRecord('발송완료');
   var name = selectedCustomer.name;
   var B = document.getElementById('mbody');
   var F = document.getElementById('mfoot');
@@ -1600,6 +1643,9 @@ function insertAiSummary() {
 }
 
 function saveDraft() {
+  var ta = document.getElementById('s3mta');
+  if (ta) s3Msg = ta.value;
+  upsertNoteRecord('임시저장');
   showToast('복약지도가 임시저장되었습니다.');
 }
 </script>

@@ -328,7 +328,13 @@ function setFilter(key) {
 
 function renderTable() {
   const q = (document.getElementById('searchInput').value || '').trim();
-  let notes = loadNotes().sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+  // 단골/단골 아님끼리 묶어서 보여준 뒤, 각 그룹 안에서는 최신순 정렬
+  let notes = loadNotes().sort((a, b) => {
+    const aGroup = a.isNew ? 1 : 0;
+    const bGroup = b.isNew ? 1 : 0;
+    if (aGroup !== bGroup) return aGroup - bGroup;
+    return (b.updatedAt || '').localeCompare(a.updatedAt || '');
+  });
 
   if (activeFilter !== 'all') notes = notes.filter(n => n.status === activeFilter);
   if (q) notes = notes.filter(n => (n.name || '').includes(q) || (n.phone || '').includes(q));

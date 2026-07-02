@@ -154,19 +154,15 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
 .s1-add-btn:hover{background:#E0EDFF;}
 .s1-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #E8EAED;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:100;overflow:hidden;}
 .s1-dropdown .s1-result-item{border-radius:0;border:none;border-bottom:1px solid #F0F0F0;margin-bottom:0;}
-.s1-add-btn-dd{display:block;width:100%;padding:12px 14px;border:none;border-top:1px solid #E8EAED;background:#F8FBFF;color:#2563EB;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;text-align:left;}
-.s1-add-btn-dd:hover{background:#E0EDFF;}
 .s1-empty-dd{text-align:center;padding:16px 0 8px;color:#AAA;font-size:13px;}
-.s1-add-form{margin-top:14px;padding:16px;background:#F8F9FA;border-radius:8px;display:flex;flex-direction:column;gap:12px;}
-.s1-add-form label{font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px;}
-.s1-add-form input{width:100%;height:38px;border:1px solid #E0E0E0;border-radius:6px;padding:0 10px;font-size:13px;font-family:inherit;outline:none;}
-.s1-add-form input:focus{border-color:#2563EB;}
-.rr-row{display:flex;align-items:center;gap:8px;}
-.rr-front{flex:1;min-width:0;}
-.rr-sep{color:#888;font-size:16px;flex-shrink:0;}
-.s1-add-form .rr-back-digit{width:38px !important;height:38px;border:1px solid #E0E0E0;border-radius:6px;text-align:center;font-size:13px;font-family:inherit;outline:none;flex-shrink:0;padding:0;}
-.s1-add-form .rr-back-digit:focus{border-color:#2563EB;}
-.rr-back-mask{font-size:13px;color:#888;letter-spacing:3px;user-select:none;flex-shrink:0;}
+/* 검색창에 입력한 값을 그대로 신규 고객으로 즉시 추가하는 드롭다운 인라인 행 */
+.s1-add-inline-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:#EBF2FF;border-bottom:1px solid #D8E4FC;}
+.s1-add-inline-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.s1-add-inline-avatar{width:28px;height:28px;border-radius:50%;background:#fff;color:#2563EB;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s1-add-inline-name{font-size:14px;font-weight:600;color:#111;}
+.s1-add-inline-sub{font-size:11.5px;color:#5B7FD1;margin-top:1px;}
+.s1-add-inline-btn{padding:6px 14px;border:none;border-radius:7px;background:#2563EB;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;}
+.s1-add-inline-btn:hover{background:#1D4ED8;}
 .btn-next{height:40px;padding:0 28px;background:#2563EB;border:none;border-radius:8px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
 .btn-next:disabled{opacity:.4;cursor:not-allowed;}
 .btn-cancel{height:40px;padding:0 20px;background:#fff;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;color:#555;cursor:pointer;font-family:inherit;}
@@ -660,13 +656,11 @@ const rows=[
 // ── 모달 + 퍼즐 AI ──
 const KIMCHECK = { name:'김체크', birth:'1982-03-15', phone:'010-1234-5678', gender:'여성', age:44 };
 let selectedCustomer = null;
-let showAddForm = false;
 let timerInterval = null;
 let timerSec = 0;
 
 function openModal() {
   selectedCustomer = null;
-  showAddForm = false;
   currentDraftId = null;
   document.getElementById('modalPt').classList.remove('on');
   document.getElementById('ptAvatar').textContent = '';
@@ -744,7 +738,6 @@ function showToast(msg) {
 
 function removeCustomer() {
   selectedCustomer = null;
-  showAddForm = false;
   const pt = document.getElementById('modalPt');
   pt.classList.remove('on');
   document.getElementById('ptAvatar').textContent = '';
@@ -876,7 +869,6 @@ function renderStep1() {
       </span>
       <div id="s1dropdown" class="s1-dropdown" style="display:none"></div>
     </div>
-    <div id="addFormOuter"></div>
     <div id="rxSection"></div>
   `;
   F.innerHTML = `
@@ -897,26 +889,33 @@ function onSearch(val) {
   const dd = document.getElementById('s1dropdown');
   selectedCustomer = null;
   document.getElementById('btnNext').disabled = true;
-  document.getElementById('addFormOuter').innerHTML = '';
-  showAddForm = false;
   if (!q) { dd.style.display = 'none'; dd.innerHTML = ''; return; }
   const matched = (KIMCHECK.name.includes(q) || KIMCHECK.phone.includes(q)) ? [KIMCHECK] : [];
   dd.style.display = 'block';
-  if (matched.length) {
-    dd.innerHTML = `
-      <div class="s1-result-item" id="ri0" onclick="selectCustomer()">
+
+  // 입력한 값을 그대로 신규 고객으로 즉시 추가할 수 있는 인라인 옵션 (항상 최상단에 노출)
+  const addRowHTML = q.length >= 2 ? `
+    <div class="s1-add-inline-row">
+      <div class="s1-add-inline-left">
+        <div class="s1-add-inline-avatar">${q.charAt(0)}</div>
         <div>
-          <div class="s1-result-name">${KIMCHECK.name}</div>
-          <div class="s1-result-info">${KIMCHECK.birth} · ${KIMCHECK.gender} · ${KIMCHECK.phone}</div>
+          <div class="s1-add-inline-name">${q}</div>
+          <div class="s1-add-inline-sub">직접 입력</div>
         </div>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/></svg>
       </div>
-      <button class="s1-add-btn-dd" onclick="toggleAddForm()">+ 새 고객 추가</button>`;
-  } else {
-    dd.innerHTML = `
-      <div class="s1-empty-dd">검색 결과가 없습니다. 고객을 추가해 주세요.</div>
-      <button class="s1-add-btn-dd" onclick="toggleAddForm()">+ 새 고객 추가</button>`;
-  }
+      <button class="s1-add-inline-btn" onclick="addNewCustomerByName('${q.replace(/'/g, "\\'")}')">고객 추가</button>
+    </div>` : '';
+
+  const matchedHTML = matched.length ? `
+    <div class="s1-result-item" id="ri0" onclick="selectCustomer()">
+      <div>
+        <div class="s1-result-name">${KIMCHECK.name}</div>
+        <div class="s1-result-info">${KIMCHECK.birth} · ${KIMCHECK.gender} · ${KIMCHECK.phone}</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>` : '';
+
+  dd.innerHTML = (addRowHTML + matchedHTML) || `<div class="s1-empty-dd">검색 결과가 없습니다.</div>`;
 }
 
 function setCustomerHeader(name, info, pzVisitTxt) {
@@ -937,62 +936,13 @@ function selectCustomer() {
   renderRxSection();
 }
 
-function toggleAddForm() {
-  showAddForm = !showAddForm;
+function addNewCustomerByName(name) {
+  name = (name || '').trim();
+  if (name.length < 2) return;
+  selectedCustomer = { name, birth: null, gender: '-', phone: '-', age: null, isNew: true };
   const dd = document.getElementById('s1dropdown');
   if (dd) dd.style.display = 'none';
-  document.getElementById('addFormOuter').innerHTML = showAddForm ? `
-    <div class="s1-add-form">
-      <div>
-        <label>이름</label>
-        <input type="text" id="addName" placeholder="고객 이름" oninput="checkAddFormValid()">
-      </div>
-      <div>
-        <label>주민등록번호 (선택)</label>
-        <div class="rr-row">
-          <input class="rr-front" type="text" id="addRrFront" placeholder="생년월일 6자리" maxlength="6" oninput="if(this.value.length===6)document.getElementById('addRrBack').focus()">
-          <span class="rr-sep">—</span>
-          <input class="rr-back-digit" type="text" id="addRrBack" maxlength="1" inputmode="numeric" oninput="this.value=this.value.replace(/\D/,'')">
-          <span class="rr-back-mask">••••••</span>
-        </div>
-      </div>
-      <button class="btn-next" style="width:100%;margin-top:4px" id="addSubmitBtn" onclick="addNewCustomer()" disabled>고객 추가</button>
-    </div>` : '';
-  if (showAddForm) document.getElementById('btnNext').disabled = true;
-}
-
-function checkAddFormValid() {
-  const name = (document.getElementById('addName').value || '').trim();
-  const btn = document.getElementById('addSubmitBtn');
-  if (btn) btn.disabled = name.length < 2;
-}
-
-function addNewCustomer() {
-  const name = (document.getElementById('addName').value || '').trim();
-  const rrFront = (document.getElementById('addRrFront').value || '').trim();
-  const rrBack = (document.getElementById('addRrBack').value || '').trim();
-  if (name.length < 2) {
-    alert('이름을 2자 이상 입력해 주세요.'); return;
-  }
-  // 주민등록번호는 선택 입력 — 입력된 경우에만 성별/생년월일/나이 계산
-  const hasRrn = rrFront.length === 6 && rrBack.length === 1;
-  let gender = '-', birth = null, age = null;
-  if (hasRrn) {
-    const genderMap = {'1':'남성','3':'남성','2':'여성','4':'여성'};
-    gender = genderMap[rrBack] || '-';
-    const century = (rrBack === '3' || rrBack === '4') ? '20' : '19';
-    const birthYear = parseInt(century + rrFront.slice(0,2));
-    const birthMonth = parseInt(rrFront.slice(2,4));
-    const birthDay = parseInt(rrFront.slice(4,6));
-    birth = birthYear + '-' + String(birthMonth).padStart(2,'0') + '-' + String(birthDay).padStart(2,'0');
-    const today = new Date(2026, 5, 29);
-    age = today.getFullYear() - birthYear;
-    if (today.getMonth() + 1 < birthMonth || (today.getMonth() + 1 === birthMonth && today.getDate() < birthDay)) age--;
-  }
-  selectedCustomer = { name, birth, gender, phone: '-', age, isNew: true };
-  setCustomerHeader(name, age !== null ? `${age}세 · ${gender}` : '정보 없음', '방문 이력 없음');
-  document.getElementById('addFormOuter').innerHTML = `<p style="font-size:12px;color:#16A34A;margin-top:8px;">✓ "${name}" 고객이 추가되었습니다.</p>`;
-  showAddForm = false;
+  setCustomerHeader(name, '정보 없음', '방문 이력 없음');
   renderRxSection();
 }
 

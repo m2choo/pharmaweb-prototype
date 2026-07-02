@@ -901,10 +901,10 @@ function toggleAddForm() {
     <div class="s1-add-form">
       <div>
         <label>이름</label>
-        <input type="text" id="addName" placeholder="고객 이름">
+        <input type="text" id="addName" placeholder="고객 이름" oninput="checkAddFormValid()">
       </div>
       <div>
-        <label>주민번호</label>
+        <label>주민등록번호 (선택)</label>
         <div class="rr-row">
           <input class="rr-front" type="text" id="addRrFront" placeholder="생년월일 6자리" maxlength="6" oninput="if(this.value.length===6)document.getElementById('addRrBack').focus()">
           <span class="rr-sep">—</span>
@@ -912,30 +912,41 @@ function toggleAddForm() {
           <span class="rr-back-mask">••••••</span>
         </div>
       </div>
-      <button class="btn-next" style="width:100%;margin-top:4px" onclick="addNewCustomer()">고객 추가</button>
+      <button class="btn-next" style="width:100%;margin-top:4px" id="addSubmitBtn" onclick="addNewCustomer()" disabled>고객 추가</button>
     </div>` : '';
   if (showAddForm) document.getElementById('btnNext').disabled = true;
+}
+
+function checkAddFormValid() {
+  const name = (document.getElementById('addName').value || '').trim();
+  const btn = document.getElementById('addSubmitBtn');
+  if (btn) btn.disabled = name.length < 2;
 }
 
 function addNewCustomer() {
   const name = (document.getElementById('addName').value || '').trim();
   const rrFront = (document.getElementById('addRrFront').value || '').trim();
   const rrBack = (document.getElementById('addRrBack').value || '').trim();
-  if (!name || rrFront.length < 6 || rrBack.length < 1) {
-    alert('이름과 주민번호를 모두 입력해 주세요.'); return;
+  if (name.length < 2) {
+    alert('이름을 2자 이상 입력해 주세요.'); return;
   }
-  const genderMap = {'1':'남성','3':'남성','2':'여성','4':'여성'};
-  const gender = genderMap[rrBack] || '-';
-  const century = (rrBack === '3' || rrBack === '4') ? '20' : '19';
-  const birthYear = parseInt(century + rrFront.slice(0,2));
-  const birthMonth = parseInt(rrFront.slice(2,4));
-  const birthDay = parseInt(rrFront.slice(4,6));
-  const birth = birthYear + '-' + String(birthMonth).padStart(2,'0') + '-' + String(birthDay).padStart(2,'0');
-  const today = new Date(2026, 5, 29);
-  let age = today.getFullYear() - birthYear;
-  if (today.getMonth() + 1 < birthMonth || (today.getMonth() + 1 === birthMonth && today.getDate() < birthDay)) age--;
+  // 주민등록번호는 선택 입력 — 입력된 경우에만 성별/생년월일/나이 계산
+  const hasRrn = rrFront.length === 6 && rrBack.length === 1;
+  let gender = '-', birth = null, age = null;
+  if (hasRrn) {
+    const genderMap = {'1':'남성','3':'남성','2':'여성','4':'여성'};
+    gender = genderMap[rrBack] || '-';
+    const century = (rrBack === '3' || rrBack === '4') ? '20' : '19';
+    const birthYear = parseInt(century + rrFront.slice(0,2));
+    const birthMonth = parseInt(rrFront.slice(2,4));
+    const birthDay = parseInt(rrFront.slice(4,6));
+    birth = birthYear + '-' + String(birthMonth).padStart(2,'0') + '-' + String(birthDay).padStart(2,'0');
+    const today = new Date(2026, 5, 29);
+    age = today.getFullYear() - birthYear;
+    if (today.getMonth() + 1 < birthMonth || (today.getMonth() + 1 === birthMonth && today.getDate() < birthDay)) age--;
+  }
   selectedCustomer = { name, birth, gender, phone: '-', age, isNew: true };
-  setCustomerHeader(name, `${age}세 · ${gender}`, '방문 이력 없음');
+  setCustomerHeader(name, age !== null ? `${age}세 · ${gender}` : '정보 없음', '방문 이력 없음');
   document.getElementById('btnNext').disabled = false;
   document.getElementById('addFormOuter').innerHTML = `<p style="font-size:12px;color:#16A34A;margin-top:8px;">✓ "${name}" 고객이 추가되었습니다.</p>`;
   showAddForm = false;

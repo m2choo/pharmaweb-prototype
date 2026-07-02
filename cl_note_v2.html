@@ -90,13 +90,30 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 /* 메시지 미리보기 레이어 */
 .view-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;}
 .view-layer.on{display:flex;}
-.view-box{width:460px;max-height:80vh;background:#fff;border-radius:14px;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.28);}
-.view-hd{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #E8EAED;}
-.view-title{font-size:15px;font-weight:700;color:#111;}
-.view-x{width:28px;height:28px;background:none;border:none;cursor:pointer;color:#888;font-size:16px;border-radius:6px;font-family:inherit;}
+.view-box{width:700px;max-width:92vw;max-height:86vh;background:#fff;border-radius:14px;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.28);}
+.view-hd{display:flex;align-items:center;justify-content:space-between;padding:22px 28px 18px;border-bottom:1px solid #E8EAED;}
+.view-title{font-size:18px;font-weight:700;color:#111;}
+.view-x{width:28px;height:28px;background:none;border:none;cursor:pointer;color:#888;font-size:18px;border-radius:6px;font-family:inherit;}
 .view-x:hover{background:#F4F5F7;}
-.view-body{padding:18px 20px;overflow-y:auto;font-size:13px;color:#333;line-height:1.7;white-space:pre-wrap;}
-.view-meta{font-size:12px;color:#888;padding:0 20px 14px;}
+.view-cols{display:grid;grid-template-columns:1fr 1.35fr;gap:28px;padding:22px 28px;overflow-y:auto;}
+.view-col-title{font-size:14px;font-weight:700;color:#111;margin-bottom:12px;}
+.view-info-table{width:100%;border-collapse:collapse;}
+.view-info-table th{width:76px;text-align:left;font-size:12.5px;font-weight:600;color:#888;padding:10px 8px 10px 0;vertical-align:top;white-space:nowrap;}
+.view-info-table td{font-size:13.5px;color:#111;padding:10px 0;font-weight:500;}
+.view-msg-box{width:100%;background:#F8F9FA;border:1px solid #E8EAED;border-radius:10px;padding:16px;font-size:13px;color:#333;line-height:1.7;white-space:pre-wrap;height:44vh;overflow-y:auto;font-family:inherit;resize:none;}
+.view-msg-box[readonly]{background:#F8F9FA;}
+.view-msg-box:not([readonly]){background:#fff;border-color:#AEB7C6;}
+.view-msg-box:not([readonly]):focus{outline:none;border-color:#2563EB;}
+.view-ft{padding:18px 28px 24px;display:flex;justify-content:center;gap:10px;}
+.view-confirm-btn{width:100%;max-width:320px;height:44px;background:#2563EB;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+.view-confirm-btn:hover{background:#1d4fd1;}
+.view-draft-btn{flex:1;max-width:200px;height:44px;background:#fff;color:#2563EB;border:1px solid #A0B4FF;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+.view-draft-btn:hover{background:#F2F6FF;}
+.view-send-btn{flex:1;max-width:200px;height:44px;background:#2563EB;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+.view-send-btn:hover{background:#1d4fd1;}
+
+.toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(16px);background:#1E293B;color:#fff;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:opacity .22s,transform .22s;z-index:999;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
@@ -170,13 +187,34 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 <div class="view-layer" id="viewLayer">
   <div class="view-box">
     <div class="view-hd">
-      <div class="view-title" id="viewTitle">발송 내용</div>
+      <div class="view-title" id="viewTitle">복약 상담 상세</div>
       <button class="view-x" onclick="closeView()">✕</button>
     </div>
-    <div class="view-meta" id="viewMeta"></div>
-    <div class="view-body" id="viewBody"></div>
+    <div class="view-cols">
+      <div>
+        <div class="view-col-title">고객 정보</div>
+        <table class="view-info-table">
+          <tr><th>고객명</th><td id="viewName"></td></tr>
+          <tr><th>생년월일</th><td id="viewBirth"></td></tr>
+          <tr><th>나이</th><td id="viewAge"></td></tr>
+          <tr><th>성별</th><td id="viewGender"></td></tr>
+          <tr><th>휴대폰 번호</th><td id="viewPhone"></td></tr>
+          <tr><th>단골 여부</th><td id="viewRegular"></td></tr>
+        </table>
+      </div>
+      <div>
+        <div class="view-col-title">약사 상담 메모</div>
+        <textarea class="view-msg-box" id="viewBody"></textarea>
+      </div>
+    </div>
+    <div class="view-ft" id="viewFt">
+      <button class="view-confirm-btn" onclick="closeView()">확인</button>
+    </div>
   </div>
 </div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
 <script>
 const CL_NOTES_KEY = 'wcCLNotes';
@@ -184,33 +222,34 @@ function loadNotes() {
   try { return JSON.parse(localStorage.getItem(CL_NOTES_KEY) || '[]'); } catch (e) { return []; }
 }
 
+const JOIN_NOTE = '\n\n[웰체크 앱 가입 안내]\n아래 링크에서 웰체크 앱에 가입하시면 저희 약국이 단골 약국으로 자동 연결됩니다.\nhttps://wellcheck.co.kr/join?ref=pharmacy';
+
 function seedDummyNotes() {
-  const notes = loadNotes();
-  if (notes.some(n => (n.id || '').startsWith('seed_'))) return;
+  const notes = loadNotes().filter(n => !(n.id || '').startsWith('seed_'));
   const dummies = [
     {
-      id: 'seed_1', name: '이체크', phone: '010-2233-4455', isNew: false, status: '임시저장',
+      id: 'seed_1', name: '이체크', phone: '010-2233-4455', birth: '1978-05-12', gender: '여성', age: 48, isNew: false, status: '임시저장',
       message: '[약사 상담 메모]\n혈압약 복용 시간이 불규칙하다고 하셔서 아침 식후 고정 복용을 권장드렸습니다. 다음 방문 시 혈압 수치 확인 예정입니다.',
       createdAt: '2026-07-01 14:20', updatedAt: '2026-07-01 14:30'
     },
     {
-      id: 'seed_2', name: '김체크', phone: '010-1234-5678', isNew: true, status: '발송완료',
-      message: '[약사 상담 메모]\n오늘 처방받으신 약은 하루 3회 식후 30분에 복용해 주세요. 졸음을 유발할 수 있어 운전이나 기계 조작 시 주의가 필요합니다.\n\n[웰체크 앱 가입 안내]\n웰체크 앱에서 복약 알림과 상담 기록을 편하게 확인하실 수 있어요. 아래 링크로 가입해 보세요!',
+      id: 'seed_2', name: '김체크', phone: '010-1234-5678', birth: '1990-11-02', gender: '남성', age: 36, isNew: true, status: '발송완료',
+      message: '[약사 상담 메모]\n오늘 처방받으신 약은 하루 3회 식후 30분에 복용해 주세요. 졸음을 유발할 수 있어 운전이나 기계 조작 시 주의가 필요합니다.' + JOIN_NOTE,
       createdAt: '2026-07-01 09:00', updatedAt: '2026-07-01 09:15'
     },
     {
-      id: 'seed_3', name: '이웰빙', phone: '010-3344-5566', isNew: false, status: '발송완료',
+      id: 'seed_3', name: '이웰빙', phone: '010-3344-5566', birth: '1965-02-20', gender: '여성', age: 61, isNew: false, status: '발송완료',
       message: '[약사 상담 메모]\n항생제는 증상이 호전되어도 처방된 기간 동안 끝까지 복용하셔야 내성이 생기지 않습니다. 유산균은 항생제와 2시간 간격을 두고 드세요.',
       createdAt: '2026-06-30 10:50', updatedAt: '2026-06-30 11:00'
     },
     {
-      id: 'seed_4', name: '김네모', phone: '010-4455-6677', isNew: false, status: '발송완료',
+      id: 'seed_4', name: '김네모', phone: '010-4455-6677', birth: '1955-08-09', gender: '남성', age: 71, isNew: false, status: '발송완료',
       message: '[약사 상담 메모]\n당뇨약과 함께 처방된 위장약은 공복에 드시면 속쓰림이 완화됩니다. 저혈당 증상(어지러움, 식은땀) 발생 시 바로 당분을 섭취하시고 병원에 문의해 주세요.',
       createdAt: '2026-06-29 16:30', updatedAt: '2026-06-29 16:45'
     },
     {
-      id: 'seed_5', name: '최세모', phone: '010-5566-7788', isNew: true, status: '임시저장',
-      message: '[약사 상담 메모]\n감기약 처방분에 진해거담제가 포함되어 있어 물을 충분히 드시는 것이 좋습니다.\n\n[웰체크 앱 가입 안내]\n웰체크 앱에서 복약 알림과 상담 기록을 편하게 확인하실 수 있어요. 아래 링크로 가입해 보세요!',
+      id: 'seed_5', name: '최세모', phone: '010-5566-7788', birth: '2001-09-30', gender: '여성', age: 25, isNew: true, status: '임시저장',
+      message: '[약사 상담 메모]\n감기약 처방분에 진해거담제가 포함되어 있어 물을 충분히 드시는 것이 좋습니다.' + JOIN_NOTE,
       createdAt: '2026-06-28 10:10', updatedAt: '2026-06-28 10:20'
     }
   ];
@@ -303,21 +342,89 @@ function rowHTML(n) {
   `;
 }
 
-function goResume(id) {
-  localStorage.setItem('wcResumeDraftId', id);
-  window.location.href = 'customer_list_v2.html';
+let currentModalId = null;
+let currentModalMode = 'view';
+
+function nowStr() {
+  const d = new Date();
+  const p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+
+function fillModalInfo(rec) {
+  document.getElementById('viewName').textContent = rec.name || '—';
+  document.getElementById('viewBirth').textContent = rec.birth || '—';
+  document.getElementById('viewAge').textContent = rec.age ? (rec.age + '세') : '—';
+  document.getElementById('viewGender').textContent = rec.gender || '—';
+  document.getElementById('viewPhone').textContent = rec.phone || '—';
+  document.getElementById('viewRegular').textContent = rec.isNew ? '신규' : '단골';
+  document.getElementById('viewBody').value = rec.message || '';
 }
 
 function openView(id) {
   const rec = loadNotes().find(n => n.id === id);
   if (!rec) return;
-  document.getElementById('viewTitle').textContent = rec.name + ' 님께 발송한 내용';
-  document.getElementById('viewMeta').textContent = (rec.phone || '연락처 미확인') + ' · ' + (rec.updatedAt || '');
-  document.getElementById('viewBody').textContent = rec.message || '';
+  currentModalId = id;
+  currentModalMode = 'view';
+  document.getElementById('viewTitle').textContent = '복약 상담 상세';
+  fillModalInfo(rec);
+  document.getElementById('viewBody').readOnly = true;
+  document.getElementById('viewFt').innerHTML = '<button class="view-confirm-btn" onclick="closeView()">확인</button>';
   document.getElementById('viewLayer').classList.add('on');
 }
+
+function goResume(id) {
+  const rec = loadNotes().find(n => n.id === id);
+  if (!rec) return;
+  currentModalId = id;
+  currentModalMode = 'resume';
+  document.getElementById('viewTitle').textContent = '복약 상담 이어서 작성';
+  fillModalInfo(rec);
+  document.getElementById('viewBody').readOnly = false;
+  document.getElementById('viewFt').innerHTML = `
+    <button class="view-draft-btn" onclick="saveResumeDraft()">임시저장</button>
+    <button class="view-send-btn" onclick="sendResumeFinal()">➤ 전송하기</button>
+  `;
+  document.getElementById('viewLayer').classList.add('on');
+}
+
+function updateModalRecord(status) {
+  const notes = loadNotes();
+  const idx = notes.findIndex(n => n.id === currentModalId);
+  if (idx === -1) return;
+  notes[idx] = Object.assign({}, notes[idx], {
+    message: document.getElementById('viewBody').value,
+    status,
+    updatedAt: nowStr()
+  });
+  saveNotes(notes);
+}
+
+function saveResumeDraft() {
+  updateModalRecord('임시저장');
+  closeView();
+  renderFilterTabs();
+  renderTable();
+  showToast('복약지도가 임시저장되었습니다.');
+}
+
+function sendResumeFinal() {
+  updateModalRecord('발송완료');
+  closeView();
+  renderFilterTabs();
+  renderTable();
+  showToast('복약지도가 발송되었습니다.');
+}
+
 function closeView() {
   document.getElementById('viewLayer').classList.remove('on');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
 
 renderFilterTabs();

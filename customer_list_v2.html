@@ -690,6 +690,9 @@ function upsertNoteRecord(status) {
     id,
     name: selectedCustomer.name,
     phone: (selectedCustomer.phone && selectedCustomer.phone !== '-') ? selectedCustomer.phone : '',
+    birth: (selectedCustomer.birth && selectedCustomer.birth !== '-') ? selectedCustomer.birth : '',
+    gender: (selectedCustomer.gender && selectedCustomer.gender !== '-') ? selectedCustomer.gender : '',
+    age: (selectedCustomer.age && selectedCustomer.age !== '-') ? selectedCustomer.age : '',
     isNew: !!selectedCustomer.isNew,
     status,
     message: s3Msg,
@@ -1607,25 +1610,6 @@ function saveDraft() {
   upsertNoteRecord('임시저장');
   showToast('복약지도가 임시저장되었습니다.');
 }
-
-// ── CL note 목록에서 "이어서 작성" 클릭 시 해당 임시저장 건을 Step3로 바로 복원 ──
-function checkResumeDraft() {
-  var id = localStorage.getItem('wcResumeDraftId');
-  if (!id) return;
-  localStorage.removeItem('wcResumeDraftId');
-  var rec = loadNotes().find(n => n.id === id);
-  if (!rec) return;
-  openModal();
-  selectedCustomer = { name: rec.name, phone: rec.phone || '-', gender: '-', age: '-', isNew: !!rec.isNew };
-  currentDraftId = rec.id;
-  setCustomerHeader(rec.name, rec.isNew ? '신규 고객' : (rec.phone || ''), '');
-  s3SelTags = new Set();
-  s3Msg = rec.message || '';
-  currentStep = 3;
-  setStepTab(3);
-  renderStep3Body();
-}
-checkResumeDraft();
 
 </script>
 </body>

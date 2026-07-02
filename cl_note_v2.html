@@ -290,6 +290,12 @@ function seedDummyNotes() {
       id: 'seed_5', name: '최세모', phone: '010-9911-2233', birth: '2001-09-30', gender: '여성', age: 25, isNew: true, status: '임시저장', appJoined: true,
       message: '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n최세모 고객님, 지속적인 복약 관리를 위해 안내드립니다.\n\n[약사 상담 메모]\n감기 증상으로 처음 내원하셨습니다. 처방된 약에 진해거담제가 포함되어 있어 물을 충분히 드시는 것이 좋습니다.' + JOIN_NOTE,
       createdAt: '2026-06-28 10:10', updatedAt: '2026-06-28 10:20'
+    },
+    {
+      // 아직 앱 미가입 + 번호 미입력 상태로 임시저장된 케이스 (전송 전 정보가 비어있는 상태를 보여줌)
+      id: 'seed_6', name: '박신규', phone: '', birth: null, gender: '-', age: null, isNew: true, status: '임시저장', appJoined: false,
+      message: '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n박신규 고객님, 지속적인 복약 관리를 위해 안내드립니다.\n\n[약사 상담 메모]\n두통으로 처음 내원하셨습니다. 진통제 복용 시 공복을 피하고 물을 충분히 드시는 것이 좋습니다.' + JOIN_NOTE,
+      createdAt: '2026-06-27 11:05', updatedAt: '2026-06-27 11:12'
     }
   ];
   saveNotes(notes.concat(dummies));

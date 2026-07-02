@@ -66,6 +66,7 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 .td-date{color:#666;font-size:12px;white-space:nowrap;}
 .td-name{font-weight:600;color:#111;white-space:nowrap;}
 .td-phone{color:#555;white-space:nowrap;}
+.td-mgmt{text-align:left;}
 
 /* 발송 현황 칩 */
 .chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;}
@@ -77,11 +78,26 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 .badge-new-txt{color:#888;}
 
 /* 관리 버튼 */
-.mgmt-btn{height:30px;padding:0 14px;border-radius:6px;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.mgmt-btn{width:78px;height:30px;padding:0;border-radius:6px;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .mgmt-btn-outline{background:#fff;border:1px solid #D1D7E0;color:#333D48;}
 .mgmt-btn-outline:hover{background:#F4F5F7;}
 .mgmt-btn-solid{background:#3E71F0;border:none;color:#fff;}
 .mgmt-btn-solid:hover{background:#2f5fd9;}
+.mgmt-actions{display:inline-flex;align-items:center;gap:4px;}
+.mgmt-del-btn{width:30px;height:30px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:none;border:1px solid transparent;color:#AAA;cursor:pointer;padding:0;border-radius:6px;}
+.mgmt-del-btn:hover{background:#FDF0F0;border-color:#F6D5D5;color:#E5484D;}
+
+/* 삭제 확인 모달 */
+.del-confirm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:center;justify-content:center;}
+.del-confirm-layer.on{display:flex;}
+.del-confirm-box{width:340px;max-width:90vw;background:#fff;border-radius:14px;padding:26px 24px 22px;box-shadow:0 24px 60px rgba(0,0,0,.28);}
+.del-confirm-title{font-size:15px;font-weight:700;color:#111;margin-bottom:8px;}
+.del-confirm-sub{font-size:12.5px;color:#888;line-height:1.6;margin-bottom:22px;}
+.del-confirm-ft{display:flex;gap:8px;}
+.del-cancel-btn{flex:1;height:42px;background:#fff;border:1px solid #D9DEE8;border-radius:8px;font-family:inherit;font-size:13.5px;font-weight:600;color:#555;cursor:pointer;}
+.del-cancel-btn:hover{background:#F4F5F7;}
+.del-confirm-danger-btn{flex:1;height:42px;background:#E5484D;border:none;border-radius:8px;font-family:inherit;font-size:13.5px;font-weight:700;color:#fff;cursor:pointer;}
+.del-confirm-danger-btn:hover{background:#cf3d42;}
 
 /* 빈 상태 */
 .empty-wrap{padding:80px 20px;text-align:center;color:#AAA;}
@@ -216,6 +232,18 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
   </div>
 </div>
 
+<!-- 삭제 확인 모달 -->
+<div class="del-confirm-layer" id="delConfirmLayer">
+  <div class="del-confirm-box">
+    <div class="del-confirm-title">임시저장 기록을 삭제하시겠습니까?</div>
+    <div class="del-confirm-sub" id="delConfirmSub">삭제하면 다시 되돌릴 수 없습니다.</div>
+    <div class="del-confirm-ft">
+      <button class="del-cancel-btn" onclick="closeDeleteConfirm()">취소</button>
+      <button class="del-confirm-danger-btn" onclick="confirmDeleteNote()">삭제</button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
@@ -311,8 +339,8 @@ function renderTable() {
           <th>작성일시</th>
           <th>고객명</th>
           <th>휴대전화 번호</th>
-          <th>발송 현황</th>
           <th>단골 등록여부</th>
+          <th>발송 현황</th>
           <th>관리</th>
         </tr>
       </thead>
@@ -328,19 +356,19 @@ function rowHTML(n) {
     ? '<span class="chip chip-sent"><span class="chip-dot"></span>발송완료</span>'
     : '<span class="chip chip-draft"><span class="chip-dot"></span>임시저장</span>';
   const regular = n.isNew
-    ? '<span class="badge-new-txt">신규</span>'
+    ? '<span class="badge-new-txt">단골 아님</span>'
     : '<span class="badge-regular-txt">단골</span>';
   const action = n.status === '발송완료'
     ? `<button class="mgmt-btn mgmt-btn-outline" onclick="openView('${n.id}')">전송완료</button>`
-    : `<button class="mgmt-btn mgmt-btn-solid" onclick="goResume('${n.id}')">전송하기</button>`;
+    : `<div class="mgmt-actions"><button class="mgmt-btn mgmt-btn-solid" onclick="goResume('${n.id}')">전송하기</button><button class="mgmt-del-btn" onclick="deleteNote('${n.id}')" title="삭제" aria-label="삭제"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M6.5 4V2.5h3V4M3.5 4l.6 9a1 1 0 001 .9h5.8a1 1 0 001-.9l.6-9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>`;
   return `
     <tr>
       <td class="td-date">${n.updatedAt || '—'}</td>
       <td class="td-name">${n.name || '—'}</td>
       <td class="td-phone">${n.phone || '—'}</td>
-      <td>${chip}</td>
       <td>${regular}</td>
-      <td>${action}</td>
+      <td>${chip}</td>
+      <td class="td-mgmt">${action}</td>
     </tr>
   `;
 }
@@ -416,6 +444,30 @@ function updateModalRecord(status) {
   if (phone !== null) patch.phone = phone;
   notes[idx] = Object.assign({}, notes[idx], patch);
   saveNotes(notes);
+}
+
+let pendingDeleteId = null;
+
+function deleteNote(id) {
+  const rec = loadNotes().find(n => n.id === id);
+  if (!rec) return;
+  pendingDeleteId = id;
+  document.getElementById('delConfirmSub').textContent = rec.name + ' 고객의 임시저장 기록을 삭제하면 다시 되돌릴 수 없습니다.';
+  document.getElementById('delConfirmLayer').classList.add('on');
+}
+
+function closeDeleteConfirm() {
+  pendingDeleteId = null;
+  document.getElementById('delConfirmLayer').classList.remove('on');
+}
+
+function confirmDeleteNote() {
+  if (!pendingDeleteId) return;
+  saveNotes(loadNotes().filter(n => n.id !== pendingDeleteId));
+  closeDeleteConfirm();
+  renderFilterTabs();
+  renderTable();
+  showToast('임시저장 기록이 삭제되었습니다.');
 }
 
 function saveResumeDraft() {

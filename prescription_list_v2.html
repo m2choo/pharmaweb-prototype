@@ -178,7 +178,9 @@ body {
 }
 .data-table td:first-child { padding-left: 15px; text-align: left; }
 .td-date { font-size: 13px; color: #333; }
-.td-name { font-size: 13px; color: #333; }
+.td-name { font-size: 13px; font-weight: 500; }
+.td-name.regular { color: #2563EB; }
+.td-name.muted { color: #666; }
 .new-dot {
   display: inline-flex; align-items: center; justify-content: center;
   width: 16px; height: 16px; border-radius: 50%;
@@ -715,7 +717,7 @@ function renderTable() {
   tbody.innerHTML = rows.map((r, i) => `
     <tr style="${!r.active ? 'opacity:.55' : ''}">
       <td><span class="td-date" style="color:${!r.active?'#AAA':'#333'}">${r.date}</span>${r.isNew ? '<span class="new-dot">N</span>' : ''}</td>
-      <td>${r.name}</td>
+      <td class="td-name ${r.isNew ? 'muted' : 'regular'}">${r.name}</td>
       <td>${r.birth}</td>
       <td>${r.phone}</td>
       <td><span class="tag-route">${r.route === '고객 앱 촬영' ? '📷' : '🖨'} ${r.route} ›</span></td>

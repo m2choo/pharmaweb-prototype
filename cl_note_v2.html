@@ -67,6 +67,7 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 .td-name{font-weight:600;color:#111;white-space:nowrap;}
 .name-link{color:#2563EB;text-decoration:none;cursor:pointer;}
 .name-link:hover{text-decoration:underline;}
+.name-muted{color:#666;}
 .td-phone{color:#555;white-space:nowrap;}
 /* 삭제 아이콘 칸이 관리 버튼과 동떨어져 보이지 않도록 왼쪽 여백을 좁혀 붙임 */
 .td-del{padding-left:2px;}
@@ -749,7 +750,7 @@ function rowHTML(n) {
   return `
     <tr>
       <td class="td-date">${n.updatedAt || '—'}</td>
-      <td class="td-name">${n.isNew ? (n.name || '—') : `<a class="name-link" href="customer_info_v2.html">${n.name || '—'}</a>`}</td>
+      <td class="td-name">${n.isNew ? `<span class="name-muted">${n.name || '—'}</span>` : `<a class="name-link" href="customer_info_v2.html">${n.name || '—'}</a>`}</td>
       <td class="td-phone">${n.phone || '—'}</td>
       <td>${joined}</td>
       <td>${regular}</td>

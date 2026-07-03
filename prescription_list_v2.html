@@ -968,7 +968,7 @@ function onSearch(val) {
 
   // 입력한 값을 그대로 신규 고객으로 즉시 추가할 수 있는 인라인 옵션 (항상 최상단에 노출)
   const addRowHTML = q.length >= 2 ? `
-    <div class="s1-add-inline-row">
+    <div class="s1-add-inline-row" onclick="addNewCustomerByName('${q.replace(/'/g, "\\'")}')">
       <div class="s1-add-inline-left">
         <div class="s1-add-inline-avatar">${q.charAt(0)}</div>
         <div>
@@ -976,7 +976,7 @@ function onSearch(val) {
           <div class="s1-add-inline-sub">직접 입력</div>
         </div>
       </div>
-      <button class="s1-add-inline-btn" onclick="addNewCustomerByName('${q.replace(/'/g, "\\'")}')">고객 추가</button>
+      <button class="s1-add-inline-btn">고객 추가</button>
     </div>` : '';
 
   const matchedHTML = matched.length ? `

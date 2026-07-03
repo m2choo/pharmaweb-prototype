@@ -698,16 +698,16 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 //  Table data
 // ──────────────────────────────────
 const rows = [
-  { date:'2024-01-01 14:00', isNew:true,  name:'박지현', birth:'1982-03-15', phone:'010-3821-5674', route:'고객 앱 촬영', consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
-  { date:'2024-01-01 14:00', isNew:true,  name:'이수민', birth:'1975-08-22', phone:'010-9234-1087', route:'비대면 진료',  consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
-  { date:'2024-01-01 14:00', isNew:true,  name:'김태양', birth:'1990-11-04', phone:'010-5567-3298', route:'비대면 진료',  consent:'동의', method:'가족 방문', hospital:'연세세브란스병원', status:'조제완료', ai:'전송완료', active:false },
-  { date:'2024-01-01 14:00', isNew:false, name:'정하은', birth:'1968-05-30', phone:'010-7743-8821', route:'비대면 진료',  consent:'동의', method:'가족 방문', hospital:'연세세브란스병원', status:'조제완료', ai:'전송완료', active:false },
-  { date:'2024-01-01 14:00', isNew:false, name:'홍재원', birth:'1972-04-09', phone:'010-4412-7733', route:'고객 앱 촬영', consent:'동의', method:'가족 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
-  { date:'2024-01-01 14:00', isNew:false, name:'임소연', birth:'1988-12-03', phone:'010-7219-0845', route:'비대면 진료',  consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
-  { date:'2024-01-01 14:00', isNew:false, name:'권도현', birth:'1965-07-22', phone:'010-9983-1564', route:'고객 앱 촬영', consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
-  { date:'2024-01-01 14:00', isNew:false, name:'오현석', birth:'1985-07-14', phone:'010-2341-9087', route:'고객 앱 촬영', consent:'동의', method:'택배',     hospital:'연세세브란스병원', status:'취소됨',  ai:'시작하기', active:false },
-  { date:'2024-01-01 14:00', isNew:false, name:'김철수', birth:'1980-01-01', phone:'010-1234-5678', route:'비대면 진료',  consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
-  { date:'2024-01-01 14:00', isNew:false, name:'강서연', birth:'1978-09-11', phone:'010-6674-2093', route:'고객 앱 촬영', consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'취소됨',  ai:'시작하기', active:false },
+  { date:'2024-01-01 14:00', isNew:true,  name:'박하트', birth:'1982-03-15', phone:'010-3821-5674', route:'고객 앱 촬영', consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
+  { date:'2024-01-01 14:00', isNew:true,  name:'김반달', birth:'1975-08-22', phone:'010-9234-1087', route:'비대면 진료',  consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
+  { date:'2024-01-01 14:00', isNew:true,  name:'정네모', birth:'1990-11-04', phone:'010-5567-3298', route:'비대면 진료',  consent:'동의', method:'가족 방문', hospital:'연세세브란스병원', status:'조제완료', ai:'전송완료', active:false },
+  { date:'2024-01-01 14:00', isNew:false, name:'이세모', birth:'1968-05-30', phone:'010-7743-8821', route:'비대면 진료',  consent:'동의', method:'가족 방문', hospital:'연세세브란스병원', status:'조제완료', ai:'전송완료', active:false },
+  { date:'2024-01-01 14:00', isNew:false, name:'홍동글', birth:'1972-04-09', phone:'010-4412-7733', route:'고객 앱 촬영', consent:'동의', method:'가족 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
+  { date:'2024-01-01 14:00', isNew:false, name:'임별표', birth:'1988-12-03', phone:'010-7219-0845', route:'비대면 진료',  consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
+  { date:'2024-01-01 14:00', isNew:false, name:'권물음', birth:'1965-07-22', phone:'010-9983-1564', route:'고객 앱 촬영', consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
+  { date:'2024-01-01 14:00', isNew:false, name:'오느낌', birth:'1985-07-14', phone:'010-2341-9087', route:'고객 앱 촬영', consent:'동의', method:'택배',     hospital:'연세세브란스병원', status:'취소됨',  ai:'시작하기', active:false },
+  { date:'2024-01-01 14:00', isNew:false, name:'최번개', birth:'1980-01-01', phone:'010-1234-5678', route:'비대면 진료',  consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'접수됨',  ai:'시작하기', active:true  },
+  { date:'2024-01-01 14:00', isNew:false, name:'윤구름', birth:'1978-09-11', phone:'010-6674-2093', route:'고객 앱 촬영', consent:'동의', method:'본인 방문', hospital:'연세세브란스병원', status:'취소됨',  ai:'시작하기', active:false },
 ];
 
 function renderTable() {

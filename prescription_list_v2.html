@@ -1003,8 +1003,8 @@ function setCustomerHeader(name, info, pzVisitTxt) {
 
 function selectCustomer() {
   selectedCustomer = KIMCHECK;
-  const el = document.getElementById('ri0');
-  if (el) el.className = 's1-result-item selected';
+  const dd = document.getElementById('s1dropdown');
+  if (dd) dd.style.display = 'none';
   setCustomerHeader(KIMCHECK.name, `${KIMCHECK.age}세 · ${KIMCHECK.gender} · ${KIMCHECK.phone}`, '3회 방문  최근 26.06.22 · 처방전 8건');
   renderRxSection();
 }

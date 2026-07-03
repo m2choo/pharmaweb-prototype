@@ -176,6 +176,7 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 
 /* Step 1 고객 선택 */
 .s1-guide{font-size:13px;color:#888;margin-bottom:16px;}
+.s1-error-msg{font-size:12.5px;color:#E53E3E;margin-top:-10px;margin-bottom:12px;padding:0 2px;}
 .s1-search-wrap{position:relative;margin-bottom:16px;}
 .s1-search{width:100%;height:40px;border:1px solid #E0E0E0;border-radius:8px;padding:0 36px 0 12px;font-size:13px;font-family:inherit;outline:none;}
 .s1-search:focus{border-color:#2563EB;}
@@ -1095,6 +1096,7 @@ function renderStep1() {
       </span>
       <div id="s1dropdown" class="s1-dropdown" style="display:none"></div>
     </div>
+    <div id="s1error" class="s1-error-msg" style="display:none"></div>
     <div id="rxSection"></div>
   `;
   F.innerHTML = `
@@ -1169,6 +1171,12 @@ function selectCustomer() {
 function addNewCustomerByName(name) {
   name = (name || '').trim();
   if (name.length < 2) return;
+  const errEl = document.getElementById('s1error');
+  if (/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z\s]/.test(name)) {
+    if (errEl) { errEl.textContent = '고객 이름은 한글 또는 영문만 입력해 주세요.'; errEl.style.display = 'block'; }
+    return;
+  }
+  if (errEl) errEl.style.display = 'none';
   selectedCustomer = { name, birth: null, gender: '-', phone: '-', age: null, isNew: true };
   const dd = document.getElementById('s1dropdown');
   if (dd) dd.style.display = 'none';

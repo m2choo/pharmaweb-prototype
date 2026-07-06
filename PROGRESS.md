@@ -33,6 +33,7 @@
 4. **비단골 고객 이름 짙은 회색(#666) 표시** — 테이블(`customer_list_v2.html`, `prescription_list_v2.html`)에서 `regular`/`isNew` 플래그에 따라 `.td-name.regular`(파랑) vs `.td-name.muted`(#666) 클래스 분기
 5. **CL note에서 단골 고객 이름 클릭 시 상세 페이지 이동** — `cl_note_v2.html`에서 단골(`!isNew`)은 `<a class="name-link" href="customer_info_v2.html">`, 비단골은 `<span class="name-muted">`
 6. **모달 내 고객 선택 후 검색창 자동 숨김** (2026-07-06) — 고객 선택 시 안내문구(`#s1guide`)·검색창(`#s1searchWrap`)·에러메시지(`#s1error`)를 `hideSearchSection()`으로 일괄 숨김. 기존엔 처방전 선택 화면 위에 검색창이 계속 남아있던 문제.
+7. **다제약물관리사업 대상자 확인 메시지 조건 변경 (AND 조건)** (2026-07-06) — 기존엔 선택한 처방전의 총 약물 수 `totalDrugs >= 10`만으로 경고 표시. 요청에 따라 "3개월 내 처방 약물 10개 이상" **AND** "3개월 이상 복용해야 하는 약물 존재" 조건으로 변경. 데이터 모델에 별도 필드 추가 없이 기존 `drug.days`(처방 일수, 예: rx3은 90일)를 재사용해 `hasLongTermDrug = selectedRxIds.some(id => editingDrugsMap[id].some(d => d.days >= 90))`로 판정. `prescription_list_v2.html`, `prescription_list.html`(구버전) 두 파일의 `updatePolyAlert()`에 동일 적용.
 
 ### 검증된 값 / 재사용 가능한 패턴
 - 확인 모달 디자인 톤: 질문형 제목 + 회색 안내 + 빨간 경고 + 취소/확인(파랑) 버튼

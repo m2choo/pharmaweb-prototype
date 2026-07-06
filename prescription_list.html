@@ -1160,9 +1160,10 @@ function toggleCheck(id) {
 
 function updatePolyAlert() {
   const totalDrugs = selectedRxIds.reduce((sum, id) => sum + (editingDrugsMap[id] || []).length, 0);
+  const hasLongTermDrug = selectedRxIds.some(id => (editingDrugsMap[id] || []).some(d => d.days >= 90));
   const el = document.getElementById('s2polyAlert');
   if (!el) return;
-  el.innerHTML = totalDrugs >= 10 ? `
+  el.innerHTML = (totalDrugs >= 10 && hasLongTermDrug) ? `
     <div class="s2-poly-alert" style="margin-bottom:14px;">
       <div class="s2-poly-alert-icon"><span>!</span></div>
       <span class="s2-poly-alert-txt">다제약물관리사업 대상자 확인이 필요합니다</span>

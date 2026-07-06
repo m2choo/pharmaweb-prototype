@@ -400,12 +400,10 @@ function openModal() {
   document.getElementById('pzVisit').textContent = '고객을 선택하면 방문 정보가 표시됩니다';
   document.querySelector('.step-tabs').style.visibility = '';
   const recBar = document.querySelector('.pz-rec-bar');
-  if (recBar) recBar.style.display = '';
+  if (recBar) recBar.style.display = 'none';
   document.getElementById('bd').classList.add('on');
   renderStep1();
-  startTimer();
-  startStream();
-  checkMicPermission();
+  startIfMicOk();
 }
 
 function closeModal() {
@@ -484,7 +482,7 @@ function removeCustomer() {
   document.getElementById('pzVisit').textContent = '고객을 선택하면 방문 정보가 표시됩니다';
   renderStep1();
   stopStream(); stopTimer();
-  startTimer(); startStream();
+  startIfMicOk();
 }
 
 const DEMO_LINES = [
@@ -1362,14 +1360,24 @@ function saveDraft() {
   showToast('복약지도가 임시저장되었습니다.');
 }
 
-function alertMicDenied() {
-  alert('마이크 접근이 거부되어 있습니다.\n브라우저 주소창의 아이콘을 클릭하여 마이크 권한을 허용한 후 새로고침해 주세요.');
-}
-async function checkMicPermission() {
+async function startIfMicOk() {
+  let denied = false;
   try {
     const r = await navigator.permissions.query({ name: 'microphone' });
-    if (r.state === 'denied') alertMicDenied();
-  } catch (e) { /* permissions API 미지원 — 무시 */ }
+    denied = r.state === 'denied';
+  } catch (e) { /* permissions API 미지원 — 녹음 시도 허용 */ }
+
+  if (denied) {
+    alert('마이크 접근이 거부되어 있습니다.\n브라우저 주소창의 아이콘을 클릭하여 마이크 권한을 허용한 후 새로고침해 주세요.');
+    const chat = document.getElementById('pzChat');
+    if (chat) chat.innerHTML = '<span style="color:#E5484D;font-size:12px;">마이크 권한이 없어 AI 녹음을 사용할 수 없습니다.</span>';
+    return;
+  }
+
+  const recBar = document.querySelector('.pz-rec-bar');
+  if (recBar) recBar.style.display = '';
+  startTimer();
+  startStream();
 }
 </script>
 </body>

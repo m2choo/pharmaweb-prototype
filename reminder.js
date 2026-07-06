@@ -9,9 +9,8 @@ function parseFreqCount(freq) {
 
 function defaultSlotsForTimes(n) {
   if (n <= 1) return ['아침'];
-  if (n === 2) return ['아침', '점심'];
-  if (n === 3) return ['아침', '점심', '저녁'];
-  return ['아침', '점심', '저녁', '취침전'];
+  if (n === 2) return ['아침', '저녁'];
+  return ['아침', '점심', '저녁'];
 }
 
 function todayISO() {
@@ -24,7 +23,7 @@ function initReminderSettings() {
     if (reminderSettings[id]) return;
     var rx = PRESCRIPTIONS.find(function(r) { return r.id === id; });
     var drugs = editingDrugsMap[id] || rx.drugs;
-    var times = Math.min(4, Math.max.apply(null, drugs.map(function(d) { return parseFreqCount(d.freq); })));
+    var times = Math.min(3, Math.max.apply(null, drugs.map(function(d) { return parseFreqCount(d.freq); })));
     reminderSettings[id] = {
       enabled: true,
       times: times,
@@ -56,7 +55,7 @@ function renderReminderBody() {
     var drugs = editingDrugsMap[id] || rx.drugs;
     var s = reminderSettings[id];
     var isOpen = rmExpandedIds.has(id);
-    var timesPills = [1, 2, 3, 4].map(function(n) {
+    var timesPills = [1, 2, 3].map(function(n) {
       return '<button class="rm-pill' + (s.times === n ? ' on' : '') + '" onclick="rmSetTimes(\'' + id + '\',' + n + ')">' + n + '회</button>';
     }).join('');
     var slotPills = ['아침', '점심', '저녁', '취침전'].map(function(t) {
@@ -78,7 +77,11 @@ function renderReminderBody() {
       + chevronSVG
       + '</div></div>';
 
+    var drugNameList = drugs.map(function(d) {
+      return '<li class="rm-drug-item">' + d.name + '</li>';
+    }).join('');
     var panel = '<div class="rm-panel' + (isOpen ? ' open' : '') + (s.enabled ? '' : ' disabled') + '">'
+      + '<div class="rm-field rm-drug-list-field"><div class="rm-field-label">포함 약품</div><ul class="rm-drug-list">' + drugNameList + '</ul></div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 횟수</div><div class="rm-pills">' + timesPills + '</div></div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 시간</div><div class="rm-pills">' + slotPills + '</div></div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 시점</div><div class="rm-pills">' + timingPills + '</div></div>'
@@ -95,7 +98,7 @@ function renderReminderBody() {
     return '<div class="rm-item">' + row + panel + '</div>';
   }).join('');
 
-  B.innerHTML = '<p style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.6;">환자의 처방전 정보를 기반으로 복약 알림을 자동 설정했습니다. 설정한 알림은 웰체크 환자 앱에 자동 등록됩니다.<br>알림 수정이 필요한 경우, 수정할 처방전을 클릭해 주세요. 알림을 발송하지 않을 처방전은 토글을 꺼 주세요.</p>'
+  B.innerHTML = '<p style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.6;">처방전 정보를 기반으로 복약 알림을 자동 설정했습니다. 항목을 눌러 값을 확인·수정하고, 발송하지 않을 처방전은 토글을 꺼주세요.<br>설정한 알림은 웰체크 앱에 자동 등록됩니다.</p>'
     + (itemsHTML || '<div class="rm-empty-tip">설정할 처방전이 없습니다.</div>');
 
   F.innerHTML = '<span class="rm-step-lbl">Step 2 / 4 · 복약 알림</span>'

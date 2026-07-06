@@ -358,26 +358,6 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 .pz-rec-dot{width:7px;height:7px;border-radius:50%;background:#EF4444;animation:blink 1s ease-in-out infinite;}
 .pz-rec-label{font-size:11px;color:#888;font-weight:500;}
 .pz-rec-time{margin-left:auto;font-size:11px;color:#888;font-variant-numeric:tabular-nums;}
-/* ── 마이크 권한 레이어 ── */
-.mic-perm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;align-items:center;justify-content:center;}
-.mic-perm-layer.on{display:flex;}
-.mic-perm-box{background:#fff;border-radius:16px;padding:44px 40px 36px;max-width:400px;width:90%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;}
-.mic-perm-icon{font-size:48px;line-height:1;}
-.mic-perm-title{font-size:18px;font-weight:700;color:#111;}
-.mic-perm-desc{font-size:13px;color:#555;line-height:1.8;}
-.mic-perm-btn{height:44px;padding:0 28px;background:#2563EB;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
-.mic-perm-btn:hover{background:#1e52c8;}
-.mic-perm-denied{font-size:13px;color:#555;line-height:1.7;}
-/* ── 종료 확인 레이어 ── */
-.close-confirm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:center;justify-content:center;}
-.close-confirm-layer.on{display:flex;}
-.close-confirm-box{background:#fff;border-radius:12px;padding:28px 28px 24px;max-width:360px;width:90%;display:flex;flex-direction:column;gap:10px;}
-.cc-title{font-size:16px;font-weight:700;color:#111;}
-.cc-body{font-size:13px;color:#666;}
-.cc-warn{font-size:13px;font-weight:700;color:#E5484D;}
-.cc-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:8px;}
-.cc-btn-cancel{height:36px;padding:0 16px;background:#fff;border:1px solid #D1D7E0;border-radius:6px;font-size:13px;color:#333;cursor:pointer;font-family:inherit;}
-.cc-btn-confirm{height:36px;padding:0 16px;background:#2563EB;border:none;border-radius:6px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
 </style>
 <link rel="stylesheet" href="reminder.css">
 </head>
@@ -681,20 +661,18 @@ function openModal() {
 }
 
 function closeModal() {
-  if (currentStep >= 2) {
-    document.getElementById('closeConfirmLayer').classList.add('on');
-    return;
+  // 복약지도 전송 단계에서 X 누르면 CL note에 임시저장
+  if (currentStep === 3) {
+    const ta = document.getElementById('s3mta');
+    if (ta && ta.value.trim()) {
+      s3Msg = ta.value;
+      upsertNoteRecord('임시저장');
+      showToast('복약지도가 임시저장되었습니다.');
+      document.getElementById('bd').classList.remove('on');
+      stopTimer(); stopStream();
+      return;
+    }
   }
-  doCloseModal();
-}
-function cancelClose() {
-  document.getElementById('closeConfirmLayer').classList.remove('on');
-}
-function confirmClose() {
-  document.getElementById('closeConfirmLayer').classList.remove('on');
-  doCloseModal();
-}
-function doCloseModal() {
   document.getElementById('bd').classList.remove('on');
   stopTimer();
   stopStream();
@@ -1418,7 +1396,10 @@ let rmExpandedIds = new Set();
 function buildMsgDefault() {
   const c = selectedCustomer;
   if (!selectedRxIds.length) {
-    return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 지속적인 복약 관리를 위해 안내드립니다.\n';
+    return '[복약 상담 안내]
+안녕하세요, 웰체크약국입니다.
+' + c.name + ' 고객님, 지속적인 복약 관리를 위해 안내드립니다.
+';
   }
   let drugLines = [];
   let methodLines = [];
@@ -1429,8 +1410,29 @@ function buildMsgDefault() {
       drugLines.push(idx++ + '. ' + d.name + ' - 1회 ' + d.dosage + ', ' + d.freq + ', ' + d.days + '일분');
       methodLines.push('• ' + d.name + ': ' + d.freq + ', 1회 ' + d.dosage + '씩 복용하세요.');
     });
+    // 복약 알림 설정 여부 반영
+    var rs = (typeof reminderSettings !== 'undefined') ? reminderSettings[id] : null;
+    if (rs && rs.enabled) {
+      var slots = rs.slots ? Array.from(rs.slots).join(', ') : '';
+      var timing = rs.timing || '';
+      var reminderNote = slots && timing
+        ? '→ 약사님이 보낸 복약 알림이 웰체크 앱으로 자동 등록됩니다(' + slots + ' · ' + timing + ')'
+        : '→ 약사님이 보낸 복약 알림이 웰체크 앱으로 자동 등록됩니다';
+      methodLines.push(reminderNote);
+    }
   });
-  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n' + methodLines.join('\n') + '\n';
+  return '[복약 상담 안내]
+안녕하세요, 웰체크약국입니다.
+' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.
+
+[조제 약품]
+' + drugLines.join('
+') + '
+
+[복약 방법]
+' + methodLines.join('
+') + '
+';
 }
 
 // ── Step 3(신규 순서) 복약지도 전송 ──
@@ -1613,59 +1615,6 @@ function saveDraft() {
   showToast('복약지도가 임시저장되었습니다.');
 }
 
-// ── 마이크 권한 ──
-async function checkMicPermission() {
-  try {
-    const r = await navigator.permissions.query({ name: 'microphone' });
-    if (r.state === 'granted') return;
-    document.getElementById('micPermLayer').classList.add('on');
-    if (r.state === 'denied') {
-      document.getElementById('micPermBtn').style.display = 'none';
-      document.getElementById('micPermDenied').style.display = '';
-    }
-    r.addEventListener('change', () => {
-      if (r.state === 'granted') document.getElementById('micPermLayer').classList.remove('on');
-    });
-  } catch (e) { /* permissions API 미지원 — 무시 */ }
-}
-async function requestMicPermission() {
-  const btn = document.getElementById('micPermBtn');
-  btn.textContent = '허용 대기 중...';
-  btn.disabled = true;
-  try {
-    const s = await navigator.mediaDevices.getUserMedia({ audio: true });
-    s.getTracks().forEach(t => t.stop());
-    document.getElementById('micPermLayer').classList.remove('on');
-  } catch (e) {
-    btn.style.display = 'none';
-    document.getElementById('micPermDenied').style.display = '';
-  }
-}
-document.addEventListener('DOMContentLoaded', checkMicPermission);
 </script>
-
-<!-- 마이크 권한 요청 레이어 -->
-<div class="mic-perm-layer" id="micPermLayer">
-  <div class="mic-perm-box">
-    <div class="mic-perm-icon">🎙️</div>
-    <div class="mic-perm-title">마이크 접근 권한이 필요합니다</div>
-    <div class="mic-perm-desc">AI 복약 상담 녹음 기능을 사용하려면<br>브라우저의 마이크 사용을 허용해 주세요.<br><br>AI가 상담 내용을 실시간으로 분석하여<br>복약 안내 메시지를 자동으로 작성합니다.</div>
-    <button class="mic-perm-btn" id="micPermBtn" onclick="requestMicPermission()">마이크 허용하기</button>
-    <div class="mic-perm-denied" id="micPermDenied" style="display:none;"><span style="color:#E5484D;font-weight:600;">마이크 접근이 거부되었습니다.</span><br>브라우저 주소창 좌측 자물쇠 아이콘을 클릭하여<br>마이크 권한을 허용한 후 새로고침해 주세요.</div>
-  </div>
-</div>
-
-<!-- 종료 확인 레이어 -->
-<div class="close-confirm-layer" id="closeConfirmLayer">
-  <div class="close-confirm-box">
-    <div class="cc-title">상담을 종료하시겠습니까?</div>
-    <div class="cc-body">지금 나가면 작성 중인 내용이 저장되지 않습니다.</div>
-    <div class="cc-warn">종료 시 복약지도 내용이 사라집니다.</div>
-    <div class="cc-btns">
-      <button class="cc-btn-cancel" onclick="cancelClose()">계속 작성</button>
-      <button class="cc-btn-confirm" onclick="confirmClose()">나가기</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>

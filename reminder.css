@@ -44,3 +44,8 @@
 .rm-switch input:checked + .rm-slider:before{transform:translateX(17px);}
 .rm-empty-tip{font-size:12.5px;color:#AAA;text-align:center;padding:32px 0;}
 .rm-step-lbl{margin-right:auto;font-size:12px;color:#AAA;align-self:center;}
+/* ── 약품 목록 (패널 상단) ── */
+.rm-drug-list-field{border-bottom:1px solid #EEF0F3;padding-bottom:14px;margin-bottom:6px;}
+.rm-drug-list{list-style:none;display:flex;flex-direction:column;gap:5px;margin:0;padding:0;}
+.rm-drug-item{font-size:12.5px;color:#333;line-height:1.5;padding-left:10px;position:relative;}
+.rm-drug-item::before{content:'';position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:#A0B4FF;}

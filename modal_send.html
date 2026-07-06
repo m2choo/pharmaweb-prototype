@@ -417,6 +417,41 @@ function openModal() {
   startIfMicOk();
 }
 
+function openModalAtStep2(customerData) {
+  currentDraftId = null;
+  reminderSettings = {};
+  rmExpandedIds = new Set();
+  document.querySelector('.step-tabs').style.visibility = '';
+  const recBar = document.querySelector('.pz-rec-bar');
+  if (recBar) recBar.style.display = 'none';
+  document.getElementById('closeConfirmBar').style.display = 'none';
+  document.getElementById('modalX').style.display = '';
+  document.getElementById('bd').classList.add('on');
+  setBeforeUnloadGuard(true);
+
+  // 고객 설정
+  const matched = (customerData.name === KIMCHECK.name) ? KIMCHECK : {
+    name: customerData.name,
+    birth: customerData.birth || null,
+    gender: customerData.gender || '-',
+    phone: customerData.phone || '-',
+    age: customerData.age || null,
+    isNew: false,
+  };
+  selectedCustomer = matched;
+  const info = matched.age ? `${matched.age}세 · ${matched.gender} · ${matched.phone}` : `${matched.birth || ''} · ${matched.phone}`;
+  setCustomerHeader(matched.name, info, customerData.visitInfo || '방문 이력');
+
+  // 최신 처방전 전체 선택
+  selectedRxIds = PRESCRIPTIONS.map(function(r) { return r.id; });
+  editingDrugsMap = {};
+  PRESCRIPTIONS.forEach(function(rx) { editingDrugsMap[rx.id] = rx.drugs.map(function(d) { return Object.assign({}, d); }); });
+
+  if (typeof initReminderSettings === 'function') initReminderSettings();
+  if (typeof renderReminderBody === 'function') { currentStep = 2; setStepTab(2); renderReminderBody(); }
+  startIfMicOk();
+}
+
 function closeModal() {
   document.getElementById('closeConfirmBar').style.display = 'flex';
   document.getElementById('modalX').style.display = 'none';

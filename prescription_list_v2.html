@@ -213,7 +213,21 @@ body {
 }
 .btn-start:hover { opacity: .85; }
 .btn-start.disabled { background: #E0E0E0; color: #AAA; cursor: not-allowed; }
-.btn-sent { height: 28px; padding: 0 12px; background: #F0FDF4; color: #059669; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: default; white-space: nowrap; }
+.btn-sent { height: 28px; padding: 0 12px; background: #fff; color: #888; border: 1px solid #E0E0E0; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: default; white-space: nowrap; }
+
+/* FAB */
+.ai-fab {
+  position: fixed; right: 32px; bottom: 32px;
+  display: flex; align-items: center; gap: 10px;
+  height: 52px; padding: 0 22px;
+  background: linear-gradient(135deg, #2563EB 0%, #38BDF8 100%);
+  border: none; border-radius: 28px;
+  box-shadow: 0 6px 20px rgba(37,99,235,.35);
+  cursor: pointer; z-index: 50;
+  transition: transform .15s, box-shadow .15s;
+}
+.ai-fab:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(37,99,235,.45); }
+.ai-fab-text { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -.2px; }
 
 /* Pagination */
 .pagination {
@@ -322,6 +336,7 @@ body {
           <th style="width:110px">수령 방법</th>
           <th style="width:155px">발행 병원</th>
           <th style="width:130px">상태 ⓘ</th>
+          <th style="width:120px">복약 상담</th>
         </tr>
       </thead>
       <tbody id="tableBody"></tbody>
@@ -398,6 +413,10 @@ function renderTable() {
       <td>${r.method}</td>
       <td>${r.hospital}</td>
       <td><span class="tag-status ${r.status}">${r.status} <span style="font-size:10px">▾</span></span></td>
+      <td>${r.ai === '전송완료'
+        ? `<button class="btn-sent">전송완료</button>`
+        : `<button class="btn-start${r.active ? '' : ' disabled'}" onclick="event.stopPropagation();${r.active ? `openModalFrameStep2(${i})` : ''}">전송하기</button>`
+      }</td>
     </tr>`).join('');
 }
 renderTable();
@@ -411,6 +430,24 @@ function openModalFrame() {
     f.onload = function() { f.contentWindow.openModal(); };
   }
 }
+
+function openModalFrameStep2(i) {
+  var r = rows[i];
+  var customerData = {
+    name: r.name,
+    birth: r.birth,
+    phone: r.phone,
+    visitInfo: '처방전 접수 · ' + r.hospital,
+  };
+  var f = document.getElementById('modalFrame');
+  f.style.display = 'block';
+  if (f.contentWindow && f.contentWindow.openModalAtStep2) {
+    f.contentWindow.openModalAtStep2(customerData);
+  } else {
+    f.onload = function() { f.contentWindow.openModalAtStep2(customerData); };
+  }
+}
+
 function closeModalFrame() {
   document.getElementById('modalFrame').style.display = 'none';
 }

@@ -74,21 +74,28 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
 .rx-header-title{font-size:13.5px;font-weight:700;color:#111;}
 
 /* ── CL note 이력 ── */
-.cl-panel{flex:1;overflow-y:auto;padding:0 12px 12px;}
-.cl-year-group{margin-top:14px;}
-.cl-year-label{font-size:11px;font-weight:700;color:#AAA;padding:0 6px 6px;letter-spacing:.04em;}
-.cl-item{display:flex;align-items:flex-start;gap:10px;padding:10px 8px;border-radius:8px;cursor:pointer;transition:background .1s;}
-.cl-item:hover{background:#F4F8FF;}
-.cl-item-dot{width:8px;height:8px;border-radius:50%;background:#2563EB;flex-shrink:0;margin-top:5px;}
-.cl-item-dot.sky{background:#38BDF8;}
-.cl-item-body{flex:1;min-width:0;}
-.cl-item-meta{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
-.cl-item-date{font-size:11px;color:#AAA;}
-.cl-item-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EBF2FF;color:#2563EB;}
-.cl-item-badge.ai{background:#E0F9F5;color:#059669;}
-.cl-item-title{font-size:12.5px;font-weight:600;color:#111;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.cl-item-preview{font-size:11.5px;color:#888;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.cl-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;gap:8px;color:#CCC;font-size:12.5px;}
+.cl-panel{flex:1;overflow-y:auto;padding:8px 14px 14px;}
+.cl-year-group{margin-top:12px;}
+.cl-year-label{font-size:11px;font-weight:700;color:#BBB;padding:0 4px 6px;letter-spacing:.05em;}
+.cl-item{border:1px solid #EAECF0;border-radius:10px;margin-bottom:8px;overflow:hidden;background:#fff;}
+.cl-item-header{display:flex;align-items:center;padding:11px 14px;cursor:pointer;gap:10px;transition:background .1s;}
+.cl-item-header:hover{background:#F8FAFF;}
+.cl-item-date{font-size:11px;color:#AAA;flex-shrink:0;}
+.cl-item-hospital{font-size:13px;font-weight:700;color:#111;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cl-item-toggle{font-size:11px;color:#888;display:flex;align-items:center;gap:4px;flex-shrink:0;padding:3px 8px;border-radius:6px;border:1px solid #E5E7EB;background:#fff;cursor:pointer;font-family:inherit;transition:background .1s;}
+.cl-item-toggle:hover{background:#F4F5F7;}
+.cl-item-toggle svg{transition:transform .2s;}
+.cl-item-toggle.open svg{transform:rotate(180deg);}
+.cl-item-body{display:none;padding:0 14px 14px;border-top:1px solid #F2F4F7;}
+.cl-item-body.open{display:block;}
+.cl-drugs{margin-bottom:12px;padding-top:12px;}
+.cl-drugs-label{font-size:11px;font-weight:700;color:#999;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.cl-drug-chip{display:inline-flex;align-items:center;gap:4px;background:#F4F5F7;border-radius:6px;padding:3px 9px;font-size:11.5px;color:#333;margin:2px 3px 2px 0;}
+.cl-section{margin-top:12px;}
+.cl-section-label{font-size:11px;font-weight:700;color:#999;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.cl-section-label svg{flex-shrink:0;}
+.cl-stt-box{background:#F8F9FB;border-radius:8px;padding:10px 12px;font-size:11.5px;color:#444;line-height:1.85;}
+.cl-summary-box{background:#EBF5FF;border-radius:8px;padding:10px 12px;font-size:11.5px;color:#1E3A5F;line-height:1.85;}
 .rx-filters{padding:0 20px 10px;display:flex;gap:6px;align-items:center;}
 .rx-tab{height:30px;padding:0 13px;border-radius:20px;font-size:12px;border:1px solid #E0E0E0;background:#fff;cursor:pointer;color:#555;display:flex;align-items:center;gap:4px;font-family:inherit;}
 .rx-tab.active{background:#2563EB;color:#fff;border-color:#2563EB;font-weight:600;}
@@ -285,72 +292,155 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
       <!-- CL note 이력 패널 -->
       <div id="panelCl" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
         <div style="padding:10px 20px 6px;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:12px;color:#888;">총 <strong style="color:#2563EB;">5</strong>건의 복약 상담</span>
-          <input class="rx-search" placeholder="키워드 검색" style="width:160px;">
+          <span style="font-size:12px;color:#888;">총 <strong style="color:#2563EB;">4</strong>건의 복약 상담</span>
+          <input class="rx-search" placeholder="병원명 검색" style="width:160px;">
         </div>
         <div class="cl-panel">
           <!-- 2024년 -->
           <div class="cl-year-group">
             <div class="cl-year-label">2024</div>
+
+            <!-- 항목 1 -->
             <div class="cl-item">
-              <div class="cl-item-dot sky"></div>
+              <div class="cl-item-header" onclick="toggleCl(this)">
+                <span class="cl-item-date">2024.11.14</span>
+                <span class="cl-item-hospital">연세세브란스병원</span>
+                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+              </div>
               <div class="cl-item-body">
-                <div class="cl-item-meta">
-                  <span class="cl-item-date">2024.11.14</span>
-                  <span class="cl-item-badge ai">AI 상담</span>
+                <div class="cl-drugs">
+                  <div class="cl-drugs-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#999" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    처방받은 약
+                  </div>
+                  <span class="cl-drug-chip">아토르바스타틴 20mg</span>
+                  <span class="cl-drug-chip">암로디핀 5mg</span>
+                  <span class="cl-drug-chip">메트포르민 500mg</span>
                 </div>
-                <div class="cl-item-title">아토르바스타틴 20mg — 복약 안내 및 부작용 확인</div>
-                <div class="cl-item-preview">근육통 증상 문의. 가벼운 근육통은 일반적으로 나타날 수 있으며 심할 경우 내원 권고. 저녁 취침 전 복용 확인함.</div>
+                <div class="cl-section">
+                  <div class="cl-section-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#999" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    녹음 내용 (STT)
+                  </div>
+                  <div class="cl-stt-box">약사: 오늘 처방받으신 약 설명 드릴게요. 아토르바스타틴은 고지혈증 약인데, 저녁에 드시면 더 효과적이에요. 최근에 근육이 뭔가 당기거나 아프신 느낌은 없으셨나요?<br><br>환자: 아, 며칠 전부터 허벅지가 좀 뻐근하긴 했는데 그게 약 때문인가요?<br><br>약사: 가벼운 근육통은 초기에 나타날 수 있어요. 근데 통증이 심해지거나 소변 색이 이상해지시면 바로 병원 오셔야 해요. 지금은 좀 더 지켜보시고요.</div>
+                </div>
+                <div class="cl-section">
+                  <div class="cl-section-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#2563EB" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    복약지도 요약
+                  </div>
+                  <div class="cl-summary-box">아토르바스타틴 저녁 복용 안내. 근육통 부작용 가능성 설명 — 경미한 증상은 경과 관찰, 심한 통증·갈색뇨 발생 시 즉시 내원 권고. 암로디핀·메트포르민 기존 복용 중, 중복·상호작용 이상 없음 확인.</div>
+                </div>
               </div>
             </div>
+
+            <!-- 항목 2 -->
             <div class="cl-item">
-              <div class="cl-item-dot sky"></div>
-              <div class="cl-item-body">
-                <div class="cl-item-meta">
-                  <span class="cl-item-date">2024.09.03</span>
-                  <span class="cl-item-badge ai">AI 상담</span>
-                </div>
-                <div class="cl-item-title">메트포르민 500mg — 위장장애 호소</div>
-                <div class="cl-item-preview">식후 즉시 복용으로 변경 권고. 2주 후 재확인 예정. 증상 지속 시 의사 상담 안내.</div>
+              <div class="cl-item-header" onclick="toggleCl(this)">
+                <span class="cl-item-date">2024.09.03</span>
+                <span class="cl-item-hospital">강남성모병원</span>
+                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg></button>
               </div>
-            </div>
-            <div class="cl-item">
-              <div class="cl-item-dot"></div>
               <div class="cl-item-body">
-                <div class="cl-item-meta">
-                  <span class="cl-item-date">2024.06.22</span>
-                  <span class="cl-item-badge">직접 작성</span>
+                <div class="cl-drugs">
+                  <div class="cl-drugs-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#999" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    처방받은 약
+                  </div>
+                  <span class="cl-drug-chip">메트포르민 500mg</span>
+                  <span class="cl-drug-chip">글리메피리드 2mg</span>
                 </div>
-                <div class="cl-item-title">혈압약(암로디핀) 복용 중단 이유 확인</div>
-                <div class="cl-item-preview">두통 부작용으로 임의 중단. 의사 상담 후 다른 계열 약 처방 받도록 안내. 복용 중단하면 안 된다는 점 강조.</div>
+                <div class="cl-section">
+                  <div class="cl-section-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#999" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    녹음 내용 (STT)
+                  </div>
+                  <div class="cl-stt-box">환자: 약 먹고 나서 속이 너무 안 좋아요. 매스껍고 밥도 못 먹겠더라고요.<br><br>약사: 메트포르민이 처음에 위장 불편감이 생길 수 있어요. 지금 식사 전에 드시고 계세요, 아니면 식후에?<br><br>환자: 식전에 먹으라고 해서요.<br><br>약사: 아, 그러면 식사 시작하자마자 바로 드시거나 식후로 바꿔 보세요. 많이 개선되실 거예요.</div>
+                </div>
+                <div class="cl-section">
+                  <div class="cl-section-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#2563EB" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    복약지도 요약
+                  </div>
+                  <div class="cl-summary-box">메트포르민 위장장애 호소. 식사 시작 직후 복용으로 변경 안내. 2주 후 증상 재확인 예정. 지속 시 의사 상담 권고.</div>
+                </div>
               </div>
             </div>
           </div>
+
           <!-- 2023년 -->
           <div class="cl-year-group">
             <div class="cl-year-label">2023</div>
+
+            <!-- 항목 3 -->
             <div class="cl-item">
-              <div class="cl-item-dot sky"></div>
+              <div class="cl-item-header" onclick="toggleCl(this)">
+                <span class="cl-item-date">2023.12.07</span>
+                <span class="cl-item-hospital">연세세브란스병원</span>
+                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+              </div>
               <div class="cl-item-body">
-                <div class="cl-item-meta">
-                  <span class="cl-item-date">2023.12.07</span>
-                  <span class="cl-item-badge ai">AI 상담</span>
+                <div class="cl-drugs">
+                  <div class="cl-drugs-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#999" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    처방받은 약
+                  </div>
+                  <span class="cl-drug-chip">암로디핀 5mg</span>
+                  <span class="cl-drug-chip">로사르탄 50mg</span>
+                  <span class="cl-drug-chip">아토르바스타틴 20mg</span>
+                  <span class="cl-drug-chip">메트포르민 500mg</span>
+                  <span class="cl-drug-chip">졸피뎀 5mg</span>
                 </div>
-                <div class="cl-item-title">다약제 복용 정리 상담 (5종)</div>
-                <div class="cl-item-preview">혈압, 혈당, 고지혈증, 수면, 소화제 중복 여부 검토. 소화제 중복 확인되어 1종 제거 권고. 복약 시간표 제공.</div>
+                <div class="cl-section">
+                  <div class="cl-section-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#999" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    녹음 내용 (STT)
+                  </div>
+                  <div class="cl-stt-box">약사: 오늘 5가지 약이 나왔는데, 혹시 지금 다른 약국에서 따로 받아드시는 약은 없으세요?<br><br>환자: 소화제 같은 거 사 먹는 건 있어요.<br><br>약사: 혹시 어떤 거 드세요? 성분에 따라 겹칠 수 있어서요.<br><br>환자: 겔포스 그거요.<br><br>약사: 겔포스는 괜찮아요. 그런데 메트포르민이랑 시간 좀 띄워서 드세요. 같이 드시면 메트포르민 흡수가 좀 떨어질 수 있거든요.</div>
+                </div>
+                <div class="cl-section">
+                  <div class="cl-section-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#2563EB" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    복약지도 요약
+                  </div>
+                  <div class="cl-summary-box">5종 다약제 복약 상담. 겔포스 자가 복용 확인 — 메트포르민과 2시간 간격 복용 안내. 중복 처방 없음. 졸피뎀 취침 30분 전, 암로디핀·로사르탄 아침 식후, 아토르바스타틴 저녁 복용으로 시간표 정리.</div>
+                </div>
               </div>
             </div>
+
+            <!-- 항목 4 -->
             <div class="cl-item">
-              <div class="cl-item-dot"></div>
+              <div class="cl-item-header" onclick="toggleCl(this)">
+                <span class="cl-item-date">2023.11.01</span>
+                <span class="cl-item-hospital">연세세브란스병원</span>
+                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+              </div>
               <div class="cl-item-body">
-                <div class="cl-item-meta">
-                  <span class="cl-item-date">2023.11.01</span>
-                  <span class="cl-item-badge">직접 작성</span>
+                <div class="cl-drugs">
+                  <div class="cl-drugs-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#999" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    처방받은 약
+                  </div>
+                  <span class="cl-drug-chip">암로디핀 5mg</span>
+                  <span class="cl-drug-chip">메트포르민 500mg</span>
                 </div>
-                <div class="cl-item-title">첫 방문 — 복약 이력 파악</div>
-                <div class="cl-item-preview">타 약국에서 전환. 알약 삼키기 힘들어함. 저녁 식후 복용 선호. 어지럼증 간헐적 호소.</div>
+                <div class="cl-section">
+                  <div class="cl-section-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#999" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    녹음 내용 (STT)
+                  </div>
+                  <div class="cl-stt-box">약사: 처음 오셨죠? 기존에 약국은 어디서 이용하셨어요?<br><br>환자: 집 근처 약국 다니다가 이사 오면서요.<br><br>약사: 혈압이랑 혈당 약 처음 드시는 건가요?<br><br>환자: 아니요, 혈압 약은 1년 넘게 먹었는데 알약을 좀 삼키기 어렵더라고요. 크면 좀 힘들어서요.<br><br>약사: 아, 그러면 조제할 때 참고할게요. 복용 시간은 아침 저녁 중에 어떤 게 더 편하세요?<br><br>환자: 저녁 밥 먹고 나서가 편해요.</div>
+                </div>
+                <div class="cl-section">
+                  <div class="cl-section-label">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#2563EB" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    복약지도 요약
+                  </div>
+                  <div class="cl-summary-box">첫 방문 고객. 타 약국 전환. 알약 삼키기 어려움 확인 — 조제 시 소형 정제 우선 고려. 저녁 식후 복용 선호 확인. 어지럼증 간헐적 호소, 다음 방문 시 확인 예정.</div>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       </div><!-- /panelCl -->
@@ -434,6 +524,14 @@ const rows=[
       <td>${r.ai==='go'?`<button class="btn-send" onclick="openModalStep2()">전송하기</button>`:r.ai==='done'?`<button class="btn-sent">전송완료</button>`:`<span style="font-size:12px;color:#A0AAB4">취소됨</span>`}</td>
     </tr>`).join('');
 })();
+
+function toggleCl(header) {
+  const body = header.nextElementSibling;
+  const btn = header.querySelector('.cl-item-toggle');
+  const isOpen = body.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  btn.childNodes[0].textContent = isOpen ? '접기 ' : '펼치기 ';
+}
 
 function switchTab(tab) {
   const isRx = tab === 'rx';

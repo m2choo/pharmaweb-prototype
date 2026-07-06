@@ -539,6 +539,86 @@ function openModalFrame() {
 function closeModalFrame() {
   document.getElementById('modalFrame').style.display = 'none';
 }
+
+function cancelClose() {
+  document.getElementById('closeConfirmLayer').classList.remove('on');
+}
+function confirmClose() {
+  document.getElementById('closeConfirmLayer').classList.remove('on');
+  doCloseView();
+}
+
+renderFilterTabs();
+renderTable();
 </script>
+
+<!-- 발송완료 메시지 보기 레이어 -->
+<div class="view-layer" id="viewLayer">
+  <div class="view-box">
+    <div class="view-hd">
+      <div class="view-title" id="viewTitle">복약 상담 상세</div>
+      <button class="view-x" onclick="closeView()">✕</button>
+    </div>
+    <div class="view-cols">
+      <div>
+        <div class="view-col-title">고객 정보</div>
+        <table class="view-info-table">
+          <tr><th>고객명</th><td id="viewName"></td></tr>
+          <tr><th>생년월일</th><td id="viewBirth"></td></tr>
+          <tr><th>나이</th><td id="viewAge"></td></tr>
+          <tr><th>성별</th><td id="viewGender"></td></tr>
+          <tr><th>휴대폰 번호</th><td id="viewPhone"></td></tr>
+          <tr><th>단골 여부</th><td id="viewRegular"></td></tr>
+        </table>
+      </div>
+      <div>
+        <div class="view-col-title">약사 상담 메모</div>
+        <textarea class="view-msg-box" id="viewBody"></textarea>
+      </div>
+    </div>
+    <div class="view-ft" id="viewFt">
+      <button class="view-confirm-btn" onclick="closeView()">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 삭제 확인 모달 -->
+<div class="del-confirm-layer" id="delConfirmLayer">
+  <div class="del-confirm-box">
+    <div class="del-confirm-title" id="delConfirmTitle">해당 임시저장 기록을 삭제하시겠습니까?</div>
+    <div class="del-confirm-sub">삭제된 기록은 목록에서 사라지며<br>다시 확인할 수 없습니다.</div>
+    <div class="del-confirm-warn">삭제 시 취소, 복구가 불가합니다.</div>
+    <div class="del-confirm-ft">
+      <button class="del-cancel-btn" onclick="closeDeleteConfirm()">취소</button>
+      <button class="del-confirm-danger-btn" onclick="confirmDeleteNote()">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 이어서 작성 종료 확인 -->
+<style>
+.close-confirm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:center;justify-content:center;}
+.close-confirm-layer.on{display:flex;}
+.close-confirm-box{width:360px;background:#fff;border-radius:16px;padding:30px 28px 24px;box-shadow:0 24px 60px rgba(0,0,0,.28);text-align:center;}
+.cc-title{font-size:17px;font-weight:700;color:#111;margin-bottom:10px;}
+.cc-body{font-size:13px;color:#888;line-height:1.6;margin-bottom:20px;}
+.cc-btns{display:flex;gap:10px;}
+.cc-btn-cancel{flex:1;height:44px;background:#fff;border:1px solid #D9DEE8;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;color:#555;cursor:pointer;}
+.cc-btn-confirm{flex:1;height:44px;background:#2563EB;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;color:#fff;cursor:pointer;}
+</style>
+<div class="close-confirm-layer" id="closeConfirmLayer">
+  <div class="close-confirm-box">
+    <div class="cc-title">작성을 종료하시겠습니까?</div>
+    <div class="cc-body">저장하지 않고 나가면 변경된 내용이 반영되지 않습니다.</div>
+    <div class="cc-btns">
+      <button class="cc-btn-cancel" onclick="cancelClose()">계속 작성</button>
+      <button class="cc-btn-confirm" onclick="confirmClose()">나가기</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
 </body>
 </html>

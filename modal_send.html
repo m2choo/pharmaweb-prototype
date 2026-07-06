@@ -1116,6 +1116,7 @@ function buildMsgDefault() {
   }
   let drugLines = [];
   let methodLines = [];
+  let reminderNotes = [];
   let idx = 1;
   selectedRxIds.forEach(function(id) {
     var drugs = editingDrugsMap[id] || [];
@@ -1128,12 +1129,13 @@ function buildMsgDefault() {
       var slots = rs.slots ? Array.from(rs.slots).join(', ') : '';
       var timing = rs.timing || '';
       var reminderNote = slots && timing
-        ? '→ 약사님이 보낸 복약 알림이 웰체크 앱으로 자동 등록됩니다(' + slots + ' · ' + timing + ')'
-        : '→ 약사님이 보낸 복약 알림이 웰체크 앱으로 자동 등록됩니다';
-      methodLines.push(reminderNote);
+        ? '※ 약사님이 보낸 복약 알림이 웰체크 앱으로 자동 등록됩니다(' + slots + ' · ' + timing + ')'
+        : '※ 약사님이 보낸 복약 알림이 웰체크 앱으로 자동 등록됩니다';
+      reminderNotes.push(reminderNote);
     }
   });
-  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n' + methodLines.join('\n') + '\n';
+  var allMethodLines = reminderNotes.concat(methodLines);
+  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n' + allMethodLines.join('\n') + '\n';
 }
 
 function goStep3() {

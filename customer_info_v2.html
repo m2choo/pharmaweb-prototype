@@ -862,8 +862,8 @@ function renderStep1() {
   const B = document.getElementById('mbody');
   const F = document.getElementById('mfoot');
   B.innerHTML = `
-    <p class="s1-guide">고객 이름 또는 휴대전화 번호를 검색하세요.</p>
-    <div class="s1-search-wrap">
+    <p class="s1-guide" id="s1guide">고객 이름 또는 휴대전화 번호를 검색하세요.</p>
+    <div class="s1-search-wrap" id="s1searchWrap">
       <input class="s1-search" id="s1input" type="text" placeholder="이름 또는 휴대전화 번호" oninput="onSearch(this.value)" autocomplete="off">
       <span class="s1-search-icon">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#aaa" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -938,10 +938,17 @@ function setCustomerHeader(name, info, pzVisitTxt) {
   document.getElementById('pzVisit').textContent = pzVisitTxt;
 }
 
+function hideSearchSection() {
+  const sw = document.getElementById('s1searchWrap'); if (sw) sw.style.display = 'none';
+  const sg = document.getElementById('s1guide'); if (sg) sg.style.display = 'none';
+  const se = document.getElementById('s1error'); if (se) se.style.display = 'none';
+}
+
 function selectCustomer() {
   selectedCustomer = KIMCHECK;
   const dd = document.getElementById('s1dropdown');
   if (dd) dd.style.display = 'none';
+  hideSearchSection();
   setCustomerHeader(KIMCHECK.name, `${KIMCHECK.age}세 · ${KIMCHECK.gender} · ${KIMCHECK.phone}`, '3회 방문  최근 26.06.22 · 처방전 8건');
   renderRxSection();
 }
@@ -954,10 +961,10 @@ function addNewCustomerByName(name) {
     if (errEl) { errEl.textContent = '특수문자는 입력할 수 없습니다. 한글, 영문, 숫자만 입력해 주세요.'; errEl.style.display = 'block'; }
     return;
   }
-  if (errEl) errEl.style.display = 'none';
   selectedCustomer = { name, birth: null, gender: '-', phone: '-', age: null, isNew: true };
   const dd = document.getElementById('s1dropdown');
   if (dd) dd.style.display = 'none';
+  hideSearchSection();
   setCustomerHeader(name, '정보 없음', '방문 이력 없음');
   renderRxSection();
 }

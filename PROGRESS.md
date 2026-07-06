@@ -34,11 +34,12 @@
 5. **CL note에서 단골 고객 이름 클릭 시 상세 페이지 이동** — `cl_note_v2.html`에서 단골(`!isNew`)은 `<a class="name-link" href="customer_info_v2.html">`, 비단골은 `<span class="name-muted">`
 6. **모달 내 고객 선택 후 검색창 자동 숨김** (2026-07-06) — 고객 선택 시 안내문구(`#s1guide`)·검색창(`#s1searchWrap`)·에러메시지(`#s1error`)를 `hideSearchSection()`으로 일괄 숨김. 기존엔 처방전 선택 화면 위에 검색창이 계속 남아있던 문제.
 7. **다제약물관리사업 대상자 확인 메시지 조건 변경 (AND 조건)** (2026-07-06) — 기존엔 선택한 처방전의 총 약물 수 `totalDrugs >= 10`만으로 경고 표시. 요청에 따라 "3개월 내 처방 약물 10개 이상" **AND** "3개월 이상 복용해야 하는 약물 존재" 조건으로 변경. 데이터 모델에 별도 필드 추가 없이 기존 `drug.days`(처방 일수, 예: rx3은 90일)를 재사용해 `hasLongTermDrug = selectedRxIds.some(id => editingDrugsMap[id].some(d => d.days >= 90))`로 판정. `prescription_list_v2.html`, `prescription_list.html`(구버전) 두 파일의 `updatePolyAlert()`에 동일 적용.
-8. **AI 복약 상담 모달에 "복약 알림" 스텝 신규 추가** (2026-07-06, `prescription_list_v2.html`만 우선 적용 — 나머지 3개 v2 패턴 파일은 미반영) — 기존 3단계(고객·처방전 선택 → 복약지도 전송 → 전송 확인) 모달을 4단계로 확장, `renderStep3`/`renderStep3Body`를 새로 추가하고 기존 최종 확인 화면(`goStep3`)은 `goStep4`로 이름 변경.
+8. **AI 복약 상담 모달에 "복약 알림" 스텝 신규 추가** (2026-07-06, `prescription_list_v2.html`만 우선 적용 — 나머지 3개 v2 패턴 파일은 미반영) — 기존 3단계(고객·처방전 선택 → 복약지도 전송 → 전송 확인) 모달을 4단계로 확장.
+   - **최종 스텝 순서**: 1 고객·처방전 선택 → **2 복약 알림(신규)** → 3 복약지도 전송 → 4 전송 확인. 처음엔 복약지도 전송 다음(3번)에 넣었으나, "처방전에서 바로 뽑히는 복약 알림을 먼저 확정하고 그 내용을 반영해 상담 메시지를 작성하는 게 자연스럽다"는 피드백으로 순서를 앞당김 — `goStep2`가 복약 알림(`renderReminderBody`), `goStep3`가 메시지 작성(`renderMsgBody`), `goStep4`가 기존 전송 확인 화면.
    - **정책**: 알림은 **처방전 단위**로 설정(품목별 개별 설정 아님) — 환자앱에 자동 등록되는 현재 정책과 일치, 복잡도 최소화를 위한 선택.
    - 선택한 처방전마다 카드(`.rm-card`) 생성 — 처방전의 `drug.freq`(예: "1일 3회")에서 최댓값을 뽑아 복약 횟수 기본값 산출(`parseFreqCount`/`initReminderSettings`), 복약 기간은 처방전의 `days`(OCR 인식값)를 기본값으로 사용. 모든 값은 약사가 pill 버튼/날짜·숫자 입력으로 수정 가능.
    - 카드별 토글(`rmToggleEnabled`)로 전송 여부 on/off. 상태는 전역 `reminderSettings` 객체(`{[rxId]: {enabled, times, slots, timing, startDate, days}}`)에 저장, `openModal()`/`toggleCheck()` 처방전 해제 시 초기화.
-   - 하단에 "이 단계 건너뛰기"(`goStep3Skip` — 전체 토글 off 처리 후 다음 단계로) 버튼 추가.
+   - 하단에 "이 단계 건너뛰기"(`goStep2Skip` — 전체 토글 off 처리 후 다음 단계로) 버튼 추가.
    - 마지막 "전송 확인" 단계(`goStep4`) 요약 테이블에 "복약 알림: N건 설정 (웰체크 앱 자동 등록)" 행 추가.
    - **TODO**: `customer_list_v2.html`, `customer_info_v2.html`, `cl_note_v2.html`에도 동일 4단계 모달 구조 반영 필요 (사용자가 prescription_list_v2.html 우선 확인 후 확장 여부 결정 예정).
 

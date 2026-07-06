@@ -640,8 +640,8 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
       </div>
       <div class="step-tabs">
         <div class="step-tab on" id="st1"><span class="step-num">1</span> 고객·처방전 선택</div>
-        <div class="step-tab" id="st2"><span class="step-num">2</span> 복약지도 전송</div>
-        <div class="step-tab" id="st3"><span class="step-num">3</span> 복약 알림</div>
+        <div class="step-tab" id="st2"><span class="step-num">2</span> 복약 알림</div>
+        <div class="step-tab" id="st3"><span class="step-num">3</span> 복약지도 전송</div>
         <div class="step-tab" id="st4"><span class="step-num">4</span> 전송 확인</div>
       </div>
       <div class="modal-body" id="mbody"></div>
@@ -785,7 +785,7 @@ function openModal() {
 }
 
 function closeModal() {
-  if (currentStep === 2) {
+  if (currentStep === 3) {
     const ta = document.getElementById('s3mta');
     if (ta && ta.value.trim()) {
       s3Msg = ta.value;
@@ -949,7 +949,7 @@ function showSummary() {
     </div>`);
   chat.scrollTop = chat.scrollHeight;
   aiSummaryText = SUMMARY_TEXT;
-  if (currentStep === 2) insertAiSummary();
+  if (currentStep === 3) insertAiSummary();
 }
 
 function stopTimer() {
@@ -1481,49 +1481,7 @@ function buildMsgDefault() {
   return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n' + methodLines.join('\n') + '\n';
 }
 
-function goStep2() {
-  if (!selectedCustomer) return;
-  if (!selectedRxIds.length && !(selectedCustomer && selectedCustomer.isNew)) return;
-  currentStep = 2;
-  setStepTab(2);
-  s3SelTags = new Set();
-  s3Msg = buildMsgDefault();
-  if (aiSummaryText) s3Msg = insertSummaryIntoMsg(s3Msg, aiSummaryText);
-  s3Msg = appendJoinNoteIfNew(s3Msg);
-  renderStep2Body();
-}
-
-// 신규 고객: 메시지 하단(약사 메모 아래)에 웰체크 앱 가입 안내 추가
-function appendJoinNoteIfNew(text) {
-  if (!(selectedCustomer && selectedCustomer.isNew)) return text;
-  if (text.includes('웰체크 앱 가입 안내')) return text;
-  return text + '\n\n[웰체크 앱 가입 안내]\n아래 링크에서 웰체크 앱에 가입하시면 저희 약국이 단골 약국으로 자동 연결됩니다.\nhttps://wellcheck.co.kr/join?ref=pharmacy';
-}
-
-// 가입 안내가 항상 약사 메모 아래(맨 끝)에 오도록, 재삽입 전 기존 안내문 제거
-function stripJoinNote(text) {
-  var idx = text.indexOf('\n\n[웰체크 앱 가입 안내]');
-  return idx === -1 ? text : text.slice(0, idx);
-}
-
-function renderStep2Body() {
-  const B = document.getElementById('mbody');
-  const F = document.getElementById('mfoot');
-  B.innerHTML = '<div class="s4-grid"><div><div class="tag-ttl">자주 사용하는 태그</div><div class="tag-chips">'
-    + S3_TAGS.map(function(t, i) {
-        return '<button class="tag-chip' + (s3SelTags.has(i) ? ' on' : '') + '" onclick="s3ToggleTag(' + i + ',\'' + t.replace(/'/g, "\\'") + '\')">' + t + '</button>';
-      }).join('')
-    + '</div></div><div><div class="msg-hdr"><span class="msg-ttl">메시지 편집</span><button class="msg-reset" onclick="s3ResetMsg()">초기화 ↺</button></div>'
-    + '<textarea class="msg-ta" id="s3mta" oninput="s3OnMsg(this)">' + s3Msg.replace(/</g,'&lt;') + '</textarea>'
-    + '<div class="msg-cnt" id="s3mcnt">' + s3Msg.length + ' / 500자</div></div></div>';
-  F.innerHTML = `
-    <button class="btn-cancel" onclick="renderStep1()">← 이전</button>
-    <button class="btn-cancel" onclick="saveDraft()" style="color:#2563EB;border-color:#A0B4FF;">임시저장</button>
-    <button class="btn-next" onclick="goStep3()">다음</button>
-  `;
-}
-
-// ── Step 3(신규) 복약 알림 ──
+// ── Step 2(신규) 복약 알림 ──
 function parseFreqCount(freq) {
   var m = /([0-9]+)\s*회/.exec(freq || '');
   return m ? parseInt(m[1], 10) : 1;
@@ -1557,16 +1515,16 @@ function initReminderSettings() {
   });
 }
 
-function goStep3() {
-  var ta = document.getElementById('s3mta');
-  if (ta) s3Msg = ta.value;
-  currentStep = 3;
-  setStepTab(3);
+function goStep2() {
+  if (!selectedCustomer) return;
+  if (!selectedRxIds.length && !(selectedCustomer && selectedCustomer.isNew)) return;
+  currentStep = 2;
+  setStepTab(2);
   initReminderSettings();
-  renderStep3Body();
+  renderReminderBody();
 }
 
-function renderStep3Body() {
+function renderReminderBody() {
   var B = document.getElementById('mbody');
   var F = document.getElementById('mfoot');
 
@@ -1606,30 +1564,30 @@ function renderStep3Body() {
   B.innerHTML = '<p style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.6;">처방전 정보를 기반으로 복약 알림을 자동 설정했습니다. 필요 시 값을 수정하고, 발송하지 않을 처방전은 토글을 꺼주세요.<br>설정한 알림은 웰체크 앱에 자동 등록됩니다.</p>'
     + (cardsHTML || '<div class="rm-empty-tip">설정할 처방전이 없습니다.</div>');
 
-  F.innerHTML = '<span class="rm-step-lbl">Step 3 / 4 · 복약 알림</span>'
-    + '<button class="btn-cancel" onclick="renderStep2Body();setStepTab(2);currentStep=2;">← 이전</button>'
-    + '<button class="btn-cancel" onclick="goStep3Skip()">이 단계 건너뛰기</button>'
-    + '<button class="btn-next" onclick="goStep4()">다음 단계 →</button>';
+  F.innerHTML = '<span class="rm-step-lbl">Step 2 / 4 · 복약 알림</span>'
+    + '<button class="btn-cancel" onclick="renderStep1()">← 이전</button>'
+    + '<button class="btn-cancel" onclick="goStep2Skip()">이 단계 건너뛰기</button>'
+    + '<button class="btn-next" onclick="goStep3()">다음 단계 →</button>';
 }
 
 function rmToggleEnabled(id) {
   reminderSettings[id].enabled = !reminderSettings[id].enabled;
-  renderStep3Body();
+  renderReminderBody();
 }
 function rmSetTimes(id, n) {
   var s = reminderSettings[id];
   s.times = n;
   s.slots = new Set(defaultSlotsForTimes(n));
-  renderStep3Body();
+  renderReminderBody();
 }
 function rmToggleSlot(id, slot) {
   var s = reminderSettings[id];
   if (s.slots.has(slot)) s.slots.delete(slot); else s.slots.add(slot);
-  renderStep3Body();
+  renderReminderBody();
 }
 function rmSetTiming(id, val) {
   reminderSettings[id].timing = val;
-  renderStep3Body();
+  renderReminderBody();
 }
 function rmSetStartDate(id, val) {
   reminderSettings[id].startDate = val;
@@ -1637,16 +1595,56 @@ function rmSetStartDate(id, val) {
 function rmChangeDays(id, delta) {
   var s = reminderSettings[id];
   s.days = Math.max(1, (s.days || 1) + delta);
-  renderStep3Body();
+  renderReminderBody();
 }
 function rmSetDays(id, val) {
   var s = reminderSettings[id];
   s.days = Math.max(1, parseInt(val, 10) || 1);
-  renderStep3Body();
+  renderReminderBody();
 }
-function goStep3Skip() {
+function goStep2Skip() {
   selectedRxIds.forEach(function(id) { reminderSettings[id].enabled = false; });
-  goStep4();
+  goStep3();
+}
+
+// ── Step 3(신규 순서) 복약지도 전송 ──
+function goStep3() {
+  currentStep = 3;
+  setStepTab(3);
+  s3SelTags = new Set();
+  s3Msg = buildMsgDefault();
+  if (aiSummaryText) s3Msg = insertSummaryIntoMsg(s3Msg, aiSummaryText);
+  s3Msg = appendJoinNoteIfNew(s3Msg);
+  renderMsgBody();
+}
+
+// 신규 고객: 메시지 하단(약사 메모 아래)에 웰체크 앱 가입 안내 추가
+function appendJoinNoteIfNew(text) {
+  if (!(selectedCustomer && selectedCustomer.isNew)) return text;
+  if (text.includes('웰체크 앱 가입 안내')) return text;
+  return text + '\n\n[웰체크 앱 가입 안내]\n아래 링크에서 웰체크 앱에 가입하시면 저희 약국이 단골 약국으로 자동 연결됩니다.\nhttps://wellcheck.co.kr/join?ref=pharmacy';
+}
+
+// 가입 안내가 항상 약사 메모 아래(맨 끝)에 오도록, 재삽입 전 기존 안내문 제거
+function stripJoinNote(text) {
+  var idx = text.indexOf('\n\n[웰체크 앱 가입 안내]');
+  return idx === -1 ? text : text.slice(0, idx);
+}
+
+function renderMsgBody() {
+  const B = document.getElementById('mbody');
+  const F = document.getElementById('mfoot');
+  B.innerHTML = '<div class="s4-grid"><div><div class="tag-ttl">자주 사용하는 태그</div><div class="tag-chips">'
+    + S3_TAGS.map(function(t, i) {
+        return '<button class="tag-chip' + (s3SelTags.has(i) ? ' on' : '') + '" onclick="s3ToggleTag(' + i + ',\'' + t.replace(/'/g, "\\'") + '\')">' + t + '</button>';
+      }).join('')
+    + '</div></div><div><div class="msg-hdr"><span class="msg-ttl">메시지 편집</span><button class="msg-reset" onclick="s3ResetMsg()">초기화 ↺</button></div>'
+    + '<textarea class="msg-ta" id="s3mta" oninput="s3OnMsg(this)">' + s3Msg.replace(/</g,'&lt;') + '</textarea>'
+    + '<div class="msg-cnt" id="s3mcnt">' + s3Msg.length + ' / 500자</div></div></div>';
+  F.innerHTML = '<span class="rm-step-lbl">Step 3 / 4 · 복약지도 전송</span>'
+    + '<button class="btn-cancel" onclick="renderReminderBody();setStepTab(2);currentStep=2;">← 이전</button>'
+    + '<button class="btn-cancel" onclick="saveDraft()" style="color:#2563EB;border-color:#A0B4FF;">임시저장</button>'
+    + '<button class="btn-next" onclick="goStep4()">다음</button>';
 }
 
 function goStep4() {
@@ -1693,7 +1691,7 @@ function goStep4() {
     + '</div></div>';
 
   F.innerHTML = '<span class="rm-step-lbl">Step 4 / 4 · 전송 확인</span>'
-    + '<button class="btn-cancel" onclick="renderStep3Body();setStepTab(3);currentStep=3;">← 이전</button>'
+    + '<button class="btn-cancel" onclick="renderMsgBody();setStepTab(3);currentStep=3;">← 이전</button>'
     + '<button class="btn-cancel" onclick="saveDraft()" style="color:#2563EB;border-color:#A0B4FF;">임시저장</button>'
     + '<button class="btn-next" onclick="sendFinal()">➤ 전송하기</button>';
 }
@@ -1764,7 +1762,7 @@ function s3ResetMsg() {
   s3Msg = buildMsgDefault();
   if (aiSummaryText) s3Msg = insertSummaryIntoMsg(s3Msg, aiSummaryText);
   s3Msg = appendJoinNoteIfNew(s3Msg);
-  renderStep2Body();
+  renderMsgBody();
 }
 
 function insertAiSummary() {

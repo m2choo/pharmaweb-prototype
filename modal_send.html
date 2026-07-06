@@ -255,16 +255,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .mic-perm-btn:hover{background:#1e52c8;}
 .mic-perm-btn:disabled{opacity:.5;cursor:not-allowed;}
 .mic-perm-hint{font-size:12px;color:#999;line-height:1.7;margin-top:2px;}
-/* ── 종료 확인 레이어 ── */
-.close-confirm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:700;align-items:center;justify-content:center;}
-.close-confirm-layer.on{display:flex;}
-.close-confirm-box{background:#fff;border-radius:12px;padding:28px 28px 24px;max-width:360px;width:90%;display:flex;flex-direction:column;gap:10px;}
-.cc-title{font-size:16px;font-weight:700;color:#111;}
-.cc-body{font-size:13px;color:#666;}
-.cc-warn{font-size:13px;font-weight:700;color:#E5484D;}
-.cc-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:8px;}
-.cc-btn-cancel{height:36px;padding:0 16px;background:#fff;border:1px solid #D1D7E0;border-radius:6px;font-size:13px;color:#333;cursor:pointer;font-family:inherit;}
-.cc-btn-confirm{height:36px;padding:0 16px;background:#2563EB;border:none;border-radius:6px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
+/* ── 푸터 종료 확인 모드 ── */
+.modal-ft.confirm-mode{background:#FFFBEB;border-top-color:#FDE68A;}
 </style>
 <link rel="stylesheet" href="reminder.css">
 </head>
@@ -388,17 +380,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
   </div>
 </div>
 
-<!-- 종료 확인 레이어 -->
-<div class="close-confirm-layer" id="closeConfirmLayer">
-  <div class="close-confirm-box">
-    <div class="cc-title">상담을 종료하시겠습니까?</div>
-    <div class="cc-body">나가기를 누르면 지금까지 녹음된 내용이 임시 저장됩니다.</div>
-    <div class="cc-btns">
-      <button class="cc-btn-cancel" onclick="confirmClose()">나가기</button>
-      <button class="cc-btn-confirm" onclick="cancelClose()">계속 작성</button>
-    </div>
-  </div>
-</div>
 
 <script src="reminder.js"></script>
 <script>
@@ -422,20 +403,26 @@ function openModal() {
   const recBar = document.querySelector('.pz-rec-bar');
   if (recBar) recBar.style.display = 'none';
   document.getElementById('bd').classList.add('on');
-  document.getElementById('closeConfirmLayer').classList.remove('on');
   setBeforeUnloadGuard(true);
   renderStep1();
   startIfMicOk();
 }
 
+let _savedFooterHTML = '';
 function closeModal() {
-  document.getElementById('closeConfirmLayer').classList.add('on');
+  const F = document.getElementById('mfoot');
+  _savedFooterHTML = F.innerHTML;
+  F.classList.add('confirm-mode');
+  F.innerHTML = '<span style="font-size:12.5px;color:#92400E;margin-right:auto;line-height:1.4;">나가면 지금까지 녹음된 내용이 임시 저장됩니다.</span>'
+    + '<button class="btn-cancel" onclick="confirmClose()">나가기</button>'
+    + '<button class="btn-next" onclick="cancelClose()">계속 작성</button>';
 }
 function cancelClose() {
-  document.getElementById('closeConfirmLayer').classList.remove('on');
+  const F = document.getElementById('mfoot');
+  F.classList.remove('confirm-mode');
+  F.innerHTML = _savedFooterHTML;
 }
 function confirmClose() {
-  document.getElementById('closeConfirmLayer').classList.remove('on');
   doCloseModal();
 }
 function setBeforeUnloadGuard(active) {

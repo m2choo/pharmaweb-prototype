@@ -63,11 +63,32 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
 .chat-input-ph{flex:1;font-size:11.5px;color:#BBB;background:#F8F9FA;border:none;border-radius:18px;padding:7px 13px;font-family:inherit;}
 .chat-send{width:28px;height:28px;border-radius:50%;background:#E8EAED;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
-/* ── 처방전 목록 ── */
+/* ── 처방전/CL note 탭 카드 ── */
 .rx-card{height:100%;}
-.rx-header{padding:14px 20px 10px;display:flex;align-items:center;gap:8px;}
+.rx-header{padding:0 20px;border-bottom:1px solid #F2F2F2;display:flex;align-items:stretch;gap:0;}
+.rx-header-tab{height:46px;padding:0 18px;font-size:13px;font-weight:600;color:#AAA;cursor:pointer;display:flex;align-items:center;gap:6px;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px;white-space:nowrap;}
+.rx-header-tab.active{color:#111;border-bottom-color:#2563EB;}
+.rx-header-tab svg{opacity:.5;}
+.rx-header-tab.active svg{opacity:1;}
 .rx-header-icon{width:24px;height:24px;background:#E8F5F0;border-radius:6px;display:flex;align-items:center;justify-content:center;}
 .rx-header-title{font-size:13.5px;font-weight:700;color:#111;}
+
+/* ── CL note 이력 ── */
+.cl-panel{flex:1;overflow-y:auto;padding:0 12px 12px;}
+.cl-year-group{margin-top:14px;}
+.cl-year-label{font-size:11px;font-weight:700;color:#AAA;padding:0 6px 6px;letter-spacing:.04em;}
+.cl-item{display:flex;align-items:flex-start;gap:10px;padding:10px 8px;border-radius:8px;cursor:pointer;transition:background .1s;}
+.cl-item:hover{background:#F4F8FF;}
+.cl-item-dot{width:8px;height:8px;border-radius:50%;background:#2563EB;flex-shrink:0;margin-top:5px;}
+.cl-item-dot.sky{background:#38BDF8;}
+.cl-item-body{flex:1;min-width:0;}
+.cl-item-meta{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+.cl-item-date{font-size:11px;color:#AAA;}
+.cl-item-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EBF2FF;color:#2563EB;}
+.cl-item-badge.ai{background:#E0F9F5;color:#059669;}
+.cl-item-title{font-size:12.5px;font-weight:600;color:#111;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cl-item-preview{font-size:11.5px;color:#888;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cl-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;gap:8px;color:#CCC;font-size:12.5px;}
 .rx-filters{padding:0 20px 10px;display:flex;gap:6px;align-items:center;}
 .rx-tab{height:30px;padding:0 13px;border-radius:20px;font-size:12px;border:1px solid #E0E0E0;background:#fff;cursor:pointer;color:#555;display:flex;align-items:center;gap:4px;font-family:inherit;}
 .rx-tab.active{background:#2563EB;color:#fff;border-color:#2563EB;font-weight:600;}
@@ -209,14 +230,21 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
       </div>
     </div>
 
-    <!-- 처방전 목록 -->
+    <!-- 처방전 / CL note 탭 카드 -->
     <div class="card rx-card">
       <div class="rx-header">
-        <div class="rx-header-icon">
+        <div class="rx-header-tab active" id="tabRx" onclick="switchTab('rx')">
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#059669" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/></svg>
+          보낸 처방전 목록
         </div>
-        <div class="rx-header-title">보낸 처방전 목록</div>
+        <div class="rx-header-tab" id="tabCl" onclick="switchTab('cl')">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M4.5 1.5h5l3 3v9a1 1 0 01-1 1h-7a1 1 0 01-1-1v-11a1 1 0 011-1z" stroke="#38BDF8" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 7.5h4M6 10h4" stroke="#38BDF8" stroke-width="1.4" stroke-linecap="round"/></svg>
+          CL note 상담 이력
+        </div>
       </div>
+
+      <!-- 처방전 패널 -->
+      <div id="panelRx" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
       <div class="rx-filters">
         <button class="rx-tab active">전체</button>
         <button class="rx-tab">📷 고객 앱 촬영</button>
@@ -252,6 +280,80 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
           <span style="position:absolute;right:48px;font-size:11px;color:#888">건씩 보기</span>
         </div>
       </div>
+      </div><!-- /panelRx -->
+
+      <!-- CL note 이력 패널 -->
+      <div id="panelCl" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+        <div style="padding:10px 20px 6px;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:12px;color:#888;">총 <strong style="color:#2563EB;">5</strong>건의 복약 상담</span>
+          <input class="rx-search" placeholder="키워드 검색" style="width:160px;">
+        </div>
+        <div class="cl-panel">
+          <!-- 2024년 -->
+          <div class="cl-year-group">
+            <div class="cl-year-label">2024</div>
+            <div class="cl-item">
+              <div class="cl-item-dot sky"></div>
+              <div class="cl-item-body">
+                <div class="cl-item-meta">
+                  <span class="cl-item-date">2024.11.14</span>
+                  <span class="cl-item-badge ai">AI 상담</span>
+                </div>
+                <div class="cl-item-title">아토르바스타틴 20mg — 복약 안내 및 부작용 확인</div>
+                <div class="cl-item-preview">근육통 증상 문의. 가벼운 근육통은 일반적으로 나타날 수 있으며 심할 경우 내원 권고. 저녁 취침 전 복용 확인함.</div>
+              </div>
+            </div>
+            <div class="cl-item">
+              <div class="cl-item-dot sky"></div>
+              <div class="cl-item-body">
+                <div class="cl-item-meta">
+                  <span class="cl-item-date">2024.09.03</span>
+                  <span class="cl-item-badge ai">AI 상담</span>
+                </div>
+                <div class="cl-item-title">메트포르민 500mg — 위장장애 호소</div>
+                <div class="cl-item-preview">식후 즉시 복용으로 변경 권고. 2주 후 재확인 예정. 증상 지속 시 의사 상담 안내.</div>
+              </div>
+            </div>
+            <div class="cl-item">
+              <div class="cl-item-dot"></div>
+              <div class="cl-item-body">
+                <div class="cl-item-meta">
+                  <span class="cl-item-date">2024.06.22</span>
+                  <span class="cl-item-badge">직접 작성</span>
+                </div>
+                <div class="cl-item-title">혈압약(암로디핀) 복용 중단 이유 확인</div>
+                <div class="cl-item-preview">두통 부작용으로 임의 중단. 의사 상담 후 다른 계열 약 처방 받도록 안내. 복용 중단하면 안 된다는 점 강조.</div>
+              </div>
+            </div>
+          </div>
+          <!-- 2023년 -->
+          <div class="cl-year-group">
+            <div class="cl-year-label">2023</div>
+            <div class="cl-item">
+              <div class="cl-item-dot sky"></div>
+              <div class="cl-item-body">
+                <div class="cl-item-meta">
+                  <span class="cl-item-date">2023.12.07</span>
+                  <span class="cl-item-badge ai">AI 상담</span>
+                </div>
+                <div class="cl-item-title">다약제 복용 정리 상담 (5종)</div>
+                <div class="cl-item-preview">혈압, 혈당, 고지혈증, 수면, 소화제 중복 여부 검토. 소화제 중복 확인되어 1종 제거 권고. 복약 시간표 제공.</div>
+              </div>
+            </div>
+            <div class="cl-item">
+              <div class="cl-item-dot"></div>
+              <div class="cl-item-body">
+                <div class="cl-item-meta">
+                  <span class="cl-item-date">2023.11.01</span>
+                  <span class="cl-item-badge">직접 작성</span>
+                </div>
+                <div class="cl-item-title">첫 방문 — 복약 이력 파악</div>
+                <div class="cl-item-preview">타 약국에서 전환. 알약 삼키기 힘들어함. 저녁 식후 복용 선호. 어지럼증 간헐적 호소.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /panelCl -->
     </div>
 
     <!-- 약사 메모 -->
@@ -332,6 +434,14 @@ const rows=[
       <td>${r.ai==='go'?`<button class="btn-send" onclick="openModalStep2()">전송하기</button>`:r.ai==='done'?`<button class="btn-sent">전송완료</button>`:`<span style="font-size:12px;color:#A0AAB4">취소됨</span>`}</td>
     </tr>`).join('');
 })();
+
+function switchTab(tab) {
+  const isRx = tab === 'rx';
+  document.getElementById('tabRx').classList.toggle('active', isRx);
+  document.getElementById('tabCl').classList.toggle('active', !isRx);
+  document.getElementById('panelRx').style.display = isRx ? 'flex' : 'none';
+  document.getElementById('panelCl').style.display = isRx ? 'none' : 'flex';
+}
 
 function openModalFrame() {
   var f = document.getElementById('modalFrame');

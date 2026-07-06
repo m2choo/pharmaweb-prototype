@@ -453,6 +453,7 @@ function openModalAtStep2(customerData) {
 }
 
 function closeModal() {
+  if (!selectedCustomer) { doCloseModal(); return; }
   document.getElementById('closeConfirmBar').style.display = 'flex';
   document.getElementById('modalX').style.display = 'none';
 }

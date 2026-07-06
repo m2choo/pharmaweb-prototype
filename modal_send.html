@@ -442,10 +442,11 @@ function openModalAtStep2(customerData) {
   const info = matched.age ? `${matched.age}세 · ${matched.gender} · ${matched.phone}` : `${matched.birth || ''} · ${matched.phone}`;
   setCustomerHeader(matched.name, info, customerData.visitInfo || '방문 이력');
 
-  // 최신 처방전 전체 선택
-  selectedRxIds = PRESCRIPTIONS.map(function(r) { return r.id; });
+  // 해당 행의 처방전 1건만 선택 (가장 최근 처방전)
+  var targetRx = PRESCRIPTIONS[0];
+  selectedRxIds = [targetRx.id];
   editingDrugsMap = {};
-  PRESCRIPTIONS.forEach(function(rx) { editingDrugsMap[rx.id] = rx.drugs.map(function(d) { return Object.assign({}, d); }); });
+  editingDrugsMap[targetRx.id] = targetRx.drugs.map(function(d) { return Object.assign({}, d); });
 
   if (typeof initReminderSettings === 'function') initReminderSettings();
   if (typeof renderReminderBody === 'function') { currentStep = 2; setStepTab(2); renderReminderBody(); }

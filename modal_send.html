@@ -244,16 +244,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .pz-rec-dot{width:7px;height:7px;border-radius:50%;background:#EF4444;animation:blink 1s ease-in-out infinite;}
 .pz-rec-label{font-size:11px;color:#888;font-weight:500;}
 .pz-rec-time{margin-left:auto;font-size:11px;color:#888;font-variant-numeric:tabular-nums;}
-/* ── 마이크 권한 레이어 ── */
-.mic-perm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;align-items:center;justify-content:center;}
-.mic-perm-layer.on{display:flex;}
-.mic-perm-box{background:#fff;border-radius:16px;padding:44px 40px 36px;max-width:400px;width:90%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;}
-.mic-perm-icon{font-size:48px;line-height:1;}
-.mic-perm-title{font-size:18px;font-weight:700;color:#111;}
-.mic-perm-desc{font-size:13px;color:#555;line-height:1.8;}
-.mic-perm-btn{height:44px;padding:0 28px;background:#2563EB;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
-.mic-perm-btn:hover{background:#1e52c8;}
-.mic-perm-denied{font-size:13px;color:#555;line-height:1.7;}
+/* ── 마이크 권한 레이어 (제거됨 — alert 방식으로 변경) ── */
 /* ── 종료 확인 레이어 ── */
 .close-confirm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:center;justify-content:center;}
 .close-confirm-layer.on{display:flex;}
@@ -375,16 +366,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
   </div>
 </div>
 
-<!-- 마이크 권한 요청 레이어 -->
-<div class="mic-perm-layer" id="micPermLayer">
-  <div class="mic-perm-box">
-    <div class="mic-perm-icon">🎙️</div>
-    <div class="mic-perm-title">마이크 접근 권한이 필요합니다</div>
-    <div class="mic-perm-desc">AI 복약 상담 녹음 기능을 사용하려면<br>브라우저의 마이크 사용을 허용해 주세요.<br><br>AI가 상담 내용을 실시간으로 분석하여<br>복약 안내 메시지를 자동으로 작성합니다.</div>
-    <button class="mic-perm-btn" id="micPermBtn" onclick="requestMicPermission()">마이크 허용하기</button>
-    <div class="mic-perm-denied" id="micPermDenied" style="display:none;"><span style="color:#E5484D;font-weight:600;">마이크 접근이 거부되었습니다.</span><br>브라우저 주소창 좌측 자물쇠 아이콘을 클릭하여<br>마이크 권한을 허용한 후 새로고침해 주세요.</div>
-  </div>
-</div>
 
 <!-- 종료 확인 레이어 -->
 <div class="close-confirm-layer" id="closeConfirmLayer">
@@ -1380,32 +1361,14 @@ function saveDraft() {
   showToast('복약지도가 임시저장되었습니다.');
 }
 
+function alertMicDenied() {
+  alert('마이크 접근이 거부되어 있습니다.\n브라우저 주소창의 아이콘을 클릭하여 마이크 권한을 허용한 후 새로고침해 주세요.');
+}
 async function checkMicPermission() {
   try {
     const r = await navigator.permissions.query({ name: 'microphone' });
-    if (r.state === 'granted') return;
-    document.getElementById('micPermLayer').classList.add('on');
-    if (r.state === 'denied') {
-      document.getElementById('micPermBtn').style.display = 'none';
-      document.getElementById('micPermDenied').style.display = '';
-    }
-    r.addEventListener('change', () => {
-      if (r.state === 'granted') document.getElementById('micPermLayer').classList.remove('on');
-    });
+    if (r.state === 'denied') alertMicDenied();
   } catch (e) { /* permissions API 미지원 — 무시 */ }
-}
-async function requestMicPermission() {
-  const btn = document.getElementById('micPermBtn');
-  btn.textContent = '허용 대기 중...';
-  btn.disabled = true;
-  try {
-    const s = await navigator.mediaDevices.getUserMedia({ audio: true });
-    s.getTracks().forEach(t => t.stop());
-    document.getElementById('micPermLayer').classList.remove('on');
-  } catch (e) {
-    btn.style.display = 'none';
-    document.getElementById('micPermDenied').style.display = '';
-  }
 }
 document.addEventListener('DOMContentLoaded', checkMicPermission);
 </script>

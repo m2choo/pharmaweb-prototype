@@ -763,6 +763,30 @@ const PRESCRIPTIONS = [
       { name: '트라마돌염산염정 37.5mg/아세트아미노펜정 325mg', ingredient: '트라마돌/아세트아미노펜', dosage: '1정', freq: '1일 2회', days: 5, sub: false },
     ]
   },
+  {
+    id: 'rx0c', date: '2026.03.10', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90,
+    drugs: [
+      { name: '아토르바스타틴정 10mg', ingredient: '아토르바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+      { name: '메트포르민염산염정 500mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 2회', days: 90, sub: false },
+      { name: '암로디핀베실산염정 5mg', ingredient: '암로디핀베실산염', dosage: '1정', freq: '1일 1회', days: 90, sub: true },
+      { name: '텔미사르탄정 40mg', ingredient: '텔미사르탄', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+    ]
+  },
+  {
+    id: 'rx0b', date: '2026.02.14', hospital: '세모가정의학과의원', dept: '가정의학과', doctor: '최의사', days: 30,
+    drugs: [
+      { name: '에소메프라졸마그네슘삼수화물캡슐 20mg', ingredient: '에소메프라졸마그네슘', dosage: '1캡슐', freq: '1일 1회', days: 30, sub: false },
+      { name: '돔페리돈정 10mg', ingredient: '돔페리돈', dosage: '1정', freq: '1일 3회', days: 30, sub: false },
+    ]
+  },
+  {
+    id: 'rx0a', date: '2026.01.20', hospital: '엠서클의원', dept: '내과', doctor: '정의사', days: 90,
+    drugs: [
+      { name: '글리메피리드정 2mg', ingredient: '글리메피리드', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+      { name: '로수바스타틴정 10mg', ingredient: '로수바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: true },
+      { name: '메트포르민서방정 1000mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+    ]
+  },
 ];
 
 let selectedRx = null;
@@ -820,7 +844,7 @@ function renderRxSection(preserveSelection) {
   if (selectedCustomer && selectedCustomer.isNew) {
     S.innerHTML = `
       <div class="s1-s2-divider"></div>
-      <label class="s2-label">처방전 선택 <span style="color:#888;font-weight:400;">(최근 3개월 · 복수 선택 가능)</span></label>
+      <label class="s2-label">처방전 선택 <span style="color:#888;font-weight:400;">(최근 6개월 · 복수 선택 가능)</span></label>
       <div class="s2-empty-tip">
         <div style="font-size:13px;font-weight:600;color:#666;margin-bottom:6px;">확인되는 처방전이 없습니다</div>
         <div style="font-size:12px;color:#AAA;line-height:1.7;">신규로 추가된 고객은 아직 처방 이력이 없습니다.<br>지속적으로 복약 상태를 추적 관리하시려면<br>단골 고객으로 연결해 주세요.</div>
@@ -831,7 +855,7 @@ function renderRxSection(preserveSelection) {
   }
 
   var cutoff = new Date();
-  cutoff.setMonth(cutoff.getMonth() - 3);
+  cutoff.setMonth(cutoff.getMonth() - 6);
   var recentGroups = {};
   var olderGroups = {};
   PRESCRIPTIONS.forEach(rx => {
@@ -848,7 +872,7 @@ function renderRxSection(preserveSelection) {
   var hasOlder = Object.keys(olderGroups).length > 0;
   S.innerHTML = `
     <div class="s1-s2-divider"></div>
-    <label class="s2-label">처방전 선택 <span style="color:#888;font-weight:400;">(최근 3개월 · 복수 선택 가능)</span></label>
+    <label class="s2-label">처방전 선택 <span style="color:#888;font-weight:400;">(최근 6개월 · 복수 선택 가능)</span></label>
     <div id="s2polyAlert"></div>
     <div class="s2-rx-list">${buildRxGroupHTML(recentGroups)}</div>
     ${hasOlder ? `

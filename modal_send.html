@@ -424,6 +424,7 @@ function openModal() {
   if (recBar) recBar.style.display = 'none';
   document.getElementById('bd').classList.add('on');
   document.getElementById('closeConfirmLayer').classList.remove('on');
+  setBeforeUnloadGuard(true);
   renderStep1();
   startIfMicOk();
 }
@@ -438,8 +439,21 @@ function confirmClose() {
   document.getElementById('closeConfirmLayer').classList.remove('on');
   doCloseModal();
 }
+function setBeforeUnloadGuard(active) {
+  var target = (window.parent !== window) ? window.parent : window;
+  if (active) {
+    target.onbeforeunload = function(e) {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+  } else {
+    target.onbeforeunload = null;
+  }
+}
+
 function doCloseModal() {
   document.getElementById('bd').classList.remove('on');
+  setBeforeUnloadGuard(false);
   stopTimer();
   stopStream();
   if (window.parent && window.parent !== window) {

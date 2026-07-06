@@ -412,8 +412,8 @@ function closeModal() {
   _savedFooterHTML = F.innerHTML;
   F.classList.add('confirm-mode');
   F.innerHTML = '<span style="font-size:14px;color:#92400E;margin-right:auto;line-height:1.4;">나가면 지금까지 녹음된 내용이 임시 저장됩니다.</span>'
-    + '<button class="btn-cancel" style="height:44px;font-size:14px;padding:0 24px;" onclick="confirmClose()">나가기</button>'
-    + '<button class="btn-next" style="height:44px;font-size:14px;padding:0 24px;" onclick="cancelClose()">계속 작성</button>';
+    + '<button class="btn-cancel" onclick="confirmClose()">나가기</button>'
+    + '<button class="btn-next" onclick="cancelClose()">계속 작성</button>';
 }
 function cancelClose() {
   const F = document.getElementById('mfoot');

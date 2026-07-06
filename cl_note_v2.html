@@ -1118,10 +1118,17 @@ function setStepTab(n) {
 function onSearch(val) {
   const q = val.trim();
   const dd = document.getElementById('s1dropdown');
+  const errEl = document.getElementById('s1error');
   selectedCustomer = null;
   document.getElementById('btnNext').disabled = true;
 
-  if (!q) { dd.style.display = 'none'; dd.innerHTML = ''; return; }
+  if (!q) { dd.style.display = 'none'; dd.innerHTML = ''; if (errEl) errEl.style.display = 'none'; return; }
+
+  if (/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\s]/.test(q)) {
+    if (errEl) { errEl.textContent = '고객 이름은 한글 또는 영문만 입력해 주세요.'; errEl.style.display = 'block'; }
+    dd.style.display = 'none'; dd.innerHTML = ''; return;
+  }
+  if (errEl) errEl.style.display = 'none';
 
   const matched = (KIMCHECK.name.includes(q) || KIMCHECK.phone.includes(q)) ? [KIMCHECK] : [];
   dd.style.display = 'block';

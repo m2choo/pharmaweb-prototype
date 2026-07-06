@@ -21,9 +21,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
 .lnb-icon{width:16px;height:16px;flex-shrink:0;opacity:.6;}
 .lnb-item.active .lnb-icon{opacity:1;}
 .lnb-badge{margin-left:auto;background:#EF4444;color:#fff;font-size:10px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.lnb-secondary{border-top:1px solid #E8EAED;padding:8px 0;}
-.lnb-item.sub{font-size:12px;color:#888;padding:9px 20px;}
-.lnb-item.sub:hover{background:#F4F5F7;color:#555;}
 .lnb-bottom{border-top:1px solid #E8EAED;padding:12px 16px;margin-top:auto;}
 .lnb-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
 .lnb-avatar{width:32px;height:32px;border-radius:50%;background:#EBF2FF;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#2563EB;flex-shrink:0;}
@@ -146,47 +143,6 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 .toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(16px);background:#1E293B;color:#fff;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:opacity .22s,transform .22s;z-index:999;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* ── Step 2(신규) 복약 알림 — 처방전 선택 리스트와 동일한 톤 ── */
-.rm-item{width:100%;margin-bottom:6px;}
-.rm-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid #E8EAED;border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none;width:100%;box-sizing:border-box;}
-.rm-row:hover{border-color:#A0B4FF;background:#FAFBFF;}
-.rm-row.open{border-color:#2563EB;background:#EBF2FF;border-bottom-left-radius:0;border-bottom-right-radius:0;}
-.rm-row-body{flex:1;min-width:0;overflow:hidden;}
-.rm-row-top{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
-.rm-row-hospital{font-size:13px;font-weight:700;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.rm-row-dept{font-size:12px;color:#888;white-space:nowrap;flex-shrink:0;}
-.rm-row-meta{font-size:11.5px;color:#AAA;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.rm-row-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.rm-chip{font-size:11px;padding:2px 8px;border-radius:10px;background:#F4F5F7;color:#666;white-space:nowrap;}
-.rm-row.open .rm-chip{background:#D1E0FF;color:#1D4ED8;}
-.rm-chevron{transition:transform .15s;color:#999;flex-shrink:0;}
-.rm-row.open .rm-chevron{transform:rotate(180deg);color:#2563EB;}
-.rm-panel{display:none;width:100%;box-sizing:border-box;border:1.5px solid #2563EB;border-top:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;padding:16px 14px;}
-.rm-panel.open{display:block;}
-.rm-panel.disabled{opacity:.45;pointer-events:none;}
-.rm-field{margin-bottom:14px;}
-.rm-field:last-child{margin-bottom:0;}
-.rm-field-label{font-size:12px;color:#666;font-weight:600;margin-bottom:8px;}
-.rm-pills{display:flex;gap:8px;flex-wrap:wrap;}
-.rm-pill{flex:1;min-width:64px;height:36px;border:1.5px solid #E0E0E0;border-radius:8px;background:#fff;font-size:12.5px;color:#444;cursor:pointer;font-family:inherit;transition:all .12s;}
-.rm-pill:hover{border-color:#A5BCEC;background:#F4F8FF;}
-.rm-pill.on{background:#2563EB;border-color:#2563EB;color:#fff;font-weight:600;}
-.rm-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.rm-date-input,.rm-days-input{border:1.5px solid #E0E0E0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
-.rm-date-input{width:100%;height:36px;padding:0 10px;}
-.rm-date-input:focus{border-color:#2563EB;}
-.rm-days-ctrl{display:flex;align-items:center;gap:8px;}
-.rm-days-btn{width:32px;height:32px;border:1.5px solid #E0E0E0;border-radius:8px;background:#fff;cursor:pointer;font-size:14px;color:#444;font-family:inherit;}
-.rm-days-btn:hover{border-color:#A5BCEC;}
-.rm-days-input{width:56px;height:32px;text-align:center;}
-.rm-switch{position:relative;width:38px;height:21px;flex-shrink:0;}
-.rm-switch input{opacity:0;width:0;height:0;position:absolute;}
-.rm-switch .rm-slider{position:absolute;inset:0;background:#DDD;border-radius:22px;cursor:pointer;transition:.15s;}
-.rm-switch .rm-slider:before{content:'';position:absolute;width:15px;height:15px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s;}
-.rm-switch input:checked + .rm-slider{background:#2563EB;}
-.rm-switch input:checked + .rm-slider:before{transform:translateX(17px);}
-.rm-empty-tip{font-size:12.5px;color:#AAA;text-align:center;padding:32px 0;}
-.rm-step-lbl{margin-right:auto;font-size:12px;color:#AAA;align-self:center;}
 
 /* ── FAB (AI 복약 상담) ── */
 .ai-fab{position:fixed;bottom:110px;right:78px;background:#38BDF8;border:none;border-radius:40px;padding:14px 24px 14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(56,189,248,.35);cursor:pointer;transition:transform .15s,box-shadow .15s;z-index:50;font-family:inherit;}
@@ -434,6 +390,7 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 .pz-rec-label{font-size:11px;color:#888;font-weight:500;}
 .pz-rec-time{margin-left:auto;font-size:11px;color:#888;font-variant-numeric:tabular-nums;}
 </style>
+<link rel="stylesheet" href="reminder.css">
 </head>
 <body>
 
@@ -662,6 +619,7 @@ td{padding:13px 14px;font-size:12.5px;color:#333;text-align:center;vertical-alig
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<script src="reminder.js"></script>
 <script>
 const CL_NOTES_KEY = 'wcCLNotes';
 function loadNotes() {
@@ -1698,149 +1656,6 @@ function buildMsgDefault() {
     });
   });
   return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n' + methodLines.join('\n') + '\n';
-}
-
-// ── Step 2(신규) 복약 알림 ──
-function parseFreqCount(freq) {
-  var m = /([0-9]+)\s*회/.exec(freq || '');
-  return m ? parseInt(m[1], 10) : 1;
-}
-
-function defaultSlotsForTimes(n) {
-  if (n <= 1) return ['아침'];
-  if (n === 2) return ['아침', '저녁'];
-  return ['아침', '점심', '저녁'];
-}
-
-function todayISO() {
-  var d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-}
-
-function initReminderSettings() {
-  selectedRxIds.forEach(function(id) {
-    if (reminderSettings[id]) return;
-    var rx = PRESCRIPTIONS.find(function(r) { return r.id === id; });
-    var drugs = editingDrugsMap[id] || rx.drugs;
-    var times = Math.min(3, Math.max.apply(null, drugs.map(function(d) { return parseFreqCount(d.freq); })));
-    reminderSettings[id] = {
-      enabled: true,
-      times: times,
-      slots: new Set(defaultSlotsForTimes(times)),
-      timing: '식후 30분',
-      startDate: todayISO(),
-      days: Math.max.apply(null, drugs.map(function(d){ return d.days || rx.days; }))
-    };
-  });
-}
-
-function goStep2() {
-  if (!selectedCustomer) return;
-  if (!selectedRxIds.length && !(selectedCustomer && selectedCustomer.isNew)) return;
-  currentStep = 2;
-  setStepTab(2);
-  initReminderSettings();
-  renderReminderBody();
-}
-
-function renderReminderBody() {
-  var B = document.getElementById('mbody');
-  var F = document.getElementById('mfoot');
-
-  var chevronSVG = '<svg class="rm-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
-
-  var itemsHTML = selectedRxIds.map(function(id) {
-    var rx = PRESCRIPTIONS.find(function(r) { return r.id === id; });
-    var drugs = editingDrugsMap[id] || rx.drugs;
-    var s = reminderSettings[id];
-    var isOpen = rmExpandedIds.has(id);
-    var timesPills = [1, 2, 3].map(function(n) {
-      return '<button class="rm-pill' + (s.times === n ? ' on' : '') + '" onclick="rmSetTimes(\'' + id + '\',' + n + ')">' + n + '회</button>';
-    }).join('');
-    var slotPills = ['아침', '점심', '저녁', '취침전'].map(function(t) {
-      return '<button class="rm-pill' + (s.slots.has(t) ? ' on' : '') + '" onclick="rmToggleSlot(\'' + id + '\',\'' + t + '\')">' + t + '</button>';
-    }).join('');
-    var timingPills = ['식전', '식후', '식후 30분'].map(function(t) {
-      return '<button class="rm-pill' + (s.timing === t ? ' on' : '') + '" onclick="rmSetTiming(\'' + id + '\',\'' + t + '\')">' + t + '</button>';
-    }).join('');
-    var summaryChip = s.enabled ? (s.times + '회 · ' + s.days + '일분') : '전송 안 함';
-
-    var row = '<div class="rm-row' + (isOpen ? ' open' : '') + '" onclick="rmToggleExpand(\'' + id + '\')">'
-      + '<div class="rm-row-body">'
-      + '<div class="rm-row-top"><span class="rm-row-hospital">' + rx.hospital + '</span><span class="rm-row-dept">' + rx.dept + '</span></div>'
-      + '<div class="rm-row-meta">' + drugs.map(function(d) { return d.name; }).join(', ') + '</div>'
-      + '</div>'
-      + '<div class="rm-row-right">'
-      + '<span class="rm-chip">' + summaryChip + '</span>'
-      + '<label class="rm-switch" onclick="event.stopPropagation();"><input type="checkbox" ' + (s.enabled ? 'checked' : '') + ' onchange="rmToggleEnabled(\'' + id + '\')"><span class="rm-slider"></span></label>'
-      + chevronSVG
-      + '</div></div>';
-
-    var panel = '<div class="rm-panel' + (isOpen ? ' open' : '') + (s.enabled ? '' : ' disabled') + '">'
-      + '<div class="rm-field"><div class="rm-field-label">복약 횟수</div><div class="rm-pills">' + timesPills + '</div></div>'
-      + '<div class="rm-field"><div class="rm-field-label">복약 시간</div><div class="rm-pills">' + slotPills + '</div></div>'
-      + '<div class="rm-field"><div class="rm-field-label">복약 시점</div><div class="rm-pills">' + timingPills + '</div></div>'
-      + '<div class="rm-2col">'
-      + '<div class="rm-field"><div class="rm-field-label">복약 시작일</div><input class="rm-date-input" type="date" value="' + s.startDate + '" onclick="event.stopPropagation();" onchange="rmSetStartDate(\'' + id + '\',this.value)"></div>'
-      + '<div class="rm-field"><div class="rm-field-label">복약 기간</div><div class="rm-days-ctrl">'
-      + '<button class="rm-days-btn" onclick="rmChangeDays(\'' + id + '\',-1)">−</button>'
-      + '<input class="rm-days-input" type="number" min="1" value="' + s.days + '" onclick="event.stopPropagation();" onchange="rmSetDays(\'' + id + '\',this.value)">'
-      + '<span style="font-size:12px;color:#888;">일</span>'
-      + '<button class="rm-days-btn" onclick="rmChangeDays(\'' + id + '\',1)">+</button>'
-      + '</div></div>'
-      + '</div></div>';
-
-    return '<div class="rm-item">' + row + panel + '</div>';
-  }).join('');
-
-  B.innerHTML = '<p style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.6;">처방전 정보를 기반으로 복약 알림을 자동 설정했습니다. 항목을 눌러 값을 확인·수정하고, 발송하지 않을 처방전은 토글을 꺼주세요.<br>설정한 알림은 웰체크 앱에 자동 등록됩니다.</p>'
-    + (itemsHTML || '<div class="rm-empty-tip">설정할 처방전이 없습니다.</div>');
-
-  F.innerHTML = '<span class="rm-step-lbl">Step 2 / 4 · 복약 알림</span>'
-    + '<button class="btn-cancel" onclick="renderStep1()">← 이전</button>'
-    + '<button class="btn-cancel" onclick="goStep2Skip()">이 단계 건너뛰기</button>'
-    + '<button class="btn-next" onclick="goStep3()">다음 단계 →</button>';
-}
-
-function rmToggleExpand(id) {
-  if (rmExpandedIds.has(id)) rmExpandedIds.delete(id); else rmExpandedIds.add(id);
-  renderReminderBody();
-}
-function rmToggleEnabled(id) {
-  reminderSettings[id].enabled = !reminderSettings[id].enabled;
-  renderReminderBody();
-}
-function rmSetTimes(id, n) {
-  var s = reminderSettings[id];
-  s.times = n;
-  s.slots = new Set(defaultSlotsForTimes(n));
-  renderReminderBody();
-}
-function rmToggleSlot(id, slot) {
-  var s = reminderSettings[id];
-  if (s.slots.has(slot)) s.slots.delete(slot); else s.slots.add(slot);
-  renderReminderBody();
-}
-function rmSetTiming(id, val) {
-  reminderSettings[id].timing = val;
-  renderReminderBody();
-}
-function rmSetStartDate(id, val) {
-  reminderSettings[id].startDate = val;
-}
-function rmChangeDays(id, delta) {
-  var s = reminderSettings[id];
-  s.days = Math.max(1, (s.days || 1) + delta);
-  renderReminderBody();
-}
-function rmSetDays(id, val) {
-  var s = reminderSettings[id];
-  s.days = Math.max(1, parseInt(val, 10) || 1);
-  renderReminderBody();
-}
-function goStep2Skip() {
-  selectedRxIds.forEach(function(id) { reminderSettings[id].enabled = false; });
-  goStep3();
 }
 
 // ── Step 3(신규 순서) 복약지도 전송 ──

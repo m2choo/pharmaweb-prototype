@@ -1,0 +1,46 @@
+/* ── Sidebar secondary nav ── */
+.lnb-secondary{border-top:1px solid #E8EAED;padding:8px 0;}
+.lnb-item.sub{font-size:12px;color:#888;padding:9px 20px;}
+.lnb-item.sub:hover{background:#F4F5F7;color:#555;}
+
+/* ── Step 2 복약 알림 ── */
+.rm-item{width:100%;margin-bottom:6px;}
+.rm-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid #E8EAED;border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none;width:100%;box-sizing:border-box;}
+.rm-row:hover{border-color:#A0B4FF;background:#FAFBFF;}
+.rm-row.open{border-color:#2563EB;background:#EBF2FF;border-bottom-left-radius:0;border-bottom-right-radius:0;}
+.rm-row-body{flex:1;min-width:0;overflow:hidden;}
+.rm-row-top{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
+.rm-row-hospital{font-size:13px;font-weight:700;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rm-row-dept{font-size:12px;color:#888;white-space:nowrap;flex-shrink:0;}
+.rm-row-meta{font-size:11.5px;color:#AAA;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rm-row-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.rm-chip{font-size:11px;padding:2px 8px;border-radius:10px;background:#F4F5F7;color:#666;white-space:nowrap;}
+.rm-row.open .rm-chip{background:#D1E0FF;color:#1D4ED8;}
+.rm-chevron{transition:transform .15s;color:#999;flex-shrink:0;}
+.rm-row.open .rm-chevron{transform:rotate(180deg);color:#2563EB;}
+.rm-panel{display:none;width:100%;box-sizing:border-box;border:1.5px solid #2563EB;border-top:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;padding:16px 14px;}
+.rm-panel.open{display:block;}
+.rm-panel.disabled{opacity:.45;pointer-events:none;}
+.rm-field{margin-bottom:14px;}
+.rm-field:last-child{margin-bottom:0;}
+.rm-field-label{font-size:12px;color:#666;font-weight:600;margin-bottom:8px;}
+.rm-pills{display:flex;gap:8px;flex-wrap:wrap;}
+.rm-pill{flex:1;min-width:64px;height:36px;border:1.5px solid #E0E0E0;border-radius:8px;background:#fff;font-size:12.5px;color:#444;cursor:pointer;font-family:inherit;transition:all .12s;}
+.rm-pill:hover{border-color:#A5BCEC;background:#F4F8FF;}
+.rm-pill.on{background:#2563EB;border-color:#2563EB;color:#fff;font-weight:600;}
+.rm-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.rm-date-input,.rm-days-input{border:1.5px solid #E0E0E0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
+.rm-date-input{width:100%;height:36px;padding:0 10px;}
+.rm-date-input:focus{border-color:#2563EB;}
+.rm-days-ctrl{display:flex;align-items:center;gap:8px;}
+.rm-days-btn{width:32px;height:32px;border:1.5px solid #E0E0E0;border-radius:8px;background:#fff;cursor:pointer;font-size:14px;color:#444;font-family:inherit;}
+.rm-days-btn:hover{border-color:#A5BCEC;}
+.rm-days-input{width:56px;height:32px;text-align:center;}
+.rm-switch{position:relative;width:38px;height:21px;flex-shrink:0;}
+.rm-switch input{opacity:0;width:0;height:0;position:absolute;}
+.rm-switch .rm-slider{position:absolute;inset:0;background:#DDD;border-radius:22px;cursor:pointer;transition:.15s;}
+.rm-switch .rm-slider:before{content:'';position:absolute;width:15px;height:15px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s;}
+.rm-switch input:checked + .rm-slider{background:#2563EB;}
+.rm-switch input:checked + .rm-slider:before{transform:translateX(17px);}
+.rm-empty-tip{font-size:12.5px;color:#AAA;text-align:center;padding:32px 0;}
+.rm-step-lbl{margin-right:auto;font-size:12px;color:#AAA;align-self:center;}

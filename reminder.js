@@ -103,7 +103,7 @@ function renderReminderBody() {
     + (itemsHTML || '<div class="rm-empty-tip">설정할 처방전이 없습니다.</div>');
 
   F.innerHTML = '<span class="rm-step-lbl">Step 2 / 4 · 복약 알림</span>'
-    + '<button class="btn-cancel" onclick="renderStep1()">← 이전</button>'
+    + '<button class="btn-cancel" onclick="goBackToStep1()">← 이전</button>'
     + '<button class="btn-cancel" onclick="goStep2Skip()">이 단계 건너뛰기</button>'
     + '<button class="btn-next" onclick="goStep3()">다음 단계 →</button>';
 }

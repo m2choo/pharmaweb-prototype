@@ -405,6 +405,7 @@ function openModal() {
   renderStep1();
   startTimer();
   startStream();
+  checkMicPermission();
 }
 
 function closeModal() {
@@ -1370,7 +1371,6 @@ async function checkMicPermission() {
     if (r.state === 'denied') alertMicDenied();
   } catch (e) { /* permissions API 미지원 — 무시 */ }
 }
-document.addEventListener('DOMContentLoaded', checkMicPermission);
 </script>
 </body>
 </html>

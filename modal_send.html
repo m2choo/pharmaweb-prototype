@@ -256,7 +256,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .mic-perm-btn:disabled{opacity:.5;cursor:not-allowed;}
 .mic-perm-hint{font-size:12px;color:#999;line-height:1.7;margin-top:2px;}
 /* ── 종료 확인 레이어 ── */
-.close-confirm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:center;justify-content:center;}
+.close-confirm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:700;align-items:center;justify-content:center;}
 .close-confirm-layer.on{display:flex;}
 .close-confirm-box{background:#fff;border-radius:12px;padding:28px 28px 24px;max-width:360px;width:90%;display:flex;flex-direction:column;gap:10px;}
 .cc-title{font-size:16px;font-weight:700;color:#111;}
@@ -423,6 +423,7 @@ function openModal() {
   const recBar = document.querySelector('.pz-rec-bar');
   if (recBar) recBar.style.display = 'none';
   document.getElementById('bd').classList.add('on');
+  document.getElementById('closeConfirmLayer').classList.remove('on');
   renderStep1();
   startIfMicOk();
 }

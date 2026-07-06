@@ -721,7 +721,7 @@ function addNewCustomerByName(name) {
 
 const PRESCRIPTIONS = [
   {
-    id: 'rx5', date: '2026.06.22', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90,
+    id: 'rx5', date: '2026.07.06', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90,
     drugs: [
       { name: '아토르바스타틴정 10mg', ingredient: '아토르바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
       { name: '메트포르민염산염정 500mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 2회', days: 90, sub: false },
@@ -732,7 +732,7 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx4', date: '2026.06.22', hospital: '네모안과의원', dept: '안과', doctor: '이의사', days: 7,
+    id: 'rx4', date: '2026.07.06', hospital: '네모안과의원', dept: '안과', doctor: '이의사', days: 7,
     drugs: [
       { name: '오플록사신점안액 0.3%', ingredient: '오플록사신', dosage: '1~2방울', freq: '1일 4회', days: 7, sub: false },
       { name: '케토롤락트로메타민점안액 0.5%', ingredient: '케토롤락트로메타민', dosage: '1방울', freq: '1일 4회', days: 7, sub: true },
@@ -855,13 +855,12 @@ function renderRxSection(preserveSelection) {
     return;
   }
 
-  var cutoff = new Date();
-  cutoff.setMonth(cutoff.getMonth() - 6);
+  var today = new Date();
+  var todayStr = today.getFullYear() + '.' + String(today.getMonth()+1).padStart(2,'0') + '.' + String(today.getDate()).padStart(2,'0');
   var recentGroups = {};
   var olderGroups = {};
   PRESCRIPTIONS.forEach(rx => {
-    var rxDate = parseRxDate(rx.date);
-    if (rxDate >= cutoff) {
+    if (rx.date === todayStr) {
       if (!recentGroups[rx.date]) recentGroups[rx.date] = [];
       recentGroups[rx.date].push(rx);
     } else {

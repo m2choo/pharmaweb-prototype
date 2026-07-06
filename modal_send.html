@@ -721,13 +721,14 @@ function addNewCustomerByName(name) {
 
 const PRESCRIPTIONS = [
   {
-    id: 'rx5', date: '2026.06.22', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 30,
+    id: 'rx5', date: '2026.06.22', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90,
     drugs: [
-      { name: '아토르바스타틴정 10mg', ingredient: '아토르바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 30, sub: false },
-      { name: '메트포르민염산염정 500mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 2회', days: 30, sub: false },
-      { name: '암로디핀베실산염정 5mg', ingredient: '암로디핀베실산염', dosage: '1정', freq: '1일 1회', days: 30, sub: true },
-      { name: '텔미사르탄정 40mg', ingredient: '텔미사르탄', dosage: '1정', freq: '1일 1회', days: 30, sub: false },
-      { name: '아스피린장용정 100mg', ingredient: '아세틸살리실산', dosage: '1정', freq: '1일 1회', days: 30, sub: false },
+      { name: '아토르바스타틴정 10mg', ingredient: '아토르바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+      { name: '메트포르민염산염정 500mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 2회', days: 90, sub: false },
+      { name: '암로디핀베실산염정 5mg', ingredient: '암로디핀베실산염', dosage: '1정', freq: '1일 1회', days: 90, sub: true },
+      { name: '텔미사르탄정 40mg', ingredient: '텔미사르탄', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+      { name: '아스피린장용정 100mg', ingredient: '아세틸살리실산', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
+      { name: '클로피도그렐정 75mg', ingredient: '클로피도그렐황산수소염', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
     ]
   },
   {
@@ -977,10 +978,18 @@ function toggleCheck(id) {
 }
 
 function updatePolyAlert() {
-  const totalDrugs = selectedRxIds.reduce((sum, id) => sum + (editingDrugsMap[id] || []).length, 0);
+  var cutoff3m = new Date();
+  cutoff3m.setMonth(cutoff3m.getMonth() - 3);
+  var qualifyingCount = selectedRxIds.reduce(function(sum, id) {
+    var rx = PRESCRIPTIONS.find(function(r) { return r.id === id; });
+    if (!rx) return sum;
+    if (parseRxDate(rx.date) < cutoff3m) return sum;  // 3개월 이내 아님
+    if (rx.days < 90) return sum;                      // 3개월 미만 복용
+    return sum + (editingDrugsMap[id] || rx.drugs).length;
+  }, 0);
   const el = document.getElementById('s2polyAlert');
   if (!el) return;
-  el.innerHTML = totalDrugs >= 10 ? `
+  el.innerHTML = qualifyingCount >= 10 ? `
     <div class="s2-poly-alert" style="margin-bottom:14px;">
       <div class="s2-poly-alert-icon"><span>!</span></div>
       <span class="s2-poly-alert-txt">다제약물관리사업 대상자 확인이 필요합니다</span>

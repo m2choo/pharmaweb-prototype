@@ -1729,7 +1729,7 @@ function initReminderSettings() {
       slots: new Set(defaultSlotsForTimes(times)),
       timing: '식후 30분',
       startDate: todayISO(),
-      days: rx.days
+      days: Math.max.apply(null, drugs.map(function(d){ return d.days || rx.days; }))
     };
   });
 }

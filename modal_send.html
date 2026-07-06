@@ -244,7 +244,17 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .pz-rec-dot{width:7px;height:7px;border-radius:50%;background:#EF4444;animation:blink 1s ease-in-out infinite;}
 .pz-rec-label{font-size:11px;color:#888;font-weight:500;}
 .pz-rec-time{margin-left:auto;font-size:11px;color:#888;font-variant-numeric:tabular-nums;}
-/* ── 마이크 권한 레이어 (제거됨 — alert 방식으로 변경) ── */
+/* ── 마이크 권한 레이어 ── */
+.mic-perm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;align-items:center;justify-content:center;}
+.mic-perm-layer.on{display:flex;}
+.mic-perm-box{background:#fff;border-radius:16px;padding:36px 36px 28px;max-width:380px;width:90%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.mic-perm-icon{font-size:44px;line-height:1;}
+.mic-perm-title{font-size:17px;font-weight:700;color:#111;}
+.mic-perm-desc{font-size:13px;color:#555;line-height:1.8;}
+.mic-perm-btn{height:44px;padding:0 32px;background:#2563EB;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;}
+.mic-perm-btn:hover{background:#1e52c8;}
+.mic-perm-btn:disabled{opacity:.5;cursor:not-allowed;}
+.mic-perm-hint{font-size:12px;color:#999;line-height:1.7;margin-top:2px;}
 /* ── 종료 확인 레이어 ── */
 .close-confirm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:center;justify-content:center;}
 .close-confirm-layer.on{display:flex;}
@@ -366,6 +376,17 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
   </div>
 </div>
 
+
+<!-- 마이크 권한 레이어 -->
+<div class="mic-perm-layer" id="micPermLayer">
+  <div class="mic-perm-box">
+    <div class="mic-perm-icon">🎙️</div>
+    <div class="mic-perm-title">마이크 권한이 필요합니다</div>
+    <div class="mic-perm-desc">AI 복약 상담 녹음 기능을 사용하려면<br>마이크 접근을 허용해 주세요.</div>
+    <button class="mic-perm-btn" id="micPermBtn" onclick="requestMicAccess()">설정하기</button>
+    <div class="mic-perm-hint" id="micPermHint" style="display:none;">권한이 이미 거부된 경우 브라우저 주소창의 아이콘을<br>클릭하여 마이크 권한을 재설정한 후 다시 시도해 주세요.</div>
+  </div>
+</div>
 
 <!-- 종료 확인 레이어 -->
 <div class="close-confirm-layer" id="closeConfirmLayer">
@@ -1361,23 +1382,54 @@ function saveDraft() {
 }
 
 async function startIfMicOk() {
-  let denied = false;
+  let state = 'prompt';
   try {
     const r = await navigator.permissions.query({ name: 'microphone' });
-    denied = r.state === 'denied';
-  } catch (e) { /* permissions API 미지원 — 녹음 시도 허용 */ }
+    state = r.state;
+    // 권한 변경 시 자동으로 모달 닫고 스트림 시작
+    r.addEventListener('change', () => {
+      if (r.state === 'granted') {
+        document.getElementById('micPermLayer').classList.remove('on');
+        const recBar = document.querySelector('.pz-rec-bar');
+        if (recBar) recBar.style.display = '';
+        startTimer();
+        startStream();
+      }
+    });
+  } catch (e) { /* permissions API 미지원 */ }
 
-  if (denied) {
-    alert('마이크 접근이 거부되어 있습니다.\n브라우저 주소창의 아이콘을 클릭하여 마이크 권한을 허용한 후 새로고침해 주세요.');
-    const chat = document.getElementById('pzChat');
-    if (chat) chat.innerHTML = '<span style="color:#E5484D;font-size:12px;">마이크 권한이 없어 AI 녹음을 사용할 수 없습니다.</span>';
-    return;
+  if (state === 'granted') {
+    const recBar = document.querySelector('.pz-rec-bar');
+    if (recBar) recBar.style.display = '';
+    startTimer();
+    startStream();
+  } else {
+    // prompt 또는 denied — 모달 표시
+    document.getElementById('micPermLayer').classList.add('on');
+    document.getElementById('micPermBtn').disabled = false;
+    document.getElementById('micPermBtn').textContent = '설정하기';
+    document.getElementById('micPermHint').style.display = state === 'denied' ? '' : 'none';
   }
+}
 
-  const recBar = document.querySelector('.pz-rec-bar');
-  if (recBar) recBar.style.display = '';
-  startTimer();
-  startStream();
+async function requestMicAccess() {
+  const btn = document.getElementById('micPermBtn');
+  btn.textContent = '요청 중...';
+  btn.disabled = true;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream.getTracks().forEach(t => t.stop());
+    document.getElementById('micPermLayer').classList.remove('on');
+    const recBar = document.querySelector('.pz-rec-bar');
+    if (recBar) recBar.style.display = '';
+    startTimer();
+    startStream();
+  } catch (e) {
+    // denied 또는 사용자가 거부
+    btn.textContent = '설정하기';
+    btn.disabled = false;
+    document.getElementById('micPermHint').style.display = '';
+  }
 }
 </script>
 </body>

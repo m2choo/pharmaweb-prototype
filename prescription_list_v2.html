@@ -400,6 +400,36 @@ body {
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(16px);background:#1E293B;color:#fff;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:opacity .22s,transform .22s;z-index:999;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+/* ── Step 3(신규) 복약 알림 ── */
+.rm-card{border:1.5px solid #E8EAED;border-radius:10px;padding:16px 18px;margin-bottom:14px;}
+.rm-card-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;}
+.rm-card-title{font-size:13px;font-weight:700;color:#111;}
+.rm-card-sub{font-size:11.5px;color:#999;margin-top:2px;line-height:1.5;}
+.rm-row{margin-bottom:14px;}
+.rm-row:last-child{margin-bottom:0;}
+.rm-row-label{font-size:12px;color:#666;font-weight:600;margin-bottom:8px;}
+.rm-pills{display:flex;gap:8px;flex-wrap:wrap;}
+.rm-pill{flex:1;min-width:64px;height:38px;border:1.5px solid #E0E0E0;border-radius:8px;background:#fff;font-size:12.5px;color:#444;cursor:pointer;font-family:inherit;transition:all .12s;}
+.rm-pill:hover{border-color:#A5BCEC;background:#F4F8FF;}
+.rm-pill.on{background:#2563EB;border-color:#2563EB;color:#fff;font-weight:600;}
+.rm-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.rm-date-input,.rm-days-input{border:1.5px solid #E0E0E0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
+.rm-date-input{width:100%;height:38px;padding:0 10px;}
+.rm-date-input:focus{border-color:#2563EB;}
+.rm-days-ctrl{display:flex;align-items:center;gap:8px;}
+.rm-days-btn{width:34px;height:34px;border:1.5px solid #E0E0E0;border-radius:8px;background:#fff;cursor:pointer;font-size:14px;color:#444;font-family:inherit;}
+.rm-days-btn:hover{border-color:#A5BCEC;}
+.rm-days-input{width:56px;height:34px;text-align:center;}
+.rm-body.rm-disabled{opacity:.4;pointer-events:none;}
+.rm-switch{position:relative;width:40px;height:22px;flex-shrink:0;}
+.rm-switch input{opacity:0;width:0;height:0;position:absolute;}
+.rm-switch .rm-slider{position:absolute;inset:0;background:#DDD;border-radius:22px;cursor:pointer;transition:.15s;}
+.rm-switch .rm-slider:before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s;}
+.rm-switch input:checked + .rm-slider{background:#2563EB;}
+.rm-switch input:checked + .rm-slider:before{transform:translateX(18px);}
+.rm-empty-tip{font-size:12.5px;color:#AAA;text-align:center;padding:32px 0;}
+.rm-step-lbl{margin-right:auto;font-size:12px;color:#AAA;align-self:center;}
+
 /* 처방전 이미지 뷰어 레이어 */
 .rx-viewer-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;align-items:center;justify-content:center;}
 .rx-viewer-bd.on{display:flex;}
@@ -611,7 +641,8 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
       <div class="step-tabs">
         <div class="step-tab on" id="st1"><span class="step-num">1</span> 고객·처방전 선택</div>
         <div class="step-tab" id="st2"><span class="step-num">2</span> 복약지도 전송</div>
-        <div class="step-tab" id="st3"><span class="step-num">3</span> 전송 확인</div>
+        <div class="step-tab" id="st3"><span class="step-num">3</span> 복약 알림</div>
+        <div class="step-tab" id="st4"><span class="step-num">4</span> 전송 확인</div>
       </div>
       <div class="modal-body" id="mbody"></div>
       <div class="modal-ft" id="mfoot"></div>
@@ -738,6 +769,7 @@ let timerSec = 0;
 function openModal() {
   selectedCustomer = null;
   currentDraftId = null;
+  reminderSettings = {};
   document.getElementById('modalPt').classList.remove('on');
   document.getElementById('ptAvatar').textContent = '';
   document.getElementById('ptName').textContent = '';
@@ -955,7 +987,7 @@ function renderStep1() {
 }
 
 function setStepTab(n) {
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 4; i++) {
     const el = document.getElementById('st' + i);
     if (el) el.className = 'step-tab' + (i === n ? ' on' : '');
   }
@@ -1197,6 +1229,7 @@ function toggleCheck(id) {
   } else {
     selectedRxIds.splice(idx, 1);
     delete editingDrugsMap[id];
+    delete reminderSettings[id];
     document.getElementById('rxexpand_' + id).classList.remove('open');
     document.getElementById('rxcard_' + id).classList.remove('checked');
   }
@@ -1428,6 +1461,7 @@ function closeRxViewer() {
 const S3_TAGS = ['공복에 복용하세요.','충분한 물과 함께 드세요.','잠이 올 수 있으니 주의하세요.','술을 드시지 마세요.','임의로 복용을 중단하지 마세요.'];
 let s3SelTags = new Set();
 let s3Msg = '';
+let reminderSettings = {};
 
 function buildMsgDefault() {
   const c = selectedCustomer;
@@ -1489,11 +1523,135 @@ function renderStep2Body() {
   `;
 }
 
+// ── Step 3(신규) 복약 알림 ──
+function parseFreqCount(freq) {
+  var m = /([0-9]+)\s*회/.exec(freq || '');
+  return m ? parseInt(m[1], 10) : 1;
+}
+
+function defaultSlotsForTimes(n) {
+  if (n <= 1) return ['아침'];
+  if (n === 2) return ['아침', '저녁'];
+  return ['아침', '점심', '저녁'];
+}
+
+function todayISO() {
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function initReminderSettings() {
+  selectedRxIds.forEach(function(id) {
+    if (reminderSettings[id]) return;
+    var rx = PRESCRIPTIONS.find(function(r) { return r.id === id; });
+    var drugs = editingDrugsMap[id] || rx.drugs;
+    var times = Math.min(3, Math.max.apply(null, drugs.map(function(d) { return parseFreqCount(d.freq); })));
+    reminderSettings[id] = {
+      enabled: true,
+      times: times,
+      slots: new Set(defaultSlotsForTimes(times)),
+      timing: '식후 30분',
+      startDate: todayISO(),
+      days: rx.days
+    };
+  });
+}
+
 function goStep3() {
   var ta = document.getElementById('s3mta');
   if (ta) s3Msg = ta.value;
   currentStep = 3;
   setStepTab(3);
+  initReminderSettings();
+  renderStep3Body();
+}
+
+function renderStep3Body() {
+  var B = document.getElementById('mbody');
+  var F = document.getElementById('mfoot');
+
+  var cardsHTML = selectedRxIds.map(function(id) {
+    var rx = PRESCRIPTIONS.find(function(r) { return r.id === id; });
+    var drugs = editingDrugsMap[id] || rx.drugs;
+    var s = reminderSettings[id];
+    var timesPills = [1, 2, 3].map(function(n) {
+      return '<button class="rm-pill' + (s.times === n ? ' on' : '') + '" onclick="rmSetTimes(\'' + id + '\',' + n + ')">' + n + '회</button>';
+    }).join('');
+    var slotPills = ['아침', '점심', '저녁', '취침전'].map(function(t) {
+      return '<button class="rm-pill' + (s.slots.has(t) ? ' on' : '') + '" onclick="rmToggleSlot(\'' + id + '\',\'' + t + '\')">' + t + '</button>';
+    }).join('');
+    var timingPills = ['식전', '식후', '식후 30분'].map(function(t) {
+      return '<button class="rm-pill' + (s.timing === t ? ' on' : '') + '" onclick="rmSetTiming(\'' + id + '\',\'' + t + '\')">' + t + '</button>';
+    }).join('');
+    return '<div class="rm-card">'
+      + '<div class="rm-card-hdr"><div><div class="rm-card-title">' + rx.hospital + ' · ' + rx.dept + '</div>'
+      + '<div class="rm-card-sub">' + drugs.map(function(d) { return d.name; }).join(', ') + '</div></div>'
+      + '<label class="rm-switch"><input type="checkbox" ' + (s.enabled ? 'checked' : '') + ' onchange="rmToggleEnabled(\'' + id + '\')"><span class="rm-slider"></span></label></div>'
+      + '<div class="rm-body' + (s.enabled ? '' : ' rm-disabled') + '">'
+      + '<div class="rm-row"><div class="rm-row-label">복약 횟수</div><div class="rm-pills">' + timesPills + '</div></div>'
+      + '<div class="rm-row"><div class="rm-row-label">복약 시간</div><div class="rm-pills">' + slotPills + '</div></div>'
+      + '<div class="rm-row"><div class="rm-row-label">복약 시점</div><div class="rm-pills">' + timingPills + '</div></div>'
+      + '<div class="rm-2col">'
+      + '<div class="rm-row"><div class="rm-row-label">복약 시작일</div><input class="rm-date-input" type="date" value="' + s.startDate + '" onchange="rmSetStartDate(\'' + id + '\',this.value)"></div>'
+      + '<div class="rm-row"><div class="rm-row-label">복약 기간</div><div class="rm-days-ctrl">'
+      + '<button class="rm-days-btn" onclick="rmChangeDays(\'' + id + '\',-1)">−</button>'
+      + '<input class="rm-days-input" type="number" min="1" value="' + s.days + '" onchange="rmSetDays(\'' + id + '\',this.value)">'
+      + '<span style="font-size:12px;color:#888;">일</span>'
+      + '<button class="rm-days-btn" onclick="rmChangeDays(\'' + id + '\',1)">+</button>'
+      + '</div></div>'
+      + '</div></div>'
+      + '</div>';
+  }).join('');
+
+  B.innerHTML = '<p style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.6;">처방전 정보를 기반으로 복약 알림을 자동 설정했습니다. 필요 시 값을 수정하고, 발송하지 않을 처방전은 토글을 꺼주세요.<br>설정한 알림은 웰체크 앱에 자동 등록됩니다.</p>'
+    + (cardsHTML || '<div class="rm-empty-tip">설정할 처방전이 없습니다.</div>');
+
+  F.innerHTML = '<span class="rm-step-lbl">Step 3 / 4 · 복약 알림</span>'
+    + '<button class="btn-cancel" onclick="renderStep2Body();setStepTab(2);currentStep=2;">← 이전</button>'
+    + '<button class="btn-cancel" onclick="goStep3Skip()">이 단계 건너뛰기</button>'
+    + '<button class="btn-next" onclick="goStep4()">다음 단계 →</button>';
+}
+
+function rmToggleEnabled(id) {
+  reminderSettings[id].enabled = !reminderSettings[id].enabled;
+  renderStep3Body();
+}
+function rmSetTimes(id, n) {
+  var s = reminderSettings[id];
+  s.times = n;
+  s.slots = new Set(defaultSlotsForTimes(n));
+  renderStep3Body();
+}
+function rmToggleSlot(id, slot) {
+  var s = reminderSettings[id];
+  if (s.slots.has(slot)) s.slots.delete(slot); else s.slots.add(slot);
+  renderStep3Body();
+}
+function rmSetTiming(id, val) {
+  reminderSettings[id].timing = val;
+  renderStep3Body();
+}
+function rmSetStartDate(id, val) {
+  reminderSettings[id].startDate = val;
+}
+function rmChangeDays(id, delta) {
+  var s = reminderSettings[id];
+  s.days = Math.max(1, (s.days || 1) + delta);
+  renderStep3Body();
+}
+function rmSetDays(id, val) {
+  var s = reminderSettings[id];
+  s.days = Math.max(1, parseInt(val, 10) || 1);
+  renderStep3Body();
+}
+function goStep3Skip() {
+  selectedRxIds.forEach(function(id) { reminderSettings[id].enabled = false; });
+  goStep4();
+}
+
+function goStep4() {
+  currentStep = 4;
+  setStepTab(4);
   var B = document.getElementById('mbody');
   var F = document.getElementById('mfoot');
   var c = selectedCustomer;
@@ -1513,6 +1671,11 @@ function goStep3() {
     ? '<tr><td>단골 여부</td><td style="color:#888;">신규 회원</td></tr>'
     : '<tr><td>단골 여부</td><td style="color:#16A34A;font-weight:600;">단골 등록됨</td></tr>';
 
+  var reminderCount = selectedRxIds.filter(function(id) { return reminderSettings[id] && reminderSettings[id].enabled; }).length;
+  var reminderRow = '<tr><td>복약 알림</td><td>' + (reminderCount > 0
+    ? reminderCount + '건 설정 (웰체크 앱 자동 등록)'
+    : '<span style="color:#AAA;">설정 안 함</span>') + '</td></tr>';
+
   B.innerHTML = '<div class="prev-grid">'
     + '<div><div class="tag-ttl" style="margin-bottom:10px">웰체크 메시지 미리보기</div>'
     + '<div class="prev-msg">' + previewMsg.replace(/</g,'&lt;').replace(/\n/g,'<br>') + '</div></div>'
@@ -1524,15 +1687,15 @@ function goStep3() {
     + '<tr><td>성별</td><td>' + (c.gender !== '-' ? c.gender : '—') + '</td></tr>'
     + phoneRow
     + regularRow
+    + reminderRow
     + '</table>'
     + (isNew ? '<p style="font-size:11px;color:#2563EB;margin-top:10px;line-height:1.6;">신규 고객입니다. 휴대폰 번호로 웰체크 앱 가입 및<br>단골 약국 연결 링크가 함께 발송됩니다.</p>' : '')
     + '</div></div>';
 
-  F.innerHTML = `
-    <button class="btn-cancel" onclick="renderStep2Body();setStepTab(2);currentStep=2;">← 이전</button>
-    <button class="btn-cancel" onclick="saveDraft()" style="color:#2563EB;border-color:#A0B4FF;">임시저장</button>
-    <button class="btn-next" onclick="sendFinal()">➤ 전송하기</button>
-  `;
+  F.innerHTML = '<span class="rm-step-lbl">Step 4 / 4 · 전송 확인</span>'
+    + '<button class="btn-cancel" onclick="renderStep3Body();setStepTab(3);currentStep=3;">← 이전</button>'
+    + '<button class="btn-cancel" onclick="saveDraft()" style="color:#2563EB;border-color:#A0B4FF;">임시저장</button>'
+    + '<button class="btn-next" onclick="sendFinal()">➤ 전송하기</button>';
 }
 
 function sendFinal() {

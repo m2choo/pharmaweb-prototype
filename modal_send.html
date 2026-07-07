@@ -951,9 +951,10 @@ function goBackToStep1() {
   setStepTab(1);
   const B = document.getElementById('mbody');
   const F = document.getElementById('mfoot');
+  const hidden = selectedCustomer ? 'style="display:none"' : '';
   B.innerHTML = `
-    <p class="s1-guide" id="s1guide">고객 이름 또는 휴대전화 번호를 검색하세요.</p>
-    <div class="s1-search-wrap" id="s1searchWrap">
+    <p class="s1-guide" id="s1guide" ${hidden}>고객 이름 또는 휴대전화 번호를 검색하세요.</p>
+    <div class="s1-search-wrap" id="s1searchWrap" ${hidden}>
       <input class="s1-search" id="s1input" type="text" placeholder="이름 또는 휴대전화 번호" oninput="onSearch(this.value)" autocomplete="off">
       <span class="s1-search-icon">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#aaa" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -968,7 +969,6 @@ function goBackToStep1() {
     <button class="btn-next" id="btnNext" disabled onclick="goStep2()">다음</button>
   `;
   if (selectedCustomer) {
-    hideSearchSection();
     renderRxSection(true);
   }
 }

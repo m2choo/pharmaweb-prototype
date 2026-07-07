@@ -1281,7 +1281,7 @@ function buildMsgDefault() {
   var methodSection;
   if (hasReminder) {
     var scheduleTime = allSlots.length
-      ? allSlots.join(' · ') + (allTiming ? ' ' + allTiming : '')
+      ? allSlots.join(' · ') + ' ' + (allTiming || '식후 30분')
       : (ocrSlots.length ? ocrSlots.join(' · ') + ' 식후 30분' : '약사님이 등록한 시간');
     methodSection = '담당 약사가 고객님의 처방전을 직접 살펴보고\n빠짐없이 약을 드실 수 있도록 맞춤 복약 알림을 등록했어요.\n\n⏰ ' + scheduleTime + '\n웰체크 앱에서 알림이 울리면 복약하세요.';
   } else {

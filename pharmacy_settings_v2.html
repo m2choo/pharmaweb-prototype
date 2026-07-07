@@ -7,7 +7,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-height:100vh;display:flex;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#fff;min-height:100vh;display:flex;}
 
 /* ── LNB ── */
 .lnb{width:200px;min-height:100vh;background:#fff;border-right:1px solid #E8EAED;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:10;}
@@ -114,16 +114,31 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
 .section-title{font-size:15px;font-weight:700;color:#111;margin-bottom:4px;}
 .section-desc{font-size:12px;color:#888;margin-bottom:16px;line-height:1.6;}
 
-.reminder-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.reminder-card{border:1px solid #E8EAED;border-radius:8px;padding:14px 16px;background:#fff;}
-.reminder-card-label{font-size:12px;font-weight:600;color:#666;margin-bottom:10px;}
-.reminder-times{display:flex;flex-direction:column;gap:8px;}
-.reminder-time-row{display:flex;align-items:center;gap:10px;}
+.reminder-simple{display:flex;flex-direction:column;gap:0;border:1px solid #E8EAED;border-radius:8px;overflow:hidden;}
+.reminder-time-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #F2F4F6;}
+.reminder-time-row:last-child{border-bottom:none;}
 .reminder-time-dot{width:8px;height:8px;border-radius:50%;background:#2563EB;flex-shrink:0;}
-.reminder-time-name{font-size:12px;color:#555;width:48px;flex-shrink:0;}
-.reminder-time-input{width:90px;padding:6px 10px;font-size:13px;font-family:inherit;border:1px solid #E0E0E0;border-radius:6px;outline:none;color:#333;background:#fff;}
-.reminder-time-input:focus{border-color:#2563EB;}
-.reminder-note{font-size:11px;color:#aaa;margin-top:8px;}
+.reminder-time-name{font-size:13px;color:#333;width:56px;flex-shrink:0;}
+.reminder-time-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;font-size:13px;font-family:inherit;border:1px solid #E0E0E0;border-radius:6px;background:#fff;color:#333;cursor:pointer;min-width:110px;}
+.reminder-time-btn:hover{border-color:#2563EB;}
+.reminder-time-btn svg{color:#aaa;}
+
+/* ── 시간 피커 모달 ── */
+.tp-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:1000;display:flex;align-items:center;justify-content:center;}
+.tp-modal{background:#fff;border-radius:14px;width:260px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.18);}
+.tp-display{text-align:center;padding:18px 0 10px;font-size:24px;font-weight:700;color:#111;border-bottom:1px solid #F2F4F6;}
+.tp-cols{display:flex;border-bottom:1px solid #F2F4F6;}
+.tp-col{flex:1;text-align:center;}
+.tp-col-label{font-size:11px;color:#888;padding:8px 0 4px;border-bottom:1px solid #F2F4F6;}
+.tp-scroll{height:140px;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none;}
+.tp-scroll::-webkit-scrollbar{display:none;}
+.tp-item{height:36px;display:flex;align-items:center;justify-content:center;font-size:15px;color:#555;scroll-snap-align:start;cursor:pointer;}
+.tp-item.selected{color:#2563EB;font-weight:700;}
+.tp-highlight{position:absolute;pointer-events:none;}
+.tp-actions{display:flex;}
+.tp-btn{flex:1;padding:14px;font-size:14px;font-family:inherit;border:none;background:none;cursor:pointer;font-weight:500;}
+.tp-btn.cancel{color:#888;border-right:1px solid #F2F4F6;}
+.tp-btn.confirm{color:#2563EB;font-weight:700;}
 
 .info-banner{background:#EBF2FF;border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:8px;margin-bottom:16px;}
 .info-banner-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
@@ -194,22 +209,22 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
     <!-- 약국명 -->
     <div class="field-group">
       <div class="field-label">약국명 <span class="required">*</span></div>
-      <input class="field-input" type="text" value="웰체크명약국">
+      <input class="field-input readonly" type="text" value="웰체크명약국" readonly>
     </div>
 
     <!-- 약국 주소 -->
     <div class="field-group">
       <div class="field-label">약국 주소 <span class="required">*</span></div>
       <div class="field-row">
-        <input class="field-input" type="text" value="서울 강남구 봉은사로 641">
-        <input class="field-input" type="text" placeholder="상세 주소" value="웰체크명약국">
+        <input class="field-input readonly" type="text" value="서울 강남구 봉은사로 641" readonly>
+        <input class="field-input readonly" type="text" placeholder="상세 주소" value="웰체크명약국" readonly>
       </div>
     </div>
 
     <!-- 약국 전화 번호 -->
     <div class="field-group">
       <div class="field-label">약국 전화 번호 <span class="required">*</span></div>
-      <input class="field-input" type="text" value="01052495748">
+      <input class="field-input readonly" type="text" value="01052495748" readonly>
       <div class="checkbox-row">
         <input type="checkbox" id="hide-phone" checked>
         <label for="hide-phone">번호 노출 안 함</label>
@@ -441,80 +456,38 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
         <span class="info-banner-text">복약 횟수별 기본 알림 시간을 설정하세요. 환자 앱에서 개별 수정도 가능합니다.</span>
       </div>
 
-      <div class="reminder-grid">
-        <!-- 1일 1회 -->
-        <div class="reminder-card">
-          <div class="reminder-card-label">1일 1회</div>
-          <div class="reminder-times">
-            <div class="reminder-time-row">
-              <div class="reminder-time-dot"></div>
-              <span class="reminder-time-name">아침</span>
-              <input class="reminder-time-input" type="time" value="08:00">
-            </div>
-          </div>
+      <div class="reminder-simple">
+        <div class="reminder-time-row">
+          <div class="reminder-time-dot" style="background:#2563EB;"></div>
+          <span class="reminder-time-name">아침</span>
+          <button class="reminder-time-btn" data-time="08:00">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span class="tp-label">오전 8:00</span>
+          </button>
         </div>
-        <!-- 1일 2회 -->
-        <div class="reminder-card">
-          <div class="reminder-card-label">1일 2회</div>
-          <div class="reminder-times">
-            <div class="reminder-time-row">
-              <div class="reminder-time-dot"></div>
-              <span class="reminder-time-name">아침</span>
-              <input class="reminder-time-input" type="time" value="08:00">
-            </div>
-            <div class="reminder-time-row">
-              <div class="reminder-time-dot" style="background:#6366F1;"></div>
-              <span class="reminder-time-name">저녁</span>
-              <input class="reminder-time-input" type="time" value="18:00">
-            </div>
-          </div>
+        <div class="reminder-time-row">
+          <div class="reminder-time-dot" style="background:#F59E0B;"></div>
+          <span class="reminder-time-name">점심</span>
+          <button class="reminder-time-btn" data-time="12:00">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span class="tp-label">오후 12:00</span>
+          </button>
         </div>
-        <!-- 1일 3회 -->
-        <div class="reminder-card">
-          <div class="reminder-card-label">1일 3회</div>
-          <div class="reminder-times">
-            <div class="reminder-time-row">
-              <div class="reminder-time-dot"></div>
-              <span class="reminder-time-name">아침</span>
-              <input class="reminder-time-input" type="time" value="08:00">
-            </div>
-            <div class="reminder-time-row">
-              <div class="reminder-time-dot" style="background:#F59E0B;"></div>
-              <span class="reminder-time-name">점심</span>
-              <input class="reminder-time-input" type="time" value="12:00">
-            </div>
-            <div class="reminder-time-row">
-              <div class="reminder-time-dot" style="background:#6366F1;"></div>
-              <span class="reminder-time-name">저녁</span>
-              <input class="reminder-time-input" type="time" value="18:00">
-            </div>
-          </div>
+        <div class="reminder-time-row">
+          <div class="reminder-time-dot" style="background:#6366F1;"></div>
+          <span class="reminder-time-name">저녁</span>
+          <button class="reminder-time-btn" data-time="18:00">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span class="tp-label">오후 6:00</span>
+          </button>
         </div>
-        <!-- 1일 4회 -->
-        <div class="reminder-card">
-          <div class="reminder-card-label">1일 4회</div>
-          <div class="reminder-times">
-            <div class="reminder-time-row">
-              <div class="reminder-time-dot"></div>
-              <span class="reminder-time-name">아침</span>
-              <input class="reminder-time-input" type="time" value="08:00">
-            </div>
-            <div class="reminder-time-row">
-              <div class="reminder-time-dot" style="background:#F59E0B;"></div>
-              <span class="reminder-time-name">점심</span>
-              <input class="reminder-time-input" type="time" value="12:00">
-            </div>
-            <div class="reminder-time-row">
-              <div class="reminder-time-dot" style="background:#6366F1;"></div>
-              <span class="reminder-time-name">저녁</span>
-              <input class="reminder-time-input" type="time" value="18:00">
-            </div>
-            <div class="reminder-time-row">
-              <div class="reminder-time-dot" style="background:#64748B;"></div>
-              <span class="reminder-time-name">취침 전</span>
-              <input class="reminder-time-input" type="time" value="22:00">
-            </div>
-          </div>
+        <div class="reminder-time-row">
+          <div class="reminder-time-dot" style="background:#64748B;"></div>
+          <span class="reminder-time-name">취침 전</span>
+          <button class="reminder-time-btn" data-time="22:00">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span class="tp-label">오후 10:00</span>
+          </button>
         </div>
       </div>
     </div>
@@ -554,6 +527,101 @@ document.querySelectorAll('.day-cell input[type=checkbox]').forEach(cb => {
   applyState();
   cb.addEventListener('change', applyState);
 });
+
+// ── 복약 알림 시간 피커 ──
+(function(){
+  const AMPM = ['AM','PM'];
+  const HOURS = Array.from({length:12},(_,i)=>String(i+1).padStart(2,'0'));
+  const MINS  = ['00','30'];
+  const LABEL = {AM:'오전', PM:'오후'};
+
+  function fmt(h24,m){
+    const ampm = h24 < 12 ? 'AM' : 'PM';
+    const h = h24 % 12 || 12;
+    return LABEL[ampm] + ' ' + h + ':' + String(m).padStart(2,'0');
+  }
+
+  function openPicker(btn){
+    const raw = btn.dataset.time; // "HH:MM"
+    const [hh,mm] = raw.split(':').map(Number);
+    const initAmpm = hh < 12 ? 'AM' : 'PM';
+    const initH = String(hh % 12 || 12).padStart(2,'0');
+    const initM = String(mm).padStart(2,'0');
+
+    let selAmpm = initAmpm, selH = initH, selM = initM;
+
+    function buildCol(items, selected, onChange){
+      const col = document.createElement('div');
+      col.className = 'tp-col';
+      const scroll = document.createElement('div');
+      scroll.className = 'tp-scroll';
+      items.forEach(v => {
+        const el = document.createElement('div');
+        el.className = 'tp-item' + (v===selected?' selected':'');
+        el.textContent = v === 'AM' ? '오전' : v === 'PM' ? '오후' : v;
+        el.addEventListener('click',()=>{
+          scroll.querySelectorAll('.tp-item').forEach(e=>e.classList.remove('selected'));
+          el.classList.add('selected');
+          onChange(v);
+          updateDisplay();
+        });
+        scroll.appendChild(el);
+      });
+      col.appendChild(scroll);
+      return col;
+    }
+
+    function updateDisplay(){
+      const h24 = (selAmpm==='AM' ? parseInt(selH)%12 : parseInt(selH)%12+12);
+      overlay.querySelector('.tp-display').textContent =
+        (selAmpm==='AM'?'오전':'오후') + ' ' + (parseInt(selH)) + ':' + selM;
+    }
+
+    const overlay = document.createElement('div');
+    overlay.className = 'tp-overlay';
+    overlay.innerHTML = `<div class="tp-modal">
+      <div class="tp-display"></div>
+      <div class="tp-cols"></div>
+      <div class="tp-actions">
+        <button class="tp-btn cancel">취소</button>
+        <button class="tp-btn confirm">확인</button>
+      </div>
+    </div>`;
+
+    const cols = overlay.querySelector('.tp-cols');
+    const lblRow = document.createElement('div');
+    lblRow.style.cssText='display:flex;border-bottom:1px solid #F2F4F6;';
+    ['시','분','구분'].forEach(t=>{
+      const d=document.createElement('div');
+      d.className='tp-col-label';d.style.flex='1';d.textContent=t;
+      lblRow.appendChild(d);
+    });
+    cols.appendChild(lblRow);
+
+    const scrollRow = document.createElement('div');
+    scrollRow.style.cssText='display:flex;';
+    scrollRow.appendChild(buildCol(HOURS, initH, v=>selH=v));
+    scrollRow.appendChild(buildCol(MINS,  initM, v=>selM=v));
+    scrollRow.appendChild(buildCol(AMPM,  initAmpm, v=>selAmpm=v));
+    cols.appendChild(scrollRow);
+
+    updateDisplay();
+
+    overlay.querySelector('.cancel').addEventListener('click',()=>overlay.remove());
+    overlay.querySelector('.confirm').addEventListener('click',()=>{
+      const h24 = selAmpm==='AM' ? parseInt(selH)%12 : parseInt(selH)%12+12;
+      btn.dataset.time = String(h24).padStart(2,'0')+':'+selM;
+      btn.querySelector('.tp-label').textContent = fmt(h24, parseInt(selM));
+      overlay.remove();
+    });
+    overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.remove(); });
+    document.body.appendChild(overlay);
+  }
+
+  document.querySelectorAll('.reminder-time-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>openPicker(btn));
+  });
+})();
 
 // 점심 체크박스 — 체크 시 시간 입력 표시
 document.querySelectorAll('.lunch-checkbox-wrap input[type=checkbox]').forEach(cb => {

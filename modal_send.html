@@ -890,7 +890,6 @@ function renderRxSection(preserveSelection) {
 
   if (selectedCustomer && selectedCustomer.isNew) {
     S.innerHTML = `
-      <div class="s1-s2-divider"></div>
       <label class="s2-label">처방전 선택 <span style="color:#888;font-weight:400;">(최근 6개월 · 복수 선택 가능)</span></label>
       <div class="s2-empty-tip">
         <div style="font-size:13px;font-weight:600;color:#666;margin-bottom:6px;">확인되는 처방전이 없습니다</div>
@@ -917,7 +916,6 @@ function renderRxSection(preserveSelection) {
 
   var hasOlder = Object.keys(olderGroups).length > 0;
   S.innerHTML = `
-    <div class="s1-s2-divider"></div>
     <label class="s2-label">처방전 선택 <span style="color:#888;font-weight:400;">(최근 6개월 · 복수 선택 가능)</span></label>
     <div id="s2polyAlert"></div>
     <div class="s2-rx-list">${buildRxGroupHTML(recentGroups)}</div>

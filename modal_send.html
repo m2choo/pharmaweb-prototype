@@ -895,12 +895,12 @@ function renderRxSection(preserveSelection) {
     return;
   }
 
-  var today = new Date();
-  var todayStr = today.getFullYear() + '.' + String(today.getMonth()+1).padStart(2,'0') + '.' + String(today.getDate()).padStart(2,'0');
   var recentGroups = {};
   var olderGroups = {};
+  var allDates = [...new Set(PRESCRIPTIONS.map(rx => rx.date))].sort((a, b) => b.localeCompare(a));
+  var latestDate = allDates[0];
   PRESCRIPTIONS.forEach(rx => {
-    if (rx.date === todayStr) {
+    if (rx.date === latestDate) {
       if (!recentGroups[rx.date]) recentGroups[rx.date] = [];
       recentGroups[rx.date].push(rx);
     } else {

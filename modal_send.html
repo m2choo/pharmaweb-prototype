@@ -1254,27 +1254,39 @@ function buildMsgDefault() {
     return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 지속적인 복약 관리를 위해 안내드립니다.\n';
   }
   let drugLines = [];
-  let methodLines = [];
-  let reminderNotes = [];
+  let allSlots = [];
+  let allTiming = '';
+  let hasReminder = false;
   let idx = 1;
   selectedRxIds.forEach(function(id) {
     var drugs = editingDrugsMap[id] || [];
     drugs.forEach(function(d) {
       drugLines.push(idx++ + '. ' + d.name + ' - 1회 ' + d.dosage + ', ' + d.freq + ', ' + d.days + '일분');
-      methodLines.push('• ' + d.name + ': ' + d.freq + ', 1회 ' + d.dosage + '씩 복용하세요.');
     });
     var rs = (typeof reminderSettings !== 'undefined') ? reminderSettings[id] : null;
     if (rs && rs.enabled) {
-      var slots = rs.slots ? Array.from(rs.slots).join(', ') : '';
-      var timing = rs.timing || '';
-      var reminderNote = slots && timing
-        ? '※ 약사님이 보낸 복약 알림이 웰체크 앱으로 자동 등록됩니다(' + slots + ' · ' + timing + ')'
-        : '※ 약사님이 보낸 복약 알림이 웰체크 앱으로 자동 등록됩니다';
-      reminderNotes.push(reminderNote);
+      hasReminder = true;
+      if (rs.slots) rs.slots.forEach(function(s) { if (!allSlots.includes(s)) allSlots.push(s); });
+      if (rs.timing && !allTiming) allTiming = rs.timing;
     }
   });
-  var allMethodLines = reminderNotes.concat(methodLines);
-  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n' + allMethodLines.join('\n') + '\n';
+  var methodSection;
+  if (hasReminder) {
+    var scheduleDesc = allSlots.length
+      ? allSlots.join(', ') + (allTiming ? ' ' + allTiming + '에' : '에') + ' 복약하세요.'
+      : '약사님이 등록한 시간에 복약하세요.';
+    methodSection = '※ 약사님이 보낸 복약 알림이 웰체크 앱으로 자동 등록됩니다\n' + scheduleDesc;
+  } else {
+    var methodLines = [];
+    selectedRxIds.forEach(function(id) {
+      var drugs = editingDrugsMap[id] || [];
+      drugs.forEach(function(d) {
+        methodLines.push('• ' + d.name + ': ' + d.freq + ', 1회 ' + d.dosage + '씩 복용하세요.');
+      });
+    });
+    methodSection = methodLines.join('\n');
+  }
+  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n' + methodSection + '\n';
 }
 
 function goStep3() {

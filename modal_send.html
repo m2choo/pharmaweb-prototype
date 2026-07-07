@@ -1272,10 +1272,10 @@ function buildMsgDefault() {
   });
   var methodSection;
   if (hasReminder) {
-    var scheduleDesc = allSlots.length
-      ? allSlots.join(', ') + (allTiming ? ' ' + allTiming + '에' : '에') + ' 복약하세요.'
-      : '약사님이 등록한 시간에 복약하세요.';
-    methodSection = '※ 약사님이 보낸 복약 알림이 웰체크 앱으로 자동 등록됩니다\n' + scheduleDesc;
+    var scheduleTime = allSlots.length
+      ? allSlots.join(' · ') + (allTiming ? ' ' + allTiming : '')
+      : '약사님이 등록한 시간';
+    methodSection = '💊 약사님이 처방약을 직접 확인하고\n   고객님 폰에 복약 알림을 등록해 드렸습니다.\n\n📱 ' + scheduleTime + '\n   웰체크 앱에서 알림이 울립니다.';
   } else {
     var methodLines = [];
     selectedRxIds.forEach(function(id) {

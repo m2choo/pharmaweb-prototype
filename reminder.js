@@ -78,11 +78,11 @@ function renderReminderBody() {
       + chevronSVG
       + '</div></div>';
 
-    var drugNameList = drugs.map(function(d) {
-      return '<li class="rm-drug-item">' + d.name + '<span class="rm-drug-meta">1일 ' + (d.freq || '') + ' · 1회 ' + (d.dosage || '') + '</span></li>';
+    var drugChips = drugs.map(function(d) {
+      return '<span class="rm-drug-chip">' + d.name + '</span>';
     }).join('');
     var panel = '<div class="rm-panel' + (isOpen ? ' open' : '') + (s.enabled ? '' : ' disabled') + '">'
-      + '<div class="rm-field rm-drug-list-field"><div class="rm-field-label">포함 약품</div><ul class="rm-drug-list">' + drugNameList + '</ul></div>'
+      + '<div class="rm-field rm-drug-list-field"><div class="rm-field-label">포함 약품</div><div class="rm-drug-chips">' + drugChips + '</div></div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 횟수</div><div class="rm-pills">' + timesPills + '</div></div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 시간</div><div class="rm-pills">' + slotPills + '</div></div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 시점</div><div class="rm-pills">' + timingPills + '</div></div>'

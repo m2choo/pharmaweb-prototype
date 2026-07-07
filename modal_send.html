@@ -1276,17 +1276,9 @@ function buildMsgDefault() {
       ? allSlots.join(' · ') + (allTiming ? ' ' + allTiming : '')
       : '약사님이 등록한 시간';
     methodSection = '💊 약사님이 처방약을 직접 확인하고\n   고객님 폰에 복약 알림을 등록해 드렸습니다.\n\n📱 ' + scheduleTime + '\n   웰체크 앱에서 알림이 울립니다.';
-  } else {
-    var methodLines = [];
-    selectedRxIds.forEach(function(id) {
-      var drugs = editingDrugsMap[id] || [];
-      drugs.forEach(function(d) {
-        methodLines.push('• ' + d.name + ': ' + d.freq + ', 1회 ' + d.dosage + '씩 복용하세요.');
-      });
-    });
-    methodSection = methodLines.join('\n');
   }
-  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + '\n\n[복약 방법]\n' + methodSection + '\n';
+  var methodBlock = hasReminder ? '\n\n[복약 방법]\n' + methodSection : '';
+  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + methodBlock + '\n';
 }
 
 function goStep3() {

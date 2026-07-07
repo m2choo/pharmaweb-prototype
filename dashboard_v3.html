@@ -1,0 +1,1189 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다제약물관리사업 1회차 디지털 상담지</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f4;
+    --bg-tertiary: #eeece8;
+    --bg-info: #E6F1FB;
+    --bg-danger: #FCEBEB;
+    --bg-warning: #FAEEDA;
+    --bg-success: #EAF3DE;
+    --text-primary: #1a1a18;
+    --text-secondary: #5a5a56;
+    --text-tertiary: #9a9994;
+    --text-info: #0C447C;
+    --text-danger: #A32D2D;
+    --text-warning: #633806;
+    --text-success: #27500A;
+    --border: rgba(0,0,0,0.12);
+    --border-md: rgba(0,0,0,0.22);
+    --border-info: #B5D4F4;
+    --border-warning: #FAC775;
+    --border-success: #C0DD97;
+    --border-danger: #F7C1C1;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    background: #fff;
+    color: var(--text-primary);
+    font-size:18px;
+    line-height: 1.5;
+    
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    margin: 0;
+    border-radius: 0;
+  }
+  .topbar-l { display: flex; align-items: center; gap: 10px; }
+  .topbar-title { font-size:21.6px; font-weight: 700; }
+  .topbar-r { display: flex; gap: 8px; align-items: center; }
+  .meta { font-size:15.6px; color: var(--text-tertiary); margin-right: 6px; }
+
+  /* ── PILLS / BADGES ── */
+  .pill {
+    font-size:15.6px; padding: 3px 10px;
+    border-radius: 20px; font-weight: 500; white-space: nowrap;
+  }
+  .pill-blue   { background: var(--bg-info);    color: var(--text-info); }
+  .pill-gray   { background: var(--bg-secondary); color: var(--text-secondary); border: 0.5px solid var(--border); }
+  .pill-red    { background: var(--bg-danger);  color: var(--text-danger); }
+  .pill-amber  { background: var(--bg-warning); color: var(--text-warning); }
+  .pill-green  { background: var(--bg-success); color: var(--text-success); }
+
+  /* ── BUTTONS ── */
+  .btn {
+    font-size:15.6px; padding: 6px 14px;
+    border-radius: var(--radius-md);
+    border: 0.5px solid var(--border-md);
+    background: transparent; cursor: pointer;
+    color: var(--text-secondary);
+    display: flex; align-items: center; gap: 4px;
+    transition: background 0.15s;
+  }
+  .btn:hover { background: var(--bg-secondary); }
+  .btn-send { background: var(--bg-info); color: var(--text-info); border-color: transparent; font-weight: 500; }
+  .btn-send:hover { background: #d0e8f8; }
+  .btn-go {
+    font-size:15.6px; padding: 7px 16px;
+    border-radius: var(--radius-md);
+    background: var(--bg-info); color: var(--text-info);
+    border: none; cursor: pointer; font-weight: 500;
+    display: flex; align-items: center; gap: 5px;
+    transition: background 0.15s;
+  }
+  .btn-go:hover { background: #d0e8f8; }
+
+  /* ── FULL WIDTH SECTIONS ── */
+  .section-full { padding: 0; margin-bottom: 0; }
+
+  /* ── MAIN LAYOUT ── */
+  .main-wrap { display: flex; flex-direction: column; gap: 0; padding: 0 0 24px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr; gap: 0; align-items: start; border-top: 1px solid var(--border); }
+
+  /* ── PRESTUDY NOTICE ── */
+  .prestudy-notice {
+    display: flex; align-items: center; gap: 6px;
+    font-size:14.4px; color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 6px 10px;
+    margin-bottom: 10px;
+  }
+  .prestudy-notice i { color: var(--text-tertiary); font-size:14.4px; flex-shrink: 0; }
+
+  /* ── CARD (문서 섹션 기본) ── */
+  .card {
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    overflow: visible;
+  }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px 10px;
+    border-bottom: none;
+  }
+  .card-head-l { display: flex; align-items: center; gap: 8px; }
+  .card-num { font-size:14.4px; color: var(--text-tertiary); font-weight: 500; min-width: 18px; }
+  .card-label { font-size:16.8px; font-weight: 700; color: var(--text-primary); }
+  .card-body { padding: 0 20px 16px; font-size:16.8px; }
+
+  /* ── HIGHLIGHT CARD (꼭 확인하세요 전용) ── */
+  .card-highlight {
+    background: #fff;
+    border: 1.5px solid rgba(226,75,74,0.35) !important;
+    border-radius: var(--radius-lg) !important;
+    overflow: hidden !important;
+    margin: 14px 20px 16px;
+    box-shadow: 0 1px 6px rgba(226,75,74,0.07);
+  }
+  .card-highlight .card-head {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(226,75,74,0.15) !important;
+  }
+  .card-highlight .card-body { padding: 12px 14px; }
+/* fcard-body: 세로 스택 */
+
+  /* ── GOAL LIST ── */
+  .goal-row {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 7px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .goal-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .goal-row:first-child { padding-top: 0; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .dot-r { background: #E24B4A; }
+  .dot-y { background: #9ca3af; }
+  .dot-g { background: #9ca3af; }
+  .goal-n { font-size:15.6px; color: var(--text-tertiary); min-width: 14px; flex-shrink: 0; }
+  .goal-t { font-size:16.8px; color: var(--text-primary); line-height: 1.5; }
+  .goal-sub { font-size:15.6px; color: var(--text-tertiary); margin-top: 2px; }
+
+  /* ── PROFILE ── */
+  .prof-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .prof-item { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 5px 10px; }
+  .prof-item.full { grid-column: 1 / -1; }
+  .plabel { font-size:14.4px; color: var(--text-tertiary); margin-bottom: 3px; }
+  .pval { font-size:16.8px; font-weight: 500; }
+  .pval-warn { color: #854F0B; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+  .tag {
+    font-size:14.4px; padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border);
+    color: var(--text-secondary);
+  }
+  .alert-strip {
+    margin-top: 8px; padding: 7px 10px;
+    border-left: 2.5px solid #EF9F27;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    background: var(--bg-warning);
+    font-size:15.6px; color: var(--text-warning);
+  }
+
+  /* ── DRUG TABLE ── */
+  .dtable {
+    width: 100%; border-collapse: collapse;
+    font-size:15.6px; table-layout: fixed;
+  }
+  .dtable th {
+    text-align: left; padding: 6px 8px;
+    font-size:14.4px; font-weight: 500; color: var(--text-tertiary);
+    border-bottom: 0.5px solid var(--border);
+    background: var(--bg-secondary);
+  }
+  .dtable td {
+    padding: 8px 8px;
+    border-bottom: 0.5px solid var(--border);
+    vertical-align: top; word-break: keep-all;
+  }
+  .dtable tr:last-child td { border-bottom: none; }
+  .dtable tr.flag-r td { background: #fdf5f5; }
+  .dtable tr:not(.flag-r):hover td { background: var(--bg-secondary); }
+  .flag-r-txt { font-size:14.4px; color: #A32D2D; font-weight: 500; }
+  .flag-y-txt { font-size:14.4px; color: var(--text-secondary); }
+  .sub-divider {
+    font-size:15.6px; font-weight: 700; color: var(--text-primary);
+    padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
+    border-top: 0.5px solid var(--border);
+    cursor: pointer; user-select: none;
+    background: var(--bg-primary);
+  }
+  .sub-divider:first-child { border-top: none; }
+  .sub-divider:hover { background: var(--bg-secondary); }
+  .sub-divider .sdiv-count { font-size:14.4px; font-weight: 400; color: var(--text-tertiary); margin-left: 5px; }
+  .sub-divider .sdiv-toggle { font-size:13.2px; color: var(--text-tertiary); transition: transform 0.2s; display: inline-block; }
+  .sub-divider.collapsed .sdiv-toggle { transform: rotate(-90deg); }
+  .sub-section.collapsed { display: none; }
+  #subsec-rx { max-height: 420px; overflow-y: auto; }
+  #subsec-rx::-webkit-scrollbar { width: 5px; }
+  #subsec-rx::-webkit-scrollbar-track { background: transparent; }
+  #subsec-rx::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── 방문 그룹 헤더 ── */
+  .visit-header td {
+    background: var(--bg-secondary);
+    font-size:14.4px; font-weight: 600; color: var(--text-secondary);
+    padding: 6px 10px;
+    border-top: 1px solid var(--border);
+  }
+  .visit-header:first-child td { border-top: none; }
+  .visit-tag {
+    display: inline-block; font-size:13.2px; font-weight: 400;
+    padding: 1px 6px; border-radius: 10px; margin-left: 6px;
+    background: #e5e7eb; color: #4b5563;
+  }
+  .visit-drug td { font-size:15.6px; padding: 7px 10px; }
+
+  /* ── 투약 이력 필터 ── */
+  .hist-filter {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 10px 14px; border-bottom: 0.5px solid var(--border);
+    background: var(--bg-secondary);
+  }
+  .hist-preset-btn {
+    font-size:14.4px; padding: 4px 10px; border-radius: 20px;
+    border: 0.5px solid var(--border-md); background: #fff; cursor: pointer;
+    color: var(--text-secondary); transition: all 0.15s;
+  }
+  .hist-preset-btn.active { background: var(--bg-info); color: var(--text-info); border-color: #B5D4F4; font-weight: 600; }
+  .hist-date-sep { font-size:14.4px; color: var(--text-tertiary); }
+  .hist-date-input {
+    font-size:14.4px; padding: 4px 8px; border-radius: 6px;
+    border: 0.5px solid var(--border-md); background: #fff; cursor: pointer;
+    color: var(--text-primary); font-family: inherit;
+  }
+  .hist-apply-btn {
+    font-size:14.4px; padding: 4px 12px; border-radius: 6px;
+    border: none; background: var(--bg-info); color: var(--text-info);
+    cursor: pointer; font-weight: 600; transition: background 0.15s;
+  }
+  .hist-apply-btn:hover { background: #d0e8f8; }
+  .hist-result-info {
+    margin-left: auto; font-size:14.4px; color: var(--text-tertiary); white-space: nowrap;
+  }
+
+  /* ── FLAG CARDS ── */
+  .fcard-body { display: flex; flex-direction: column; gap: 8px; }
+  .fcard { border-radius: var(--radius-md); border: 1px solid var(--border); border-left-width: 4px; overflow: hidden; background: #fff; }
+
+  /* HIGH — 빨강 강조 유지 */
+  .fcard.r { border-left-color: #E24B4A; }
+  .fcard.r .fcard-header { background: #fdf5f5; padding: 8px 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+  .fcard.r .fcard-items { padding: 10px 12px; display: flex; flex-direction: column; gap: 10px; }
+
+  /* MEDIUM — 회색 */
+  .fcard.y { border-left-color: #9ca3af; }
+  .fcard.y .fcard-header { background: var(--bg-secondary); padding: 8px 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+  .fcard.y .fcard-items { padding: 0 12px; display: flex; flex-direction: column; }
+
+  /* LOW — 회색 */
+  .fcard.g { border-left-color: #9ca3af; }
+  .fcard.g .fcard-header { background: var(--bg-secondary); padding: 7px 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+  .fcard.g .fcard-items { padding: 8px 12px; display: flex; flex-direction: column; gap: 5px; }
+
+  .flevel { font-size:15.6px; font-weight: 700; letter-spacing: -0.01em; }
+  .flevel.r { color: #A32D2D; }
+  .flevel.y { color: var(--text-secondary); }
+  .flevel.g { color: var(--text-secondary); }
+  .fbadge { font-size:14.4px; font-weight: 600; padding: 2px 8px; border-radius: 99px; margin-left: auto; }
+  .fbadge.r { background: #F7C1C1; color: #A32D2D; }
+  .fbadge.y { background: var(--bg-tertiary); color: var(--text-secondary); }
+  .fbadge.g { background: var(--bg-tertiary); color: var(--text-secondary); }
+
+  /* 아코디언 토글 */
+  .fcard-header { cursor: pointer; user-select: none; }
+  .fcard-header:hover { filter: brightness(0.97); }
+  .ftoggle { font-size:13.2px; color: inherit; opacity: 0.55; margin-left: 6px; transition: transform 0.2s; display: inline-block; transform: rotate(180deg); }
+  .fcard.collapsed .ftoggle { transform: rotate(0deg); }
+  .fcard.collapsed .fcard-items { display: none; }
+  .fcard:not(.collapsed) .fcard-header { border-bottom-width: 1px; }
+  .fcard.collapsed .fcard-header { border-bottom: none; }
+
+  /* HIGH 아이템 */
+  .fitem-r { display: flex; flex-direction: column; gap: 3px; }
+  .fitem-r .fdrug { font-size:18px; font-weight: 700; color: #1a1a1a; margin: 0; }
+  .fitem-r .fdesc { font-size:15.6px; color: #6b3a3a; line-height: 1.55; }
+
+  /* MEDIUM 아이템 */
+  .fitem-y { padding: 9px 0; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 3px; }
+  .fitem-y:last-child { border-bottom: none; }
+  .fitem-y .fnum { font-size:14.4px; font-weight: 700; color: var(--text-tertiary); margin-bottom: 1px; }
+  .fitem-y .fdrug { font-size:16.8px; font-weight: 600; color: #1a1a1a; margin: 0; }
+  .fitem-y .fdesc { font-size:15.6px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* LOW 아이템 */
+  .fitem-g { display: flex; align-items: center; gap: 6px; font-size:15.6px; color: #374151; }
+  .fitem-g::before { content: '·'; color: var(--text-tertiary); font-weight: 900; font-size:16.8px; flex-shrink: 0; }
+
+  .fcheck { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size:13.2px; color: var(--text-secondary); }
+  .fcheck input { accent-color: #185FA5; cursor: pointer; }
+  .finner-divider { margin: 8px 0; padding-top: 8px; border-top: 0.5px solid var(--border); }
+
+  /* ── CHECKLIST ITEMS ── */
+  .cl-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 7px 9px;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    margin-bottom: 6px;
+  }
+  .cl-item:last-child { margin-bottom: 0; }
+  .cl-item.warn { background: #FAEEDA; border-color: #FAC775; }
+  .cl-item input[type="checkbox"] { margin-top: 2px; accent-color: #185FA5; cursor: pointer; flex-shrink: 0; }
+  .cl-label { font-size:16.8px; line-height: 1.5; }
+  .cl-sub { font-size:14.4px; color: var(--text-tertiary); margin-top: 2px; }
+  .cl-sub.warn { color: #633806; }
+  input.inline-inp {
+    border: none; border-bottom: 0.5px solid var(--border-md);
+    background: transparent; font-size:13.2px; width: 55px; padding: 0 2px;
+  }
+
+  /* ── PRE-STUDY ── */
+  .prestudy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .psc { border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 9px 11px; }
+  .psg { font-size:14.4px; font-weight: 500; color: var(--text-tertiary); margin-bottom: 5px; letter-spacing: 0.03em; }
+  .psa { font-size:15.6px; line-height: 1.6; }
+  .psa-hi { color: #A32D2D; font-weight: 500; }
+
+  /* ── MISC ── */
+  .memo {
+    width: 100%; min-height: 62px;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 7px 9px; font-size:16.8px;
+    background: var(--bg-secondary);
+    resize: vertical;
+    font-family: inherit; line-height: 1.5;
+    color: var(--text-primary);
+  }
+  .memo::placeholder { color: var(--text-tertiary); }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .info-note {
+    margin-top: 8px; padding: 6px 9px;
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    font-size:15.6px; color: var(--text-tertiary);
+  }
+  input[type="text"] {
+    width: 100%; padding: 6px 8px; font-size:15.6px;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    font-family: inherit; color: var(--text-primary);
+  }
+  input[type="text"]:focus { outline: none; border-color: #185FA5; }
+
+  @media (max-width: 900px) {
+    .fcard-body { flex-direction: column; }
+    .row3 { grid-template-columns: 1fr; }
+    .prof-grid { grid-template-columns: repeat(2, 1fr); }
+    .prestudy-grid { grid-template-columns: 1fr; }
+    .topbar { flex-wrap: wrap; gap: 8px; }
+    .topbar-l { flex-wrap: wrap; }
+    .meta { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .prof-grid { grid-template-columns: 1fr 1fr; }
+    .row2 { grid-template-columns: 1fr; }
+    .topbar { padding: 10px 12px; }
+    .section-full { padding: 0 8px; }
+    .main-wrap { padding: 0 8px 16px; }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- ── TOP BAR ── -->
+<div class="topbar">
+  <div class="topbar-l">
+    <span class="topbar-title"><i class="ti ti-clipboard-text" style="font-size:18px;margin-right:5px;vertical-align:-2px"></i>다제약물관리사업 상담 기록지</span>
+    <span class="pill pill-blue">1회차 / 4회</span>
+  </div>
+  <div class="topbar-r">
+    <span class="meta">P-2025-0042 &nbsp;·&nbsp; 2025. 06. 03 오전 10:00 &nbsp;·&nbsp; 홍○○ 약사</span>
+  </div>
+</div>
+
+
+<!-- ── S2 대상자 기본 프로파일 (FULL WIDTH) ── -->
+<div style="padding:6px 16px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14.4px;color:var(--text-secondary);background:var(--bg-page)">
+  <i class="ti ti-user" style="font-size:14.4px;color:var(--text-tertiary)"></i>
+  <span><span style="color:var(--text-tertiary);margin-right:3px">연령·성별</span><span style="color:var(--text-primary);font-weight:600">만 72세 · 여성</span></span>
+  <span style="color:var(--border)">|</span>
+  <span><span style="color:var(--text-tertiary);margin-right:3px">거주 형태</span><span style="color:#C05621;font-weight:600">독거</span></span>
+  <span style="color:var(--border)">|</span>
+  <span><span style="color:var(--text-tertiary);margin-right:3px">인지 기능</span><span style="color:#C05621;font-weight:600">경도 저하 의심</span></span>
+  <span style="color:var(--border)">|</span>
+  <span><span style="color:var(--text-tertiary);margin-right:3px">참여 회차</span><span style="color:var(--text-primary);font-weight:600">1회차 (첫 상담)</span></span>
+  <span style="color:var(--border)">|</span>
+  <span style="display:flex;align-items:center;gap:4px"><span style="color:var(--text-tertiary);margin-right:2px">만성질환</span><span class="tag">고혈압</span><span class="tag">2형 당뇨</span><span class="tag">골다공증</span><span class="tag">불면증</span><span class="tag">이상지질혈증</span></span>
+  <span style="color:var(--border)">|</span>
+  <span style="color:#92622A"><i class="ti ti-alert-triangle" style="font-size:13.2px;margin-right:2px"></i>독거 + 인지기능 저하 의심 — 보관·순응도 집중 확인</span>
+</div>
+
+<!-- ── 검토 필요 ── -->
+<div class="section-full">
+  <div class="card card-highlight">
+    <div class="card-head" style="border-bottom:1px solid var(--border)">
+      <div class="card-head-l">
+        <i class="ti ti-alert-circle" style="font-size:18px;color:#E24B4A"></i>
+        <span class="card-label" style="font-weight:800;color:#E24B4A">꼭 확인하세요!</span>
+      </div>
+      <span style="font-size:14.4px;color:var(--text-secondary)"><i class="ti ti-robot" style="font-size:14.4px;margin-right:4px"></i>AI 분석 결과 · <strong>공단 자료와 대조 후 최종 판단</strong>하세요</span>
+    </div>
+    <div id="flags-container" class="card-body fcard-body" style="padding:12px 14px;gap:8px"></div>
+  </div>
+</div>
+
+<!-- ── MAIN LAYOUT ── -->
+<div class="main-wrap">
+
+  <!-- S3 투약 현황 (FULL WIDTH) -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-head-l">
+        <i class="ti ti-pill" style="font-size:16.8px;color:#9a9994"></i>
+        <span class="card-label">투약 현황</span>
+</div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <span id="rx-count-pill" class="pill pill-gray">처방 10종</span>
+        <span id="otc-count-pill" class="pill pill-gray">일반의약품 2종</span>
+        <span id="supp-count-pill" class="pill pill-gray">건기식 4종</span>
+        <button id="edit-btn" class="btn" onclick="startEdit()" style="padding:5px 11px"><i class="ti ti-pencil" style="font-size:15.6px"></i> 수정</button>
+        <button id="save-btn" class="btn btn-send" onclick="saveEdit()" style="display:none;padding:5px 11px"><i class="ti ti-device-floppy" style="font-size:15.6px"></i> 저장</button>
+        <button id="cancel-btn" class="btn" onclick="cancelEdit()" style="display:none;padding:5px 11px">취소</button>
+      </div>
+    </div>
+    <div class="hist-filter" id="rx-filter">
+      <button class="hist-preset-btn" onclick="setRxPreset(1,event)">1개월</button>
+      <button class="hist-preset-btn active" id="rx-preset-3" onclick="setRxPreset(3,event)">3개월</button>
+      <button class="hist-preset-btn" onclick="setRxPreset(6,event)">6개월</button>
+      <span class="hist-date-sep" style="margin-left:4px">|</span>
+      <input type="date" id="rx-from" class="hist-date-input">
+      <span class="hist-date-sep">~</span>
+      <input type="date" id="rx-to" class="hist-date-input">
+      <button class="hist-apply-btn" onclick="applyRxFilter()">조회</button>
+      <span id="rx-filter-info" class="hist-result-info"></span>
+    </div>
+    <div class="card-body" style="padding:0 0 0 0">
+      <span class="sub-divider" id="sdiv-rx" onclick="toggleSubSection('rx')">
+        <span>처방 의약품 <span id="rx-sub-count" style="color:var(--text-tertiary);font-weight:400"></span></span>
+        <span class="sdiv-toggle">▼</span>
+      </span>
+      <div id="subsec-rx" class="sub-section">
+        <table class="dtable" id="rx-table">
+          <colgroup>
+            <col style="width:30%"><col style="width:14%"><col style="width:9%"><col style="width:47%">
+          </colgroup>
+          <thead>
+            <tr><th>약품명</th><th>약효군</th><th>일수</th><th>검토 사항</th></tr>
+          </thead>
+          <tbody id="rx-tbody"></tbody>
+        </table>
+      </div>
+
+      <span class="sub-divider collapsed" id="sdiv-otc" onclick="toggleSubSection('otc')">
+        <span>자가 복용 일반의약품 <span id="otc-sub-count" style="color:var(--text-tertiary);font-weight:400"></span></span>
+        <span class="sdiv-toggle">▼</span>
+      </span>
+      <div id="subsec-otc" class="sub-section collapsed">
+        <table class="dtable" id="otc-table">
+          <colgroup id="otc-colgroup">
+            <col style="width:22%"><col style="width:30%"><col style="width:48%">
+          </colgroup>
+          <thead id="otc-thead">
+            <tr><th>제품명</th><th>주요 성분</th><th>검토 사항</th></tr>
+          </thead>
+          <tbody id="otc-tbody"></tbody>
+        </table>
+        <div id="otc-add-row" style="display:none;padding:6px 14px;border-top:0.5px solid var(--border)">
+          <button class="btn" onclick="addOtcRow()" style="font-size:13.2px;padding:4px 10px"><i class="ti ti-plus" style="font-size:13.2px"></i> 일반의약품 추가</button>
+        </div>
+      </div>
+
+      <span class="sub-divider collapsed" id="sdiv-supp" onclick="toggleSubSection('supp')">
+        <span>자가 복용 건강기능식품 <span id="supp-sub-count" style="color:var(--text-tertiary);font-weight:400"></span></span>
+        <span class="sdiv-toggle">▼</span>
+      </span>
+      <div id="subsec-supp" class="sub-section collapsed">
+        <table class="dtable" id="supp-table">
+          <colgroup id="supp-colgroup">
+            <col style="width:22%"><col style="width:30%"><col style="width:48%">
+          </colgroup>
+          <thead id="supp-thead">
+            <tr><th>제품명</th><th>주요 성분</th><th>검토 사항</th></tr>
+          </thead>
+          <tbody id="supp-tbody"></tbody>
+        </table>
+        <div id="supp-add-row" style="display:none;padding:6px 14px;border-top:0.5px solid var(--border)">
+          <button class="btn" onclick="addSuppRow()" style="font-size:13.2px;padding:4px 10px"><i class="ti ti-plus" style="font-size:13.2px"></i> 영양제 추가</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S6 | S7 | S8 3컬럼 -->
+  <div class="row3">
+
+    <!-- S6 복약순응도 -->
+    <div class="card" style="border-right:1px solid var(--border)">
+      <div class="card-head">
+        <div class="card-head-l">
+          <i class="ti ti-checkbox" style="font-size:16.8px;color:#9a9994"></i>
+          <span class="card-label">복약순응도</span>
+	  <span class="prestudy-notice">대상자가 앱에서 사전 입력한 값입니다. 공단에서 제공한 자료와 대조 검토가 필요합니다.</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="cl-item warn">
+          <input type="checkbox" id="c1">
+          <div><div class="cl-label">정해진 시간에 복용하고 있음</div><div class="cl-sub warn">사전입력: 1~2일/주 잊음 확인됨</div></div>
+        </div>
+        <div class="cl-item warn">
+          <input type="checkbox" id="c2" checked>
+          <div><div class="cl-label">복용 잊은 적 있음</div><div class="cl-sub warn">사전입력 체크 &nbsp;횟수: <input class="inline-inp" placeholder="__회"> &nbsp;잊은 약: <input class="inline-inp" style="width:80px" placeholder="약 이름"></div></div>
+        </div>
+        <div class="cl-item">
+          <input type="checkbox" id="c3">
+          <div><div class="cl-label">스스로 줄이거나 끊은 약 있음</div><div class="cl-sub">해당 약: <input class="inline-inp" style="width:110px" placeholder="약 이름"></div></div>
+        </div>
+        <div class="cl-item warn">
+          <input type="checkbox" id="c4" checked>
+          <div><div class="cl-label">복용 후 어지럽거나 속 불편함</div><div class="cl-sub warn">사전입력: 어지러움·졸림 체크됨</div></div>
+        </div>
+        <div class="cl-item warn">
+          <input type="checkbox" id="c5" checked>
+          <div><div class="cl-label">복용 시간·방법이 복잡하다고 느낌</div><div class="cl-sub warn">사전입력 체크됨</div></div>
+        </div>
+        </div>
+    </div>
+
+    <!-- S7 이상반응 -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-l">
+          <i class="ti ti-stethoscope" style="font-size:16.8px;color:#9a9994"></i>
+          <span class="card-label">이상반응 스크리닝</span>
+	  <span class="prestudy-notice">대상자가 앱에서 사전 입력한 값입니다. 공단에서 제공한 자료와 대조 검토가 필요합니다.</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="cl-item warn">
+          <input type="checkbox" id="r1" checked>
+          <div><div class="cl-label">어지러움·기립 시 휘청거림 <span style="font-size:12px;color:#854F0B">(사전입력 ✓)</span></div><div class="cl-sub">연관 가능: 암로디핀, 졸피뎀·트리아졸람 잔류 진정</div></div>
+        </div>
+        <div class="cl-item warn">
+          <input type="checkbox" id="r2" checked>
+          <div><div class="cl-label">평소보다 많이 졸림 <span style="font-size:12px;color:#854F0B">(사전입력 ✓)</span></div><div class="cl-sub">연관 가능: 벤조계 3종 중복</div></div>
+        </div>
+        <div class="cl-item">
+          <input type="checkbox" id="r3">
+          <div><div class="cl-label">속쓰림·소화불량</div><div class="cl-sub">연관 가능: 알렌드로네이트, 메트포르민</div></div>
+        </div>
+        <div class="cl-item">
+          <input type="checkbox" id="r4">
+          <div><div class="cl-label">근육통·몸 무거움</div><div class="cl-sub">연관 가능: 로수바스타틴 (근병증 가능성)</div></div>
+        </div>
+        <div style="margin:8px 0 6px;font-size:13.2px;font-weight:500;color:var(--text-secondary)">낙상 위험 간이 평가</div>
+        <div class="cl-item"><input type="checkbox" id="fall1"><div class="cl-label">최근 6개월 낙상 경험</div></div>
+        <div class="cl-item" style="margin-top:6px"><input type="checkbox" id="fall2"><div class="cl-label">야간 화장실 이동 빈도 높음</div></div>
+        <div id="fall-risk-note" class="info-note"><i class="ti ti-info-circle" style="font-size:14.4px;margin-right:3px;vertical-align:-1px"></i>낙상 고위험 약물 현재 <strong>4종</strong> — 졸피뎀, 트리아졸람, 알프라졸람, 암로디핀</div>
+      </div>
+    </div>
+
+    </div><!-- /row3 -->
+
+</div><!-- /main-wrap -->
+
+<script>
+// ── 데이터 ──
+let rxDrugs = [
+  { name: '암로디핀 5mg',      source: 'A내과',    usage: '1일 1회 아침',     date: '25.05.01' },
+  { name: '메트포르민 500mg',  source: 'A내과',    usage: '1일 2회 식후',     date: '25.05.01' },
+  { name: '글리메피리드 2mg',  source: 'A내과',    usage: '1일 1회 아침 식전',date: '25.05.01' },
+  { name: '알렌드로네이트 70mg',source: 'B정형외과',usage: '주 1회 기상 직후', date: '25.04.15' },
+  { name: '졸피뎀 10mg',       source: 'C신경과',  usage: '1일 1회 취침 전',  date: '25.05.10' },
+  { name: '트리아졸람 0.25mg', source: 'A내과',    usage: '1일 1회 취침 전',  date: '25.04.20' },
+  { name: '로수바스타틴 10mg', source: 'A내과',    usage: '1일 1회 저녁',     date: '25.05.01' },
+  { name: '에소메프라졸 20mg', source: 'A내과',    usage: '1일 1회 식전',     date: '25.05.01' },
+  { name: '칼슘+비타민D',      source: 'B정형외과',usage: '1일 2회',          date: '25.04.15' },
+  { name: '알프라졸람 0.25mg', source: 'C신경과',  usage: '필요시',           date: '25.05.10' },
+];
+let suppDrugs = [
+  { name: '오메가 3',      ingredient: 'EPA/DHA'           },
+  { name: '홍삼',          ingredient: '홍삼 농축액'        },
+  { name: '비타민 C',      ingredient: '아스코르브산 1000mg'},
+  { name: '미네랄 Ca·Mg', ingredient: 'Mg oxide 250mg'    },
+];
+let otcDrugs = [
+  { name: '타이레놀 500mg', ingredient: '아세트아미노펜' },
+  { name: '판피린큐액',     ingredient: '복합감기약'     },
+];
+
+// ── 진료내역 (공단 API 구조: 방문 > 투약내역) ──
+const rxVisits = [
+  { date: '2025-05-10', institution: 'C신경과', type: '처방조제',
+    drugs: [
+      { name: '졸피뎀 10mg',       indication: '수면진정제', days: 30 },
+      { name: '알프라졸람 0.25mg', indication: '항불안제',   days: 30 },
+    ]
+  },
+  { date: '2025-05-01', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '암로디핀 5mg',      indication: '혈압강하제',    days: 30 },
+      { name: '메트포르민 500mg',  indication: '항당뇨제',      days: 30 },
+      { name: '글리메피리드 2mg',  indication: '항당뇨제',      days: 30 },
+      { name: '로수바스타틴 10mg', indication: '지질강하제',    days: 30 },
+      { name: '에소메프라졸 20mg', indication: '위산분비억제제',days: 30 },
+    ]
+  },
+  { date: '2025-04-20', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '트리아졸람 0.25mg', indication: '수면진정제', days: 30 },
+    ]
+  },
+  { date: '2025-04-15', institution: 'B정형외과', type: '처방조제',
+    drugs: [
+      { name: '알렌드로네이트 70mg', indication: '골다공증치료제', days: 90 },
+      { name: '칼슘+비타민D',        indication: '무기질보충제',   days: 90 },
+    ]
+  },
+  { date: '2025-03-10', institution: 'C신경과', type: '처방조제',
+    drugs: [
+      { name: '졸피뎀 10mg', indication: '수면진정제', days: 30 },
+    ]
+  },
+  { date: '2025-03-05', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '암로디핀 5mg',      indication: '혈압강하제',    days: 30 },
+      { name: '메트포르민 500mg',  indication: '항당뇨제',      days: 30 },
+      { name: '글리메피리드 2mg',  indication: '항당뇨제',      days: 30 },
+      { name: '로수바스타틴 10mg', indication: '지질강하제',    days: 30 },
+      { name: '에소메프라졸 20mg', indication: '위산분비억제제',days: 30 },
+    ]
+  },
+  { date: '2025-02-08', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '트리아졸람 0.25mg', indication: '수면진정제', days: 30 },
+      { name: '암로디핀 5mg',      indication: '혈압강하제', days: 30 },
+      { name: '메트포르민 500mg',  indication: '항당뇨제',   days: 30 },
+      { name: '글리메피리드 2mg',  indication: '항당뇨제',   days: 30 },
+      { name: '로수바스타틴 10mg', indication: '지질강하제', days: 30 },
+    ]
+  },
+  { date: '2025-01-15', institution: 'B정형외과', type: '처방조제',
+    drugs: [
+      { name: '알렌드로네이트 70mg', indication: '골다공증치료제', days: 90 },
+      { name: '칼슘+비타민D',        indication: '무기질보충제',   days: 90 },
+    ]
+  },
+  { date: '2025-01-10', institution: 'C신경과', type: '처방조제',
+    drugs: [
+      { name: '졸피뎀 10mg', indication: '수면진정제', days: 30 },
+    ]
+  },
+  { date: '2025-01-08', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '암로디핀 5mg',     indication: '혈압강하제', days: 30 },
+      { name: '메트포르민 500mg', indication: '항당뇨제',   days: 30 },
+    ]
+  },
+  { date: '2024-12-20', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '트리아졸람 0.25mg', indication: '수면진정제', days: 30 },
+      { name: '암로디핀 5mg',      indication: '혈압강하제', days: 30 },
+      { name: '메트포르민 500mg',  indication: '항당뇨제',   days: 30 },
+      { name: '로수바스타틴 10mg', indication: '지질강하제', days: 30 },
+    ]
+  },
+  { date: '2024-11-12', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '암로디핀 5mg',     indication: '혈압강하제', days: 30 },
+      { name: '메트포르민 500mg', indication: '항당뇨제',   days: 30 },
+    ]
+  },
+  { date: '2024-11-05', institution: 'C신경과', type: '처방조제',
+    drugs: [
+      { name: '졸피뎀 10mg', indication: '수면진정제', days: 30 },
+    ]
+  },
+  { date: '2024-10-15', institution: 'B정형외과', type: '처방조제',
+    drugs: [
+      { name: '알렌드로네이트 70mg', indication: '골다공증치료제', days: 90 },
+      { name: '칼슘+비타민D',        indication: '무기질보충제',   days: 90 },
+    ]
+  },
+  { date: '2024-10-10', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '암로디핀 5mg',      indication: '혈압강하제', days: 30 },
+      { name: '메트포르민 500mg',  indication: '항당뇨제',   days: 30 },
+      { name: '로수바스타틴 10mg', indication: '지질강하제', days: 30 },
+    ]
+  },
+  { date: '2024-09-09', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '암로디핀 5mg',      indication: '혈압강하제', days: 30 },
+      { name: '메트포르민 500mg',  indication: '항당뇨제',   days: 30 },
+      { name: '글리메피리드 2mg',  indication: '항당뇨제',   days: 30 },
+      { name: '로수바스타틴 10mg', indication: '지질강하제', days: 30 },
+    ]
+  },
+  { date: '2024-08-12', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '암로디핀 5mg',     indication: '혈압강하제', days: 30 },
+      { name: '메트포르민 500mg', indication: '항당뇨제',   days: 30 },
+      { name: '글리메피리드 2mg', indication: '항당뇨제',   days: 30 },
+    ]
+  },
+  { date: '2024-07-15', institution: 'B정형외과', type: '처방조제',
+    drugs: [
+      { name: '알렌드로네이트 70mg', indication: '골다공증치료제', days: 90 },
+      { name: '칼슘+비타민D',        indication: '무기질보충제',   days: 90 },
+    ]
+  },
+  { date: '2024-07-10', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '암로디핀 5mg',     indication: '혈압강하제', days: 30 },
+      { name: '메트포르민 500mg', indication: '항당뇨제',   days: 30 },
+    ]
+  },
+  { date: '2024-06-10', institution: 'A내과', type: '처방조제',
+    drugs: [
+      { name: '암로디핀 5mg',      indication: '혈압강하제', days: 30 },
+      { name: '메트포르민 500mg',  indication: '항당뇨제',   days: 30 },
+      { name: '로수바스타틴 10mg', indication: '지질강하제', days: 30 },
+    ]
+  },
+];
+
+// 규칙엔진용: 가장 최근 방문 기준으로 약품 중복 제거한 현재 복용 목록
+function deriveRxDrugs(visits) {
+  const seen = new Set();
+  const result = [];
+  for (const v of visits) {
+    for (const d of v.drugs) {
+      if (!seen.has(d.name)) {
+        seen.add(d.name);
+        result.push({ name: d.name, source: v.institution, usage: '', date: v.date.slice(2).replace(/-/g,'.') });
+      }
+    }
+  }
+  return result;
+}
+
+let editMode = false;
+let otcBackup = null, suppBackup = null;
+
+// 현재 필터 기준 방문 목록 (renderRxTable이 갱신)
+let filteredVisits = [];
+
+// ── 규칙 엔진 ──
+const SLEEP_KEYS  = ['졸피뎀','트리아졸람','알프라졸람','에스조피클론','클로나제팜','디아제팜','로라제팜','미다졸람','니트라제팜'];
+const FALL_KEYS   = ['졸피뎀','트리아졸람','알프라졸람','암로디핀','클로나제팜','디아제팜','로라제팜'];
+const ANTIPLATELET= ['오메가3','epa','dha'];
+
+function has(list, ...keys) { return list.some(n => keys.some(k => n.includes(k))); }
+function findDrugs(list, keys) { return list.filter(d => keys.some(k => d.name.includes(k))); }
+
+function runRules(rx, supp, otc = []) {
+  const rxN  = rx.map(d => d.name);
+  const otcN  = otc.map(d => (d.name + ' ' + (d.ingredient||'')).toLowerCase());
+  const suppN = [...supp, ...otc].map(d => (d.name + ' ' + (d.ingredient||'')).toLowerCase());
+
+  const high = [], medium = [], low = [];
+
+  // HIGH: 수면제·진정제 중복
+  const sleepFound = findDrugs(rx, SLEEP_KEYS);
+  if (sleepFound.length >= 2) {
+    high.push({
+      drug: sleepFound.map(d => d.name).join(' + '),
+      desc: `동일 계열 수면제·진정제 ${sleepFound.length}종 동시 처방. 처방 기관 간 소통 여부 미확인. 낙상 고위험.`
+    });
+  }
+
+  // MEDIUM: 알렌드로네이트 + 칼슘
+  const hasAlend = has(rxN, '알렌드로네이트');
+  const hasCaRx  = has(rxN, '칼슘');
+  if (hasAlend && hasCaRx) {
+    medium.push({ drug: '알렌드로네이트 + 칼슘제 복용 간격', desc: '동시 복용 시 흡수 저하. 30분 간격 교육.' });
+  }
+
+  // MEDIUM: 오메가3/홍삼 항혈전
+  const hasOmega3  = suppN.some(n => ANTIPLATELET.some(k => n.includes(k)));
+  const hasHongsam = suppN.some(n => n.includes('홍삼'));
+  if (hasOmega3 || hasHongsam) {
+    const drugs = [hasOmega3 ? '오메가3' : null, hasHongsam ? '홍삼' : null].filter(Boolean).join(' + ');
+    medium.push({ drug: drugs + ' 자가 복용', desc: '항혈전·혈소판 관련 병용 가능성. 용량 확인.' });
+  }
+
+  // MEDIUM: 칼슘(처방) + 마그네슘(자가) 중복
+  const hasMg = suppN.some(n => n.includes('마그네슘') || n.includes('mg oxide'));
+  if (hasCaRx && hasMg) {
+    medium.push({ drug: '칼슘(처방) + 마그네슘(자가) 중복', desc: '합산 용량 및 신장 기능 이슈 확인.' });
+  }
+
+  // LOW
+  if (findDrugs(rx, SLEEP_KEYS).length > 0) low.push({ drug: '수면제·진정제 잠금 보관 여부 확인' });
+  if (supp.length > 0)                       low.push({ drug: '영양제 유통기한·보관 상태 점검' });
+  low.push({ drug: '폐의약품 수거 안내' });
+
+  return { high, medium, low };
+}
+
+function computeDrugNotes(rx, supp, otc = []) {
+  const notes = {};
+  const suppN = [...supp, ...otc].map(d => (d.name + ' ' + (d.ingredient||'')).toLowerCase());
+
+  // 수면제 중복
+  const sleepFound = findDrugs(rx, SLEEP_KEYS);
+  if (sleepFound.length >= 2) {
+    sleepFound.forEach(d => {
+      notes[d.name] = d.name.includes('알프라졸람')
+        ? { level: 'r', text: '🔴 벤조계 ' + sleepFound.length + '종 병용 — 낙상 고위험' }
+        : { level: 'r', text: '🔴 동일계열 수면제 중복 — 의사 전달 필요' };
+    });
+  }
+
+  rx.forEach(d => {
+    if (d.name.includes('암로디핀'))      notes[d.name] = notes[d.name] || { level: 'y', text: '낙상 위험 — 기립성 어지러움 확인' };
+    if (d.name.includes('글리메피리드'))  notes[d.name] = notes[d.name] || { level: 'y', text: '저혈당 위험 — 식사 패턴 확인 필요' };
+    if (d.name.includes('알렌드로네이트'))notes[d.name] = notes[d.name] || { level: 'y', text: '복약법 교육 필수 (1회차 목표)' };
+    if (d.name.includes('로수바스타틴'))  notes[d.name] = notes[d.name] || { level: 'y', text: '자몽 섭취 여부 확인 (사전입력: 해당없음)' };
+    const hasMg = suppN.some(n => n.includes('마그네슘') || n.includes('mg oxide'));
+    if (d.name.includes('칼슘') && hasMg) notes[d.name] = notes[d.name] || { level: 'y', text: '영양제 마그네슘 자가 복용 — 합산 용량 확인' };
+  });
+
+  supp.forEach(d => {
+    const n = (d.name + ' ' + (d.ingredient||'')).toLowerCase();
+    if (ANTIPLATELET.some(k => n.includes(k))) notes[d.name] = { level: 'y', text: '항혈전 효과 — 항혈전제 병용 여부 확인' };
+    if (n.includes('홍삼'))      notes[d.name] = { level: 'y', text: '혈소판 기능 영향 가능성 확인' };
+    if (n.includes('마그네슘') || n.includes('mg oxide')) {
+      const hasCaRx = rx.some(d2 => d2.name.includes('칼슘'));
+      if (hasCaRx) notes[d.name] = { level: 'y', text: '처방 칼슘+비타민D와 합산 용량 검토' };
+    }
+  });
+
+  return notes;
+}
+
+// ── 렌더링 ──
+function inp(val, w) {
+  return `<input type="text" value="${esc(val)}" style="width:${w||'100%'};padding:4px 6px;font-size:13.2px;background:#fff">`;
+}
+function esc(s) { return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+function dateToStr(d) { return d.toISOString().slice(0, 10); }
+function parseDateStr(s) { const p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+
+function renderRxTable() {
+  const fromVal = document.getElementById('rx-from').value;
+  const toVal   = document.getElementById('rx-to').value;
+  if (!fromVal || !toVal) return;
+  const from = parseDateStr(fromVal);
+  const to   = parseDateStr(toVal); to.setHours(23,59,59);
+
+  filteredVisits = rxVisits.filter(v => {
+    const d = parseDateStr(v.date); return d >= from && d <= to;
+  });
+
+  // 규칙엔진용 현재 약품 목록 재계산
+  const rxDrugs = deriveRxDrugs(filteredVisits);
+  const notes = computeDrugNotes(rxDrugs, suppDrugs, otcDrugs);
+
+  const tbody = document.getElementById('rx-tbody');
+  const totalDrugs = filteredVisits.reduce((s, v) => s + v.drugs.length, 0);
+
+  if (filteredVisits.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--text-tertiary);padding:18px 0;font-size:15.6px">해당 기간에 청구 내역이 없습니다</td></tr>`;
+  } else {
+    tbody.innerHTML = filteredVisits.map(v => {
+      const dispDate = v.date.slice(2).replace(/-/g,'.');
+      const headerRow = `<tr class="visit-header">
+        <td colspan="4">
+          <span>${dispDate}</span>
+          <span style="margin-left:8px;color:var(--text-secondary)">${esc(v.institution)}</span>
+          <span class="visit-tag">${esc(v.type)}</span>
+          <span class="visit-tag">${v.drugs.length}종</span>
+        </td>
+      </tr>`;
+      const drugRows = v.drugs.map(d => {
+        const note = notes[d.name];
+        const isRed = note && note.level === 'r';
+        const noteHtml = note
+          ? `<span class="flag-${note.level}-txt">${esc(note.text)}</span>`
+          : `<span style="color:#9a9994">—</span>`;
+        return `<tr class="visit-drug${isRed ? ' flag-r' : ''}">
+          <td${isRed ? ' style="font-weight:500"' : ''}>${esc(d.name)}</td>
+          <td style="color:var(--text-tertiary)">${esc(d.indication)}</td>
+          <td>${d.days}일</td>
+          <td>${noteHtml}</td>
+        </tr>`;
+      }).join('');
+      return headerRow + drugRows;
+    }).join('');
+  }
+
+  document.getElementById('rx-sub-count').textContent = `(${filteredVisits.length}회 방문 · ${totalDrugs}건)`;
+  const totalVisits = rxVisits.length;
+  document.getElementById('rx-filter-info').textContent =
+    `${filteredVisits.length}회 방문 표시 / 전체 ${totalVisits}회`;
+
+  // 헤더 뱃지도 최신 상태로
+  const latestRx = deriveRxDrugs(rxVisits);
+  document.getElementById('rx-count-pill').textContent = `처방 ${latestRx.length}종`;
+}
+
+function renderOtcSuppTable() {
+  const notes = computeDrugNotes(deriveRxDrugs(rxVisits), suppDrugs, otcDrugs);
+
+  // 일반의약품
+  const otcTbody = document.getElementById('otc-tbody');
+  if (editMode) {
+    document.getElementById('otc-colgroup').innerHTML = '<col style="width:30%"><col style="width:35%"><col style="width:5%">';
+    document.getElementById('otc-thead').innerHTML = '<tr><th>제품명</th><th>주요 성분</th><th></th></tr>';
+    otcTbody.innerHTML = otcDrugs.map((d, i) => `
+      <tr>
+        <td>${inp(d.name)}</td><td>${inp(d.ingredient)}</td>
+        <td><button onclick="deleteOtcRow(${i})" style="background:none;border:none;cursor:pointer;color:#A32D2D;font-size:16.8px;padding:0 4px">×</button></td>
+      </tr>`).join('');
+  } else {
+    document.getElementById('otc-colgroup').innerHTML = '<col style="width:22%"><col style="width:30%"><col style="width:48%">';
+    document.getElementById('otc-thead').innerHTML = '<tr><th>제품명</th><th>주요 성분</th><th>검토 사항</th></tr>';
+    otcTbody.innerHTML = otcDrugs.map(d => {
+      const note = notes[d.name];
+      return `<tr><td>${esc(d.name)}</td><td>${esc(d.ingredient||'')}</td><td>${note ? `<span class="flag-${note.level}-txt">${esc(note.text)}</span>` : '<span style="color:#9a9994">—</span>'}</td></tr>`;
+    }).join('');
+  }
+
+  // 건기식
+  const suppTbody = document.getElementById('supp-tbody');
+  if (editMode) {
+    document.getElementById('supp-colgroup').innerHTML = '<col style="width:30%"><col style="width:35%"><col style="width:5%">';
+    document.getElementById('supp-thead').innerHTML = '<tr><th>제품명</th><th>주요 성분</th><th></th></tr>';
+    suppTbody.innerHTML = suppDrugs.map((d, i) => `
+      <tr>
+        <td>${inp(d.name)}</td><td>${inp(d.ingredient)}</td>
+        <td><button onclick="deleteSuppRow(${i})" style="background:none;border:none;cursor:pointer;color:#A32D2D;font-size:16.8px;padding:0 4px">×</button></td>
+      </tr>`).join('');
+  } else {
+    document.getElementById('supp-colgroup').innerHTML = '<col style="width:22%"><col style="width:30%"><col style="width:48%">';
+    document.getElementById('supp-thead').innerHTML = '<tr><th>제품명</th><th>주요 성분</th><th>검토 사항</th></tr>';
+    suppTbody.innerHTML = suppDrugs.map(d => {
+      const note = notes[d.name];
+      return `<tr><td>${esc(d.name)}</td><td>${esc(d.ingredient||'')}</td><td>${note ? `<span class="flag-${note.level}-txt">${esc(note.text)}</span>` : '<span style="color:#9a9994">—</span>'}</td></tr>`;
+    }).join('');
+  }
+
+  document.getElementById('otc-add-row').style.display  = editMode ? '' : 'none';
+  document.getElementById('supp-add-row').style.display = editMode ? '' : 'none';
+  document.getElementById('otc-sub-count').textContent  = `(${otcDrugs.length}종)`;
+  document.getElementById('supp-sub-count').textContent = `(${suppDrugs.length}종)`;
+}
+
+function renderMedTable() { renderRxTable(); renderOtcSuppTable(); }
+
+function renderFlags() {
+  const rxDrugs = deriveRxDrugs(rxVisits);
+  const flags = runRules(rxDrugs, suppDrugs, otcDrugs);
+  const container = document.getElementById('flags-container');
+
+  const highHtml = flags.high.length
+    ? `<div class="fcard r">
+        <div class="fcard-header">
+          <span class="dot dot-r" style="width:9px;height:9px"></span>
+          <span class="flevel r">긴급 — 반드시 확인</span>
+          <span class="fbadge r">${flags.high.length}건</span>
+          <span class="ftoggle">▼</span>
+        </div>
+        <div class="fcard-items">
+          ${flags.high.map(f => `
+            <div class="fitem-r">
+              <div class="fdrug">⚠ ${esc(f.drug)}</div>
+              <div class="fdesc">${esc(f.desc)}</div>
+            </div>`).join('')}
+        </div>
+      </div>`
+    : '';
+
+  const medHtml = flags.medium.length
+    ? `<div class="fcard y">
+        <div class="fcard-header">
+          <span class="dot dot-y" style="width:9px;height:9px"></span>
+          <span class="flevel y">주의 — 상담 중 확인</span>
+          <span class="fbadge y">${flags.medium.length}건</span>
+          <span class="ftoggle">▼</span>
+        </div>
+        <div class="fcard-items">
+          ${flags.medium.map((f, i) => `
+            <div class="fitem-y" style="display:flex;gap:10px;align-items:flex-start">
+              <input type="checkbox" style="margin-top:5px;flex-shrink:0;accent-color:#EF9F27;width:15px;height:15px;cursor:pointer">
+              <div>
+                <div class="fnum">${i + 1}번</div>
+                <div class="fdrug">${esc(f.drug)}</div>
+                <div class="fdesc">${esc(f.desc)}</div>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>`
+    : '';
+
+  const lowHtml = flags.low.length
+    ? `<div class="fcard g">
+        <div class="fcard-header">
+          <span class="dot dot-g" style="width:9px;height:9px"></span>
+          <span class="flevel g">안내 — 교육 권장</span>
+          <span class="fbadge g">${flags.low.length}건</span>
+          <span class="ftoggle">▼</span>
+        </div>
+        <div class="fcard-items">
+          ${flags.low.map(f => `
+            <div class="fitem-g" style="display:flex;gap:8px;align-items:flex-start;padding:3px 0">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:#639922;width:13px;height:13px;cursor:pointer">
+              <span>${esc(f.drug)}</span>
+            </div>`).join('')}
+        </div>
+      </div>`
+    : '';
+
+  container.innerHTML = highHtml + medHtml + lowHtml ||
+    '<div style="padding:8px 0;color:var(--text-tertiary);font-size:14.4px">검토 필요 항목 없음</div>';
+
+  // 아코디언: MEDIUM·LOW 기본 접힘, HIGH 펼침
+  container.querySelectorAll('.fcard.y, .fcard.g').forEach(card => card.classList.add('collapsed'));
+  container.querySelectorAll('.fcard-header').forEach(header => {
+    header.addEventListener('click', () => header.closest('.fcard').classList.toggle('collapsed'));
+  });
+
+  // 상단 뱃지 업데이트
+  document.getElementById('pill-high').textContent = `🔴 긴급 ${flags.high.length}건`;
+  document.getElementById('pill-med').textContent  = `🟡 확인 ${flags.medium.length}건`;
+  document.getElementById('pill-low').textContent  = `🟢 교육 ${flags.low.length}건`;
+  document.getElementById('pill-high').style.display = flags.high.length   ? '' : 'none';
+  document.getElementById('pill-med').style.display  = flags.medium.length ? '' : 'none';
+  document.getElementById('pill-low').style.display  = flags.low.length    ? '' : 'none';
+
+  // 투약 수 뱃지
+  document.getElementById('otc-count-pill').textContent  = `일반의약품 ${otcDrugs.length}종`;
+  document.getElementById('supp-count-pill').textContent = `건기식 ${suppDrugs.length}종`;
+
+  // 낙상 고위험 약물 메모 업데이트
+  const fallDrugs = rxDrugs.filter(d => FALL_KEYS.some(k => d.name.includes(k)));
+  const fallNote = document.getElementById('fall-risk-note');
+  if (fallDrugs.length > 0) {
+    fallNote.innerHTML = `<i class="ti ti-info-circle" style="font-size:14.4px;margin-right:3px;vertical-align:-1px"></i>낙상 고위험 약물 현재 <strong>${fallDrugs.length}종</strong> — ${fallDrugs.map(d => d.name).join(', ')}`;
+  } else {
+    fallNote.innerHTML = `<i class="ti ti-info-circle" style="font-size:14.4px;margin-right:3px;vertical-align:-1px"></i>현재 낙상 고위험 약물 없음`;
+  }
+}
+
+function renderAll() { renderMedTable(); renderFlags(); }
+
+// ── 편집 모드 (OTC·건기식만 해당) ──
+function startEdit() {
+  otcBackup  = JSON.parse(JSON.stringify(otcDrugs));
+  suppBackup = JSON.parse(JSON.stringify(suppDrugs));
+  editMode = true;
+  document.getElementById('edit-btn').style.display   = 'none';
+  document.getElementById('save-btn').style.display   = '';
+  document.getElementById('cancel-btn').style.display = '';
+  // OTC·건기식 섹션 자동 열기
+  ['otc','supp'].forEach(k => {
+    document.getElementById('sdiv-'+k).classList.remove('collapsed');
+    document.getElementById('subsec-'+k).classList.remove('collapsed');
+  });
+  renderOtcSuppTable();
+}
+
+function readInputs() {
+  const otcRows = document.querySelectorAll('#otc-tbody tr');
+  otcDrugs = Array.from(otcRows).map(tr => {
+    const inputs = tr.querySelectorAll('input');
+    return { name: inputs[0].value.trim(), ingredient: inputs[1].value.trim() };
+  }).filter(d => d.name);
+  const suppRows = document.querySelectorAll('#supp-tbody tr');
+  suppDrugs = Array.from(suppRows).map(tr => {
+    const inputs = tr.querySelectorAll('input');
+    return { name: inputs[0].value.trim(), ingredient: inputs[1].value.trim() };
+  }).filter(d => d.name);
+}
+
+function saveEdit() {
+  readInputs(); editMode = false;
+  document.getElementById('edit-btn').style.display   = '';
+  document.getElementById('save-btn').style.display   = 'none';
+  document.getElementById('cancel-btn').style.display = 'none';
+  renderAll();
+}
+
+function cancelEdit() {
+  otcDrugs  = otcBackup;
+  suppDrugs = suppBackup;
+  editMode  = false;
+  document.getElementById('edit-btn').style.display   = '';
+  document.getElementById('save-btn').style.display   = 'none';
+  document.getElementById('cancel-btn').style.display = 'none';
+  renderOtcSuppTable();
+}
+
+// ── 하위 섹션 토글 ──
+function toggleSubSection(key) {
+  document.getElementById('sdiv-' + key).classList.toggle('collapsed');
+  document.getElementById('subsec-' + key).classList.toggle('collapsed');
+}
+
+// ── 처방약 날짜 필터 ──
+function setRxPreset(months, e) {
+  document.querySelectorAll('#rx-filter .hist-preset-btn').forEach(b => b.classList.remove('active'));
+  e.currentTarget.classList.add('active');
+  const to = new Date('2025-05-15');
+  const from = new Date(to);
+  from.setMonth(from.getMonth() - months);
+  document.getElementById('rx-from').value = dateToStr(from);
+  document.getElementById('rx-to').value   = dateToStr(to);
+  renderRxTable();
+}
+
+function applyRxFilter() {
+  document.querySelectorAll('#rx-filter .hist-preset-btn').forEach(b => b.classList.remove('active'));
+  renderRxTable();
+}
+
+function addOtcRow()  { otcDrugs.push({name:'',ingredient:''}); renderOtcSuppTable(); }
+function addSuppRow() { suppDrugs.push({name:'',ingredient:''}); renderOtcSuppTable(); }
+
+function deleteOtcRow(i) {
+  if (editMode) readInputs();
+  otcDrugs.splice(i, 1); renderOtcSuppTable();
+}
+function deleteSuppRow(i) {
+  if (editMode) readInputs();
+  suppDrugs.splice(i, 1); renderOtcSuppTable();
+}
+
+// ── 초기 렌더 ──
+(function initRxFilter() {
+  const to = new Date('2025-05-15');
+  const from = new Date(to);
+  from.setMonth(from.getMonth() - 3);
+  document.getElementById('rx-from').value = dateToStr(from);
+  document.getElementById('rx-to').value   = dateToStr(to);
+})();
+renderAll();
+renderFlags();
+
+// iframe 높이 자동 동기화 — 토글 등으로 콘텐츠 높이 바뀔 때 부모에 알림
+new ResizeObserver(() => {
+  const h = document.documentElement.scrollHeight;
+  if (window.parent !== window) window.parent.postMessage({ type: 'iframeResize', height: h }, '*');
+}).observe(document.body);
+</script>
+</body>
+</html>

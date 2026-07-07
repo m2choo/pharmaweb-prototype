@@ -1,0 +1,660 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웰체크 약사웹 프로토타입</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#fff;min-height:100vh;display:flex;}
+
+/* ── LNB ── */
+.lnb{width:200px;min-height:100vh;background:#fff;border-right:1px solid #E8EAED;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:10;}
+.lnb-logo{padding:20px 20px 16px;border-bottom:1px solid #E8EAED;}
+.lnb-logo svg{width:100px;}
+.lnb-nav{padding:8px 0;}
+.lnb-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:15.6px;color:#555;cursor:pointer;position:relative;text-decoration:none;transition:background .1s;}
+.lnb-item:hover{background:#F4F5F7;}
+.lnb-item.active{background:#2563EB;color:#fff;font-weight:600;border-radius:6px;margin:0 8px;padding:10px 12px;}
+.lnb-item.active svg path,.lnb-item.active svg circle,.lnb-item.active svg rect{stroke:#fff;}
+.lnb-icon{width:16px;height:16px;flex-shrink:0;opacity:.6;}
+.lnb-item.active .lnb-icon{opacity:1;}
+.lnb-secondary{border-top:1px solid #E8EAED;padding:8px 0;}
+.lnb-item.sub{font-size:17.3px;color:#888;padding:8px 20px;}
+.lnb-item.sub.active{background:#F4F5F7;color:#333;font-weight:500;}
+.lnb-bottom{border-top:1px solid #E8EAED;padding:12px 16px;margin-top:auto;}
+.lnb-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.lnb-avatar{width:32px;height:32px;border-radius:50%;background:#EBF2FF;display:flex;align-items:center;justify-content:center;font-size:14.4px;font-weight:700;color:#2563EB;flex-shrink:0;}
+.lnb-username{font-size:14.4px;font-weight:600;color:#111;}
+.lnb-pharmacy{font-size:13.2px;color:#888;}
+.lnb-btns{display:flex;gap:6px;}
+.lnb-btn-sm{flex:1;padding:6px;font-size:13.2px;color:#555;border:1px solid #E0E0E0;border-radius:6px;background:#fff;cursor:pointer;font-family:inherit;text-align:center;}
+
+/* ── MAIN ── */
+.main{margin-left:200px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
+.page-hd{padding:20px 32px 0;background:#fff;border-bottom:1px solid #E8EAED;}
+.page-title{font-size:24px;font-weight:700;color:#111;margin-bottom:16px;}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:0;border-bottom:none;}
+.tab{padding:10px 20px;font-size:15.6px;font-weight:500;color:#888;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.tab.active{color:#2563EB;font-weight:700;border-bottom:2px solid #2563EB;}
+.tab:hover:not(.active){color:#555;}
+
+/* ── CONTENT ── */
+.content{flex:1;padding:28px 32px;max-width:860px;}
+
+.field-group{margin-bottom:24px;}
+.field-label{font-size:15.6px;font-weight:600;color:#333;margin-bottom:8px;display:flex;align-items:center;gap:4px;}
+.required{color:#EF4444;font-size:15.6px;}
+.field-input{width:100%;padding:10px 14px;font-size:15.6px;font-family:inherit;border:1px solid #E0E0E0;border-radius:6px;outline:none;color:#333;background:#fff;transition:border-color .15s;}
+.field-input:focus{border-color:#2563EB;}
+.field-input.readonly{background:#F8F9FA;color:#888;cursor:default;}
+.field-row{display:flex;flex-direction:column;gap:8px;}
+
+.checkbox-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.checkbox-row input[type=checkbox]{width:15px;height:15px;accent-color:#2563EB;cursor:pointer;}
+.checkbox-row label{font-size:15.6px;color:#555;cursor:pointer;}
+
+.field-textarea{width:100%;padding:10px 14px;font-size:15.6px;font-family:inherit;border:1px solid #E0E0E0;border-radius:6px;outline:none;color:#333;background:#fff;resize:vertical;min-height:100px;transition:border-color .15s;}
+.field-textarea:focus{border-color:#2563EB;}
+.textarea-wrap{position:relative;}
+.char-count{position:absolute;bottom:10px;right:14px;font-size:13.2px;color:#aaa;}
+
+.ai-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;font-size:14.4px;font-family:inherit;border:1px solid #E0E0E0;border-radius:6px;background:#fff;color:#555;cursor:pointer;}
+.ai-btn:hover{background:#F4F5F7;}
+.field-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+
+.divider{border:none;border-top:1px solid #E8EAED;margin:28px 0;}
+
+.save-bar{position:sticky;bottom:0;background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;display:flex;justify-content:flex-end;gap:10px;}
+.btn-cancel{padding:8px 20px;font-size:15.6px;font-family:inherit;border:1px solid #E0E0E0;border-radius:6px;background:#fff;color:#555;cursor:pointer;}
+.btn-save{padding:8px 20px;font-size:15.6px;font-family:inherit;border:none;border-radius:6px;background:#2563EB;color:#fff;font-weight:600;cursor:pointer;}
+.btn-save:hover{background:#1d4ed8;}
+
+/* ── 영업 시간 테이블 ── */
+.hours-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.hours-section-label{font-size:15.6px;font-weight:600;color:#333;}
+.hours-section-label .required{color:#EF4444;}
+.apply-all-btn{font-size:14.4px;color:#2563EB;cursor:pointer;background:none;border:none;font-family:inherit;display:flex;align-items:center;gap:4px;padding:0;}
+.apply-all-btn:hover{text-decoration:underline;}
+
+.hours-table{width:100%;border-collapse:collapse;border:1px solid #E8EAED;border-radius:8px;overflow:hidden;}
+.hours-table thead th{background:#F8F9FA;font-size:14.4px;font-weight:600;color:#666;padding:10px 14px;text-align:center;border-bottom:1px solid #E8EAED;}
+.hours-table thead th:first-child{text-align:left;width:130px;}
+.hours-table thead th:nth-child(2){width:260px;}
+.hours-table thead th:nth-child(3){width:auto;}
+.hours-table tbody tr{border-bottom:1px solid #F2F4F6;}
+.hours-table tbody tr:last-child{border-bottom:none;}
+.hours-table tbody td{padding:10px 14px;vertical-align:middle;}
+.hours-table tbody td:first-child{font-size:15.6px;color:#333;}
+
+.day-cell{display:flex;align-items:center;gap:10px;}
+.day-cell input[type=checkbox]{width:15px;height:15px;accent-color:#2563EB;cursor:pointer;flex-shrink:0;}
+.day-cell label{font-size:15.6px;color:#333;cursor:pointer;}
+
+.time-range{display:flex;align-items:center;gap:6px;}
+.time-input-wrap{position:relative;display:flex;align-items:center;}
+.time-input{width:90px;padding:7px 30px 7px 10px;font-size:15.6px;font-family:inherit;border:1px solid #E0E0E0;border-radius:6px;outline:none;color:#333;background:#fff;}
+.time-input:focus{border-color:#2563EB;}
+.time-input:disabled{background:#F8F9FA;color:#aaa;}
+.time-icon{position:absolute;right:8px;color:#aaa;pointer-events:none;font-size:15.6px;}
+.time-sep{font-size:15.6px;color:#999;}
+
+.holiday-cell{background:#F8F9FA;color:#888;font-size:15.6px;text-align:center;border-radius:6px;padding:8px;width:100%;}
+
+.lunch-cell{display:flex;align-items:center;gap:6px;}
+.lunch-checkbox-wrap{display:flex;align-items:center;gap:6px;}
+.lunch-checkbox-wrap input[type=checkbox]{width:15px;height:15px;accent-color:#2563EB;cursor:pointer;}
+.lunch-checkbox-wrap label{font-size:15.6px;color:#555;cursor:pointer;white-space:nowrap;}
+.lunch-times{display:flex;align-items:center;gap:6px;margin-left:4px;}
+
+/* ── 복약 알림 기본 설정 ── */
+.section-title{font-size:18px;font-weight:700;color:#111;margin-bottom:4px;}
+.section-desc{font-size:14.4px;color:#888;margin-bottom:16px;line-height:1.6;}
+
+.reminder-simple{display:flex;flex-direction:row;gap:0;border:1px solid #E8EAED;border-radius:8px;overflow:hidden;}
+.reminder-time-row{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:14px 16px;border-right:1px solid #F2F4F6;flex:1;}
+.reminder-time-row:last-child{border-right:none;}
+.reminder-time-dot{width:8px;height:8px;border-radius:50%;background:#2563EB;flex-shrink:0;}
+.reminder-time-name-wrap{display:flex;align-items:center;gap:6px;}
+.reminder-time-name{font-size:15.6px;color:#333;flex-shrink:0;}
+.reminder-time-btn{display:flex;align-items:center;gap:6px;padding:6px 10px;font-size:15.6px;font-family:inherit;border:1px solid #E0E0E0;border-radius:6px;background:#fff;color:#333;cursor:pointer;width:100%;}
+.reminder-time-btn:hover{border-color:#2563EB;}
+.reminder-time-btn svg{color:#aaa;}
+
+/* ── 시간 피커 드롭다운 ── */
+.tp-dropdown{position:absolute;z-index:1000;background:#fff;border-radius:12px;width:220px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.18);border:1px solid #E8EAED;}
+.tp-display{text-align:center;padding:14px 0 10px;font-size:26.4px;font-weight:700;color:#111;border-bottom:1px solid #F2F4F6;}
+.tp-cols{display:flex;flex-direction:column;}
+.tp-col-labels{display:flex;border-bottom:1px solid #F2F4F6;}
+.tp-col-label{flex:1;text-align:center;font-size:13.2px;color:#888;padding:6px 0;}
+.tp-scrolls{display:flex;}
+.tp-scroll{flex:1;height:150px;overflow-y:scroll;scrollbar-width:none;border-right:1px solid #F2F4F6;}
+.tp-scroll:last-child{border-right:none;}
+.tp-scroll::-webkit-scrollbar{display:none;}
+.tp-item{height:36px;display:flex;align-items:center;justify-content:center;font-size:16.8px;color:#555;cursor:pointer;}
+.tp-item:hover{background:#F8F9FA;}
+.tp-item.selected{color:#2563EB;font-weight:700;}
+.tp-actions{display:flex;border-top:1px solid #F2F4F6;}
+.tp-btn{flex:1;padding:12px;font-size:15.6px;font-family:inherit;border:none;background:none;cursor:pointer;font-weight:500;}
+.tp-btn.cancel{color:#888;border-right:1px solid #F2F4F6;}
+.tp-btn.confirm{color:#2563EB;font-weight:700;}
+
+.info-banner{background:#EBF2FF;border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:8px;margin-bottom:16px;}
+.info-banner-icon{font-size:16.8px;flex-shrink:0;margin-top:1px;}
+.info-banner-text{font-size:14.4px;color:#1e40af;line-height:1.6;}
+/* footer */
+footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:12.6px;color:#999;display:flex;justify-content:space-between;align-items:flex-end;}
+.footer-links{display:flex;gap:12px;margin-bottom:6px;}
+.footer-links a{color:#999;text-decoration:none;}
+.footer-links a:hover{color:#555;}
+</style>
+</head>
+<body>
+
+<!-- LNB -->
+<nav class="lnb">
+  <div class="lnb-logo">
+    <img src="wellcheck_bi.png" alt="Wellcheck" style="width:144px;display:block;">
+  </div>
+  <div class="lnb-nav">
+    <a class="lnb-item" href="customer_list_v3.html" style="text-decoration:none;color:inherit;">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="#555" stroke-width="1.4"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
+      약국 고객
+    </a>
+    <a class="lnb-item" href="prescription_list_v3.html" style="text-decoration:none;color:inherit;">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#555" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
+      처방전
+    </a>
+    <a class="lnb-item" href="cl_note_v3.html" style="text-decoration:none;color:inherit;">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><path d="M4.5 1.5h5l3 3v9a1 1 0 01-1 1h-7a1 1 0 01-1-1v-11a1 1 0 011-1z" stroke="#555" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 7.5h4M6 10h4" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
+      CL note 복약 상담
+    </a>
+    <div class="lnb-item">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="#555" stroke-width="1.4"/><path d="M1 6h14" stroke="#555" stroke-width="1.4"/></svg>
+      앱 설치 문자 발송
+    </div>
+  </div>
+  <div class="lnb-secondary">
+    <a class="lnb-item sub active" href="pharmacy_settings_v3.html" style="text-decoration:none;justify-content:space-between;">약국설정 <span style="color:#aaa;">›</span></a>
+    <div class="lnb-item sub">1:1 채팅문의</div>
+    <div class="lnb-item sub">원격 지원 요청하기</div>
+  </div>
+  <div class="lnb-bottom">
+    <div class="lnb-user">
+      <div class="lnb-avatar">추</div>
+      <div>
+        <div class="lnb-username">김체크 약사</div>
+        <div class="lnb-pharmacy">하나누리 약국</div>
+      </div>
+    </div>
+    <div class="lnb-btns">
+      <button class="lnb-btn-sm">내정보</button>
+      <button class="lnb-btn-sm">로그아웃</button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="page-hd">
+    <div class="page-title">약국 설정</div>
+    <div class="tabs">
+      <div class="tab active">기본 정보</div>
+      <div class="tab">앱 처방전 설정</div>
+      <div class="tab">약사 목록</div>
+    </div>
+  </div>
+
+  <!-- 기본 정보 -->
+  <div class="content">
+
+    <!-- 약국명 -->
+    <div class="field-group">
+      <div class="field-label">약국명 <span class="required">*</span></div>
+      <input class="field-input readonly" type="text" value="하나누리 약국" readonly>
+    </div>
+
+    <!-- 약국 주소 -->
+    <div class="field-group">
+      <div class="field-label">약국 주소 <span class="required">*</span></div>
+      <div class="field-row">
+        <input class="field-input readonly" type="text" value="서울 강남구 봉은사로 641" readonly>
+        <input class="field-input readonly" type="text" placeholder="상세 주소" value="7층 701호" readonly>
+      </div>
+    </div>
+
+    <!-- 약국 전화 번호 -->
+    <div class="field-group">
+      <div class="field-label">약국 전화 번호 <span class="required">*</span></div>
+      <input class="field-input readonly" type="text" value="01052495748" readonly>
+      <div class="checkbox-row">
+        <input type="checkbox" id="hide-phone" checked>
+        <label for="hide-phone">번호 노출 안 함</label>
+      </div>
+    </div>
+
+    <!-- 약국 Fax 번호 -->
+    <div class="field-group">
+      <div class="field-label">약국 Fax 번호</div>
+      <input class="field-input" type="text" value="021234567888">
+    </div>
+
+    <!-- 인사말 -->
+    <div class="field-group">
+      <div class="field-header">
+        <div class="field-label">인사말</div>
+        <button class="ai-btn">✨ 인사말 추천</button>
+      </div>
+      <div class="textarea-wrap">
+        <textarea class="field-textarea" id="greeting-text" maxlength="200">이 약국은 테스트를 위한 가상 약국으로 처방전 접수를 할 수 없습니다.</textarea>
+        <span class="char-count" id="char-count">39 / 200</span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- 영업 시간 설정 -->
+    <div class="field-group">
+      <div class="hours-section-header">
+        <div class="hours-section-label">영업 시간 설정 <span class="required">*</span></div>
+        <button class="apply-all-btn">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3L11 6.5 7.5 10" stroke="#2563EB" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          요일별 시간을 평일에 모두 적용
+        </button>
+      </div>
+      <table class="hours-table">
+        <thead>
+          <tr>
+            <th>요일</th>
+            <th>영업 시간</th>
+            <th>점심 시간</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 월요일 -->
+          <tr>
+            <td>
+              <div class="day-cell">
+                <input type="checkbox" id="day-mon" checked>
+                <label for="day-mon">월요일</label>
+              </div>
+            </td>
+            <td>
+              <div class="time-range">
+                <div class="time-input-wrap"><input class="time-input" type="time" value="08:00"><span class="time-icon">🕐</span></div>
+                <span class="time-sep">—</span>
+                <div class="time-input-wrap"><input class="time-input" type="time" value="23:00"><span class="time-icon">🕐</span></div>
+              </div>
+            </td>
+            <td>
+              <div class="lunch-cell">
+                <div class="lunch-checkbox-wrap">
+                  <input type="checkbox" id="lunch-mon">
+                  <label for="lunch-mon">점심 시간</label>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <!-- 화요일 -->
+          <tr>
+            <td>
+              <div class="day-cell">
+                <input type="checkbox" id="day-tue" checked>
+                <label for="day-tue">화요일</label>
+              </div>
+            </td>
+            <td>
+              <div class="time-range">
+                <div class="time-input-wrap"><input class="time-input" type="time" value="08:00"><span class="time-icon">🕐</span></div>
+                <span class="time-sep">—</span>
+                <div class="time-input-wrap"><input class="time-input" type="time" value="23:00"><span class="time-icon">🕐</span></div>
+              </div>
+            </td>
+            <td>
+              <div class="lunch-cell">
+                <div class="lunch-checkbox-wrap">
+                  <input type="checkbox" id="lunch-tue">
+                  <label for="lunch-tue">점심 시간</label>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <!-- 수요일 -->
+          <tr>
+            <td>
+              <div class="day-cell">
+                <input type="checkbox" id="day-wed" checked>
+                <label for="day-wed">수요일</label>
+              </div>
+            </td>
+            <td>
+              <div class="time-range">
+                <div class="time-input-wrap"><input class="time-input" type="time" value="08:00"><span class="time-icon">🕐</span></div>
+                <span class="time-sep">—</span>
+                <div class="time-input-wrap"><input class="time-input" type="time" value="23:00"><span class="time-icon">🕐</span></div>
+              </div>
+            </td>
+            <td>
+              <div class="lunch-cell">
+                <div class="lunch-checkbox-wrap">
+                  <input type="checkbox" id="lunch-wed">
+                  <label for="lunch-wed">점심 시간</label>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <!-- 목요일 -->
+          <tr>
+            <td>
+              <div class="day-cell">
+                <input type="checkbox" id="day-thu" checked>
+                <label for="day-thu">목요일</label>
+              </div>
+            </td>
+            <td>
+              <div class="time-range">
+                <div class="time-input-wrap"><input class="time-input" type="time" value="08:00"><span class="time-icon">🕐</span></div>
+                <span class="time-sep">—</span>
+                <div class="time-input-wrap"><input class="time-input" type="time" value="23:00"><span class="time-icon">🕐</span></div>
+              </div>
+            </td>
+            <td>
+              <div class="lunch-cell">
+                <div class="lunch-checkbox-wrap">
+                  <input type="checkbox" id="lunch-thu">
+                  <label for="lunch-thu">점심 시간</label>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <!-- 금요일 -->
+          <tr>
+            <td>
+              <div class="day-cell">
+                <input type="checkbox" id="day-fri" checked>
+                <label for="day-fri">금요일</label>
+              </div>
+            </td>
+            <td>
+              <div class="time-range">
+                <div class="time-input-wrap"><input class="time-input" type="time" value="08:00"><span class="time-icon">🕐</span></div>
+                <span class="time-sep">—</span>
+                <div class="time-input-wrap"><input class="time-input" type="time" value="22:00"><span class="time-icon">🕐</span></div>
+              </div>
+            </td>
+            <td>
+              <div class="lunch-cell">
+                <div class="lunch-checkbox-wrap">
+                  <input type="checkbox" id="lunch-fri">
+                  <label for="lunch-fri">점심 시간</label>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <!-- 토요일 -->
+          <tr>
+            <td>
+              <div class="day-cell">
+                <input type="checkbox" id="day-sat" checked>
+                <label for="day-sat">토요일</label>
+              </div>
+            </td>
+            <td>
+              <div class="time-range">
+                <div class="time-input-wrap"><input class="time-input" type="time" value="09:00"><span class="time-icon">🕐</span></div>
+                <span class="time-sep">—</span>
+                <div class="time-input-wrap"><input class="time-input" type="time" value="19:00"><span class="time-icon">🕐</span></div>
+              </div>
+            </td>
+            <td>
+              <div class="lunch-cell">
+                <div class="lunch-checkbox-wrap">
+                  <input type="checkbox" id="lunch-sat">
+                  <label for="lunch-sat">점심 시간</label>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <!-- 일요일 -->
+          <tr>
+            <td>
+              <div class="day-cell">
+                <input type="checkbox" id="day-sun">
+                <label for="day-sun">일요일</label>
+              </div>
+            </td>
+            <td colspan="2">
+              <div class="holiday-cell">휴무일</div>
+            </td>
+          </tr>
+          <!-- 공휴일 -->
+          <tr>
+            <td>
+              <div class="day-cell">
+                <input type="checkbox" id="day-hol">
+                <label for="day-hol">공휴일</label>
+              </div>
+            </td>
+            <td colspan="2">
+              <div class="holiday-cell">휴무일</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="divider">
+
+    <!-- 복약 알림 기본 설정 -->
+    <div class="field-group">
+      <div class="section-title">복약 알림 기본 설정</div>
+
+      <div class="info-banner">
+        <span class="info-banner-icon">ℹ️</span>
+        <span class="info-banner-text">앱에서 복약 알림이 발송되는 기본 시간입니다. 환자 앱에서 개별 수정도 가능합니다.</span>
+      </div>
+
+      <div class="reminder-simple">
+        <div class="reminder-time-row">
+          <div class="reminder-time-name-wrap"><div class="reminder-time-dot" style="background:#2563EB;"></div><span class="reminder-time-name">아침</span></div>
+          <button class="reminder-time-btn" data-time="08:00">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span class="tp-label">오전 8:00</span>
+          </button>
+        </div>
+        <div class="reminder-time-row">
+          <div class="reminder-time-name-wrap"><div class="reminder-time-dot" style="background:#F59E0B;"></div><span class="reminder-time-name">점심</span></div>
+          <button class="reminder-time-btn" data-time="12:00">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span class="tp-label">오후 12:00</span>
+          </button>
+        </div>
+        <div class="reminder-time-row">
+          <div class="reminder-time-name-wrap"><div class="reminder-time-dot" style="background:#6366F1;"></div><span class="reminder-time-name">저녁</span></div>
+          <button class="reminder-time-btn" data-time="18:00">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span class="tp-label">오후 6:00</span>
+          </button>
+        </div>
+        <div class="reminder-time-row">
+          <div class="reminder-time-name-wrap"><div class="reminder-time-dot" style="background:#64748B;"></div><span class="reminder-time-name">취침 전</span></div>
+          <button class="reminder-time-btn" data-time="22:00">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span class="tp-label">오후 10:00</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <div class="save-bar">
+    <button class="btn-cancel">취소</button>
+    <button class="btn-save">설정 저장</button>
+  </div>
+  <footer>
+    <div>
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+      </div>
+      <div>(주)엠서클 &nbsp;·&nbsp; 사업자등록번호: 288-87-03573 &nbsp;·&nbsp; 통신판매업신고번호: 제2009-서울강남-00209호 &nbsp;·&nbsp; 주소: 서울특별시 강남구 봉은사로 114길 12, 7층 &nbsp;·&nbsp; 대표자: 이찬란, 정윤미 &nbsp;·&nbsp; 대표번호: 1551-3633</div>
+    </div>
+    <div>Copyright © Mcircle Corp. All rights reserved.</div>
+  </footer>
+</main>
+
+<script>
+// 글자수 카운트
+const ta = document.getElementById('greeting-text');
+const cc = document.getElementById('char-count');
+if (ta && cc) {
+  ta.addEventListener('input', () => { cc.textContent = ta.value.length + ' / 200'; });
+}
+
+// 요일 체크박스 — 비활성화 시 시간 입력 비활성화
+document.querySelectorAll('.day-cell input[type=checkbox]').forEach(cb => {
+  const row = cb.closest('tr');
+  const applyState = () => {
+    const disabled = !cb.checked;
+    row.querySelectorAll('.time-input, .reminder-time-input').forEach(inp => inp.disabled = disabled);
+    row.querySelectorAll('.lunch-checkbox-wrap input').forEach(inp => inp.disabled = disabled);
+    // holiday cell visibility
+    const holidayCell = row.querySelector('.holiday-cell');
+    if (holidayCell) {
+      const td = holidayCell.closest('td');
+      if (disabled) {
+        td.querySelector('.holiday-cell').style.background = '#F8F9FA';
+      }
+    }
+  };
+  applyState();
+  cb.addEventListener('change', applyState);
+});
+
+// ── 복약 알림 시간 피커 ──
+(function(){
+  const AMPM = ['AM','PM'];
+  const HOURS = Array.from({length:12},(_,i)=>String(i+1).padStart(2,'0'));
+  const MINS  = ['00','30'];
+  const LABEL = {AM:'오전', PM:'오후'};
+
+  function fmt(h24,m){
+    const ampm = h24 < 12 ? 'AM' : 'PM';
+    const h = h24 % 12 || 12;
+    return LABEL[ampm] + ' ' + h + ':' + String(m).padStart(2,'0');
+  }
+
+  let currentDropdown = null;
+
+  function closeDropdown(){ if(currentDropdown){ currentDropdown.remove(); currentDropdown=null; } }
+
+  function openPicker(btn){
+    if(currentDropdown){ closeDropdown(); return; }
+
+    const raw = btn.dataset.time;
+    const [hh,mm] = raw.split(':').map(Number);
+    const initAmpm = hh < 12 ? 'AM' : 'PM';
+    const initH = String(hh % 12 || 12).padStart(2,'0');
+    const initM = String(mm).padStart(2,'0');
+    let selAmpm = initAmpm, selH = initH, selM = initM;
+
+    const dp = document.createElement('div');
+    dp.className = 'tp-dropdown';
+    dp.innerHTML = `
+      <div class="tp-display"></div>
+      <div class="tp-cols">
+        <div class="tp-col-labels">
+          <div class="tp-col-label">시</div>
+          <div class="tp-col-label">분</div>
+          <div class="tp-col-label">구분</div>
+        </div>
+        <div class="tp-scrolls">
+          <div class="tp-scroll" id="tp-h"></div>
+          <div class="tp-scroll" id="tp-m"></div>
+          <div class="tp-scroll" id="tp-ap"></div>
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="tp-btn cancel">취소</button>
+        <button class="tp-btn confirm">확인</button>
+      </div>`;
+
+    function updateDisplay(){
+      dp.querySelector('.tp-display').textContent =
+        (selAmpm==='AM'?'오전':'오후') + ' ' + parseInt(selH) + ':' + selM;
+    }
+
+    function fillScroll(id, items, sel, labelFn, onChange){
+      const sc = dp.querySelector('#'+id);
+      items.forEach(v=>{
+        const el = document.createElement('div');
+        el.className = 'tp-item' + (v===sel?' selected':'');
+        el.textContent = labelFn(v);
+        el.addEventListener('click',()=>{
+          sc.querySelectorAll('.tp-item').forEach(e=>e.classList.remove('selected'));
+          el.classList.add('selected');
+          onChange(v);
+          updateDisplay();
+        });
+        sc.appendChild(el);
+      });
+    }
+
+    fillScroll('tp-h',  HOURS, initH,   v=>v,                        v=>selH=v);
+    fillScroll('tp-m',  MINS,  initM,   v=>v,                        v=>selM=v);
+    fillScroll('tp-ap', AMPM,  initAmpm,v=>v==='AM'?'오전':'오후',  v=>selAmpm=v);
+
+    updateDisplay();
+
+    // 버튼 아래에 위치
+    const rect = btn.getBoundingClientRect();
+    dp.style.cssText = `position:fixed;top:${rect.bottom+4}px;left:${rect.left}px;`;
+
+    dp.querySelector('.cancel').addEventListener('click', closeDropdown);
+    dp.querySelector('.confirm').addEventListener('click',()=>{
+      const h24 = selAmpm==='AM' ? parseInt(selH)%12 : parseInt(selH)%12+12;
+      btn.dataset.time = String(h24).padStart(2,'0')+':'+selM;
+      btn.querySelector('.tp-label').textContent = fmt(h24, parseInt(selM));
+      closeDropdown();
+    });
+
+    document.body.appendChild(dp);
+    currentDropdown = dp;
+  }
+
+  document.addEventListener('click', e=>{
+    if(currentDropdown && !currentDropdown.contains(e.target) && !e.target.closest('.reminder-time-btn'))
+      closeDropdown();
+  });
+
+  document.querySelectorAll('.reminder-time-btn').forEach(btn=>{
+    btn.addEventListener('click', e=>{ e.stopPropagation(); openPicker(btn); });
+  });
+})();
+
+// 점심 체크박스 — 체크 시 시간 입력 표시
+document.querySelectorAll('.lunch-checkbox-wrap input[type=checkbox]').forEach(cb => {
+  const cell = cb.closest('.lunch-cell');
+  const makeTimePicker = () => {
+    if (cb.checked && !cell.querySelector('.lunch-times')) {
+      const wrap = document.createElement('div');
+      wrap.className = 'lunch-times';
+      wrap.innerHTML = `
+        <div class="time-input-wrap"><input class="time-input" type="time" value="12:00"><span class="time-icon">🕐</span></div>
+        <span class="time-sep">—</span>
+        <div class="time-input-wrap"><input class="time-input" type="time" value="13:00"><span class="time-icon">🕐</span></div>`;
+      cell.appendChild(wrap);
+    } else if (!cb.checked) {
+      const lt = cell.querySelector('.lunch-times');
+      if (lt) lt.remove();
+    }
+  };
+  cb.addEventListener('change', makeTimePicker);
+});
+</script>
+</body>
+</html>

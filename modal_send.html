@@ -1325,7 +1325,7 @@ function renderMsgBody() {
     + '<textarea class="msg-ta" id="s3mta" oninput="s3OnMsg(this)">' + s3Msg.replace(/</g,'&lt;') + '</textarea>'
     + '<div class="msg-cnt" id="s3mcnt">' + s3Msg.length + ' / 500자</div></div></div>';
   F.innerHTML = '<span class="rm-step-lbl">Step 3 / 4 · 복약지도 전송</span>'
-    + '<button class="btn-cancel" onclick="renderReminderBody();setStepTab(2);currentStep=2;">← 이전</button>'
+    + '<button class="btn-cancel" onclick="(selectedCustomer&&selectedCustomer.isNew)?goBackToStep1():(renderReminderBody(),setStepTab(2),currentStep=2)">← 이전</button>'
     + '<button class="btn-cancel" onclick="saveDraft()" style="color:#2563EB;border-color:#A0B4FF;">임시저장</button>'
     + '<button class="btn-next" onclick="goStep4()">다음</button>';
 }

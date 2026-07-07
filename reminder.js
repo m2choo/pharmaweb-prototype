@@ -39,6 +39,7 @@ function initReminderSettings() {
 function goStep2() {
   if (!selectedCustomer) return;
   if (!selectedRxIds.length && !(selectedCustomer && selectedCustomer.isNew)) return;
+  if (selectedCustomer.isNew) { goStep3(); return; }
   currentStep = 2;
   setStepTab(2);
   initReminderSettings();

@@ -752,10 +752,9 @@ function addNewCustomerByName(name) {
     return;
   }
   selectedCustomer = { name, birth: null, gender: '-', phone: '-', age: null, isNew: true };
-  const dd = document.getElementById('s1dropdown');
-  if (dd) dd.style.display = 'none';
-  hideSearchSection();
   setCustomerHeader(name, '정보 없음', '방문 이력 없음');
+  const B2 = document.getElementById('mbody');
+  B2.innerHTML = '<div id="rxSection"></div>';
   renderRxSection();
 }
 

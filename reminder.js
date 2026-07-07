@@ -70,7 +70,7 @@ function renderReminderBody() {
     var row = '<div class="rm-row' + (isOpen ? ' open' : '') + '" onclick="rmToggleExpand(\'' + id + '\')">'
       + '<div class="rm-row-body">'
       + '<div class="rm-row-top"><span class="rm-row-hospital">' + rx.hospital + '</span><span class="rm-row-dept">' + rx.dept + '</span></div>'
-      + '<div class="rm-row-meta">' + drugs.map(function(d) { return d.name; }).join(', ') + '</div>'
+      + '<div class="rm-row-meta">' + rx.dept + ' · ' + drugs.length + '개 약품</div>'
       + '</div>'
       + '<div class="rm-row-right">'
       + '<span class="rm-chip">' + summaryChip + '</span>'
@@ -79,7 +79,7 @@ function renderReminderBody() {
       + '</div></div>';
 
     var drugNameList = drugs.map(function(d) {
-      return '<li class="rm-drug-item">' + d.name + '</li>';
+      return '<li class="rm-drug-item">' + d.name + '<span class="rm-drug-meta">1일 ' + (d.freq || '') + ' · 1회 ' + (d.dosage || '') + '</span></li>';
     }).join('');
     var panel = '<div class="rm-panel' + (isOpen ? ' open' : '') + (s.enabled ? '' : ' disabled') + '">'
       + '<div class="rm-field rm-drug-list-field"><div class="rm-field-label">포함 약품</div><ul class="rm-drug-list">' + drugNameList + '</ul></div>'

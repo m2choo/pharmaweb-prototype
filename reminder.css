@@ -49,3 +49,4 @@
 .rm-drug-list{list-style:none;display:flex;flex-direction:column;gap:5px;margin:0;padding:0;}
 .rm-drug-item{font-size:12.5px;color:#333;line-height:1.5;padding-left:10px;position:relative;}
 .rm-drug-item::before{content:'';position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:#A0B4FF;}
+.rm-drug-meta{margin-left:6px;font-size:11.5px;color:#888;}

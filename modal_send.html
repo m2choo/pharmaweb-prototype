@@ -737,10 +737,9 @@ function hideSearchSection() {
 
 function selectCustomer() {
   selectedCustomer = KIMCHECK;
-  const dd = document.getElementById('s1dropdown');
-  if (dd) dd.style.display = 'none';
-  hideSearchSection();
   setCustomerHeader(KIMCHECK.name, `${KIMCHECK.age}세 · ${KIMCHECK.gender} · ${KIMCHECK.phone}`, '3회 방문  최근 26.06.22 · 처방전 8건');
+  const B = document.getElementById('mbody');
+  B.innerHTML = '<div id="rxSection"></div>';
   renderRxSection();
 }
 

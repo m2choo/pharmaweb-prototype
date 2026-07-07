@@ -246,7 +246,7 @@ function loadNotes() {
   try { return JSON.parse(localStorage.getItem(CL_NOTES_KEY) || '[]'); } catch (e) { return []; }
 }
 
-const JOIN_NOTE = '\n\n[웰체크 앱 가입 안내]\n아래 링크에서 웰체크 앱에 가입하시면 저희 약국이 단골 약국으로 자동 연결됩니다.\nhttps://wellcheck.co.kr/join?ref=pharmacy';
+const JOIN_NOTE = '\n\n[웰체크 앱 가입 안내]\n지속적인 건강 관리의 시작, 웰체크 앱과 함께하세요. 우리 약국을 단골 약국으로 연결하시면 더 편리해집니다.\nhttps://wellcheck.co.kr/join?ref=pharmacy';
 
 function seedDummyNotes() {
   const notes = loadNotes().filter(n => !(n.id || '').startsWith('seed_'));

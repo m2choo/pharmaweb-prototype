@@ -76,6 +76,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .btn-next{height:40px;padding:0 28px;background:#2563EB;border:none;border-radius:8px;font-size:15.6px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
 .btn-next:disabled{opacity:.4;cursor:not-allowed;}
 .btn-cancel{height:40px;padding:0 20px;background:#fff;border:1px solid #E0E0E0;border-radius:8px;font-size:15.6px;color:#555;cursor:pointer;font-family:inherit;}
+.btn-no-rx{height:40px;padding:0 16px;background:#fff;border:1px solid #D1D5DB;border-radius:8px;font-size:14.4px;color:#6B7280;cursor:pointer;font-family:inherit;margin-right:auto;}
+.btn-no-rx:hover{background:#F4F5F7;}
 
 /* Step 1 처방전 선택 */
 .s1-s2-divider{border-top:1px solid #E8EAED;margin:20px 0 16px;}
@@ -671,6 +673,7 @@ function renderStep1() {
   `;
   F.innerHTML = `
     <button class="btn-cancel" onclick="closeModal()">취소</button>
+    <button class="btn-no-rx" id="btnNoRx" style="display:none" onclick="goNoRxStep2()">처방전 없이 상담</button>
     <button class="btn-next" id="btnNext" disabled onclick="goStep2()">다음</button>
   `;
 }
@@ -747,6 +750,8 @@ function selectCustomer() {
   const B = document.getElementById('mbody');
   B.innerHTML = '<div id="rxSection"></div>';
   renderRxSection();
+  const noRxBtn = document.getElementById('btnNoRx');
+  if (noRxBtn) noRxBtn.style.display = '';
 }
 
 function addNewCustomerByName(name) {
@@ -968,6 +973,7 @@ function goBackToStep1() {
   `;
   F.innerHTML = `
     <button class="btn-cancel" onclick="closeModal()">취소</button>
+    <button class="btn-no-rx" id="btnNoRx" onclick="goNoRxStep2()">처방전 없이 상담</button>
     <button class="btn-next" id="btnNext" disabled onclick="goStep2()">다음</button>
   `;
   if (selectedCustomer) {
@@ -1294,6 +1300,23 @@ function buildMsgDefault() {
   }
   var methodBlock = methodSection ? '\n\n[복약 방법]\n' + methodSection : '';
   return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + methodBlock + '\n';
+}
+
+function goStep2() {
+  currentStep = 2;
+  setStepTab(2);
+  if (typeof renderReminderBody === 'function') {
+    renderReminderBody();
+  } else {
+    goStep3();
+  }
+}
+
+function goNoRxStep2() {
+  selectedRxIds = [];
+  editingDrugsMap = {};
+  selectedRx = null;
+  goStep3();
 }
 
 function goStep3() {

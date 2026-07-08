@@ -1303,6 +1303,7 @@ function buildMsgDefault() {
 }
 
 function goStep2() {
+  if (!selectedRxIds.length) { goStep3(); return; }
   currentStep = 2;
   setStepTab(2);
   if (typeof renderReminderBody === 'function') {

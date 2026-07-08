@@ -88,6 +88,13 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
 .cl-item-toggle.open svg{transform:rotate(180deg);}
 .cl-item-body{display:none;padding:0 14px 14px;border-top:1px solid #F2F4F7;}
 .cl-item-body.open{display:block;}
+.cl-item-rx-chips{display:flex;flex-wrap:wrap;gap:4px;flex:1;align-items:center;overflow:hidden;}
+.cl-rx-chip{display:inline-flex;align-items:center;background:#EBF2FF;color:#2563EB;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:500;white-space:nowrap;}
+.cl-rx-chip.no-rx{background:#F4F5F7;color:#888;}
+.cl-rx-group{padding-top:10px;margin-top:10px;border-top:1px dashed #EAECF0;}
+.cl-rx-group:first-child{padding-top:12px;margin-top:0;border-top:none;}
+.cl-rx-group-label{font-size:12.6px;font-weight:700;color:#555;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.cl-rx-group-label::before{content:'';display:inline-block;width:3px;height:11px;background:#2563EB;border-radius:2px;flex-shrink:0;}
 .cl-drugs{margin-bottom:12px;padding-top:12px;}
 .cl-drugs-label{font-size:13.2px;font-weight:700;color:#999;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
 .cl-drug-chip{display:inline-flex;align-items:center;gap:4px;background:#F4F5F7;border-radius:6px;padding:3px 9px;font-size:13.8px;color:#333;margin:2px 3px 2px 0;}
@@ -295,104 +302,81 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
       <!-- CL note 이력 패널 -->
       <div id="panelCl" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
         <div style="padding:10px 20px 6px;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:14.4px;color:#888;">총 <strong style="color:#2563EB;">4</strong>건의 복약 상담</span>
-          <input class="rx-search" placeholder="병원명 검색" style="width:160px;">
+          <span style="font-size:14.4px;color:#888;">총 <strong style="color:#2563EB;">3</strong>건의 복약 상담</span>
+          <input class="rx-search" placeholder="약품·병원 검색" style="width:160px;">
         </div>
         <div class="cl-panel">
-          <!-- 2024년 -->
           <div class="cl-year-group">
             <div class="cl-year-label">2026</div>
 
-            <!-- 항목 1 -->
+            <!-- 상담 1: 2026.07.08 — 처방전 2건 -->
             <div class="cl-item">
               <div class="cl-item-header" onclick="toggleCl(this)">
                 <span class="cl-item-date">2026.07.08</span>
-                <span class="cl-item-hospital">웰체크내과</span>
+                <div class="cl-item-rx-chips">
+                  <span class="cl-rx-chip">웰체크내과</span>
+                  <span class="cl-rx-chip">하나로내과의원</span>
+                </div>
                 <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg></button>
               </div>
               <div class="cl-item-body">
                 <div class="cl-drugs">
                   <div class="cl-drugs-label">
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#999" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    처방받은 약
+                    선택된 처방전
                   </div>
-                  <span class="cl-drug-chip">아토르바스타틴 20mg</span>
-                  <span class="cl-drug-chip">암로디핀 5mg</span>
-                  <span class="cl-drug-chip">메트포르민 500mg</span>
+                  <div class="cl-rx-group">
+                    <div class="cl-rx-group-label">웰체크내과</div>
+                    <span class="cl-drug-chip">아토르바스타틴 20mg</span>
+                    <span class="cl-drug-chip">암로디핀 5mg</span>
+                    <span class="cl-drug-chip">메트포르민 500mg</span>
+                  </div>
+                  <div class="cl-rx-group">
+                    <div class="cl-rx-group-label">하나로내과의원</div>
+                    <span class="cl-drug-chip">메트포르민 500mg</span>
+                    <span class="cl-drug-chip">글리메피리드 2mg</span>
+                  </div>
                 </div>
                 <div class="cl-section">
                   <div class="cl-section-label">
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#999" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
                     녹음 내용
                   </div>
-                  <div class="cl-stt-box">오늘 처방받으신 약 설명 드릴게요. 아토르바스타틴은 고지혈증 약인데, 저녁에 드시면 더 효과적이에요. 최근에 근육이 뭔가 당기거나 아프신 느낌은 없으셨나요? 아, 며칠 전부터 허벅지가 좀 뻐근하긴 했는데 그게 약 때문인가요? 가벼운 근육통은 초기에 나타날 수 있어요. 근데 통증이 심해지거나 소변 색이 이상해지시면 바로 병원 오셔야 해요. 지금은 좀 더 지켜보시고요.</div>
+                  <div class="cl-stt-box">오늘 두 곳에서 처방받으셨네요. 아토르바스타틴은 고지혈증 약인데 저녁에 드시면 더 효과적이에요. 최근에 근육이 당기거나 아프신 느낌은 없으셨나요? 며칠 전부터 허벅지가 좀 뻐근하긴 했는데요. 가벼운 근육통은 초기에 나타날 수 있어요. 심해지거나 소변 색이 이상해지면 병원 오셔야 해요. 또 메트포르민이 두 처방전에 다 있는데, 이미 드시고 계신 거 맞죠? 속 불편함은 없으세요? 식사 직후에 드시면 훨씬 나아요.</div>
                 </div>
                 <div class="cl-section">
                   <div class="cl-section-label">
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#2563EB" stroke-width="1.3" stroke-linecap="round"/></svg>
                     복약지도 요약
                   </div>
-                  <div class="cl-summary-box">아토르바스타틴 저녁 복용 안내. 근육통 부작용 가능성 설명 — 경미한 증상은 경과 관찰, 심한 통증·갈색뇨 발생 시 즉시 내원 권고. 암로디핀·메트포르민 기존 복용 중, 중복·상호작용 이상 없음 확인.</div>
+                  <div class="cl-summary-box">처방전 2건 통합 상담. 아토르바스타틴 저녁 복용 안내, 근육통 부작용 경과 관찰. 메트포르민 중복 처방 확인 — 위장장애 예방 위해 식후 즉시 복용 안내. 글리메피리드 저혈당 증상 교육.</div>
                 </div>
               </div>
             </div>
 
-            <!-- 항목 2 -->
-            <div class="cl-item">
-              <div class="cl-item-header" onclick="toggleCl(this)">
-                <span class="cl-item-date">2026.07.01</span>
-                <span class="cl-item-hospital">하나로내과의원</span>
-                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-              </div>
-              <div class="cl-item-body">
-                <div class="cl-drugs">
-                  <div class="cl-drugs-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#999" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    처방받은 약
-                  </div>
-                  <span class="cl-drug-chip">메트포르민 500mg</span>
-                  <span class="cl-drug-chip">글리메피리드 2mg</span>
-                </div>
-                <div class="cl-section">
-                  <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#999" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    녹음 내용
-                  </div>
-                  <div class="cl-stt-box">약 먹고 나서 속이 너무 안 좋아요. 매스껍고 밥도 못 먹겠더라고요. 메트포르민이 처음에 위장 불편감이 생길 수 있어요. 지금 식사 전에 드시고 계세요, 아니면 식후에? 식전에 먹으라고 해서요. 아, 그러면 식사 시작하자마자 바로 드시거나 식후로 바꿔 보세요. 많이 개선되실 거예요.</div>
-                </div>
-                <div class="cl-section">
-                  <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#2563EB" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    복약지도 요약
-                  </div>
-                  <div class="cl-summary-box">메트포르민 위장장애 호소. 식사 시작 직후 복용으로 변경 안내. 2주 후 증상 재확인 예정. 지속 시 의사 상담 권고.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 2026년 -->
-          <div class="cl-year-group">
-            <div class="cl-year-label">2026</div>
-
-            <!-- 항목 3 -->
+            <!-- 상담 2: 2026.06.28 — 처방전 1건 -->
             <div class="cl-item">
               <div class="cl-item-header" onclick="toggleCl(this)">
                 <span class="cl-item-date">2026.06.28</span>
-                <span class="cl-item-hospital">우리동네내과의원</span>
+                <div class="cl-item-rx-chips">
+                  <span class="cl-rx-chip">우리동네내과의원</span>
+                </div>
                 <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg></button>
               </div>
               <div class="cl-item-body">
                 <div class="cl-drugs">
                   <div class="cl-drugs-label">
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#999" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    처방받은 약
+                    선택된 처방전
                   </div>
-                  <span class="cl-drug-chip">암로디핀 5mg</span>
-                  <span class="cl-drug-chip">로사르탄 50mg</span>
-                  <span class="cl-drug-chip">아토르바스타틴 20mg</span>
-                  <span class="cl-drug-chip">메트포르민 500mg</span>
-                  <span class="cl-drug-chip">졸피뎀 5mg</span>
+                  <div class="cl-rx-group">
+                    <div class="cl-rx-group-label">우리동네내과의원</div>
+                    <span class="cl-drug-chip">암로디핀 5mg</span>
+                    <span class="cl-drug-chip">로사르탄 50mg</span>
+                    <span class="cl-drug-chip">아토르바스타틴 20mg</span>
+                    <span class="cl-drug-chip">메트포르민 500mg</span>
+                    <span class="cl-drug-chip">졸피뎀 5mg</span>
+                  </div>
                 </div>
                 <div class="cl-section">
                   <div class="cl-section-label">
@@ -411,22 +395,16 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
               </div>
             </div>
 
-            <!-- 항목 4 -->
+            <!-- 상담 3: 2026.06.25 — 처방전 없이 상담 -->
             <div class="cl-item">
               <div class="cl-item-header" onclick="toggleCl(this)">
                 <span class="cl-item-date">2026.06.25</span>
-                <span class="cl-item-hospital">건강한가정의원</span>
+                <div class="cl-item-rx-chips">
+                  <span class="cl-rx-chip no-rx">처방전 없이 상담</span>
+                </div>
                 <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg></button>
               </div>
               <div class="cl-item-body">
-                <div class="cl-drugs">
-                  <div class="cl-drugs-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#999" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    처방받은 약
-                  </div>
-                  <span class="cl-drug-chip">암로디핀 5mg</span>
-                  <span class="cl-drug-chip">메트포르민 500mg</span>
-                </div>
                 <div class="cl-section">
                   <div class="cl-section-label">
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#999" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>

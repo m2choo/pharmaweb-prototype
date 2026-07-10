@@ -484,11 +484,9 @@ function openModalAtStep2(customerData) {
 function closeModal() {
   if (!selectedCustomer) { doCloseModal(); return; }
   document.getElementById('closeConfirmBar').style.display = 'flex';
-  document.getElementById('modalX').style.display = 'none';
 }
 function cancelClose() {
   document.getElementById('closeConfirmBar').style.display = 'none';
-  document.getElementById('modalX').style.display = '';
 }
 function confirmClose() { doCloseModal(); }
 function setBeforeUnloadGuard(active) {

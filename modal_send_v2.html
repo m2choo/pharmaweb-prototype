@@ -477,7 +477,7 @@ function openModalAtStep2(customerData) {
   editingDrugsMap[targetRx.id] = targetRx.drugs.map(function(d) { return Object.assign({}, d); });
 
   if (typeof initReminderSettings === 'function') initReminderSettings();
-  if (typeof renderReminderBody === 'function') { currentStep = 2; setStepTab(2); renderReminderBody(); }
+  goBackToStep1();
   startIfMicOk();
 }
 

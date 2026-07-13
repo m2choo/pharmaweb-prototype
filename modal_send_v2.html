@@ -24,13 +24,18 @@
   --color-blue-200:#E3EBFF;
   --color-blue-100:#ECF1FF;
   --color-red:#EE4951;
+  --color-grey-700:#252525;
+  --color-success:#33AF2E;
+  --color-warning:#FF8A00;
+  --color-step-inactive:#414B5E;
+  --color-grey-550:#7888AC;
 }
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;margin:0;padding:0;}
 
 /* ── BACKDROP ── */
-.backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 0;}
 .backdrop.on{display:flex;}
 
 /* ── 투 패널 오버레이 ── */
@@ -38,27 +43,30 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 @keyframes mIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
 /* 왼쪽: 모달 패널 */
-.modal-panel{width:680px;flex-shrink:0;background:var(--color-white);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;height:86vh;}
-.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--color-grey-250);flex-shrink:0;}
+.modal-panel{width:800px;flex-shrink:0;background:var(--color-white);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;min-height:723px;max-height:90vh;}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 24px 15px;border-bottom:1px solid var(--color-grey-300);flex-shrink:0;}
 .modal-title{font-size:24px;font-weight:350;letter-spacing:-0.96px;color:var(--color-grey-900);}
-.modal-x{width:30px;height:30px;background:none;border:none;cursor:pointer;color:var(--color-grey-500);font-size:21.6px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+.modal-x{width:30px;height:30px;background:none;border:none;cursor:pointer;color:var(--color-grey-500);font-size:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:inherit;}
 .modal-x:hover{background:var(--color-grey-150);}
-.modal-pt{display:none;align-items:center;gap:12px;padding:10px 24px;border-bottom:1px solid var(--color-grey-250);flex-shrink:0;background:var(--color-blue-100);}
+.modal-pt{display:none;align-items:center;gap:12px;padding:10px 24px;flex-shrink:0;}
 .modal-pt.on{display:flex;}
-.modal-pt-avatar{width:32px;height:32px;border-radius:50%;background:var(--color-blue-200);color:var(--color-primary);font-size:13px;font-weight:500;letter-spacing:-0.26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.modal-pt-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-900);}
-.modal-pt-info{font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-500);margin-left:4px;}
+.modal-pt-avatar{width:40px;height:40px;border-radius:50%;background:#EEF0F3;color:var(--color-grey-500);font-size:18px;font-weight:500;letter-spacing:-0.72px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.modal-pt-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);}
+.modal-pt-info{font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);margin-left:4px;}
 .modal-pt-remove{margin-left:auto;padding:4px 10px;background:none;border:1px solid var(--color-grey-300);border-radius:6px;font-size:13px;font-weight:350;letter-spacing:0;color:var(--color-grey-500);cursor:pointer;font-family:inherit;white-space:nowrap;}
-.modal-pt-remove:hover{background:#FEE2E2;border-color:#FCA5A5;color:#DC2626;}
-.step-tabs{display:flex;border-bottom:1px solid var(--color-grey-250);flex-shrink:0;}
-.step-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:11px 0;font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-400);border-bottom:2px solid transparent;white-space:nowrap;}
-.step-tab.on{color:var(--color-primary);border-bottom-color:var(--color-primary);}
-.step-num{width:17px;height:17px;border-radius:50%;background:var(--color-grey-250);color:var(--color-grey-400);font-size:13px;font-weight:500;letter-spacing:-0.26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.modal-pt-remove:hover{background:#FFF4F5;border-color:var(--color-red);color:var(--color-red);}
+.step-tabs{display:flex;margin-top:16px;border-bottom:1px solid var(--color-grey-300);flex-shrink:0;}
+.step-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 20px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-step-inactive);border-bottom:2px solid transparent;white-space:nowrap;}
+.step-tab.on{font-weight:700;color:var(--color-primary);border-bottom-color:var(--color-primary);}
+.step-num{width:20px;height:20px;border-radius:50%;background:var(--color-grey-200);color:var(--color-grey-500);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .step-tab.on .step-num{background:var(--color-primary);color:var(--color-white);}
-.modal-body{padding:16px 24px;overflow-y:auto;flex:1;}
-.modal-ft{padding:14px 24px 20px;display:flex;align-items:center;justify-content:flex-end;gap:10px;border-top:1px solid var(--color-grey-250);flex-shrink:0;}
-.close-confirm-bar{display:flex;align-items:center;gap:10px;padding:10px 24px;background:#FFF5F5;border-bottom:1px solid #FED7D7;flex-shrink:0;}
-.ccb-txt{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:#DC2626;margin-right:auto;line-height:1.4;}
+.modal-body{padding:20px 24px;overflow-y:auto;flex:1;min-height:0;}
+.modal-body::-webkit-scrollbar{width:3px;}
+.modal-body::-webkit-scrollbar-thumb{background:var(--color-grey-300);border-radius:2px;}
+.modal-body::-webkit-scrollbar-track{background:transparent;}
+.modal-ft{padding:15px 24px 20px;display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;}
+.close-confirm-bar{display:flex;align-items:center;gap:10px;padding:10px 24px;background:#FFF4F5;border-bottom:1px solid var(--color-red);flex-shrink:0;}
+.ccb-txt{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-red);margin-right:auto;line-height:1.4;}
 .ccb-btn-cancel{height:34px;padding:0 16px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;white-space:nowrap;}
 .ccb-btn-confirm{height:34px;padding:0 16px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;font-family:inherit;white-space:nowrap;}
 
@@ -72,28 +80,39 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .s1-search{width:100%;height:40px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 36px 0 12px;font-size:12px;font-weight:500;font-family:inherit;outline:none;}
 .s1-search:focus{border-color:var(--color-primary);}
 .s1-search-icon{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--color-grey-400);pointer-events:none;}
-.s1-result-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid var(--color-grey-250);border-radius:8px;cursor:pointer;transition:background .1s;margin-bottom:6px;}
+.s1-result-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--color-grey-250);border-radius:8px;cursor:pointer;transition:background .1s;margin-bottom:6px;}
 .s1-result-item:hover{background:var(--color-blue-100);border-color:var(--color-primary);}
 .s1-result-item.selected{background:var(--color-blue-200);border-color:var(--color-primary);}
-.s1-result-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-900);}
-.s1-result-info{font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-500);margin-top:2px;}
+.s1-result-avatar{width:40px;height:40px;border-radius:50%;background:#EEF0F3;color:var(--color-grey-500);font-size:18px;font-weight:500;letter-spacing:-0.72px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s1-result-body{flex:1;min-width:0;}
+.s1-result-name{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-700);}
+.s1-result-info{font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-grey-800);margin-top:2px;}
+.s1-result-tag{flex-shrink:0;height:28px;padding:0 10px;border-radius:999px;background:var(--color-blue-100);border:1px solid var(--color-blue-200);color:var(--color-primary);font-size:12px;font-weight:500;letter-spacing:-0.48px;display:flex;align-items:center;justify-content:center;white-space:nowrap;}
 .s1-empty{text-align:center;padding:20px 0 8px;color:var(--color-grey-400);font-size:15px;font-weight:400;letter-spacing:-0.6px;}
+.s1-dd-hd{display:flex;align-items:center;justify-content:space-between;height:30px;padding:10px;border-bottom:1px solid var(--color-grey-200);font-size:12px;font-weight:500;}
+.s1-dd-hd .s1-dd-hd-label{color:var(--color-grey-600);}
+.s1-dd-hd .s1-dd-hd-count{color:var(--color-primary);}
 .s1-add-btn{width:100%;margin-top:12px;padding:11px;border:1.5px dashed var(--color-primary);border-radius:8px;background:var(--color-blue-100);color:var(--color-primary);font-size:15px;font-weight:500;letter-spacing:-0.6px;cursor:pointer;font-family:inherit;transition:background .1s;}
 .s1-add-btn:hover{background:var(--color-blue-200);}
-.s1-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--color-white);border:1px solid var(--color-grey-250);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:100;overflow:hidden;}
+.s1-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:5px;box-shadow:0 4px 7.5px rgba(0,0,0,.1);z-index:100;overflow:hidden;}
 .s1-dropdown .s1-result-item{border-radius:0;border:none;border-bottom:1px solid var(--color-grey-200);margin-bottom:0;}
-.s1-empty-dd{text-align:center;padding:16px 0 8px;color:var(--color-grey-400);font-size:15px;font-weight:400;letter-spacing:-0.6px;}
+.s1-empty-dd{display:flex;flex-direction:column;align-items:center;gap:8px;padding:32px 20px;}
+.s1-empty-dd-icon{width:40px;height:40px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-400);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s1-empty-dd-msg{font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-800);}
+.s1-empty-dd-sub{font-size:13px;font-weight:350;color:var(--color-grey-500);}
 .s1-add-inline-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:var(--color-blue-200);border-bottom:1px solid var(--color-blue-200);}
 .s1-add-inline-left{display:flex;align-items:center;gap:10px;min-width:0;}
 .s1-add-inline-avatar{width:28px;height:28px;border-radius:50%;background:var(--color-white);color:var(--color-primary);font-size:13px;font-weight:500;letter-spacing:-0.26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .s1-add-inline-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-900);}
-.s1-add-inline-sub{font-size:13px;font-weight:350;letter-spacing:0;color:#5B7FD1;margin-top:1px;}
+.s1-add-inline-sub{font-size:13px;font-weight:350;letter-spacing:0;color:var(--color-primary);margin-top:1px;}
 .s1-add-inline-btn{padding:6px 14px;border:none;border-radius:8px;background:var(--color-primary);color:var(--color-white);font-size:15px;font-weight:500;letter-spacing:-0.6px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;}
 .s1-add-inline-btn:hover{background:var(--color-primary);}
 .btn-next{height:40px;padding:0 28px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
+.btn-next.btn-send{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:4px 10px;font-weight:700;}
 .btn-next:disabled{opacity:.4;cursor:not-allowed;}
 .btn-cancel{height:40px;padding:0 20px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;font-family:inherit;}
-.btn-no-rx{height:40px;padding:0 16px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;font-family:inherit;margin-right:auto;}
+.btn-cancel.is-back{color:var(--color-grey-800);}
+.btn-no-rx{height:40px;padding:0 16px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;font-family:inherit;}
 .btn-no-rx:hover{background:var(--color-grey-150);}
 
 /* Step 1 처방전 선택 */
@@ -105,7 +124,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .s2-rx-list{display:flex;flex-direction:column;gap:0;}
 .s2-rx-item{width:100%;margin-bottom:6px;}
 .s2-rx-card{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid var(--color-grey-250);border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none;width:100%;box-sizing:border-box;}
-.s2-rx-card:hover{border-color:#A0B4FF;background:var(--color-blue-100);}
+.s2-rx-card:hover{border-color:var(--color-primary);background:var(--color-blue-100);}
 .s2-rx-card.checked{border-color:var(--color-primary);background:var(--color-blue-200);border-bottom-left-radius:0;border-bottom-right-radius:0;}
 .s2-rx-card-check{width:17px;height:17px;accent-color:var(--color-primary);cursor:pointer;flex-shrink:0;}
 .s2-rx-card-body{flex:1;min-width:0;overflow:hidden;}
@@ -127,97 +146,99 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .s2-rx-img-btn{padding:5px 12px;border:1px solid var(--color-grey-300);border-radius:6px;background:var(--color-white);font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0;}
 .s2-rx-img-btn:hover{background:var(--color-grey-150);}
 .s2-drug-table{width:100%;border-collapse:collapse;table-layout:fixed;}
-.s2-drug-table thead tr{background:var(--color-grey-150);}
-.s2-drug-table th{padding:8px 12px;font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-500);text-align:left;border-bottom:1px solid var(--color-grey-250);}
-.s2-drug-table td{padding:10px 12px;font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-800);border-bottom:1px solid var(--color-grey-200);word-break:keep-all;overflow-wrap:break-word;}
+.s2-drug-table thead tr{background:#EEF0F3;}
+.s2-drug-table th{padding:8px 12px;font-size:12px;font-weight:400;letter-spacing:-0.48px;color:#5F6E7D;text-align:center;border-top:1px solid var(--color-grey-250);border-bottom:1px solid var(--color-grey-250);}
+.s2-drug-table th:nth-child(2){text-align:left;}
+.s2-drug-table td{padding:0 12px;height:54px;font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-800);border-bottom:1px solid var(--color-grey-200);word-break:keep-all;overflow-wrap:break-word;}
 .s2-drug-table tbody tr:last-child td{border-bottom:none;}
-.s2-drug-table th:nth-child(1),.s2-drug-table td:nth-child(1){width:38%;}
-.s2-drug-table th:nth-child(2),.s2-drug-table td:nth-child(2){width:13%;text-align:center;}
-.s2-drug-table th:nth-child(3),.s2-drug-table td:nth-child(3){width:16%;text-align:center;}
-.s2-drug-table th:nth-child(4),.s2-drug-table td:nth-child(4){width:12%;text-align:center;}
-.s2-drug-table th:nth-child(5),.s2-drug-table td:nth-child(5){width:11%;text-align:center;}
-.s2-drug-table th:nth-child(6),.s2-drug-table td:nth-child(6){width:10%;text-align:center;}
-.s2-drug-name{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-900);}
-.s2-drug-sub{font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-grey-500);margin-top:1px;}
-.s2-consent-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px;background:#FFF1F1;border-top:1px solid #FCA5A5;}
-.s2-consent-left{display:flex;align-items:flex-start;gap:10px;}
-.s2-consent-icon{width:20px;height:20px;border-radius:50%;border:2px solid #DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-.s2-consent-icon span{font-size:13.2px;font-weight:900;color:#DC2626;line-height:1;}
-.s2-consent-title{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:#DC2626;}
-.s2-consent-sub{font-size:13px;font-weight:350;letter-spacing:0;color:#EF4444;margin-top:2px;}
+.s2-drug-table th:nth-child(1),.s2-drug-table td:nth-child(1){width:25px;text-align:center;color:var(--color-grey-400);font-family:'Poppins',sans-serif;}
+.s2-drug-table th:nth-child(2),.s2-drug-table td:nth-child(2){width:auto;}
+.s2-drug-table th:nth-child(3),.s2-drug-table td:nth-child(3){width:70px;text-align:center;}
+.s2-drug-name{font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-800);}
+.s2-drug-sub{font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);margin-top:1px;}
+.s2-consent-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 20px 16px;background:rgba(238,73,81,.1);border-radius:8px;}
+.s2-consent-left{display:flex;align-items:center;gap:8px;}
+.s2-consent-icon{width:20px;height:20px;border-radius:50%;background:var(--color-red);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s2-consent-icon span{font-size:13px;font-weight:900;color:var(--color-white);line-height:1;}
+.s2-consent-title{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-red);}
+.s2-consent-sub{font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-red);margin-top:4px;}
 .s2-consent-radios{display:flex;align-items:center;gap:16px;flex-shrink:0;}
-.s2-consent-radio{display:flex;align-items:center;gap:5px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-800);cursor:pointer;}
-.s2-consent-radio input[type="radio"]{width:16px;height:16px;accent-color:var(--color-primary);cursor:pointer;}
+.s2-consent-radio{display:flex;align-items:center;gap:5px;font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;}
+.s2-consent-radio input[type="radio"]{width:14px;height:14px;accent-color:var(--color-primary);cursor:pointer;}
 .s2-empty-tip{text-align:center;padding:40px 0;color:var(--color-grey-400);font-size:15px;font-weight:400;letter-spacing:-0.6px;}
-.s2-more-btn{width:100%;margin-top:4px;margin-bottom:4px;padding:10px;border:1.5px dashed var(--color-grey-200);border-radius:8px;background:var(--color-blue-100);color:#5B7FD1;font-size:15px;font-weight:500;letter-spacing:-0.6px;cursor:pointer;font-family:inherit;transition:background .1s;}
+.s2-more-btn{width:100%;margin-top:4px;margin-bottom:4px;padding:10px;border:1.5px dashed var(--color-grey-200);border-radius:8px;background:var(--color-blue-100);color:var(--color-primary);font-size:15px;font-weight:500;letter-spacing:-0.6px;cursor:pointer;font-family:inherit;transition:background .1s;}
 .s2-more-btn:hover{background:var(--color-blue-200);}
 
 /* Step 2 처방 변경 */
 .s2-drug-table th:last-child,.s2-drug-table td:last-child{text-align:center;width:64px;}
 .s2-drug-table th.th-action{width:64px;}
 .s2-drug-table td.td-action{text-align:center;padding:6px 4px;display:flex;align-items:center;justify-content:center;gap:2px;}
-.s2-row-edit-btn{width:26px;height:26px;border:none;background:none;cursor:pointer;color:var(--color-grey-400);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;}
+.s2-row-edit-btn{width:24px;height:24px;border:none;background:none;cursor:pointer;color:var(--color-grey-400);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;}
 .s2-row-edit-btn:hover{background:var(--color-grey-150);color:var(--color-grey-600);}
-.s2-row-del-btn{width:26px;height:26px;border:none;background:none;cursor:pointer;color:var(--color-grey-400);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;}
-.s2-row-del-btn:hover{background:#FEE2E2;color:#DC2626;}
+.s2-row-del-btn{width:24px;height:24px;border:none;background:none;cursor:pointer;color:var(--color-grey-400);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;}
+.s2-row-del-btn:hover{background:#FFF4F5;color:var(--color-red);}
 .s2-add-drug-row{display:flex;align-items:center;justify-content:center;padding:10px 12px;border-top:1px dashed var(--color-grey-200);}
 .s2-add-drug-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border:1.5px dashed var(--color-primary);border-radius:8px;background:var(--color-blue-100);color:var(--color-primary);font-size:15px;font-weight:500;letter-spacing:-0.6px;cursor:pointer;font-family:inherit;}
 .s2-add-drug-btn:hover{background:var(--color-blue-200);}
 .s2-edit-row td{background:var(--color-blue-100);padding:10px 12px;}
-.s2-edit-form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;}
-.s2-edit-field{display:flex;flex-direction:column;gap:3px;}
-.s2-edit-field label{font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-grey-600);}
-.s2-edit-field input,.s2-edit-field select{height:32px;border:1px solid var(--color-blue-200);border-radius:6px;padding:0 8px;font-size:12px;font-weight:500;font-family:inherit;outline:none;background:var(--color-white);min-width:0;}
-.s2-edit-field input:focus,.s2-edit-field select:focus{border-color:var(--color-primary);}
-.s2-edit-field.f-name input{width:200px;}
-.s2-edit-field.f-ing input{width:130px;}
-.s2-edit-field.f-dosage input{width:70px;}
-.s2-edit-field.f-freq input{width:90px;}
-.s2-edit-field.f-days input{width:60px;}
-.s2-edit-actions{display:flex;gap:6px;margin-left:auto;}
-.s2-edit-save{height:32px;padding:0 14px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
-.s2-edit-cancel{height:32px;padding:0 12px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;font-family:inherit;}
+.s2-edit-form{display:flex;flex-direction:column;gap:16px;padding:12px 14px;}
+.s2-edit-label{font-size:11px;font-weight:500;letter-spacing:-0.44px;color:var(--color-grey-550);margin-bottom:8px;display:block;}
+.s2-edit-search{position:relative;}
+.s2-edit-search input{width:100%;height:40px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 36px 0 15px;font-size:15px;font-family:inherit;outline:none;}
+.s2-edit-search input:focus{border-color:var(--color-primary);}
+.s2-edit-search .clear-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--color-grey-400);display:flex;padding:0;}
+.s2-edit-qty-row{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;}
+.s2-edit-qty-group{display:flex;flex-direction:column;gap:6px;}
+.s2-edit-qty-value{display:flex;gap:6px;align-items:center;font-size:15px;color:var(--color-grey-800);font-family:inherit;}
+.s2-edit-qty-input{width:66px;height:28px;border:1px solid #CBCDD0;border-radius:5px;font-family:'Poppins',sans-serif;font-size:15px;color:var(--color-grey-800);text-align:center;outline:none;}
+.s2-edit-qty-input:focus{border-color:var(--color-primary);}
+.s2-edit-actions{display:flex;gap:8px;justify-content:flex-end;}
+.s2-edit-save{height:34px;width:80px;background:var(--color-primary);border:none;border-radius:6px;font-size:13px;font-weight:500;color:var(--color-white);cursor:pointer;font-family:inherit;}
+.s2-edit-cancel{height:34px;width:80px;background:var(--color-white);border:1px solid var(--color-primary);border-radius:6px;font-size:13px;font-weight:500;color:var(--color-primary);cursor:pointer;font-family:inherit;}
 .s2-add-form-row{background:var(--color-blue-100);}
 .s2-add-form-row td{padding:12px 14px;}
 .s2-changed-badge{display:inline-block;background:var(--color-blue-200);color:var(--color-primary);font-size:13px;font-weight:500;letter-spacing:-0.26px;padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;}
-.s2-poly-alert{display:flex;align-items:center;gap:10px;padding:11px 14px;background:#FFF1F1;border:1.5px solid #FCA5A5;border-radius:8px;margin-bottom:16px;}
-.s2-poly-alert-icon{width:20px;height:20px;border-radius:50%;border:2px solid #DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.s2-poly-alert-icon span{font-size:13.2px;font-weight:900;color:#DC2626;line-height:1;}
-.s2-poly-alert-txt{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:#DC2626;}
+.s2-poly-alert{display:flex;align-items:center;gap:8px;padding:12px 20px 16px;background:rgba(238,73,81,.1);border-radius:8px;margin-bottom:16px;}
+.s2-poly-alert-icon{width:20px;height:20px;border-radius:50%;background:var(--color-red);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s2-poly-alert-icon span{font-size:13px;font-weight:900;color:var(--color-white);line-height:1;}
+.s2-poly-alert-txt{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-red);}
 
 /* ── Step 3 복약지도 전송 ── */
-.s4-grid{display:grid;grid-template-columns:200px 1fr;gap:20px;}
-.tag-ttl{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-900);margin-bottom:12px;}
-.tag-chips{display:flex;flex-direction:column;gap:8px;}
-.tag-chip{padding:9px 13px;border:1.5px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-800);cursor:pointer;line-height:1.4;transition:all .12s;font-family:inherit;background:var(--color-white);text-align:left;}
-.tag-chip:hover{border-color:#A5BCEC;background:var(--color-blue-100);}
-.tag-chip.on{border-color:var(--color-primary);background:var(--color-blue-200);color:var(--color-primary);}
+.s4-grid{display:grid;grid-template-columns:250px 1fr;gap:20px;}
+.tag-ttl{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);margin-bottom:12px;}
+.tag-chips{display:flex;flex-direction:column;gap:6px;}
+.tag-chip{height:45px;padding:0 15px;border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;display:flex;align-items:center;transition:all .12s;font-family:inherit;background:var(--color-white);text-align:left;}
+.tag-chip:hover{border-color:var(--color-primary);}
+.tag-chip.on{border-color:var(--color-primary);color:var(--color-primary);opacity:.8;}
 .msg-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
-.msg-ttl{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-900);}
-.msg-reset{font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-400);cursor:pointer;background:none;border:none;font-family:inherit;}
+.msg-ttl{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);}
+.msg-reset{display:inline-flex;align-items:center;gap:5px;font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;background:none;border:none;font-family:inherit;}
 .msg-reset:hover{color:var(--color-primary);}
 .msg-ta{width:100%;height:260px;border:1.5px solid var(--color-grey-300);border-radius:10px;padding:14px;font-size:15px;font-weight:400;line-height:25px;letter-spacing:-0.6px;color:var(--color-grey-800);resize:none;font-family:inherit;transition:border-color .15s;}
 .msg-ta:focus{outline:none;border-color:var(--color-primary);}
-.msg-cnt{text-align:right;font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-grey-400);margin-top:4px;}
+.msg-cnt{text-align:right;font-size:12px;font-weight:400;letter-spacing:-0.48px;margin-top:4px;}
+.msg-cnt .msg-cnt-num{color:var(--color-primary);}
+.msg-cnt .msg-cnt-max{color:var(--color-grey-500);}
 .cpl-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 40px;gap:16px;text-align:center;}
 .cpl-ttl{font-size:24px;font-weight:350;letter-spacing:-0.96px;color:var(--color-grey-900);}
 .cpl-sub{font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);}
 .btn-close-cpl{height:44px;padding:0 48px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
 /* Step 4 미리보기 */
 .prev-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-.prev-msg{background:#FFF9E6;border-radius:10px;padding:16px;font-size:15px;font-weight:400;line-height:25px;letter-spacing:-0.6px;color:var(--color-grey-800);min-height:calc(52vh - 110px);overflow-y:auto;max-height:calc(52vh - 110px);}
-.sum-tbl{width:100%;border-collapse:collapse;}
-.sum-tbl tr{border-bottom:1px solid var(--color-grey-200);}
-.sum-tbl td{padding:11px 4px;font-size:15px;font-weight:400;letter-spacing:-0.6px;vertical-align:middle;}
-.sum-tbl td:first-child{color:var(--color-grey-500);width:90px;white-space:nowrap;}
-.sum-tbl td:last-child{color:var(--color-grey-800);font-weight:500;}
+.prev-phone{background:var(--color-grey-100);border-radius:10px;padding:20px 16px;min-height:calc(52vh - 110px);max-height:calc(52vh - 110px);overflow-y:auto;display:flex;flex-direction:column;align-items:flex-end;}
+.prev-msg{background:#FFE790;border-radius:16px 0 16px 16px;padding:15px 12px;font-size:15px;font-weight:350;line-height:21px;letter-spacing:-0.75px;color:var(--color-grey-700);max-width:100%;}
+.sum-tbl{width:100%;border-collapse:collapse;border-left:1px solid var(--color-grey-250);}
+.sum-tbl tr{border-bottom:1px solid var(--color-grey-250);height:52px;}
+.sum-tbl td{padding:11px 12px;font-size:15px;font-weight:400;letter-spacing:-0.6px;vertical-align:middle;}
+.sum-tbl td:first-child{background:var(--color-grey-100);color:var(--color-grey-600);width:100px;white-space:nowrap;text-align:center;}
+.sum-tbl td:last-child{color:var(--color-grey-700);font-weight:400;}
 .s4-phone-input{width:100%;height:36px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 10px;font-size:12px;font-weight:500;font-family:inherit;outline:none;margin-top:4px;}
 .s4-phone-input:focus{border-color:var(--color-primary);}
 .s4-birth-input{width:100%;height:36px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 10px;font-size:12px;font-weight:500;font-family:inherit;outline:none;margin-top:4px;color:var(--color-grey-800);}
 .s4-birth-input:focus{border-color:var(--color-primary);}
-.s4-opt-label{font-size:11px;font-weight:400;color:var(--color-grey-400);margin-left:4px;}
+.s4-opt-label{font-size:12px;font-weight:400;color:var(--color-grey-400);margin-left:4px;}
 /* Toast */
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(16px);background:#1E293B;color:var(--color-white);padding:10px 22px;border-radius:24px;font-size:15px;font-weight:500;letter-spacing:-0.6px;opacity:0;transition:opacity .22s,transform .22s;z-index:999;pointer-events:none;white-space:nowrap;}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--color-grey-800);color:var(--color-white);padding:10px 22px;border-radius:24px;font-size:15px;font-weight:500;letter-spacing:-0.6px;opacity:0;transition:opacity .22s,transform .22s;z-index:999;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* 처방전 이미지 뷰어 레이어 */
@@ -244,19 +265,19 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .pz-icon-btn{width:28px;height:28px;background:none;border:none;color:var(--color-grey-500);font-size:16.8px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:6px;}
 .pz-icon-btn:hover{background:var(--color-grey-150);}
 .pz-visit-bar{display:inline-flex;align-items:center;gap:0;background:var(--color-grey-150);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:350;letter-spacing:0;color:var(--color-grey-600);cursor:pointer;flex-wrap:wrap;gap:4px;}
-.pz-visit-dot{width:6px;height:6px;border-radius:50%;background:#3B82F6;display:inline-block;flex-shrink:0;}
+.pz-visit-dot{width:6px;height:6px;border-radius:50%;background:var(--color-primary);display:inline-block;flex-shrink:0;}
 .pz-visit-sep{color:var(--color-grey-400);margin:0 4px;}
 .pz-chat{flex:1;overflow-y:auto;padding:16px 18px;font-size:15px;font-weight:400;line-height:25px;letter-spacing:-0.6px;color:var(--color-grey-800);background:var(--color-white);}
 .pz-chat::-webkit-scrollbar{width:3px;}
 .pz-chat::-webkit-scrollbar-thumb{background:var(--color-grey-300);border-radius:2px;}
 .pz-sparkle-wrap{position:relative;flex-shrink:0;}
 .pz-sparkle-btn{position:absolute;right:14px;bottom:8px;background:var(--color-white);border:1.5px solid var(--color-grey-200);border-radius:20px;padding:6px 14px;color:var(--color-grey-600);font-size:15px;font-weight:500;letter-spacing:-0.6px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:2;}
-.pz-sparkle-btn:hover{background:var(--color-blue-100);border-color:#C7CEFF;}
+.pz-sparkle-btn:hover{background:var(--color-blue-100);border-color:var(--color-primary);}
 .pz-bottom{flex-shrink:0;border-top:1px solid var(--color-grey-150);background:var(--color-white);}
 .pz-chips{display:flex;gap:8px;padding:10px 14px 8px;overflow-x:auto;}
 .pz-chips::-webkit-scrollbar{display:none;}
 .pz-chip{padding:6px 12px;border:1px solid var(--color-grey-200);border-radius:20px;font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-800);cursor:pointer;white-space:nowrap;background:var(--color-white);font-family:inherit;flex-shrink:0;}
-.pz-chip:hover{background:var(--color-blue-100);border-color:#A0B4FF;}
+.pz-chip:hover{background:var(--color-blue-100);border-color:var(--color-primary);}
 .pz-input-row{display:flex;align-items:center;gap:8px;padding:6px 14px 14px;}
 .pz-mic-btn{width:40px;height:40px;border-radius:50%;background:var(--color-primary);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:micPulse 1.5s ease-in-out infinite;}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 3px rgba(37,99,235,.18)}50%{box-shadow:0 0 0 8px rgba(37,99,235,.05)}}
@@ -273,7 +294,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .pz-wave span:nth-child(5){height:4px;animation-delay:.48s;}
 @keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.7)}}
 .pz-rec-bar{display:flex;align-items:center;gap:8px;padding:4px 16px 0;flex-shrink:0;}
-.pz-rec-dot{width:7px;height:7px;border-radius:50%;background:#EF4444;animation:blink 1s ease-in-out infinite;}
+.pz-rec-dot{width:7px;height:7px;border-radius:50%;background:var(--color-red);animation:blink 1s ease-in-out infinite;}
 .pz-rec-label{font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-grey-500);}
 .pz-rec-time{margin-left:auto;font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-grey-500);font-variant-numeric:tabular-nums;}
 /* ── 마이크 권한 레이어 ── */
@@ -297,15 +318,19 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
   <div class="overlay-wrap" onclick="event.stopPropagation()">
 
     <!-- 왼쪽: 모달 -->
-    <div class="modal-panel">
+    <!-- component: popup -->
+    <div class="modal-panel" data-figma="popup">
       <div class="modal-hd">
         <span class="modal-title">CL note 복약 상담</span>
-        <button class="modal-x" id="modalX" onclick="closeModal()">✕</button>
+        <!-- component: button/ghost -->
+        <button class="modal-x" id="modalX" data-figma="button/ghost" onclick="closeModal()">✕</button>
       </div>
       <div class="close-confirm-bar" id="closeConfirmBar" style="display:none;">
         <span class="ccb-txt">녹음이 중단되고, 지금까지 변환된 텍스트만 임시 저장됩니다.</span>
-        <button class="ccb-btn-confirm" onclick="confirmClose()">나가기</button>
-        <button class="ccb-btn-cancel" onclick="cancelClose()">계속 작성</button>
+        <!-- component: button/outlined-secondary -->
+        <button class="ccb-btn-confirm" data-figma="button/outlined-secondary" onclick="confirmClose()">나가기</button>
+        <!-- component: button/solid -->
+        <button class="ccb-btn-cancel" data-figma="button/solid" onclick="cancelClose()">계속 작성</button>
       </div>
       <div class="modal-pt" id="modalPt">
         <div class="modal-pt-avatar" id="ptAvatar"></div>
@@ -331,28 +356,32 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
         <div class="pz-name-row">
           <div class="pz-name" id="pzName">고객 선택 대기 중<span class="pz-name-sub" id="pzSub"></span></div>
           <div class="pz-icons">
-            <button class="pz-icon-btn">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="#888" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <!-- component: button/ghost -->
+            <button class="pz-icon-btn" data-figma="button/ghost">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="#666666" stroke-width="1.8" stroke-linejoin="round"/></svg>
             </button>
-            <button class="pz-icon-btn">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="#888" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <!-- component: button/ghost -->
+            <button class="pz-icon-btn" data-figma="button/ghost">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="#666666" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <button class="pz-icon-btn">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="#888" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <!-- component: button/ghost -->
+            <button class="pz-icon-btn" data-figma="button/ghost">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="#666666" stroke-width="1.8" stroke-linecap="round"/></svg>
             </button>
           </div>
         </div>
         <div class="pz-visit-bar">
           <span class="pz-visit-dot"></span>
           <span id="pzVisit">고객을 선택하면 방문 정보가 표시됩니다</span>
-          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style="margin-left:2px"><path d="M2 4l4 4 4-4" stroke="#999" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style="margin-left:2px"><path d="M2 4l4 4 4-4" stroke="#8B95A1" stroke-width="1.5" stroke-linecap="round"/></svg>
         </div>
       </div>
 
       <!-- 채팅 영역 + ✦ 플로팅 버튼 -->
       <div style="flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;">
         <div class="pz-chat" id="pzChat"></div>
-        <button class="pz-sparkle-btn" style="position:absolute;right:12px;bottom:10px;" onclick="showSummary()">✦ 복약지도 요약하기</button>
+        <!-- component: button/outlined-secondary -->
+        <button class="pz-sparkle-btn" data-figma="button/outlined-secondary" style="position:absolute;right:12px;bottom:10px;" onclick="showSummary()">✦ 복약지도 요약하기</button>
       </div>
 
       <!-- 녹음 상태 바 -->
@@ -364,12 +393,13 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 
       <div class="pz-bottom">
         <div class="pz-chips">
-          <button class="pz-chip">의약품 복용 이력</button>
-          <button class="pz-chip">과거 복약지도 이력</button>
+          <button class="pz-chip" data-figma="new/chip">의약품 복용 이력</button>
+          <button class="pz-chip" data-figma="new/chip">과거 복약지도 이력</button>
         </div>
         <div class="pz-input-row">
-          <button class="pz-mic-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="8.5" y="1" width="7" height="11" rx="3.5" fill="#fff"/><path d="M5 11c0 3.866 3.134 7 7 7s7-3.134 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M12 18v3M9 21h6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+          <!-- component: button/solid -->
+          <button class="pz-mic-btn" data-figma="button/solid">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="8.5" y="1" width="7" height="11" rx="3.5" fill="#FFFFFF"/><path d="M5 11c0 3.866 3.134 7 7 7s7-3.134 7-7" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/><path d="M12 18v3M9 21h6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg>
           </button>
           <div class="pz-input-box">
             <input class="pz-input" placeholder="버튼을 눌러 수정사항을 알려보세요">
@@ -389,10 +419,12 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 
 <!-- 처방전 이미지 뷰어 레이어 -->
 <div class="rx-viewer-bd" id="rxViewerBd">
-  <div class="rx-viewer-box">
+  <!-- component: popup -->
+  <div class="rx-viewer-box" data-figma="popup">
     <div class="rx-viewer-hd">
       <span class="rx-viewer-title" id="rxViewerTitle">처방전 원본</span>
-      <button class="rx-viewer-x" onclick="closeRxViewer()">✕</button>
+      <!-- component: button/ghost -->
+      <button class="rx-viewer-x" data-figma="button/ghost" onclick="closeRxViewer()">✕</button>
     </div>
     <div class="rx-viewer-img">
       <div class="rx-viewer-placeholder">
@@ -406,11 +438,13 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 
 <!-- 마이크 권한 레이어 -->
 <div class="mic-perm-layer" id="micPermLayer">
-  <div class="mic-perm-box">
+  <!-- component: popup -->
+  <div class="mic-perm-box" data-figma="popup">
     <div class="mic-perm-icon">🎙️</div>
     <div class="mic-perm-title">마이크 권한이 필요합니다</div>
     <div class="mic-perm-desc">AI 복약 상담 녹음 기능을 사용하려면<br>마이크 접근을 허용해 주세요.</div>
-    <button class="mic-perm-btn" id="micPermBtn" onclick="requestMicAccess()">설정하기</button>
+    <!-- component: button/solid -->
+    <button class="mic-perm-btn" id="micPermBtn" data-figma="button/solid" onclick="requestMicAccess()">설정하기</button>
     <div class="mic-perm-hint" id="micPermHint" style="display:none;">권한이 이미 거부된 경우 브라우저 주소창의 아이콘을<br>클릭하여 마이크 권한을 재설정한 후 다시 시도해 주세요.</div>
   </div>
 </div>
@@ -652,7 +686,7 @@ function showSummary() {
         <span style="font-size:13px;font-weight:350;letter-spacing:0;color:var(--color-grey-400);white-space:nowrap;">AI 요약</span>
         <div style="flex:1;height:1px;background:var(--color-grey-200);"></div>
       </div>
-      <div style="background:var(--color-blue-100);border-left:3px solid var(--color-primary);border-radius:8px;padding:14px 16px;font-size:15px;font-weight:400;line-height:25px;letter-spacing:-0.6px;color:#1E3A5F;">
+      <div style="background:var(--color-blue-100);border-left:3px solid var(--color-primary);border-radius:8px;padding:14px 16px;font-size:15px;font-weight:400;line-height:25px;letter-spacing:-0.6px;color:var(--color-grey-800);">
         ${SUMMARY_TEXT}
       </div>
     </div>`);
@@ -680,9 +714,9 @@ function renderStep1() {
   B.innerHTML = `
     <p class="s1-guide" id="s1guide">고객 이름 또는 휴대전화 번호를 검색하세요.</p>
     <div class="s1-search-wrap" id="s1searchWrap">
-      <input class="s1-search" id="s1input" type="text" placeholder="이름 또는 휴대전화 번호" oninput="onSearch(this.value)" autocomplete="off">
+      <input class="s1-search" id="s1input" data-figma="search/default" type="text" placeholder="이름 또는 휴대전화 번호" oninput="onSearch(this.value)" autocomplete="off">
       <span class="s1-search-icon">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#aaa" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#A9ADB9" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#A9ADB9" stroke-width="1.5" stroke-linecap="round"/></svg>
       </span>
       <div id="s1dropdown" class="s1-dropdown" style="display:none"></div>
     </div>
@@ -690,9 +724,10 @@ function renderStep1() {
     <div id="rxSection"></div>
   `;
   F.innerHTML = `
-    <button class="btn-cancel" onclick="closeModal()">취소</button>
-    <button class="btn-no-rx" id="btnNoRx" style="display:none" onclick="goNoRxStep2()">처방전 없이 상담</button>
-    <button class="btn-next" id="btnNext" disabled onclick="goStep2()">다음</button>
+    <!-- component: button/outlined-secondary -->
+    <button class="btn-no-rx" id="btnNoRx" data-figma="button/outlined-secondary" style="display:none" onclick="goNoRxStep2()">처방전 없이 상담</button>
+    <!-- component: button/solid -->
+    <button class="btn-next" id="btnNext" data-figma="button/solid" disabled onclick="goStep2()">다음</button>
   `;
 }
 
@@ -730,20 +765,23 @@ function onSearch(val) {
           <div class="s1-add-inline-sub">직접 입력</div>
         </div>
       </div>
-      <button class="s1-add-inline-btn">고객 추가</button>
+      <!-- component: button/solid -->
+      <button class="s1-add-inline-btn" data-figma="button/solid">고객 추가</button>
     </div>` : '';
 
   const matchedHTML = matched.length ? `
+    <div class="s1-dd-hd"><span class="s1-dd-hd-label">검색 결과</span><span class="s1-dd-hd-count">${matched.length}건</span></div>
     <div class="s1-result-item" id="ri0" onclick="selectCustomer()">
-      <div>
+      <div class="s1-result-avatar">${KIMCHECK.name.charAt(0)}</div>
+      <div class="s1-result-body">
         <div class="s1-result-name">${KIMCHECK.name}</div>
-        <div class="s1-result-info">${KIMCHECK.birth} · ${KIMCHECK.gender} · ${KIMCHECK.phone}</div>
+        <div class="s1-result-info">${KIMCHECK.phone}</div>
       </div>
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="s1-result-tag">단골 등록됨</span>
     </div>` : '';
 
-  const noMatchMsg = !matched.length && q.length >= 2 ? `<div class="s1-empty-dd">검색되는 고객이 없습니다.<br><span style="color:var(--color-grey-500);font-size:15px;font-weight:400;letter-spacing:-0.6px;">'고객 추가' 버튼을 눌러 새 고객을 추가해 주세요.</span></div>` : '';
-  dd.innerHTML = (noMatchMsg + addRowHTML + matchedHTML) || `<div class="s1-empty-dd">이름 또는 전화번호를 2자 이상 입력해 주세요.</div>`;
+  const noMatchMsg = !matched.length && q.length >= 2 ? `<div class="s1-empty-dd"><div class="s1-empty-dd-icon"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="s1-empty-dd-msg">검색되는 고객이 없습니다</div><div class="s1-empty-dd-sub">'고객 추가' 버튼을 눌러 새 고객을 추가해 주세요</div></div>` : '';
+  dd.innerHTML = (noMatchMsg + addRowHTML + matchedHTML) || `<div class="s1-empty-dd"><div class="s1-empty-dd-icon"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="s1-empty-dd-msg">이름 또는 전화번호를 2자 이상 입력해 주세요</div></div>`;
 }
 
 function setCustomerHeader(name, info, pzVisitTxt) {
@@ -876,12 +914,12 @@ function buildRxGroupHTML(groups) {
     <div class="s2-date-group">
       <div class="s2-date-header">
         ${date}
-        <span class="s2-date-count">${rxList.length}건</span>
+        <span class="s2-date-count" data-figma="new/count-badge">${rxList.length}건</span>
       </div>
       ${rxList.map(rx => `
         <div class="s2-rx-item">
           <div class="s2-rx-card" id="rxcard_${rx.id}" onclick="toggleExpand('${rx.id}')">
-            <input type="checkbox" class="s2-rx-card-check" id="rxchk_${rx.id}" onclick="event.stopPropagation();toggleCheck('${rx.id}')">
+            <input type="checkbox" class="s2-rx-card-check" id="rxchk_${rx.id}" data-figma="checkbox" onclick="event.stopPropagation();toggleCheck('${rx.id}')">
             <div class="s2-rx-card-body">
               <div class="s2-rx-card-top">
                 <span class="s2-rx-card-hospital">${rx.hospital}</span>
@@ -890,7 +928,7 @@ function buildRxGroupHTML(groups) {
               <div class="s2-rx-card-meta">${rx.days}일분 · ${rx.drugs.length}품목</div>
             </div>
             <div class="s2-rx-card-right">
-              <span class="s2-rx-card-chip">${rx.drugs.length}품목</span>
+              <span class="s2-rx-card-chip" data-figma="new/count-badge">${rx.drugs.length}품목</span>
               ${chevronSVG}
             </div>
           </div>
@@ -980,9 +1018,9 @@ function goBackToStep1() {
   B.innerHTML = `
     <p class="s1-guide" id="s1guide" ${hidden}>고객 이름 또는 휴대전화 번호를 검색하세요.</p>
     <div class="s1-search-wrap" id="s1searchWrap" ${hidden}>
-      <input class="s1-search" id="s1input" type="text" placeholder="이름 또는 휴대전화 번호" oninput="onSearch(this.value)" autocomplete="off">
+      <input class="s1-search" id="s1input" data-figma="search/default" type="text" placeholder="이름 또는 휴대전화 번호" oninput="onSearch(this.value)" autocomplete="off">
       <span class="s1-search-icon">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#aaa" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#A9ADB9" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#A9ADB9" stroke-width="1.5" stroke-linecap="round"/></svg>
       </span>
       <div id="s1dropdown" class="s1-dropdown" style="display:none"></div>
     </div>
@@ -990,9 +1028,10 @@ function goBackToStep1() {
     <div id="rxSection"></div>
   `;
   F.innerHTML = `
-    <button class="btn-cancel" onclick="closeModal()">취소</button>
-    <button class="btn-no-rx" id="btnNoRx" onclick="goNoRxStep2()">처방전 없이 상담</button>
-    <button class="btn-next" id="btnNext" disabled onclick="goStep2()">다음</button>
+    <!-- component: button/outlined-secondary -->
+    <button class="btn-no-rx" id="btnNoRx" data-figma="button/outlined-secondary" onclick="goNoRxStep2()">처방전 없이 상담</button>
+    <!-- component: button/solid -->
+    <button class="btn-next" id="btnNext" data-figma="button/solid" disabled onclick="goStep2()">다음</button>
   `;
   if (selectedCustomer) {
     renderRxSection(true);
@@ -1084,25 +1123,24 @@ function renderDrugTableHTML(rx) {
   const drugRows = drugs.map((d, i) => {
     const changed = JSON.stringify(d) !== JSON.stringify(origDrugs[i]);
     const isNew = i >= origDrugs.length;
-    const badge = (changed || isNew) ? `<span class="s2-changed-badge">${isNew ? '추가' : '변경'}</span>` : '';
+    const badge = (changed || isNew) ? `<span class="s2-changed-badge" data-figma="new/tag-medium">${isNew ? '추가' : '변경'}</span>` : '';
+    const usageLine = `1회 ${d.dosage}, ${d.freq.replace('1일', '하루')}`;
     return `
     <tr id="drow_${rx.id}_${i}">
+      <td>${i + 1}</td>
       <td>
         <div class="s2-drug-name">${d.name}${badge}</div>
-        <div class="s2-drug-sub">${d.ingredient}</div>
+        <div class="s2-drug-sub">${usageLine}</div>
       </td>
-      <td style="text-align:center;">${d.dosage}</td>
-      <td style="text-align:center;">${d.freq}</td>
-      <td style="text-align:center;">${d.days}일</td>
-      <td style="text-align:center;">${d.sub
-        ? '<span style="background:#FFF3E0;color:#E07800;font-size:13px;padding:2px 7px;border-radius:10px;font-weight:500;">대체</span>'
-        : '<span style="color:var(--color-grey-400);font-size:15px;font-weight:400;letter-spacing:-0.6px;">—</span>'}</td>
+      <td>${d.days}일분</td>
       <td class="td-action">
-        <button class="s2-row-edit-btn" onclick="openEditRow('${rx.id}',${i})" title="편집">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <!-- component: button/ghost -->
+        <button class="s2-row-edit-btn" data-figma="button/ghost" onclick="openEditRow('${rx.id}',${i})" title="편집">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
         </button>
-        <button class="s2-row-del-btn" onclick="deleteDrug('${rx.id}',${i})" title="삭제">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <!-- component: button/ghost -->
+        <button class="s2-row-del-btn" data-figma="button/ghost" onclick="deleteDrug('${rx.id}',${i})" title="삭제">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </td>
     </tr>`;
@@ -1115,26 +1153,26 @@ function renderDrugTableHTML(rx) {
           <strong>${rx.hospital}</strong>
           <span style="color:var(--color-grey-500);font-size:15px;font-weight:400;letter-spacing:-0.6px;margin-left:6px;">${rx.days}일분</span>
         </div>
-        <button class="s2-rx-img-btn" onclick="openRxViewer('${rx.date} ${rx.hospital}')">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="2" stroke="#555" stroke-width="1.3"/><circle cx="5.5" cy="6.5" r="1.5" stroke="#555" stroke-width="1.3"/><path d="M1 11l4-3 3 3 2-2 5 4" stroke="#555" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <!-- component: button/outlined-secondary -->
+        <button class="s2-rx-img-btn" data-figma="button/outlined-secondary" onclick="openRxViewer('${rx.date} ${rx.hospital}')">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="2" stroke="#666666" stroke-width="1.3"/><circle cx="5.5" cy="6.5" r="1.5" stroke="#666666" stroke-width="1.3"/><path d="M1 11l4-3 3 3 2-2 5 4" stroke="#666666" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
           처방전 원본 이미지 보기
         </button>
       </div>
       <table class="s2-drug-table">
         <thead>
           <tr>
-            <th>약품명 / 성분</th>
-            <th style="text-align:center;">1회 용량</th>
-            <th style="text-align:center;">복용 횟수</th>
-            <th style="text-align:center;">투약 일수</th>
-            <th style="text-align:center;">대체조제</th>
+            <th>NO</th>
+            <th>약명</th>
+            <th>복용일</th>
             <th class="th-action"></th>
           </tr>
         </thead>
         <tbody id="drugTbody_${rx.id}">${drugRows}</tbody>
       </table>
       <div class="s2-add-drug-row">
-        <button class="s2-add-drug-btn" onclick="openAddRow('${rx.id}')">
+        <!-- component: new/button-dashed-add (기존 컴포넌트 매핑 없음, 마스터 가이드 확인 필요) -->
+        <button class="s2-add-drug-btn" data-figma="new/button-dashed-add" onclick="openAddRow('${rx.id}')">
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           약품 추가
         </button>
@@ -1150,15 +1188,45 @@ function renderDrugTableHTML(rx) {
         </div>
         <div class="s2-consent-radios">
           <label class="s2-consent-radio">
-            <input type="radio" name="subConsent_${rx.id}" value="yes"> 네
+            <input type="radio" name="subConsent_${rx.id}" value="yes" data-figma="radio"> 네
           </label>
           <label class="s2-consent-radio">
-            <input type="radio" name="subConsent_${rx.id}" value="no"> 아니오
+            <input type="radio" name="subConsent_${rx.id}" value="no" data-figma="radio"> 아니오
           </label>
         </div>
       </div>` : ''}
     </div>
   `;
+}
+
+function parseLeadingQty(str) {
+  const m = /^(\d+)\s*(.*)$/.exec((str || '').trim());
+  return m ? { num: m[1], unit: m[2] || '정' } : { num: '1', unit: str || '정' };
+}
+
+function parseLeadingFreq(str) {
+  const m = /([0-9]+)\s*회/.exec(str || '');
+  return m ? m[1] : '1';
+}
+
+function qtyFieldsHTML(prefix, dosage, freq, days) {
+  const d = parseLeadingQty(dosage);
+  const freqNum = parseLeadingFreq(freq);
+  return `
+  <div class="s2-edit-qty-row">
+    <div class="s2-edit-qty-group">
+      <label class="s2-edit-label">용량</label>
+      <div class="s2-edit-qty-value">1회 <input class="s2-edit-qty-input" id="${prefix}_dnum" type="number" min="1" value="${d.num}"> ${d.unit}</div>
+    </div>
+    <div class="s2-edit-qty-group">
+      <label class="s2-edit-label">횟수</label>
+      <div class="s2-edit-qty-value">하루 <input class="s2-edit-qty-input" id="${prefix}_fnum" type="number" min="1" value="${freqNum}"> 회</div>
+    </div>
+    <div class="s2-edit-qty-group">
+      <label class="s2-edit-label">일수</label>
+      <div class="s2-edit-qty-value"><input class="s2-edit-qty-input" id="${prefix}_days" type="number" min="1" value="${days}"> 일</div>
+    </div>
+  </div>`;
 }
 
 function openEditRow(rxId, i) {
@@ -1171,22 +1239,19 @@ function openEditRow(rxId, i) {
   const formRow = document.createElement('tr');
   formRow.id = 'editForm_' + key;
   formRow.className = 's2-edit-row';
-  formRow.innerHTML = `<td colspan="6">
+  formRow.innerHTML = `<td colspan="4">
     <div class="s2-edit-form">
-      <div class="s2-edit-field f-name"><label>약품명</label><input id="ef_name_${key}" value="${d.name}"></div>
-      <div class="s2-edit-field f-ing"><label>성분명</label><input id="ef_ing_${key}" value="${d.ingredient}"></div>
-      <div class="s2-edit-field f-dosage"><label>1회 용량</label><input id="ef_dosage_${key}" value="${d.dosage}"></div>
-      <div class="s2-edit-field f-freq"><label>복용 횟수</label><input id="ef_freq_${key}" value="${d.freq}"></div>
-      <div class="s2-edit-field f-days"><label>투약 일수</label><input id="ef_days_${key}" type="number" min="1" value="${d.days}"></div>
-      <div class="s2-edit-field"><label>대체조제</label>
-        <select id="ef_sub_${key}">
-          <option value="0" ${!d.sub?'selected':''}>—</option>
-          <option value="1" ${d.sub?'selected':''}>대체</option>
-        </select>
+      <div>
+        <label class="s2-edit-label">약품 검색</label>
+        <div class="s2-edit-search">
+          <input id="ef_name_${key}" value="${d.name}">
+          <button class="clear-btn" onclick="document.getElementById('ef_name_${key}').value=''"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+        </div>
       </div>
+      ${qtyFieldsHTML('ef_' + key, d.dosage, d.freq, d.days)}
       <div class="s2-edit-actions">
-        <button class="s2-edit-cancel" onclick="document.getElementById('editForm_${key}').remove()">취소</button>
-        <button class="s2-edit-save" onclick="saveEditRow('${rxId}',${i})">저장</button>
+        <button class="s2-edit-cancel" data-figma="button/outlined" onclick="document.getElementById('editForm_${key}').remove()">취소</button>
+        <button class="s2-edit-save" data-figma="button/solid" onclick="saveEditRow('${rxId}',${i})">저장</button>
       </div>
     </div>
   </td>`;
@@ -1202,13 +1267,18 @@ function closeEditRow(key) {
 function saveEditRow(rxId, i) {
   const key = rxId + '_' + i;
   const prev = editingDrugsMap[rxId][i];
+  const p = 'ef_' + key;
+  const dNum = document.getElementById(p + '_dnum').value.trim();
+  const dUnit = parseLeadingQty(prev.dosage).unit;
+  const fNum = document.getElementById(p + '_fnum').value.trim();
+  const days = parseInt(document.getElementById(p + '_days').value) || prev.days;
   editingDrugsMap[rxId][i] = {
     name: document.getElementById('ef_name_' + key).value.trim() || prev.name,
-    ingredient: document.getElementById('ef_ing_' + key).value.trim() || prev.ingredient,
-    dosage: document.getElementById('ef_dosage_' + key).value.trim() || prev.dosage,
-    freq: document.getElementById('ef_freq_' + key).value.trim() || prev.freq,
-    days: parseInt(document.getElementById('ef_days_' + key).value) || prev.days,
-    sub: document.getElementById('ef_sub_' + key).value === '1',
+    ingredient: prev.ingredient,
+    dosage: (dNum || '1') + dUnit,
+    freq: '1일 ' + (fNum || '1') + '회',
+    days: days,
+    sub: prev.sub,
   };
   renderAllDrugTables();
 }
@@ -1226,20 +1296,19 @@ function openAddRow(rxId) {
   const addRow = document.createElement('tr');
   addRow.id = formId;
   addRow.className = 's2-add-form-row';
-  addRow.innerHTML = `<td colspan="6" style="padding:12px 14px;background:var(--color-blue-100);">
-    <div style="font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-primary);margin-bottom:8px;">약품 추가</div>
+  addRow.innerHTML = `<td colspan="4">
     <div class="s2-edit-form">
-      <div class="s2-edit-field f-name"><label>약품명</label><input id="af_name_${rxId}" placeholder="약품명 입력"></div>
-      <div class="s2-edit-field f-ing"><label>성분명</label><input id="af_ing_${rxId}" placeholder="성분명"></div>
-      <div class="s2-edit-field f-dosage"><label>1회 용량</label><input id="af_dosage_${rxId}" placeholder="예: 1정"></div>
-      <div class="s2-edit-field f-freq"><label>복용 횟수</label><input id="af_freq_${rxId}" placeholder="예: 1일 2회"></div>
-      <div class="s2-edit-field f-days"><label>투약 일수</label><input id="af_days_${rxId}" type="number" min="1" placeholder="30"></div>
-      <div class="s2-edit-field"><label>대체조제</label>
-        <select id="af_sub_${rxId}"><option value="0">—</option><option value="1">대체</option></select>
+      <div>
+        <label class="s2-edit-label">약품 검색</label>
+        <div class="s2-edit-search">
+          <input id="af_name_${rxId}" placeholder="약품명을 검색하세요.">
+          <button class="clear-btn" onclick="document.getElementById('af_name_${rxId}').value=''"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+        </div>
       </div>
+      ${qtyFieldsHTML('af_' + rxId, '1정', '1일 1회', 30)}
       <div class="s2-edit-actions">
-        <button class="s2-edit-cancel" onclick="document.getElementById('${formId}').remove()">취소</button>
-        <button class="s2-edit-save" onclick="saveAddRow('${rxId}')">추가</button>
+        <button class="s2-edit-cancel" data-figma="button/outlined" onclick="document.getElementById('${formId}').remove()">취소</button>
+        <button class="s2-edit-save" data-figma="button/solid" onclick="saveAddRow('${rxId}')">저장</button>
       </div>
     </div>
   </td>`;
@@ -1250,14 +1319,12 @@ function openAddRow(rxId) {
 
 function saveAddRow(rxId) {
   const name = document.getElementById('af_name_' + rxId).value.trim();
-  const ingredient = document.getElementById('af_ing_' + rxId).value.trim();
-  const dosage = document.getElementById('af_dosage_' + rxId).value.trim();
-  const freq = document.getElementById('af_freq_' + rxId).value.trim();
-  const days = parseInt(document.getElementById('af_days_' + rxId).value) || 0;
-  if (!name || !dosage || !freq || !days) {
-    alert('약품명, 용량, 복용 횟수, 투약 일수를 모두 입력해 주세요.'); return;
-  }
-  editingDrugsMap[rxId].push({ name, ingredient: ingredient || '—', dosage, freq, days, sub: document.getElementById('af_sub_' + rxId).value === '1' });
+  const p = 'af_' + rxId;
+  const dNum = document.getElementById(p + '_dnum').value.trim() || '1';
+  const fNum = document.getElementById(p + '_fnum').value.trim() || '1';
+  const days = parseInt(document.getElementById(p + '_days').value) || 30;
+  if (!name) { alert('약품명을 입력해 주세요.'); return; }
+  editingDrugsMap[rxId].push({ name, ingredient: '—', dosage: dNum + '정', freq: '1일 ' + fNum + '회', days, sub: false });
   renderAllDrugTables();
 }
 
@@ -1320,17 +1387,6 @@ function buildMsgDefault() {
   return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + c.name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + methodBlock + '\n';
 }
 
-function goStep2() {
-  if (!selectedRxIds.length) { goStep3(); return; }
-  currentStep = 2;
-  setStepTab(2);
-  if (typeof renderReminderBody === 'function') {
-    renderReminderBody();
-  } else {
-    goStep3();
-  }
-}
-
 function goNoRxStep2() {
   selectedRxIds = [];
   editingDrugsMap = {};
@@ -1364,15 +1420,15 @@ function renderMsgBody() {
   const F = document.getElementById('mfoot');
   B.innerHTML = '<div class="s4-grid"><div><div class="tag-ttl">자주 사용하는 태그</div><div class="tag-chips">'
     + S3_TAGS.map(function(t, i) {
-        return '<button class="tag-chip' + (s3SelTags.has(i) ? ' on' : '') + '" onclick="s3ToggleTag(' + i + ',\'' + t.replace(/'/g, "\\'") + '\')">' + t + '</button>';
+        return '<button class="tag-chip' + (s3SelTags.has(i) ? ' on' : '') + '" data-figma="new/chip" onclick="s3ToggleTag(' + i + ',\'' + t.replace(/'/g, "\\'") + '\')">' + t + '</button>';
       }).join('')
-    + '</div></div><div><div class="msg-hdr"><span class="msg-ttl">메시지 편집</span><button class="msg-reset" onclick="s3ResetMsg()">초기화 ↺</button></div>'
+    + '</div></div><div><div class="msg-hdr"><span class="msg-ttl">메시지 편집</span><!-- component: button/ghost --><button class="msg-reset" data-figma="button/ghost" onclick="s3ResetMsg()">초기화 ↺</button></div>'
     + '<textarea class="msg-ta" id="s3mta" oninput="s3OnMsg(this)">' + s3Msg.replace(/</g,'&lt;') + '</textarea>'
-    + '<div class="msg-cnt" id="s3mcnt">' + s3Msg.length + ' / 500자</div></div></div>';
-  F.innerHTML = '<span class="rm-step-lbl">Step 3 / 4 · 복약지도 전송</span>'
-    + '<button class="btn-cancel" onclick="(selectedCustomer&&selectedCustomer.isNew)?goBackToStep1():(renderReminderBody(),setStepTab(2),currentStep=2)">← 이전</button>'
-    + '<button class="btn-cancel" onclick="saveDraft()" style="color:var(--color-primary);border-color:#A0B4FF;">임시저장</button>'
-    + '<button class="btn-next" onclick="goStep4()">다음</button>';
+    + '<div class="msg-cnt" id="s3mcnt"><span class="msg-cnt-num">' + s3Msg.length + '</span><span class="msg-cnt-max"> / 500자</span></div></div></div>';
+  F.innerHTML = ''
+    + '<button class="btn-cancel is-back" data-figma="button/outlined-secondary" onclick="(selectedCustomer&&selectedCustomer.isNew)?goBackToStep1():(renderReminderBody(),setStepTab(2),currentStep=2)">← 이전</button>'
+    + '<button class="btn-cancel" data-figma="button/outlined" onclick="saveDraft()" style="color:var(--color-primary);border-color:var(--color-primary);">임시저장</button>'
+    + '<button class="btn-next" data-figma="button/solid" onclick="goStep4()">다음</button>';
 }
 
 function goStep4() {
@@ -1399,7 +1455,7 @@ function goStep4() {
 
   var regularRow = isNew
     ? '<tr><td>단골 여부</td><td style="color:var(--color-grey-500);">신규 회원</td></tr>'
-    : '<tr><td>단골 여부</td><td style="color:#16A34A;font-weight:500;">단골 등록됨</td></tr>';
+    : '<tr><td>단골 여부</td><td style="color:var(--color-success);font-weight:500;">단골 등록됨</td></tr>';
 
   var reminderCount = selectedRxIds.filter(function(id) { return reminderSettings[id] && reminderSettings[id].enabled; }).length;
   var reminderRow = '<tr><td>복약 알림</td><td>' + (reminderCount > 0
@@ -1407,8 +1463,8 @@ function goStep4() {
     : '<span style="color:var(--color-grey-400);">설정 안 함</span>') + '</td></tr>';
 
   B.innerHTML = '<div class="prev-grid">'
-    + '<div><div class="tag-ttl" style="margin-bottom:10px">웰체크 메시지 미리보기</div>'
-    + '<div class="prev-msg">' + previewMsg.replace(/</g,'&lt;').replace(/\n/g,'<br>') + '</div></div>'
+    + '<div><div class="tag-ttl" style="margin-bottom:10px">카카오 알림톡 미리보기</div>'
+    + '<div class="prev-phone" data-figma="new/chat-bubble"><div class="prev-msg">' + previewMsg.replace(/</g,'&lt;').replace(/\n/g,'<br>') + '</div></div></div>'
     + '<div><div class="tag-ttl" style="margin-bottom:10px">전송 요약</div>'
     + '<table class="sum-tbl">'
     + '<tr><td>고객명</td><td>' + c.name + '</td></tr>'
@@ -1422,17 +1478,17 @@ function goStep4() {
     + (isNew ? '<p style="font-size:13px;font-weight:350;letter-spacing:0;color:var(--color-primary);margin-top:10px;line-height:1.6;">신규 고객입니다. 휴대폰 번호로 웰체크 앱 가입 및<br>단골 약국 연결 링크가 함께 발송됩니다.</p>' : '')
     + '</div></div>'
     + (isNew
-      ? '<label id="consent-label" style="display:flex;align-items:flex-start;gap:10px;margin-top:20px;padding:14px 16px;background:var(--color-grey-50);border:1px solid var(--color-grey-200);border-radius:8px;cursor:pointer;">'
-        + '<input type="checkbox" id="consent-chk" onchange="toggleSendBtn()" style="margin-top:2px;width:16px;height:16px;flex-shrink:0;accent-color:var(--color-primary);cursor:pointer;">'
-        + '<span style="font-size:14px;font-weight:400;letter-spacing:-0.56px;color:var(--color-grey-700);line-height:1.6;">본인은 초대장 문자 발송 대상자(환자 등)의 동의를 받았거나, 해당 정보 제공이 가능한 정당한 권한이 있음을 확인합니다.</span>'
+      ? '<label id="consent-label" style="display:flex;align-items:flex-start;gap:8px;margin-top:20px;cursor:pointer;">'
+        + '<input type="checkbox" id="consent-chk" data-figma="checkbox" onchange="toggleSendBtn()" style="margin-top:5px;width:14px;height:14px;flex-shrink:0;accent-color:var(--color-primary);cursor:pointer;">'
+        + '<span style="font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-500);line-height:25px;">본인은 초대장 문자 발송 대상자(환자 등)의 동의를 받았거나, 해당 정보 제공이 가능한 정당한 권한이 있음을 확인합니다.</span>'
         + '</label>'
       : '');
 
   var sendBtnStyle = isNew ? ' disabled style="opacity:0.4;cursor:not-allowed;"' : '';
-  F.innerHTML = '<span class="rm-step-lbl">Step 4 / 4 · 전송 확인</span>'
-    + '<button class="btn-cancel" onclick="renderMsgBody();setStepTab(3);currentStep=3;">← 이전</button>'
-    + '<button class="btn-cancel" onclick="saveDraft()" style="color:var(--color-primary);border-color:#A0B4FF;">임시저장</button>'
-    + '<button id="btn-send-final" class="btn-next" onclick="sendFinal()"' + sendBtnStyle + '>➤ 전송하기</button>';
+  F.innerHTML = ''
+    + '<button class="btn-cancel is-back" data-figma="button/outlined-secondary" onclick="renderMsgBody();setStepTab(3);currentStep=3;">← 이전</button>'
+    + '<button class="btn-cancel" data-figma="button/outlined" onclick="saveDraft()" style="color:var(--color-primary);border-color:var(--color-primary);">임시저장</button>'
+    + '<button id="btn-send-final" class="btn-next btn-send" data-figma="button/solid" onclick="sendFinal()"' + sendBtnStyle + '><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14.5 1.5L7.5 8.5M14.5 1.5L10 14.5L7.5 8.5M14.5 1.5L1.5 6L7.5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>전송하기</button>';
 }
 
 function toggleSendBtn() {
@@ -1479,7 +1535,7 @@ function sendFinal() {
     <div class="cpl-ttl">AI 복약 상담 전송 완료</div>
     <div class="cpl-sub">${name} 님께 복약 안내 메시지가 발송되었습니다.</div>
   </div>`;
-  F.innerHTML = `<button class="btn-close-cpl" onclick="doCloseModal()">닫기</button>`;
+  F.innerHTML = `<button class="btn-close-cpl" data-figma="button/solid" onclick="doCloseModal()">닫기</button>`;
 }
 
 function insertSummaryIntoMsg(text, summary) {
@@ -1498,13 +1554,17 @@ function s3ToggleTag(i, t) {
     s3SelTags.add(i);
     if (ta) ta.value += (ta.value.endsWith('\n') ? '' : '\n') + t;
   }
-  if (ta) { s3Msg = ta.value; document.getElementById('s3mcnt').textContent = ta.value.length + ' / 500자'; }
+  if (ta) { s3Msg = ta.value; updateMsgCnt(ta.value.length); }
   document.querySelectorAll('.tag-chip').forEach(function(el, idx) { el.classList.toggle('on', s3SelTags.has(idx)); });
+}
+
+function updateMsgCnt(len) {
+  document.getElementById('s3mcnt').innerHTML = '<span class="msg-cnt-num">' + len + '</span><span class="msg-cnt-max"> / 500자</span>';
 }
 
 function s3OnMsg(el) {
   s3Msg = el.value;
-  document.getElementById('s3mcnt').textContent = el.value.length + ' / 500자';
+  updateMsgCnt(el.value.length);
 }
 
 function s3ResetMsg() {
@@ -1520,7 +1580,7 @@ function insertAiSummary() {
   if (!ta || !aiSummaryText) return;
   ta.value = appendJoinNoteIfNew(insertSummaryIntoMsg(stripJoinNote(ta.value), aiSummaryText));
   s3Msg = ta.value;
-  document.getElementById('s3mcnt').textContent = ta.value.length + ' / 500자';
+  updateMsgCnt(ta.value.length);
   showToast('AI 요약이 삽입되었습니다.');
 }
 
@@ -1581,6 +1641,10 @@ async function requestMicAccess() {
     document.getElementById('micPermHint').style.display = '';
   }
 }
+
+// ↓↓↓ 확인용 임시 코드 — 다 보고 나면 이 블록만 지우세요 ↓↓↓
+openModal();
+// ↑↑↑ 확인용 임시 코드 ↑↑↑
 </script>
 </body>
 </html>

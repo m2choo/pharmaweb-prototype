@@ -5,157 +5,180 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>웰체크 약사웹 프로토타입</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@350;400;500;600&family=Poppins:wght@500;600&display=swap');
+:root{
+  --color-primary:#3E71F0;
+  --color-white:#FFFFFF;
+  --color-grey-900:#212529;
+  --color-grey-800:#333D48;
+  --color-grey-600:#666666;
+  --color-grey-500:#8B95A1;
+  --color-grey-400:#A9ADB9;
+  --color-grey-300:#D9D9D9;
+  --color-grey-250:#D1D7E0;
+  --color-grey-200:#EBEBEB;
+  --color-grey-150:#EEF0F3;
+  --color-grey-100:#F6F6F6;
+  --color-blue-200:#E3EBFF;
+  --color-blue-100:#ECF1FF;
+  --color-red:#EE4951;
+  --lnb-bg:#F5F6F9;
+  --lnb-border:#D7D7D7;
+  --lnb-text-1depth:#191F28;
+  --lnb-text-1depth-regular:#4A505A;
+  --lnb-text-sub:#555;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-height:100vh;overflow:hidden;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-grey-100);min-height:100vh;overflow:hidden;}
 
 /* ═══ LNB ═══ */
-.lnb{position:fixed;left:0;top:0;width:200px;height:100vh;background:#fff;border-right:1px solid #E8EAED;display:flex;flex-direction:column;z-index:10;}
-.lnb-logo{padding:20px 20px 16px;border-bottom:1px solid #E8EAED;}
+.lnb{position:fixed;left:0;top:0;width:200px;height:100vh;background:var(--lnb-bg);border-right:1px solid var(--lnb-border);display:flex;flex-direction:column;z-index:10;}
+.lnb-logo{padding:20px 20px 16px;border-bottom:1px solid var(--lnb-border);}
 .lnb-logo svg{width:100px;}
 .lnb-nav{padding:8px 0;}
-.lnb-secondary{border-top:1px solid #E8EAED;padding:8px 0;}
-.lnb-item.sub{font-size:17.3px;color:#888;padding:8px 20px;}
-.lnb-item.sub.active{background:#F4F5F7;color:#333;font-weight:500;}
-.lnb-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:15.6px;color:#555;cursor:pointer;position:relative;transition:background .1s;}
-.lnb-item:hover{background:#F4F5F7;}
-.lnb-item.active{background:#2563EB;color:#fff;font-weight:600;border-radius:6px;margin:0 8px;padding:10px 12px;}
-.lnb-item.active svg path,.lnb-item.active svg circle,.lnb-item.active svg rect{stroke:#fff;}
+.lnb-secondary{border-top:1px solid var(--lnb-border);padding:8px 0;}
+.lnb-item.sub{font-size:14px;color:var(--lnb-text-sub);padding:8px 20px;}
+.lnb-item.sub.active{background:var(--color-grey-100);color:var(--color-grey-800);font-weight:500;}
+.lnb-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:15px;font-weight:400;color:var(--lnb-text-1depth-regular);cursor:pointer;position:relative;transition:background .1s;}
+.lnb-item:hover{background:var(--color-grey-100);}
+.lnb-item.active{background:var(--color-primary);color:var(--color-white);font-size:16px;font-weight:500;border-radius:6px;margin:0 8px;padding:10px 12px;}
+.lnb-item.active svg path,.lnb-item.active svg circle,.lnb-item.active svg rect{stroke:var(--color-white);}
 .lnb-icon{width:16px;height:16px;flex-shrink:0;opacity:.6;}
 .lnb-item.active .lnb-icon{opacity:1;}
-.lnb-badge{margin-left:auto;background:#EF4444;color:#fff;font-size:12px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.lnb-bottom{border-top:1px solid #E8EAED;padding:12px 16px;margin-top:auto;}
+.lnb-badge{margin-left:auto;background:var(--color-red);color:var(--color-white);font-size:12px;font-weight:600;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.lnb-bottom{border-top:1px solid var(--lnb-border);padding:12px 16px;margin-top:auto;}
 .lnb-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.lnb-avatar{width:32px;height:32px;border-radius:50%;background:#EBF2FF;color:#2563EB;font-size:14.4px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.lnb-username{font-size:14.4px;font-weight:600;color:#111;}
-.lnb-pharmacy{font-size:13.2px;color:#888;}
+.lnb-avatar{width:32px;height:32px;border-radius:50%;background:var(--color-blue-200);color:var(--color-primary);font-size:14px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lnb-username{font-size:14px;font-weight:500;color:var(--color-grey-900);}
+.lnb-pharmacy{font-size:13px;font-weight:350;color:var(--color-grey-600);}
 .lnb-btns{display:flex;gap:6px;}
-.lnb-btn-sm{flex:1;padding:6px;font-size:13.2px;color:#555;border:1px solid #E0E0E0;border-radius:6px;background:#fff;cursor:pointer;font-family:inherit;text-align:center;}
+.lnb-btn-sm{flex:1;padding:6px;font-size:13px;color:var(--color-grey-600);border:1px solid var(--color-grey-250);border-radius:6px;background:var(--color-white);cursor:pointer;font-family:inherit;text-align:center;}
 
 /* ═══ MAIN ═══ */
 .main{margin-left:200px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
 
 /* topbar */
-.topbar{height:52px;flex-shrink:0;background:#fff;border-bottom:1px solid #E8EAED;display:flex;align-items:center;padding:0 28px;gap:10px;}
-.topbar-back{color:#888;font-size:16.8px;cursor:pointer;display:flex;align-items:center;}
-.topbar-name{font-size:21.6px;font-weight:700;color:#111;}
-.topbar-info{font-size:15.6px;color:#888;}
-.topbar-gender{color:#2563EB;font-weight:600;}
+.topbar{height:52px;flex-shrink:0;background:var(--color-white);border-bottom:1px solid var(--color-grey-200);display:flex;align-items:center;padding:0 28px;gap:10px;}
+.topbar-back{color:var(--color-grey-500);font-size:16px;cursor:pointer;display:flex;align-items:center;}
+.topbar-name{font-size:24px;font-weight:350;letter-spacing:-0.96px;color:var(--color-grey-900);}
+.topbar-info{font-size:15px;letter-spacing:-0.6px;color:var(--color-grey-600);}
+.topbar-gender{color:var(--color-primary);font-weight:500;}
 
 /* body */
 .body-wrap{flex:1;overflow:hidden;padding:16px 20px;display:grid;grid-template-columns:280px 1fr 230px;gap:12px;}
 
 /* 카드 공통 */
-.card{background:#fff;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.07);overflow:hidden;display:flex;flex-direction:column;}
+.card{background:var(--color-white);border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.07);overflow:hidden;display:flex;flex-direction:column;}
 
 /* ── 통합 상담 채널 ── */
 .chat-card{height:100%;}
-.chat-header{padding:14px 18px 12px;border-bottom:1px solid #F2F2F2;font-size:15.6px;font-weight:700;color:#111;display:flex;align-items:center;gap:7px;}
+.chat-header{padding:14px 18px 12px;border-bottom:1px solid var(--color-grey-150);font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-900);display:flex;align-items:center;gap:7px;}
 .chat-date-wrap{padding:12px 0 8px;text-align:center;}
-.chat-date-badge{display:inline-flex;align-items:center;gap:5px;background:#F4F5F7;border-radius:20px;padding:3px 10px;font-size:12.6px;color:#888;}
+.chat-date-badge{display:inline-flex;align-items:center;gap:5px;background:var(--color-grey-100);border-radius:20px;padding:3px 10px;font-size:12px;letter-spacing:-0.48px;color:var(--color-grey-500);}
 .chat-bubbles{flex:1;overflow-y:auto;padding:0 14px 12px;}
 .chat-bubble{display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;}
 .chat-w-ava{width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.chat-sender{font-size:12px;font-weight:600;color:#333;margin-bottom:3px;}
-.chat-msg{background:#F4F5F7;border-radius:0 10px 10px 10px;padding:9px 11px;font-size:13.2px;line-height:1.75;color:#333;max-width:190px;}
-.chat-time{font-size:12px;color:#BBB;margin-top:3px;text-align:right;}
-.chat-input{border-top:1px solid #F0F0F0;padding:9px 12px;display:flex;align-items:center;gap:7px;}
-.chat-input-ph{flex:1;font-size:13.8px;color:#BBB;background:#F8F9FA;border:none;border-radius:18px;padding:7px 13px;font-family:inherit;}
-.chat-send{width:28px;height:28px;border-radius:50%;background:#E8EAED;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.chat-sender{font-size:13px;font-weight:500;color:var(--color-grey-800);margin-bottom:3px;}
+.chat-msg{background:var(--color-grey-100);border-radius:0 10px 10px 10px;padding:9px 11px;font-size:13px;line-height:1.75;color:var(--color-grey-800);max-width:190px;}
+.chat-time{font-size:12px;color:var(--color-grey-400);margin-top:3px;text-align:right;}
+.chat-input{border-top:1px solid var(--color-grey-150);padding:9px 12px;display:flex;align-items:center;gap:7px;}
+.chat-input-ph{flex:1;font-size:13px;color:var(--color-grey-400);background:var(--color-grey-100);border:none;border-radius:18px;padding:7px 13px;font-family:inherit;}
+.chat-send{width:28px;height:28px;border-radius:50%;background:var(--color-grey-200);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
 /* ── 처방전/CL note 탭 카드 ── */
 .rx-card{height:100%;}
-.rx-header{padding:0 20px;border-bottom:1px solid #F2F2F2;display:flex;align-items:stretch;gap:0;}
-.rx-header-tab{height:46px;padding:0 18px;font-size:15.6px;font-weight:600;color:#AAA;cursor:pointer;display:flex;align-items:center;gap:6px;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px;white-space:nowrap;}
-.rx-header-tab.active{color:#111;border-bottom-color:#2563EB;}
+.rx-header{padding:0 20px;border-bottom:1px solid var(--color-grey-150);display:flex;align-items:stretch;gap:0;}
+.rx-header-tab{height:46px;padding:0 18px;font-size:15px;font-weight:500;color:var(--color-grey-400);cursor:pointer;display:flex;align-items:center;gap:6px;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px;white-space:nowrap;}
+.rx-header-tab.active{color:var(--color-grey-900);border-bottom-color:var(--color-primary);}
 .rx-header-tab svg{opacity:.5;}
 .rx-header-tab.active svg{opacity:1;}
 .rx-header-icon{width:24px;height:24px;background:#E8F5F0;border-radius:6px;display:flex;align-items:center;justify-content:center;}
-.rx-header-title{font-size:16.2px;font-weight:700;color:#111;}
+.rx-header-title{font-size:15px;font-weight:500;color:var(--color-grey-900);}
 
 /* ── CL note 이력 ── */
 .cl-panel{flex:1;overflow-y:auto;padding:8px 14px 14px;}
 .cl-year-group{margin-top:12px;}
-.cl-year-label{font-size:13.2px;font-weight:700;color:#BBB;padding:0 4px 6px;letter-spacing:.05em;}
-.cl-item{border:1px solid #EAECF0;border-radius:10px;margin-bottom:8px;overflow:hidden;background:#fff;}
+.cl-year-label{font-size:13px;font-weight:500;color:var(--color-grey-400);padding:0 4px 6px;letter-spacing:.05em;}
+.cl-item{border:1px solid var(--color-grey-250);border-radius:10px;margin-bottom:8px;overflow:hidden;background:var(--color-white);}
 .cl-item-header{display:flex;align-items:center;padding:11px 14px;cursor:pointer;gap:10px;transition:background .1s;}
-.cl-item-header:hover{background:#F8FAFF;}
-.cl-item-date{font-size:13.2px;color:#AAA;flex-shrink:0;}
-.cl-item-hospital{font-size:15.6px;font-weight:700;color:#111;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.cl-item-toggle{font-size:13.2px;color:#888;display:flex;align-items:center;gap:4px;flex-shrink:0;padding:3px 8px;border-radius:6px;border:1px solid #E5E7EB;background:#fff;cursor:pointer;font-family:inherit;transition:background .1s;}
-.cl-item-toggle:hover{background:#F4F5F7;}
+.cl-item-header:hover{background:var(--color-blue-100);}
+.cl-item-date{font-size:13px;color:var(--color-grey-400);flex-shrink:0;}
+.cl-item-hospital{font-size:15px;font-weight:500;color:var(--color-grey-900);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cl-item-toggle{font-size:13px;color:var(--color-grey-600);display:flex;align-items:center;gap:4px;flex-shrink:0;padding:3px 8px;border-radius:6px;border:1px solid var(--color-grey-250);background:var(--color-white);cursor:pointer;font-family:inherit;transition:background .1s;}
+.cl-item-toggle:hover{background:var(--color-grey-100);}
 .cl-item-toggle svg{transition:transform .2s;}
 .cl-item-toggle.open svg{transform:rotate(180deg);}
-.cl-item-body{display:none;padding:0 14px 14px;border-top:1px solid #F2F4F7;}
+.cl-item-body{display:none;padding:0 14px 14px;border-top:1px solid var(--color-grey-150);}
 .cl-item-body.open{display:block;}
 .cl-item-rx-chips{display:flex;flex-wrap:wrap;gap:4px;flex:1;align-items:center;overflow:hidden;}
-.cl-rx-chip{display:inline-flex;align-items:center;background:#EBF2FF;color:#2563EB;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:500;white-space:nowrap;}
-.cl-rx-chip.no-rx{background:#F4F5F7;color:#888;}
-.cl-rx-group{padding-top:10px;margin-top:10px;border-top:1px dashed #EAECF0;}
+.cl-rx-chip{display:inline-flex;align-items:center;background:var(--color-blue-200);color:var(--color-primary);border-radius:5px;padding:2px 8px;font-size:12px;font-weight:500;white-space:nowrap;}
+.cl-rx-chip.no-rx{background:var(--color-grey-100);color:var(--color-grey-500);}
+.cl-rx-group{padding-top:10px;margin-top:10px;border-top:1px dashed var(--color-grey-250);}
 .cl-rx-group:first-child{padding-top:12px;margin-top:0;border-top:none;}
-.cl-rx-group-label{font-size:12.6px;font-weight:700;color:#555;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
-.cl-rx-group-label::before{content:'';display:inline-block;width:3px;height:11px;background:#2563EB;border-radius:2px;flex-shrink:0;}
+.cl-rx-group-label{font-size:12px;font-weight:500;color:var(--color-grey-600);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.cl-rx-group-label::before{content:'';display:inline-block;width:3px;height:11px;background:var(--color-primary);border-radius:2px;flex-shrink:0;}
 .cl-drugs{margin-bottom:12px;padding-top:12px;}
-.cl-drugs-label{font-size:13.2px;font-weight:700;color:#999;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
-.cl-drug-chip{display:inline-flex;align-items:center;gap:4px;background:#F4F5F7;border-radius:6px;padding:3px 9px;font-size:13.8px;color:#333;margin:2px 3px 2px 0;}
+.cl-drugs-label{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.cl-drug-chip{display:inline-flex;align-items:center;gap:4px;background:var(--color-grey-100);border-radius:6px;padding:3px 9px;font-size:13px;color:var(--color-grey-800);margin:2px 3px 2px 0;}
 .cl-section{margin-top:12px;}
-.cl-section-label{font-size:13.2px;font-weight:700;color:#999;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.cl-section-label{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
 .cl-section-label svg{flex-shrink:0;}
-.cl-stt-box{background:#F8F9FB;border-radius:8px;padding:10px 12px;font-size:13.8px;color:#444;line-height:1.85;}
-.cl-summary-box{background:#EBF5FF;border-radius:8px;padding:10px 12px;font-size:13.8px;color:#1E3A5F;line-height:1.85;}
+.cl-stt-box{background:var(--color-grey-150);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--color-grey-800);line-height:1.85;}
+.cl-summary-box{background:var(--color-blue-100);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--color-grey-800);line-height:1.85;}
 .rx-filters{padding:10px 20px 10px;display:flex;gap:6px;align-items:center;}
-.rx-tab{height:30px;padding:0 13px;border-radius:20px;font-size:14.4px;border:1px solid #E0E0E0;background:#fff;cursor:pointer;color:#555;display:flex;align-items:center;gap:4px;font-family:inherit;}
-.rx-tab.active{background:#2563EB;color:#fff;border-color:#2563EB;font-weight:600;}
-.rx-select{height:30px;padding:0 26px 0 10px;border:1px solid #E0E0E0;border-radius:6px;font-size:13.8px;color:#555;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center;appearance:none;margin-left:auto;font-family:inherit;}
+.rx-tab{height:30px;padding:0 13px;border-radius:20px;font-size:14px;border:1px solid var(--color-grey-300);background:var(--color-white);cursor:pointer;color:var(--color-grey-600);display:flex;align-items:center;gap:4px;font-family:inherit;}
+.rx-tab.active{background:var(--color-blue-200);color:var(--color-primary);border-color:var(--color-blue-200);font-weight:500;}
+.rx-select{height:30px;padding:0 26px 0 10px;border:1px solid var(--color-grey-300);border-radius:5px;font-size:12px;color:var(--color-grey-600);background:var(--color-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23A9ADB9' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center;appearance:none;margin-left:auto;font-family:inherit;}
 .rx-meta{padding:0 20px 8px;display:flex;align-items:center;justify-content:space-between;}
-.rx-count{font-size:14.4px;color:#888;}.rx-count span{color:#2563EB;font-weight:700;}
-.rx-search{width:200px;height:32px;border:1px solid #E0E0E0;border-radius:7px;padding:0 10px 0 30px;font-size:13.8px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 9px center;outline:none;font-family:inherit;}
+.rx-count{font-size:15px;color:var(--color-grey-600);}.rx-count span{color:var(--color-primary);font-weight:500;}
+.rx-search{width:200px;height:32px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 10px 0 30px;font-size:12px;background:var(--color-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%23A9ADB9' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 9px center;outline:none;font-family:inherit;}
 .rx-table-wrap{flex:1;overflow-y:auto;padding:0 12px 12px;}
 .rx-tbl{width:100%;border-collapse:collapse;}
-.rx-tbl thead tr{border-bottom:1px solid #F2F2F2;}
-.rx-tbl th{padding:8px 6px;font-size:13.2px;color:#999;font-weight:500;text-align:center;white-space:nowrap;}
+.rx-tbl thead tr{border-bottom:1px solid var(--color-grey-150);}
+.rx-tbl th{padding:8px 6px;font-size:12px;color:var(--color-grey-500);font-weight:400;text-align:center;white-space:nowrap;}
 .rx-tbl th:first-child{text-align:left;padding-left:8px;}
-.rx-tbl tbody tr{border-bottom:1px solid #F7F7F7;transition:background .1s;}
-.rx-tbl tbody tr:hover{background:#FAFBFF;}
-.rx-tbl td{padding:0;height:48px;font-size:14.4px;color:#333;text-align:center;vertical-align:middle;}
+.rx-tbl tbody tr{border-bottom:1px solid var(--color-grey-150);transition:background .1s;}
+.rx-tbl tbody tr:hover{background:var(--color-blue-100);}
+.rx-tbl td{padding:0;height:48px;font-size:15px;color:var(--color-grey-800);text-align:center;vertical-align:middle;}
 .rx-tbl td:first-child{padding-left:8px;text-align:left;}
-.tag-route{display:inline-flex;align-items:center;gap:3px;font-size:13.8px;color:#2563EB;cursor:pointer;}
-.status-drop{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:13.8px;font-weight:500;border:1px solid #E0E0E0;color:#555;cursor:pointer;white-space:nowrap;}
+.tag-route{display:inline-flex;align-items:center;gap:3px;font-size:13px;color:var(--color-primary);cursor:pointer;}
+.status-drop{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:13px;font-weight:500;border:1px solid var(--color-grey-300);color:var(--color-grey-600);cursor:pointer;white-space:nowrap;}
 .status-drop.green{color:#059669;border-color:#059669;background:#F0FDF4;}
-.status-drop.gray{color:#999;border-color:#DDD;}
-.btn-send{height:26px;padding:0 12px;background:#2563EB;color:#fff;border:none;border-radius:6px;font-size:13.8px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;}
+.status-drop.gray{color:var(--color-grey-500);border-color:var(--color-grey-300);}
+.btn-send{height:26px;padding:0 12px;background:var(--color-primary);color:var(--color-white);border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:inherit;}
 .btn-send:hover{opacity:.85;}
-.btn-sent{height:26px;padding:0 12px;background:#fff;color:#3D4B5C;border:1px solid #D0D4DA;border-radius:6px;font-size:13.8px;font-weight:500;cursor:default;white-space:nowrap;}
-.btn-send-dis{height:26px;padding:0 12px;background:#F0F0F0;color:#BBB;border:none;border-radius:6px;font-size:13.8px;font-weight:600;cursor:not-allowed;white-space:nowrap;}
+.btn-sent{height:26px;padding:0 12px;background:var(--color-white);color:var(--color-grey-800);border:1px solid var(--color-grey-250);border-radius:6px;font-size:13px;font-weight:500;cursor:default;white-space:nowrap;}
+.btn-send-dis{height:26px;padding:0 12px;background:var(--color-grey-200);color:var(--color-grey-400);border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:not-allowed;white-space:nowrap;}
 .rx-pagination{display:flex;align-items:center;justify-content:center;gap:3px;padding:10px 0 4px;position:relative;}
-.pg{width:26px;height:26px;border-radius:5px;border:1px solid #E0E0E0;background:#fff;color:#555;font-size:14.4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;}
-.pg.active{background:#2563EB;color:#fff;border-color:#2563EB;font-weight:700;}
-.pg-select{position:absolute;right:8px;height:26px;padding:0 20px 0 8px;border:1px solid #E0E0E0;border-radius:5px;font-size:13.2px;color:#555;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 6px center;appearance:none;font-family:inherit;}
+.pg{width:26px;height:26px;border-radius:8px;border:1px solid var(--color-grey-300);background:var(--color-white);color:var(--color-grey-600);font-size:13px;font-family:'Poppins','Noto Sans KR',sans-serif;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.pg.active{background:var(--color-blue-200);color:var(--color-primary);border-color:var(--color-blue-200);font-weight:600;}
+.pg:first-child,.pg:nth-child(2),.pg:nth-last-child(2),.pg:last-child{background:var(--color-blue-100);border-color:var(--color-blue-100);color:var(--color-primary);}
+.pg-select{position:absolute;right:8px;height:26px;padding:0 20px 0 8px;border:1px solid var(--color-grey-300);border-radius:5px;font-size:13px;color:var(--color-grey-600);background:var(--color-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23A9ADB9' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 6px center;appearance:none;font-family:inherit;}
 
-/* ── 약사 메모 ── */
+/* ── 약사 메모 (기능 강조색: 원안 유지) ── */
 .memo-card{background:#FFFBF0;border:1px solid #F5E6B8;border-radius:12px;padding:14px 16px;align-self:start;box-shadow:0 1px 6px rgba(0,0,0,.06);}
 .memo-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.memo-title{font-size:15.6px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;}
-.memo-auto{font-size:13.2px;color:#F59E0B;font-weight:500;}
-.memo-body{font-size:14.4px;line-height:1.9;color:#444;}
+.memo-title{font-size:15px;font-weight:500;color:var(--color-grey-900);display:flex;align-items:center;gap:6px;}
+.memo-auto{font-size:13px;color:#F59E0B;font-weight:500;}
+.memo-body{font-size:15px;line-height:1.9;color:var(--color-grey-800);}
 .memo-item{margin-bottom:10px;}
-.memo-num{font-weight:700;color:#333;}
-.memo-footer{text-align:right;font-size:12.6px;color:#CCC;margin-top:10px;}
+.memo-num{font-weight:500;color:var(--color-grey-800);}
+.memo-footer{text-align:right;font-size:12px;color:var(--color-grey-400);margin-top:10px;}
 
-/* ── AI 복약 상담 FAB ── */
+/* ── AI 복약 상담 FAB (기능 강조색: 원안 유지) ── */
 .ai-fab{position:fixed;bottom:82px;right:40px;background:#38BDF8;border:none;border-radius:44px;padding:16px 28px 16px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(56,189,248,.35);cursor:pointer;transition:transform .15s,box-shadow .15s;z-index:50;font-family:inherit;}
 .ai-fab:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(56,189,248,.5);}
-.ai-fab-text{font-size:19.2px;font-weight:700;color:#fff;}
+.ai-fab-text{font-size:15px;font-weight:500;color:var(--color-white);}
 
 #modalFrame{display:none;position:fixed;inset:0;border:none;width:100%;height:100%;z-index:200;}
 
 /* 왼쪽: 모달 패널 */
-.modal-panel{width:680px;flex-shrink:0;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;height:86vh;}
+.modal-panel{width:680px;flex-shrink:0;background:var(--color-white);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;height:86vh;}
 /* footer */
-footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:12.6px;color:#999;display:flex;justify-content:space-between;align-items:flex-end;}
+footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);padding:14px 32px;font-size:12px;color:var(--color-grey-500);display:flex;justify-content:space-between;align-items:flex-end;}
 .footer-links{display:flex;gap:12px;margin-bottom:6px;}
-.footer-links a{color:#999;text-decoration:none;}
-.footer-links a:hover{color:#555;}
+.footer-links a{color:var(--color-grey-500);text-decoration:none;}
+.footer-links a:hover{color:var(--color-grey-600);}
 </style>
 <link rel="stylesheet" href="reminder.css">
 </head>
@@ -186,7 +209,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
     </div>
   </div>
   <div class="lnb-secondary">
-    <a class="lnb-item sub" href="pharmacy_settings_v3.html" style="text-decoration:none;color:inherit;justify-content:space-between;">약국설정 <span style="color:#aaa;">›</span></a>
+    <a class="lnb-item sub" href="pharmacy_settings_v3.html" style="text-decoration:none;color:inherit;justify-content:space-between;">약국설정 <span style="color:var(--color-grey-400);">›</span></a>
     <div class="lnb-item sub">1:1 채팅문의</div>
     <div class="lnb-item sub">원격 지원 요청하기</div>
   </div>
@@ -227,8 +250,8 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
         <div class="chat-bubble">
           <div class="chat-w-ava">
             <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
-              <circle cx="18" cy="18" r="18" fill="#EBF2FF"/>
-              <path d="M8 12C8 12 10 19 11 22C11.5 24 12.5 25 14 25C15.5 25 16.5 24 17 22L18 17L19 22C19.5 24 20.5 25 22 25C23.5 25 24.5 24 25 22C26 19 28 12 28 12H25L22 20L20 14H16L14 20L11 12H8Z" fill="#2563EB"/>
+              <circle cx="18" cy="18" r="18" fill="#E3EBFF"/>
+              <path d="M8 12C8 12 10 19 11 22C11.5 24 12.5 25 14 25C15.5 25 16.5 24 17 22L18 17L19 22C19.5 24 20.5 25 22 25C23.5 25 24.5 24 25 22C26 19 28 12 28 12H25L22 20L20 14H16L14 20L11 12H8Z" fill="#3E71F0"/>
               <circle cx="10" cy="23" r="3" fill="#10B981"/>
             </svg>
           </div>
@@ -242,7 +265,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
       <div class="chat-input">
         <input class="chat-input-ph" placeholder="+ 서비스 준비 중입니다" disabled>
         <button class="chat-send">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="#8B95A1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
     </div>
@@ -294,7 +317,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
           <button class="pg">4</button><button class="pg">5</button>
           <button class="pg">›</button><button class="pg">≫</button>
           <select class="pg-select"><option>10</option><option>20</option></select>
-          <span style="position:absolute;right:48px;font-size:13.2px;color:#888">건씩 보기</span>
+          <span style="position:absolute;right:48px;font-size:13px;color:var(--color-grey-600)">건씩 보기</span>
         </div>
       </div>
       </div><!-- /panelRx -->
@@ -302,7 +325,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
       <!-- CL note 이력 패널 -->
       <div id="panelCl" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
         <div style="padding:10px 20px 6px;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:14.4px;color:#888;">총 <strong style="color:#2563EB;">3</strong>건의 복약 상담</span>
+          <span style="font-size:15px;color:var(--color-grey-600);">총 <strong style="color:var(--color-primary);">3</strong>건의 복약 상담</span>
           <input class="rx-search" placeholder="약품·병원 검색" style="width:160px;">
         </div>
         <div class="cl-panel">
@@ -317,12 +340,12 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
                   <span class="cl-rx-chip">웰체크내과</span>
                   <span class="cl-rx-chip">하나로내과의원</span>
                 </div>
-                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#8B95A1" stroke-width="1.5" stroke-linecap="round"/></svg></button>
               </div>
               <div class="cl-item-body">
                 <div class="cl-drugs">
                   <div class="cl-drugs-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#999" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#8B95A1" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#8B95A1" stroke-width="1.3" stroke-linecap="round"/></svg>
                     선택된 처방전
                   </div>
                   <div class="cl-rx-group">
@@ -339,14 +362,14 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
                 </div>
                 <div class="cl-section">
                   <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#999" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#8B95A1" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#8B95A1" stroke-width="1.3" stroke-linecap="round"/></svg>
                     녹음 내용
                   </div>
                   <div class="cl-stt-box">오늘 두 곳에서 처방받으셨네요. 아토르바스타틴은 고지혈증 약인데 저녁에 드시면 더 효과적이에요. 최근에 근육이 당기거나 아프신 느낌은 없으셨나요? 며칠 전부터 허벅지가 좀 뻐근하긴 했는데요. 가벼운 근육통은 초기에 나타날 수 있어요. 심해지거나 소변 색이 이상해지면 병원 오셔야 해요. 또 메트포르민이 두 처방전에 다 있는데, 이미 드시고 계신 거 맞죠? 속 불편함은 없으세요? 식사 직후에 드시면 훨씬 나아요.</div>
                 </div>
                 <div class="cl-section">
                   <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#2563EB" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#3E71F0" stroke-width="1.3" stroke-linecap="round"/></svg>
                     복약지도 요약
                   </div>
                   <div class="cl-summary-box">처방전 2건 통합 상담. 아토르바스타틴 저녁 복용 안내, 근육통 부작용 경과 관찰. 메트포르민 중복 처방 확인 — 위장장애 예방 위해 식후 즉시 복용 안내. 글리메피리드 저혈당 증상 교육.</div>
@@ -361,12 +384,12 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
                 <div class="cl-item-rx-chips">
                   <span class="cl-rx-chip">우리동네내과의원</span>
                 </div>
-                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#8B95A1" stroke-width="1.5" stroke-linecap="round"/></svg></button>
               </div>
               <div class="cl-item-body">
                 <div class="cl-drugs">
                   <div class="cl-drugs-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#999" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#8B95A1" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#8B95A1" stroke-width="1.3" stroke-linecap="round"/></svg>
                     선택된 처방전
                   </div>
                   <div class="cl-rx-group">
@@ -380,14 +403,14 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
                 </div>
                 <div class="cl-section">
                   <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#999" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#8B95A1" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#8B95A1" stroke-width="1.3" stroke-linecap="round"/></svg>
                     녹음 내용
                   </div>
                   <div class="cl-stt-box">오늘 5가지 약이 나왔는데, 혹시 지금 다른 약국에서 따로 받아드시는 약은 없으세요? 소화제 같은 거 사 먹는 건 있어요. 혹시 어떤 거 드세요? 성분에 따라 겹칠 수 있어서요. 겔포스 그거요. 겔포스는 괜찮아요. 그런데 메트포르민이랑 시간 좀 띄워서 드세요. 같이 드시면 메트포르민 흡수가 좀 떨어질 수 있거든요.</div>
                 </div>
                 <div class="cl-section">
                   <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#2563EB" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#3E71F0" stroke-width="1.3" stroke-linecap="round"/></svg>
                     복약지도 요약
                   </div>
                   <div class="cl-summary-box">5종 다약제 복약 상담. 겔포스 자가 복용 확인 — 메트포르민과 2시간 간격 복용 안내. 중복 처방 없음. 졸피뎀 취침 30분 전, 암로디핀·로사르탄 아침 식후, 아토르바스타틴 저녁 복용으로 시간표 정리.</div>
@@ -402,19 +425,19 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
                 <div class="cl-item-rx-chips">
                   <span class="cl-rx-chip no-rx">처방전 없이 상담</span>
                 </div>
-                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#8B95A1" stroke-width="1.5" stroke-linecap="round"/></svg></button>
               </div>
               <div class="cl-item-body">
                 <div class="cl-section">
                   <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#999" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#999" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#8B95A1" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#8B95A1" stroke-width="1.3" stroke-linecap="round"/></svg>
                     녹음 내용
                   </div>
                   <div class="cl-stt-box">처음 오셨죠? 기존에 약국은 어디서 이용하셨어요? 집 근처 약국 다니다가 이사 오면서요. 혈압이랑 혈당 약 처음 드시는 건가요? 아니요, 혈압 약은 1년 넘게 먹었는데 알약을 좀 삼키기 어렵더라고요. 크면 좀 힘들어서요. 아, 그러면 조제할 때 참고할게요. 복용 시간은 아침 저녁 중에 어떤 게 더 편하세요? 저녁 밥 먹고 나서가 편해요.</div>
                 </div>
                 <div class="cl-section">
                   <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#2563EB" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#3E71F0" stroke-width="1.3" stroke-linecap="round"/></svg>
                     복약지도 요약
                   </div>
                   <div class="cl-summary-box">첫 방문 고객. 타 약국 전환. 알약 삼키기 어려움 확인 — 조제 시 소형 정제 우선 고려. 저녁 식후 복용 선호 확인. 어지럼증 간헐적 호소, 다음 방문 시 확인 예정.</div>
@@ -482,13 +505,13 @@ const rows=[
 (function(){
   document.getElementById('rxBody').innerHTML=rows.map(r=>`
     <tr style="${r.ai==='off'?'opacity:.5':''}">
-      <td style="font-size:14.4px;color:#333">${r.date}</td>
+      <td style="font-size:15px;color:#333D48">${r.date}</td>
       <td><span class="tag-route">${r.route==='고객 앱 촬영'?'📷':'🖨'} ${r.route} ›</span></td>
-      <td style="color:#555;font-size:14.4px">${r.consent}</td>
-      <td style="color:#555;font-size:14.4px">${r.method}</td>
-      <td style="color:#555;font-size:14.4px">${r.hospital}</td>
+      <td style="color:#666;font-size:15px">${r.consent}</td>
+      <td style="color:#666;font-size:15px">${r.method}</td>
+      <td style="color:#666;font-size:15px">${r.hospital}</td>
       <td>${r.status==='조제완료'?`<span class="status-drop green">조제 완료 ∨</span>`:r.status==='취소됨'?`<span class="status-drop gray">취소됨 ∨</span>`:`<span class="status-drop">접수됨 ∨</span>`}</td>
-      <td>${r.ai==='go'?`<button class="btn-send" onclick="openModalStep2()">전송하기</button>`:r.ai==='done'?`<button class="btn-sent">전송완료</button>`:`<span style="font-size:14.4px;color:#A0AAB4">취소됨</span>`}</td>
+      <td>${r.ai==='go'?`<button class="btn-send" onclick="openModalStep2()">전송하기</button>`:r.ai==='done'?`<button class="btn-sent">전송완료</button>`:`<span style="font-size:15px;color:#A9ADB9">취소됨</span>`}</td>
     </tr>`).join('');
 })();
 

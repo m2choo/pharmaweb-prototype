@@ -100,11 +100,11 @@ function renderReminderBody() {
     return '<div class="rm-item">' + row + panel + '</div>';
   }).join('');
 
-  B.innerHTML = '<p style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.6;">환자의 처방전 정보를 기반으로 복약 알림을 자동 설정했습니다. 설정한 알림은 웰체크 환자 앱에 자동 등록됩니다.<br>알림 수정이 필요한 경우, 수정할 처방전을 클릭해 주세요. 알림을 발송하지 않을 처방전은 토글을 꺼 주세요.</p>'
+  B.innerHTML = '<p style="font-size:12px;color:var(--color-grey-500);margin-bottom:14px;line-height:1.6;">환자의 처방전 정보를 기반으로 복약 알림을 자동 설정했습니다. 설정한 알림은 웰체크 환자 앱에 자동 등록됩니다.<br>알림 수정이 필요한 경우, 수정할 처방전을 클릭해 주세요. 알림을 발송하지 않을 처방전은 토글을 꺼 주세요.</p>'
     + (itemsHTML || '<div class="rm-empty-tip">설정할 처방전이 없습니다.</div>');
 
-  F.innerHTML = '<span class="rm-step-lbl">Step 2 / 4 · 복약 알림</span>'
-    + '<button class="btn-cancel" onclick="goBackToStep1()">← 이전</button>'
+  F.innerHTML = ''
+    + '<button class="btn-cancel is-back" onclick="goBackToStep1()">← 이전</button>'
     + '<button class="btn-cancel" onclick="goStep2Skip()">이 단계 건너뛰기</button>'
     + '<button class="btn-next" onclick="goStep3()">다음 단계 →</button>';
 }

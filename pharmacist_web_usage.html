@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웰체크 약사웹 사용 현황</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#fff;min-height:100vh;display:flex;color:#09081d;}
+
+/* ── LNB (어드민 확장) ── */
+.lnb{width:250px;min-height:100vh;background:#fff;border-right:1px solid #d8d8d8;box-shadow:2px 0 2px rgba(0,0,0,.05);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:10;}
+.lnb-user{display:flex;align-items:center;gap:10px;height:110px;padding:0 25px;border-bottom:1px solid #d8d8d8;}
+.lnb-avatar{width:50px;height:50px;border-radius:50%;background:#e3ebff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#4a6dff;flex-shrink:0;}
+.lnb-user-name{font-size:16px;font-weight:700;color:#09081d;}
+.lnb-logout{font-size:12px;color:#505968;text-decoration:underline;margin-top:8px;display:inline-block;}
+.lnb-nav{padding-top:10px;}
+.lnb-item{display:flex;align-items:center;gap:20px;padding:15px 20px 15px 25px;font-size:15px;font-weight:500;color:#505968;text-decoration:none;cursor:pointer;}
+.lnb-item.active{background:#f4f7ff;border-left:3px solid #4a6dff;color:#4a6dff;font-weight:700;padding-left:22px;}
+.lnb-icon{width:16px;height:16px;flex-shrink:0;}
+.lnb-sub{background:#fff;padding:5px 10px 10px;}
+.lnb-sub-item{display:block;padding:10px 10px 10px 50px;font-size:14px;font-weight:500;color:#8f96a1;text-decoration:none;border-radius:8px;}
+.lnb-sub-item.active{color:#4a6dff;text-decoration:underline;font-weight:500;}
+.lnb-collapse{position:absolute;top:230px;right:-13px;width:26px;height:26px;border-radius:50%;background:#fff;border:1px solid #d8d8d8;box-shadow:0 1px 3px rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;color:#8f96a1;font-size:12px;cursor:pointer;}
+
+/* ── MAIN ── */
+.main{margin-left:250px;flex:1;min-height:100vh;padding:0 30px 100px;}
+
+/* GNB */
+.gnb{padding:40px 0 20px;}
+.gnb-title{font-size:28px;font-weight:700;color:#09081d;letter-spacing:-1.4px;}
+
+/* 필터 영역 */
+.filters{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.filters-left{display:flex;gap:8px;}
+.select-xs{display:flex;align-items:center;justify-content:space-between;gap:16px;height:40px;border:1px solid #d8d8d8;border-radius:6px;padding:0 12px;font-size:14px;font-weight:500;color:#333d48;background:#fff;cursor:pointer;width:110px;}
+.select-xs .arrow{font-size:9px;color:#8f96a1;}
+.btn-excel{display:flex;align-items:center;gap:6px;height:40px;padding:0 16px;border:1px solid #d8d8d8;border-radius:6px;font-size:14px;font-weight:500;color:#333d48;background:#fff;cursor:pointer;font-family:inherit;}
+
+/* 카운트 + 페이지네이션 상단 바 */
+.list-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.list-total{font-size:16px;font-weight:700;color:#09081d;}
+.list-pg{display:flex;align-items:center;gap:16px;font-size:14px;color:#505968;}
+.select-s{display:flex;align-items:center;gap:8px;height:32px;border:1px solid #d8d8d8;border-radius:5px;padding:0 10px;font-size:13px;font-weight:500;color:#505968;background:#fff;cursor:pointer;}
+.list-pg-nav{display:flex;align-items:center;gap:8px;}
+.pg-nav-btn{width:24px;height:24px;border:none;background:none;cursor:pointer;color:#8f96a1;font-size:16px;display:flex;align-items:center;justify-content:center;}
+
+/* 테이블 */
+.table-scroll{overflow-x:auto;}
+table{width:100%;min-width:1180px;border-collapse:collapse;}
+thead th{background:#e7eaf3;height:52px;font-size:13px;font-weight:700;color:#333d48;letter-spacing:-.5px;padding:0 14px;text-align:left;white-space:nowrap;}
+thead th.num{text-align:center;}
+tbody td{height:48px;border-bottom:1px solid #eef0f3;font-size:14px;color:#333d48;padding:0 14px;letter-spacing:-.5px;}
+tbody td.num{text-align:center;font-weight:700;}
+tbody tr:hover{background:#f8fbff;}
+.pharmacy-link{color:#4a6dff;text-decoration:underline;font-weight:500;cursor:pointer;}
+
+/* 컬럼 헤더 툴팁 */
+.th-label{display:inline-flex;align-items:center;gap:4px;white-space:normal;}
+.th-tip{display:inline-flex;width:14px;height:14px;border-radius:50%;border:1px solid #a9adb9;color:#8f96a1;font-size:10px;font-weight:700;align-items:center;justify-content:center;cursor:default;flex-shrink:0;}
+
+/* 오름차순/내림차순 정렬 버튼 */
+.sort-btn{display:inline-flex;flex-direction:column;justify-content:center;gap:2px;cursor:pointer;flex-shrink:0;}
+.sort-btn .tri{font-size:7px;line-height:1;color:#bdc1c7;}
+.sort-btn .tri.active{color:#4a6dff;}
+
+/* 전역 툴팁 (JS로 위치 계산 — table-scroll의 overflow-x:auto가 overflow-y까지 잘라버리는 문제 회피용으로 body 기준 fixed 배치) */
+.global-tip{display:none;position:fixed;max-width:240px;background:#333d48;color:#fff;font-size:12px;font-weight:400;letter-spacing:-.3px;line-height:1.5;padding:10px 12px;border-radius:8px;text-align:left;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.2);}
+
+/* 재방문율 강조 */
+.revisit-good{color:#00a313;}
+.revisit-none{color:#bdc1c7;font-weight:500;}
+
+/* footer */
+footer{margin-left:0;border-top:1px solid #e8e8e8;padding:14px 0;font-size:12.5px;color:#8f96a1;display:flex;justify-content:space-between;align-items:flex-end;margin-top:40px;}
+.footer-links{display:flex;gap:16px;margin-bottom:6px;}
+.footer-links a{color:#505968;text-decoration:none;}
+.footer-links a:hover{color:#09081d;}
+
+/* FAB */
+.fab{position:fixed;bottom:30px;right:30px;width:56px;height:56px;border-radius:50%;background:#ff5b57;border:none;box-shadow:0 4px 14px rgba(255,91,87,.4);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+</style>
+</head>
+<body>
+
+<!-- LNB : 어드민 확장 -->
+<nav class="lnb" data-figma="lnb">
+  <div class="lnb-user">
+    <div class="lnb-avatar">m</div>
+    <div>
+      <div class="lnb-user-name">manager01 님</div>
+      <a class="lnb-logout" href="#">로그아웃</a>
+    </div>
+  </div>
+  <div class="lnb-nav">
+    <div class="lnb-item">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><path d="M2 7l6-5 6 5v7a1 1 0 01-1 1H3a1 1 0 01-1-1V7z" stroke="#505968" stroke-width="1.3"/></svg>
+      홈
+    </div>
+    <div class="lnb-item active">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><path d="M2 14V8M7 14V2M12 14V5" stroke="#4a6dff" stroke-width="1.4" stroke-linecap="round"/></svg>
+      통계
+    </div>
+    <div class="lnb-sub">
+      <a class="lnb-sub-item" href="#">회원 통계</a>
+      <a class="lnb-sub-item" href="#">의사웹 사용 현황</a>
+      <a class="lnb-sub-item active" href="pharmacist_web_usage.html">약사웹 사용 현황</a>
+      <a class="lnb-sub-item" href="#">Vital 입력 현황</a>
+      <a class="lnb-sub-item" href="#">비대면진료(영업)</a>
+      <a class="lnb-sub-item" href="#">비대면진료(월별)</a>
+      <a class="lnb-sub-item" href="#">일만사 참여 병원 MAU (구)</a>
+      <a class="lnb-sub-item" href="#">병원별 일만사 참여 현황</a>
+      <a class="lnb-sub-item" href="#">병원별 디지털 헬스케어 통계</a>
+      <a class="lnb-sub-item" href="ai_subscription_stats.html">사용처별 AI 구독 현황</a>
+    </div>
+    <div class="lnb-item">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="#505968" stroke-width="1.3"/></svg>
+      공지사항
+    </div>
+    <div class="lnb-item">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><path d="M2 14V6l6-4 6 4v8H2z" stroke="#505968" stroke-width="1.3"/></svg>
+      병원 관리
+    </div>
+    <div class="lnb-item">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="3" y="2" width="10" height="12" rx="1.5" stroke="#505968" stroke-width="1.3"/></svg>
+      약국 관리
+    </div>
+    <div class="lnb-item">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="#505968" stroke-width="1.3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#505968" stroke-width="1.3"/></svg>
+      사용자 관리
+    </div>
+  </div>
+  <div class="lnb-collapse" data-figma="new/lnb-collapse-toggle">‹</div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="gnb">
+    <div class="gnb-title">약사웹 사용 현황</div>
+  </div>
+
+  <div class="filters">
+    <div class="filters-left">
+      <div class="select-xs" data-figma="select/xs">
+        <span>2026</span><span class="arrow">▼</span>
+      </div>
+      <div class="select-xs" data-figma="select/xs">
+        <span>07</span><span class="arrow">▼</span>
+      </div>
+    </div>
+    <button class="btn-excel" data-figma="button/outlined-secondary">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="2" fill="#1d6f42"/><path d="M4 4l3.2 4-3.2 4h1.8l2.3-3 2.3 3H12l-3.2-4L12 4h-1.8l-2.2 2.9L5.8 4H4z" fill="#fff"/></svg>
+      엑셀 다운로드
+    </button>
+  </div>
+
+  <div class="list-bar">
+    <div class="list-total">전체: <span id="totalCount">10</span></div>
+    <div class="list-pg">
+      <span>페이지 당 행:</span>
+      <div class="select-s" data-figma="select/s"><span>10</span><span style="font-size:9px;">▼</span></div>
+      <span id="pgRange">1-10 / 10</span>
+      <div class="list-pg-nav" data-figma="pagination">
+        <button class="pg-nav-btn">‹</button>
+        <button class="pg-nav-btn">›</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-scroll" data-figma="new/stats-table">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:170px;">
+            <span class="th-label">약국명
+              <span class="sort-btn" data-key="name"><span class="tri tri-up">▲</span><span class="tri tri-down">▼</span></span>
+            </span>
+          </th>
+          <th style="width:140px;">
+            <span class="th-label">사업자 번호
+              <span class="sort-btn" data-key="biz"><span class="tri tri-up">▲</span><span class="tri tri-down">▼</span></span>
+            </span>
+          </th>
+          <th style="width:280px;">주소</th>
+          <th style="width:150px;">
+            <span class="th-label">최종 접속 일시
+              <span class="th-tip" data-tip="이 약국 계정이 마지막으로 약사웹에 로그인한 일시입니다. 오래될수록 휴면 상태일 가능성이 높습니다.">ⓘ</span>
+              <span class="sort-btn" data-key="lastAccess"><span class="tri tri-up">▲</span><span class="tri tri-down">▼</span></span>
+            </span>
+          </th>
+          <th class="num" style="width:110px;">
+            <span class="th-label">단골 고객 수
+              <span class="sort-btn" data-key="customers"><span class="tri tri-up">▲</span><span class="tri tri-down">▼</span></span>
+            </span>
+          </th>
+          <th class="num" style="width:150px;">
+            <span class="th-label">다제약물 예상 대상자
+              <span class="th-tip" data-tip="보유 단골 고객 중, 다제약물 관리사업 대상 조건(다약제 복용 등)에 해당할 것으로 추정되는 고객 수입니다.">ⓘ</span>
+              <span class="sort-btn" data-key="polyTarget"><span class="tri tri-up">▲</span><span class="tri tri-down">▼</span></span>
+            </span>
+          </th>
+          <th class="num" style="width:160px;">
+            <span class="th-label">단골 재방문율(90일)
+              <span class="th-tip" data-tip="등록된 지 90일이 지난 단골 중, 최근 90일 내 처방전 전송 기록이 있는 비율입니다. 처방전 전송은 환자가 실제로 약국을 방문해야 발생하는 이벤트라 재방문의 증거로 사용합니다. 복약지도 발송만으로는 실제 방문 여부를 확인할 수 없어 집계에 포함하지 않습니다.">ⓘ</span>
+              <span class="sort-btn" data-key="revisit"><span class="tri tri-up">▲</span><span class="tri tri-down">▼</span></span>
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    <div>
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+        <a href="#">고객센터</a>
+      </div>
+      <div>사업자등록번호: 288-87-03573 &nbsp;·&nbsp; 통신판매업 신고번호: 제2026-서울강남-01545호 &nbsp;·&nbsp; 대표자: 이찬란, 정윤미</div>
+    </div>
+    <div>Copyright©Mcircle Corp. All rights reserved.</div>
+  </footer>
+</main>
+
+<!-- FAB -->
+<button class="fab" data-figma="new/chat-fab">
+  <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="#fff" stroke-width="1.6"/><path d="M8 13h10M13 8v10" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+</button>
+
+<div id="ttip" class="global-tip"></div>
+
+<script>
+const rows = [
+  { name:'○○약국',   biz:'4029052613', addr:'○○도 ○○시 ○○구 ○○로 ***',   lastAccess:'2026.07.13 09:21', customers:412, polyTarget:96,  revisit:72 },
+  { name:'△△약국',   biz:'8672300800', addr:'○○시 ○○구 ○○로 ***',       lastAccess:'2026.07.11 14:05', customers:88,  polyTarget:14,  revisit:50 },
+  { name:'□□약국',   biz:'6121715401', addr:'○○도 ○○시 ○○면 ○○로 ***', lastAccess:'2026.02.03 10:47', customers:0,   polyTarget:0,   revisit:0 },
+  { name:'☆☆약국',   biz:'8659401934', addr:'○○도 ○○시 ○○로 *** (○○빌딩)', lastAccess:'2026.07.12 18:30', customers:265, polyTarget:58,  revisit:81 },
+  { name:'◇◇약국',   biz:'1349141433', addr:'○○도 ○○시 ○○로 ***',       lastAccess:'2025.11.20 08:12', customers:0,   polyTarget:0,   revisit:0 },
+  { name:'♤♤약국',   biz:'1921302710', addr:'○○시 ○○구 ○○로 *** (○○타워)', lastAccess:'2026.07.13 11:52', customers:530, polyTarget:121, revisit:78 },
+  { name:'●●약국',   biz:'8859401957', addr:'○○시 ○○구 ○○동 ***',       lastAccess:'2026.06.28 16:40', customers:24,  polyTarget:3,   revisit:40 },
+  { name:'▲▲약국',   biz:'6219042109', addr:'○○시 ○○구 ○○로 ***',       lastAccess:'2025.09.15 13:08', customers:0,   polyTarget:0,   revisit:0 },
+  { name:'◆◆약국',   biz:'7619002405', addr:'○○시 ○○구 ○○로 *** (○○프라자)', lastAccess:'2026.07.10 09:44', customers:151, polyTarget:32,  revisit:56 },
+  { name:'▽▽약국',   biz:'4189601009', addr:'○○도 ○○시 ○○구 ○○로 ***', lastAccess:'2025.12.01 17:26', customers:0,   polyTarget:0,   revisit:0 },
+];
+
+function render() {
+  document.getElementById('totalCount').textContent = rows.length.toLocaleString();
+  document.getElementById('pgRange').textContent = `1-${rows.length} / ${rows.length}`;
+  document.getElementById('tbody').innerHTML = rows.map(r => `
+    <tr>
+      <td><span class="pharmacy-link">${r.name}</span></td>
+      <td>${r.biz}</td>
+      <td>${r.addr}</td>
+      <td>${r.lastAccess}</td>
+      <td class="num">${r.customers}</td>
+      <td class="num">${r.polyTarget || '—'}</td>
+      <td class="num ${r.revisit ? 'revisit-good' : 'revisit-none'}">${r.revisit ? r.revisit + '%' : '—'}</td>
+    </tr>
+  `).join('');
+}
+render();
+
+const ttip = document.getElementById('ttip');
+function bindTooltips() {
+  document.querySelectorAll('.th-tip[data-tip]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ttip.textContent = el.getAttribute('data-tip');
+      ttip.style.display = 'block';
+      const r = el.getBoundingClientRect();
+      const tw = ttip.offsetWidth, th = ttip.offsetHeight;
+      let left = r.left + r.width / 2 - tw / 2;
+      left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+      let top = r.top - th - 8;
+      if (top < 8) top = r.bottom + 8;
+      ttip.style.left = left + 'px';
+      ttip.style.top = top + 'px';
+    });
+    el.addEventListener('mouseleave', () => { ttip.style.display = 'none'; });
+  });
+}
+bindTooltips();
+
+const sortGetters = {
+  name: r => r.name,
+  biz: r => r.biz,
+  lastAccess: r => r.lastAccess,
+  customers: r => r.customers,
+  polyTarget: r => r.polyTarget,
+  revisit: r => r.revisit,
+};
+let sortKey = null, sortDir = 1;
+
+function sortRows(key) {
+  if (sortKey === key) sortDir = -sortDir; else { sortKey = key; sortDir = 1; }
+  const get = sortGetters[key];
+  rows.sort((a, b) => {
+    const va = get(a), vb = get(b);
+    if (typeof va === 'string') return va.localeCompare(vb) * sortDir;
+    return (va - vb) * sortDir;
+  });
+  render();
+  updateSortIndicators();
+}
+
+function updateSortIndicators() {
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    const up = btn.querySelector('.tri-up'), down = btn.querySelector('.tri-down');
+    up.classList.remove('active');
+    down.classList.remove('active');
+    if (btn.dataset.key === sortKey) (sortDir === 1 ? up : down).classList.add('active');
+  });
+}
+
+document.querySelectorAll('.sort-btn[data-key]').forEach(btn => {
+  btn.addEventListener('click', () => sortRows(btn.dataset.key));
+});
+</script>
+</body>
+</html>

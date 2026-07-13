@@ -1,0 +1,1245 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Wellcheck Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#202733;background:#fff;font-size:15px}.app{display:grid;grid-template-columns:198px 1fr;min-height:100vh}.sidebar{background:#f7f7f8;border-right:1px solid #d8dce3;display:flex;flex-direction:column;justify-content:space-between}.logo{height:78px;display:flex;align-items:center;padding:0 24px}.logo svg{width:150px;height:auto}.nav{padding:0 12px}.nav button{width:100%;height:40px;margin-bottom:6px;border:0;border-radius:6px;background:transparent;color:#3b4654;font-weight:800;text-align:left;padding:0 13px;cursor:pointer}.nav button.active{background:#3f6ff2;color:#fff}.side-links,.profile{padding:0 12px}.side-divider{height:1px;background:#e0e2e6;margin:20px 0}.side-link{height:38px;padding:0 12px;display:flex;align-items:center;border-radius:7px}.profile{padding-bottom:24px}.profile-row{display:flex;gap:9px;align-items:center;margin-bottom:14px}.avatar{width:29px;height:29px;border-radius:50%;background:#dadde2}.profile strong{display:block}.profile span,.muted{color:#7d8695;font-size:13px}.profile-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.content{min-width:980px}.header{height:78px;border-bottom:1px solid #d7dce4;display:flex;align-items:center;justify-content:space-between;padding:0 42px}h1{margin:0;font-size:26px}.subtitle{color:#7d8695;font-size:13px}.main{padding:38px}.btn,.outline-btn,.dark-btn,.invite-btn{height:38px;border-radius:7px;font-weight:800;cursor:pointer;padding:0 12px}.btn,.outline-btn{border:1px solid #cfd6e0;background:#fff;color:#2f3a49}.dark-btn,.invite-btn{border:0;background:#3f6ff2;color:#fff}.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.toolbar-actions{display:flex;gap:10px}.count{font-size:18px;font-weight:900}.count span{color:#3f6ff2}.search-box{position:relative;width:296px}.search-box input{width:100%;height:41px;border:1px solid #d7dce4;border-radius:6px;padding:0 40px 0 14px}.search-box span{position:absolute;right:14px;top:10px}.table-wrap{overflow:auto}table{width:100%;min-width:1100px;border-collapse:collapse}th{height:40px;background:#eef1f5;color:#404a58;font-size:13px;text-align:left;padding:0 12px;border-top:1px solid #d4d9e1}td{height:56px;padding:0 12px;border-bottom:1px solid #d8dde5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.link{color:#2563eb;text-decoration:underline;font-weight:900;cursor:pointer}.pill{display:inline-flex;height:25px;align-items:center;margin-right:6px;padding:0 10px;border-radius:999px;font-size:13px;font-weight:900}.purple{background:#ead8ff;color:#7c3aed}.orange{background:#ffe7c2;color:#ee7d00}.gray{background:#f1f3f5;color:#7a8492}.joined{color:#7b61ff;background:#f5f1ff}.not-joined{color:#ff5b5b;background:#fff4f4}.success{color:#009c3b;font-weight:900}.warn{color:#ff7a00;font-weight:900}.danger{color:#ff3333;font-weight:900}.pagination{display:flex;justify-content:center;gap:8px;margin-top:28px}.page-btn{min-width:34px;height:34px;border:0;border-radius:8px;background:#fff}.page-btn.active{background:#eaf0ff;color:#3f6ff2}.toast{display:none;position:fixed;right:28px;bottom:28px;background:#111827;color:#fff;padding:13px 16px;border-radius:10px;z-index:30}.modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.38);z-index:20}.modal-backdrop.open{display:flex}.invite-modal{width:650px;background:#fff;border:1px solid #d7dce4;border-radius:14px;padding:26px;box-shadow:0 24px 70px rgba(15,23,42,.24);position:relative}.modal-close{position:absolute;top:18px;right:18px;width:32px;height:32px;border:0;border-radius:8px;background:#f1f3f5;font-size:20px}.invite-title{margin:0 0 8px;font-size:22px}.invite-desc{margin:0 0 24px;color:#6b7280}.invite-label{display:block;margin:16px 0 8px;font-size:13px;font-weight:800;color:#4b5563}.invite-input{width:100%;height:46px;border:1px solid #d7dce4;border-radius:8px;padding:0 15px;font-size:18px}.invite-preview{min-height:190px;border:1px solid #d7dce4;border-radius:10px;background:#fafafa;padding:18px 16px;line-height:1.75;white-space:pre-line}.invite-submit{width:100%;height:48px;margin-top:20px;border:1px solid #cfd6e0;border-radius:9px;background:#fff;font-size:16px;font-weight:900}.personal-top{background:#f7f8fa;border:1px solid #dfe3ea;border-radius:10px;padding:14px 18px;margin-bottom:12px;display:flex;justify-content:space-between;gap:12px}.personal-name{font-size:22px;font-weight:900}.badge{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;font-size:11px;font-weight:900;background:#ebfff3;color:#009c3b;border:1px solid #c5f1d3}.badge.warn{background:#fff7e8;color:#ff7a00;border-color:#ffe0aa}.tabs{display:flex;gap:8px;border-bottom:1px solid #dfe3ea;padding-bottom:10px;margin-bottom:16px}.tab{height:32px;border:1px solid #d7dce4;border-radius:8px;background:#fff;color:#667085;font-weight:800;padding:0 14px}.tab.active{border-color:#3f6ff2;background:#eaf0ff;color:#3f6ff2}.detail{display:grid;grid-template-columns:230px 1fr;gap:16px}.side,.detail-main{display:flex;flex-direction:column;gap:10px}.card{border:1px solid #dfe3ea;border-radius:10px;background:#fff;padding:14px}.card-title{font-size:13px;font-weight:900;color:#6b7280;margin-bottom:10px}.row{display:flex;justify-content:space-between;gap:8px;padding:6px 0;font-size:13px}.row+.row{border-top:1px solid #eef2f6}.box{border:1px solid #dfe3ea;border-radius:10px;background:#fff;padding:16px}.box-title{font-size:15px;font-weight:900;margin:0 0 12px}.timeline{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.step{text-align:center;min-width:86px}.circle{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;margin:0 auto 6px;background:#f1f3f5;border:1px solid #d7dce4;color:#8a94a6;font-weight:900}.done .circle{background:#3f6ff2;color:#fff}.active-step .circle{background:#eaf0ff;color:#3f6ff2;border:2px solid #3f6ff2}.small{font-size:13px;color:#6b7280;line-height:1.6}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.sheet{background:#f8fafc}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+/* 1차 탭 전용 스타일 */
+.radio-group{display:flex;flex-direction:column;gap:6px}.radio-group label{display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer;padding:5px 8px;border-radius:6px;border:1px solid #e5e7eb}.radio-group label:has(input:checked){border-color:#3f6ff2;background:#eaf0ff;color:#3f6ff2;font-weight:800}.radio-group input[type=radio]{accent-color:#3f6ff2}
+.method-group{display:flex;gap:6px;margin-top:6px}.method-btn{flex:1;height:32px;border:1px solid #d7dce4;border-radius:7px;background:#fff;font-size:12px;font-weight:800;color:#667085;cursor:pointer}.method-btn.sel{border-color:#3f6ff2;background:#eaf0ff;color:#3f6ff2}
+.field-label{font-size:12px;font-weight:800;color:#374151;margin:0 0 6px}.field-input{width:100%;height:36px;border:1px solid #d7dce4;border-radius:7px;padding:0 10px;font-size:13px}.field-textarea{width:100%;border:1px solid #d7dce4;border-radius:7px;padding:10px;font-size:13px;resize:vertical;line-height:1.6;font-family:inherit}.field-textarea:focus,.field-input:focus{outline:none;border-color:#3f6ff2}
+.med-table{width:100%;border-collapse:collapse;font-size:12px}.med-table th{background:#f3f4f6;padding:7px 10px;text-align:left;font-weight:800;color:#4b5563;border:1px solid #e5e7eb}.med-table td{padding:7px 10px;border:1px solid #e5e7eb;vertical-align:top}.med-section-head{background:#fafafa;font-weight:800;color:#374151}.med-add-btn{height:26px;padding:0 10px;border:1px dashed #d1d5db;border-radius:6px;background:#fff;font-size:11px;color:#6b7280;cursor:pointer;margin-top:4px}.med-add-btn:hover{border-color:#3f6ff2;color:#3f6ff2}
+.adh-bar-wrap{display:flex;align-items:center;gap:8px;margin-bottom:4px}.adh-bar-bg{flex:1;height:10px;background:#eef1f5;border-radius:99px;overflow:hidden}.adh-bar-fill{height:100%;border-radius:99px;background:#3f6ff2}.adh-label{font-size:12px;font-weight:800;min-width:28px;text-align:right}
+.problem-item{display:flex;align-items:flex-start;gap:8px;padding:9px;border:1px solid #fee2e2;border-radius:8px;background:#fff9f9;margin-bottom:6px}.problem-badge{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:99px;font-size:10px;font-weight:900;white-space:nowrap}.sev-caution{background:#fff7e8;color:#ee7d00}.sev-risk{background:#fee2e2;color:#dc2626}.problem-body{flex:1}.problem-title{font-size:12px;font-weight:800;color:#374151}.problem-sub{font-size:11px;color:#6b7280;margin-top:2px}.problem-action{font-size:11px;color:#3f6ff2;margin-top:2px}
+.guide-box{border:1px solid #d7dce4;border-radius:8px;background:#fafafa;padding:12px;font-size:13px;line-height:1.8;white-space:pre-line;min-height:100px}.guide-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}.guide-btn{height:32px;padding:0 12px;border:1px solid #d7dce4;border-radius:7px;background:#fff;font-size:12px;font-weight:800;color:#374151;cursor:pointer}.guide-btn:hover{border-color:#3f6ff2;color:#3f6ff2}.guide-btn.primary{background:#3f6ff2;color:#fff;border-color:#3f6ff2}.guide-btn.primary:hover{background:#2f5dd4}.guide-btn:disabled{color:#9ca3af;background:#f3f4f6;border-color:#e5e7eb;cursor:not-allowed}.guide-btn:disabled:hover{border-color:#e5e7eb;color:#9ca3af}
+.submit-box{border:2px solid #3f6ff2;border-radius:10px;background:#f0f5ff;padding:18px}.submit-box.done{border-color:#009c3b;background:#f0fdf4}.submit-title{font-size:14px;font-weight:900;color:#1e40af;margin-bottom:6px}.submit-box.done .submit-title{color:#009c3b}.submit-desc{font-size:12px;color:#6b7280;margin-bottom:14px}.submit-btn{height:42px;border:0;border-radius:8px;background:#3f6ff2;color:#fff;font-size:14px;font-weight:900;cursor:pointer;padding:0 24px}.submit-btn:disabled{background:#d1d5db;color:#9ca3af;cursor:not-allowed}
+.readonly-overlay{pointer-events:none;opacity:.7}.done-banner{display:flex;align-items:center;gap:8px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:800;color:#009c3b}
+.quick-modal{width:480px;background:#fff;border:1px solid #d7dce4;border-radius:14px;padding:24px;box-shadow:0 24px 70px rgba(15,23,42,.24);position:relative}.quick-template-group{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.quick-tpl{height:30px;padding:0 12px;border:1px solid #d7dce4;border-radius:7px;background:#fff;font-size:12px;font-weight:800;color:#374151;cursor:pointer}.quick-tpl:hover,.quick-tpl.sel{border-color:#3f6ff2;background:#eaf0ff;color:#3f6ff2}
+.consult-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.consult-field{display:flex;flex-direction:column;gap:4px}.check-group{display:flex;flex-wrap:wrap;gap:6px}.check-item{display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer}.check-item input{accent-color:#3f6ff2}
+.section-divider{height:1px;background:#eef1f5;margin:16px 0}
+.adh-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.adh-card{border:1px solid #e5e7eb;border-radius:10px;background:#fff;padding:14px}.adh-card-title{font-size:13px;font-weight:900;color:#202733;margin-bottom:6px}.adh-card-hint{display:flex;align-items:flex-start;gap:5px;margin-bottom:4px}.adh-hint-icon{display:inline-flex;width:14px;height:14px;border-radius:50%;background:#d1d5db;color:#6b7280;font-size:9px;font-weight:900;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}.adh-hint-text{font-size:11px;color:#9ca3af;line-height:1.5}
+@media(max-width:1100px){.detail,.grid2,.grid3,.grid4,.consult-form-grid{grid-template-columns:1fr}.timeline{grid-template-columns:repeat(7,110px);overflow:auto}.adh-summary-grid{grid-template-columns:1fr}}
+.content{min-width:0}
+
+/* ── 단계별 흐름 레이아웃 ── */
+.phase-block{border:1.5px solid #e5e9f0;border-radius:14px;overflow:hidden;background:#fff;margin-bottom:8px}
+.phase-block.collapsed .phase-body{display:none}
+.phase-toggle{font-size:12px;color:#9ca3af;margin-left:8px;transition:transform 0.2s;display:inline-block}
+.phase-block:not(.collapsed) .phase-toggle{transform:rotate(180deg)}
+.action-now{border:1.5px solid #3f6ff2;border-radius:14px;background:#fff;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.action-now-l{display:flex;flex-direction:column;gap:3px}
+.action-now-tag{font-size:11px;font-weight:700;color:#9ca3af}
+.action-now-title{font-size:15px;font-weight:800;color:#111827}
+.action-now-desc{font-size:12px;color:#6b7280}
+.phase-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#f7f8fa;border-bottom:1px solid #e5e9f0}
+.phase-header-l{display:flex;align-items:center;gap:12px}
+.phase-num{width:30px;height:30px;border-radius:50%;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.phase-num-active{background:#3f6ff2;color:#fff}
+.phase-num-done{background:#16a34a;color:#fff}
+.phase-num-idle{background:#e5e7eb;color:#9ca3af}
+.phase-title{font-size:15px;font-weight:800;color:#111827;line-height:1.3}
+.phase-sub{font-size:11px;color:#6b7280;margin-top:2px}
+.phase-badge{display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:99px;font-size:11px;font-weight:800}
+.phase-badge-active{background:#eaf0ff;color:#3f6ff2}
+.phase-badge-done{background:#dcfce7;color:#16a34a}
+.phase-badge-idle{background:#f3f4f6;color:#9ca3af}
+.phase-body{padding:16px 20px;display:flex;flex-direction:column;gap:0}
+.phase-connector{display:flex;justify-content:center;padding:4px 0}
+.phase-connector::before{content:'';display:block;width:2px;height:24px;background:#d1d5db;border-radius:2px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div>
+      <div class="logo"><img src="BI.svg" alt="Wellcheck" style="width:140px;height:auto"></div>
+      <nav class="nav"><button class="active" data-page="customers">♙ 단골 고객</button><button data-message="처방전 메뉴는 다음 단계에서 연결합니다.">▣ 처방전</button><button data-message="앱 설치 문자 발송 메뉴는 다음 단계에서 연결합니다.">✉ 앱 설치 문자 발송</button></nav>
+      <div class="side-divider"></div><div class="side-links"><div class="side-link">약국설정</div><div class="side-link">1:1 채팅문의</div><div class="side-link">원격 지원 요청하기 ›</div></div>
+    </div>
+    <div class="profile"><div class="profile-row"><div class="avatar"></div><div><strong>김체크 약사</strong><span>하나누리 약국</span></div></div><div class="profile-actions"><button class="outline-btn">내정보</button><button class="outline-btn">로그아웃</button></div></div>
+  </aside>
+  <main class="content"><header class="header"><div><h1 id="pageTitle"></h1><div id="pageSubtitle" class="subtitle"></div></div><div id="headerAction" class="header-action"></div></header><section id="mainArea" class="main"></section></main>
+</div>
+<div id="toast" class="toast"></div>
+
+<!-- 대상자 초대 모달 -->
+<div id="inviteModal" class="modal-backdrop" aria-hidden="true"><div class="invite-modal"><button id="inviteClose" class="modal-close">×</button><h2 class="invite-title">대상자 초대</h2><p class="invite-desc">환자에게 다제약물 관리사업 초대 문자를 발송합니다.</p><label class="invite-label">환자 이름</label><input id="inviteName" class="invite-input" value="홍길동"><label class="invite-label">연락처</label><input id="invitePhone" class="invite-input" value="010-0000-0000"><div class="invite-label">발송 메시지 미리보기</div><div id="invitePreview" class="invite-preview"></div><button id="inviteSend" class="invite-submit">문자 발송</button></div></div>
+
+<!-- 상담지 미확정 확인 팝업 -->
+<div id="consultConfirmModal" class="modal-backdrop" aria-hidden="true" style="align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:12px;width:320px;box-shadow:0 8px 32px rgba(0,0,0,0.18);padding:28px 24px 20px">
+    <div style="font-size:14px;font-weight:600;color:#111827;line-height:1.7;text-align:center;margin-bottom:24px">상담지 최종 확정 전입니다.<br>상담지를 확인하시겠습니까?</div>
+    <div style="display:flex;gap:10px">
+      <button id="consultConfirmCancel" style="flex:1;padding:10px 0;border:1px solid #d1d5db;border-radius:8px;background:#fff;font-size:14px;font-weight:600;color:#374151;cursor:pointer">취소</button>
+      <button id="consultConfirmOk" style="flex:1;padding:10px 0;border:none;border-radius:8px;background:#2563eb;font-size:14px;font-weight:600;color:#fff;cursor:pointer">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 상담지 팝업 모달 -->
+<div id="consultPopupModal" class="modal-backdrop" aria-hidden="true" style="align-items:stretch;padding:0">
+  <div style="display:flex;flex-direction:column;width:100%;max-width:900px;height:100vh;margin:0 auto;background:#fff">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #e5e7eb;background:#fff;flex-shrink:0">
+      <div style="font-size:15px;font-weight:800;color:#111827" id="consultPopupTitle">1차 디지털 상담지</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="consultPopupPrintBtn" style="height:36px;padding:0 14px;border:1px solid #d1d5db;border-radius:8px;background:#fff;font-size:13px;font-weight:600;color:#374151;cursor:pointer">🖨 인쇄</button>
+        <button id="consultPopupPdfBtn" style="height:36px;padding:0 14px;border:1px solid #d1d5db;border-radius:8px;background:#fff;font-size:13px;font-weight:600;color:#374151;cursor:pointer">⬇ PDF 저장</button>
+        <button id="consultPopupCloseBtn" style="height:36px;width:36px;border:none;border-radius:8px;background:#f3f4f6;font-size:18px;font-weight:700;color:#6b7280;cursor:pointer;line-height:1">×</button>
+      </div>
+    </div>
+    <div style="flex:1;overflow:auto">
+      <iframe id="consultPopupIframe" src="dashboard_v2.html" style="width:100%;min-height:600px;border:none;display:block"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- 확정 전 인쇄/PDF 안내 모달 -->
+<div id="prefinalizeModal" class="modal-backdrop" aria-hidden="true">
+  <div style="width:340px;background:#fff;border-radius:12px;padding:28px 24px;box-shadow:0 24px 70px rgba(15,23,42,.24)">
+    <p id="prefinalizeModalMsg" style="font-size:14px;color:#374151;text-align:center;margin:0 0 24px;line-height:1.7"></p>
+    <div style="display:flex;gap:8px">
+      <button id="prefinalizeCancelBtn" style="flex:1;height:40px;border:1px solid #d1d5db;border-radius:8px;background:#fff;font-size:13px;font-weight:600;color:#374151;cursor:pointer">취소</button>
+      <button id="prefinalizeConfirmBtn" style="flex:1;height:40px;border:none;border-radius:8px;background:#3f6ff2;font-size:13px;font-weight:700;color:#fff;cursor:pointer">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 다제약물 복약지도문 발송 모달 (4단계) -->
+<div id="guideModal" class="modal-backdrop" aria-hidden="true" style="align-items:stretch;padding:0;background:rgba(15,23,42,.45)">
+  <div style="display:flex;flex-direction:column;width:100%;max-width:960px;height:100vh;margin:0 auto;background:#fff">
+
+    <!-- 모달 헤더 -->
+    <div style="flex-shrink:0;background:#fff;border-bottom:1px solid #e5e7eb;padding:14px 24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div id="gmAvatar" style="width:36px;height:36px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#1d4ed8"></div>
+          <div>
+            <div id="gmName" style="font-size:15px;font-weight:900;color:#111827"></div>
+            <div id="gmSub" style="font-size:12px;color:#6b7280"></div>
+          </div>
+        </div>
+        <button id="guideModalClose" style="width:32px;height:32px;border:none;border-radius:8px;background:#f3f4f6;font-size:18px;font-weight:700;color:#6b7280;cursor:pointer;line-height:1">×</button>
+      </div>
+      <!-- 단계 표시 -->
+      <div style="display:flex;gap:0">
+        <div class="gm-step" data-step="1" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px">
+          <div class="gm-step-circle" style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;border:2px solid #d1d5db;color:#6b7280;background:#fff">1</div>
+          <div class="gm-step-label" style="font-size:11px;color:#6b7280;text-align:center">상담지 확인</div>
+        </div>
+        <div style="flex:1;height:2px;background:#e5e7eb;margin-top:13px;align-self:flex-start"></div>
+        <div class="gm-step" data-step="2" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px">
+          <div class="gm-step-circle" style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;border:2px solid #d1d5db;color:#6b7280;background:#fff">2</div>
+          <div class="gm-step-label" style="font-size:11px;color:#6b7280;text-align:center">복약지도문 작성</div>
+        </div>
+        <div style="flex:1;height:2px;background:#e5e7eb;margin-top:13px;align-self:flex-start"></div>
+        <div class="gm-step" data-step="3" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px">
+          <div class="gm-step-circle" style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;border:2px solid #d1d5db;color:#6b7280;background:#fff">3</div>
+          <div class="gm-step-label" style="font-size:11px;color:#6b7280;text-align:center">발송 방법</div>
+        </div>
+        <div style="flex:1;height:2px;background:#e5e7eb;margin-top:13px;align-self:flex-start"></div>
+        <div class="gm-step" data-step="4" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px">
+          <div class="gm-step-circle" style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;border:2px solid #d1d5db;color:#6b7280;background:#fff">4</div>
+          <div class="gm-step-label" style="font-size:11px;color:#6b7280;text-align:center">전송 완료</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 모달 바디 -->
+    <div id="gmBody" style="flex:1;overflow:auto"></div>
+
+    <!-- 모달 푸터 -->
+    <div id="gmFooter" style="flex-shrink:0;border-top:1px solid #e5e7eb;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;background:#fff">
+      <div id="gmStepLabel" style="font-size:12px;color:#6b7280"></div>
+      <div style="display:flex;gap:10px">
+        <button id="gmPrev" style="height:40px;padding:0 20px;border:1px solid #d1d5db;border-radius:8px;background:#fff;font-size:14px;font-weight:700;color:#374151;cursor:pointer">← 이전</button>
+        <button id="gmNext" style="height:40px;padding:0 24px;border:none;border-radius:8px;background:#3f6ff2;font-size:14px;font-weight:700;color:#fff;cursor:pointer">다음 단계 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 빠른 연락 모달 (C9) -->
+<div id="finalizeConfirmModal" class="modal-backdrop" aria-hidden="true">
+  <div class="quick-modal" style="width:380px;padding:28px 28px 24px">
+    <p style="font-size:15px;font-weight:700;color:#111827;margin:0 0 8px;text-align:center">최종 확정</p>
+    <p style="font-size:13px;color:#374151;text-align:center;margin:0 0 24px;line-height:1.6">확정한 지도문은 다시 수정하실 수 없습니다.</p>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button id="finalizeCancelBtn" style="flex:1;height:40px;border:1px solid #d1d5db;border-radius:8px;background:#fff;font-size:13px;font-weight:600;color:#374151;cursor:pointer">취소</button>
+      <button id="finalizeConfirmBtn" style="flex:1;height:40px;border:none;border-radius:8px;background:#3f6ff2;font-size:13px;font-weight:700;color:#fff;cursor:pointer">확인</button>
+    </div>
+  </div>
+</div>
+
+<div id="quickModal" class="modal-backdrop" aria-hidden="true">
+  <div class="quick-modal">
+    <button id="quickClose" class="modal-close">×</button>
+    <h2 class="invite-title" style="font-size:18px;margin-bottom:4px">빠른 연락</h2>
+    <p style="font-size:12px;color:#6b7280;margin:0 0 14px">템플릿을 선택하거나 메시지를 직접 입력한 후 발송하세요.</p>
+    <div class="field-label">템플릿 선택</div>
+    <div class="quick-template-group">
+      <button class="quick-tpl" data-tpl="remind">복약 알림</button>
+      <button class="quick-tpl" data-tpl="appt">상담 일정 안내</button>
+      <button class="quick-tpl" data-tpl="check">복약 확인 요청</button>
+      <button class="quick-tpl" data-tpl="result">상담 결과 안내</button>
+    </div>
+    <div class="field-label">수신자</div>
+    <input id="quickPhone" class="field-input" style="margin-bottom:10px" value="010-1234-5678" readonly>
+    <div class="field-label">메시지 내용</div>
+    <textarea id="quickMsg" class="field-textarea" rows="5" style="margin-bottom:12px">[웰체크] 안녕하세요. 하나누리 약국입니다.
+복약 관련 문의사항이 있으시면 언제든 연락 주세요.</textarea>
+    <button id="quickSend" class="invite-submit" style="margin-top:0">문자 발송</button>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], NL='\n';
+
+const raw=[['p1','김영자','1954-03-12','만 72세 / 여성','010-1234-5678','여성','3건','참여',['고혈압','당뇨'],'88%','success','1차 상담','2026-05-28','참여 확정'],['p2','박정수','1949-11-08','만 76세 / 남성','010-2345-6789','남성','2건','미참여',['고혈압','고지혈증'],'60%','warn','','',''],['p3','이순희','1951-07-21','만 74세 / 여성','010-3456-7890','여성','5건','참여',['당뇨','관절염'],'72%','warn','2차 상담','2026-05-26','2차 상담 완료'],['p4','정말순','1947-09-18','만 78세 / 여성','010-5678-9012','여성','4건','참여',['당뇨','고혈압'],'81%','success','초기 문진','2026-05-24','동의서 징수'],['p5','오성호','1952-04-15','만 74세 / 남성','010-7890-1234','남성','6건','참여',['심혈관질환','고혈압'],'93%','success','1차 상담 완료','2026-05-22','1차 상담 완료'],['p6','서명희','1953-10-06','만 72세 / 여성','010-0123-4567','여성','3건','미참여',['당뇨(전)'],'85%','success','','','']];
+const keys=['id','name','birth','ageGender','phone','gender','rx','join','disease','adh','adhType','round','start','status'];
+const C=raw.map(r=>Object.fromEntries(keys.map((k,i)=>[k,r[i]])));
+
+// 메모 포함 인쇄/PDF
+function printWithMemo(memo){
+  const w=window.open('dashboard_v2.html','_blank');
+  w.addEventListener('load',function(){
+    if(memo){
+      const div=w.document.createElement('div');
+      div.style.cssText='margin:24px 32px 0;padding:12px 16px;border:1px solid #e5e7eb;border-radius:8px;background:#fafafa;font-size:13px;font-family:inherit';
+      div.innerHTML='<div style="font-weight:700;margin-bottom:6px;color:#374151">메모</div><div style="white-space:pre-wrap;color:#374151">'+memo.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div>';
+      w.document.body.appendChild(div);
+    }
+    w.print();
+  });
+}
+function pdfWithMemo(memo){printWithMemo(memo);}
+
+// 1차 탭 상태 저장소
+const s1={};
+function getS1(id){
+  if(!s1[id])s1[id]={
+    status:'미진행',date:'',method:'방문',
+    selfAdh:'',adhDiff:[],sideEffect:'',question:'',
+    consultFinalized:false,
+    problems:[
+      {type:'상호작용',drug:'암로디핀 + 아스피린',sev:'주의',action:'병용 모니터링 권고, 출혈 증상 관찰'},
+      {type:'중복투약',drug:'메트포르민 중복',sev:'위험',action:'처방의와 협의 필요'}
+    ],
+    opinion:'',opinionEditing:false,guide:'',guideEditing:false,submitted:false
+  };
+  return s1[id];
+}
+
+const el=(t,c,x)=>{const n=document.createElement(t);if(c)n.className=c;if(x!=null)n.textContent=x;return n};
+const clear=n=>n.replaceChildren();
+const setNav=p=>$$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));
+const poly=()=>C.filter(c=>c.join==='참여');
+
+function toast(x){const t=$('#toast');t.textContent=x;t.style.display='block';setTimeout(()=>t.style.display='none',1800)}
+function pill(x){let c=x.includes('당뇨')?'purple':x.includes('고혈압')?'orange':'gray';return `<span class="pill ${c}">${x}</span>`}
+
+function renderList(page){setNav(page);const data=page==='poly'?poly():C;$('#pageTitle').textContent=page==='poly'?'다제약물관리사업 대상자 현황':'단골고객 현황';$('#pageSubtitle').textContent=page==='poly'?'단골고객 중 다제약물관리사업 참여 대상자입니다.':'웰체크 앱에 등록된 단골 고객입니다.';clear($('#headerAction'));const main=$('#mainArea');clear(main);main.innerHTML=`<div class="toolbar"><div class="count">총 대상자 <span id="totalCount">(${data.length})</span></div><div class="toolbar-actions"><div class="search-box"><input id="searchInput" placeholder="이름 또는 전화번호 검색"><span>⌕</span></div>${page==='poly'?'<button class="invite-btn" id="inviteBtn">+ 대상자 초대</button>':''}</div></div><div class="table-wrap"><table><thead><tr>${(page==='poly'?['이름','생년월일','나이/성별','전화번호','현재 차수','질환','사업 참여 시작일','진행 상태']:['단골 등록일시','고객명','생년월일','휴대전화 번호','성별','처방전 수','보유 질환','30일 복약 순응도','다제약물 사업참여','사업 관리']).map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody id="rows"></tbody></table></div><div class="pagination"><button class="page-btn">«</button><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">›</button></div>`;const rows=$('#rows');data.forEach(c=>rows.append(row(c,page)));$('#searchInput').oninput=filterRows;if($('#inviteBtn'))$('#inviteBtn').onclick=openInvite}
+
+function row(c,page){const tr=el('tr');tr.dataset.key=[c.name,c.phone,c.status,c.disease.join(' ')].join(' ');const name=`<span class="link" data-id="${c.id}">${c.name}</span>`;tr.innerHTML=page==='poly'?`<td>${name}</td><td>${c.birth}</td><td>${c.ageGender}</td><td>${c.phone}</td><td class="bold">${c.round||'-'}</td><td>${c.disease.map(pill).join('')}</td><td>${c.start||'-'}</td><td class="${c.status?.includes('완료')?'success':c.status==='동의서 징수'||c.status==='공단 승인 대기'?'warn':c.status==='참여 확정'?'':'warn'}">${c.status||'-'}</td>`:`<td>2024-01-01 14:00</td><td>${name}</td><td>${c.birth}</td><td>${c.phone}</td><td>${c.gender}</td><td class="bold">${c.rx}</td><td>${c.disease.map(pill).join('')||'<span style="color:#9ca3af">없음</span>'}</td><td class="${c.adhType}">${c.adh}</td><td><span class="pill ${c.join==='참여'?'joined':'not-joined'}">${c.join}</span></td><td>${c.join==='참여'?`<span class="link" data-id="${c.id}">대상자 바로가기 →</span>`:`<span class="link" data-invite="${c.id}">참여 메시지 보내기 ↗</span>`}</td>`;tr.querySelectorAll('.link[data-id]').forEach(l=>l.onclick=()=>detail(c.id));const invBtn=tr.querySelector('[data-invite]');if(invBtn)invBtn.onclick=e=>{e.stopPropagation();openInvite(c)};return tr}
+
+function filterRows(){let v=$('#searchInput').value.toLowerCase(),n=0;$$('#rows tr').forEach(r=>{let ok=!v||r.dataset.key.toLowerCase().includes(v);r.style.display=ok?'':'none';if(ok)n++});$('#totalCount').textContent=`(${n})`}
+
+function detail(id,activeTopTab){
+  const c=C.find(x=>x.id===id);
+  setNav('customers');
+  const topIdx=activeTopTab||0;
+  // 헤더 영역에 환자 정보 표시
+  $('#pageTitle').innerHTML=`<button id="backList" style="background:none;border:none;cursor:pointer;font-size:15px;font-weight:900;color:#202733;padding:0;margin-right:6px;vertical-align:middle">‹</button>${c.name}`;
+  $('#pageSubtitle').textContent=`${c.birth}생(${c.ageGender}) · ${c.gender} · ${c.phone}`;
+  $('#headerAction').innerHTML=`<button class="btn" id="quick">빠른 연락</button>`;
+  $('#mainArea').innerHTML=`
+<div class="tabs" id="topTabs" style="gap:4px;margin-bottom:0;border-bottom:none;padding-top:0">
+  <button class="tab ${topIdx===0?'active':''}" data-top="0">Overview</button>
+  <button class="tab ${topIdx===1?'active':''}" data-top="1">다제약물관리</button>
+</div>
+<div id="topContent" style="border-top:1px solid #dfe3ea;padding-top:16px;margin-top:0"></div>`;
+
+  const renderTop=ti=>{
+    const wrap=$('#topContent');
+    if(ti===0){
+      wrap.innerHTML=`<img src="overview_placeholder.png" alt="Overview" style="width:100%;border-radius:8px;display:block">`;
+    } else {
+      // 다제약물관리 — 상단: 사업 진행 단계 / 하단: 차수별 탭
+      wrap.innerHTML=`
+        <div id="polyTimeline" style="margin-bottom:20px">${timeline(c)}</div>
+        <div class="tabs" id="polyTabs" style="margin-bottom:16px">${['1차','2차','3차','4차'].map((t,i)=>`<button class="tab ${i===0?'active':''}" data-pti="${i}">${t}</button>`).join('')}</div>
+        <div id="polyContent"></div>`;
+      const renderPoly=pi=>{
+        const pw=$('#polyContent');
+        if(pi===0) renderTab1(c,pw);
+        else pw.innerHTML=`<div style="padding:60px 0;text-align:center;color:#9ca3af"><div style="font-size:32px;margin-bottom:12px">🔒</div><div style="font-size:15px;font-weight:800;color:#374151">${pi+1}차 상담지</div><div style="font-size:13px;margin-top:6px">이전 차수 상담 완료 후 활성화됩니다.</div></div>`;
+      };
+      wrap.querySelectorAll('[data-pti]').forEach(btn=>{btn.onclick=()=>{wrap.querySelectorAll('[data-pti]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPoly(parseInt(btn.dataset.pti))};});
+      renderPoly(0);
+    }
+  };
+
+  $$('[data-top]').forEach(btn=>{btn.onclick=()=>{$$('[data-top]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTop(parseInt(btn.dataset.top))};});
+  renderTop(topIdx);
+  $('#quick').onclick=()=>openQuick(c);
+  $('#backList').onclick=()=>renderList('customers');
+}
+
+// ─── 전체 요약 탭 렌더 함수들 ────────────────────────────
+function side(c){return card('차수별 현황',[['1차',c.join==='참여'?'미진행':'-'],['2차','-'],['3차','-'],['4차','-']])+card('복약 순응도',[['복약일수','2일/13일'],['복약율','15.8%']])}
+function card(t,rows){return `<div class="card"><div class="card-title">${t}</div>${rows.map(r=>`<div class="row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}</div>`}
+function timeline(c){
+  const steps=['동의서 징수','공단 승인','참여 확정','1차 상담','2차 상담','3차 상담','4차 상담'];
+  const statusMap={'1차 상담 완료':4,'2차 상담 완료':5,'3차 상담 완료':6,'4차 상담 완료':7};
+  let doneUpTo=-1;
+  if(statusMap[c.status]!==undefined) doneUpTo=statusMap[c.status]-1;
+  else {const idx=steps.indexOf(c.status);if(idx>=0)doneUpTo=idx-1;}
+  const activeIdx=doneUpTo+1<steps.length?doneUpTo+1:steps.length-1;
+  const allDone=doneUpTo>=steps.length-1;
+  return `<div class="box" style="margin-bottom:0"><p class="box-title" style="margin-bottom:14px">사업 진행 단계</p><div class="timeline" style="grid-template-columns:repeat(7,1fr)">${steps.map((s,i)=>{
+    const done=i<=doneUpTo||allDone;
+    const active=!allDone&&i===activeIdx;
+    return `<div class="step ${done?'done':active?'active-step':''}"><div class="circle">${done?'✓':i+1}</div><div class="small"><b>${s}</b><br><span style="color:${done?'#16a34a':active?'#3f6ff2':'#9ca3af'}">${done?'완료':active?'현재 단계':'대기'}</span></div></div>`;
+  }).join('')}</div></div>`;
+}
+function sheets(c){
+  const st=c?getS1(c.id):{};
+  return `<div class="box"><p class="box-title">디지털 상담지</p><div class="grid4">${['1차 상담지','2차 상담지','3차 상담지','4차 상담지'].map((s,i)=>{
+    const finalized=i===0&&st.consultFinalized;
+    const statusText=i===0?(finalized?'작성 완료':'작성 대기'):'미진행';
+    const statusColor=finalized?'#16a34a':'';
+    const btnAction=finalized?`openConsultPopup(${i+1})`:`openConsultConfirm(${i+1})`;
+    return `<div class="card sheet"><b>${s}</b><div class="small" style="color:${statusColor};font-weight:${finalized?700:400}">${statusText}</div><button class="btn" onclick="${btnAction}">상담지 열기</button></div>`;
+  }).join('')}</div></div>`;
+}
+function meds(){
+  const rx=GM_MEDS.rx;
+  const supp=GM_MEDS.supp;
+  const rxPreview=rx.slice(0,2).map(m=>m.split(' (')[0]).join('<br>')+(rx.length>2?`<br>+ ${rx.length-2}종`:'');
+  const suppPreview=supp.slice(0,2).join('<br>')+(supp.length>2?`<br>+ ${supp.length-2}종`:'');
+  return `<div class="box"><p class="box-title">현재 복용 약물 요약 <span class="badge">1차 상담지 기준</span></p><div class="grid3"><div><b>처방약 (${rx.length}종)</b><div class="small">${rxPreview}</div></div><div><b>OTC</b><div class="small">${GM_MEDS.otc.length?GM_MEDS.otc.join('<br>'):'-'}</div></div><div><b>건기식 (${supp.length}종)</b><div class="small">${suppPreview}</div></div></div><div class="small" style="margin-top:10px">💬 1차 상담지 투약 현황 기준 · 공단 제공 자료와 대조 검토 필요</div></div>`;
+}
+function bottom(){
+  const R=48,CX=66,CY=66,SW=10;
+  const circ=+(2*Math.PI*R).toFixed(2);
+  const arc=+(circ*0.75).toFixed(2);
+  function gauge(pct,title,hint,val,sub){
+    const fill=+(arc*(pct/100)).toFixed(2);
+    return `<div class="adh-card">
+      <div class="adh-card-title">${title}</div>
+      <div class="adh-card-hint"><span class="adh-hint-icon">i</span><span class="adh-hint-text">${hint}</span></div>
+      <div style="display:flex;justify-content:center;margin-top:8px">
+        <svg width="132" height="112" viewBox="0 0 132 128" style="overflow:visible">
+          <circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="#f3f4f6" stroke-width="${SW}" stroke-dasharray="${arc} ${circ}" transform="rotate(135,${CX},${CY})" stroke-linecap="round"/>
+          <circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="#ef4444" stroke-width="${SW}" stroke-dasharray="${fill} ${circ}" transform="rotate(135,${CX},${CY})" stroke-linecap="round"/>
+          <text x="${CX}" y="${CY-8}" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="-apple-system,sans-serif">미흡</text>
+          <text x="${CX}" y="${CY+14}" text-anchor="middle" font-size="${val.length>6?16:18}" font-weight="900" fill="#202733" font-family="-apple-system,sans-serif">${val}</text>
+          ${sub?`<text x="${CX}" y="${CY+30}" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="-apple-system,sans-serif">${sub}</text>`:''}
+        </svg>
+      </div>
+    </div>`;
+  }
+  const bars=[['아침',12.5,'12.5%'],['점심',50,'50%'],['저녁',11.1,'11.1%']];
+  return `<div class="box"><p class="box-title">복약 순응도</p>
+    <div class="adh-summary-grid">
+      ${gauge(15.4,'복약일수','약을 복용한 날짜 수<br>(일부 복용일 포함)','2일 / 13일','(15.4%)')}
+      ${gauge(15.8,'복약률','약을 복용한 비율<br>(먹은 약 / 먹어야 할 약)','15.8%','')}
+      <div class="adh-card">
+        <div class="adh-card-title">시간대별 복약률</div>
+        <div class="adh-card-hint"><span class="adh-hint-icon">i</span><span class="adh-hint-text">아침, 점심, 저녁에 각각 먹어야 할 약들 중 몇 %를 먹었습니까?</span></div>
+        <div style="margin-top:20px;padding:0 4px">
+          ${bars.map(([t,v,lbl])=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <span style="font-size:12px;color:#374151;min-width:24px">${t}</span>
+            <span style="font-size:13px;font-weight:900;color:#374151;min-width:38px">${lbl}</span>
+            <div style="flex:1;height:8px;background:#f3f4f6;border-radius:99px;overflow:hidden">
+              <div style="height:100%;width:${v}%;background:#ef4444;border-radius:99px"></div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── 1차 탭 렌더 ────────────────────────────────────────
+function renderTab1(c,wrap){
+  const st=getS1(c.id);
+  wrap.innerHTML='';
+
+  // ── 메인 영역 ──
+  const mainEl=document.createElement('section');
+  mainEl.className='detail-main';
+  mainEl.id='tab1Main';
+
+  // ── 3단계 흐름 레이아웃 ──
+  // 현재 단계 파악
+  const nowStep = st.submitted ? 3 : st.consultFinalized ? 2 : 1;
+  const nowLabel = nowStep===1 ? '상담 기록지를 검토하고 상담을 준비하세요' : nowStep===2 ? '상담 후 약사 소견을 기록하세요' : '복약지도문을 발송하고 기록을 제출하세요';
+
+  mainEl.innerHTML+=`
+
+  <!-- 지금 할 일 -->
+  <div class="action-now">
+    <div class="action-now-l">
+      <div class="action-now-tag">지금 할 일 · STEP ${nowStep}</div>
+      <div class="action-now-title">${nowLabel}</div>
+    </div>
+    <button class="guide-btn primary" onclick="(()=>{const b=document.getElementById('phase${nowStep}');b.classList.remove('collapsed');setTimeout(()=>b.scrollIntoView({behavior:'smooth',block:'start'}),50)})()">바로 가기 →</button>
+  </div>
+
+  <!-- ════════════════════════════════
+       STEP 1 · 상담 준비
+  ════════════════════════════════ -->
+  <div class="phase-block" id="phase1">
+    <!-- 단계 헤더 -->
+    <div class="phase-header" onclick="(()=>{const b=document.getElementById('phase1');b.classList.toggle('collapsed')})()" style="cursor:pointer">
+      <div class="phase-header-l">
+        <div class="phase-num ${st.consultFinalized?'phase-num-done':'phase-num-active'}">
+          ${st.consultFinalized?'✓':'1'}
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#9ca3af;margin-bottom:2px">STEP 1</div>
+          <div class="phase-title">상담 준비</div>
+          <div class="phase-sub">디지털 상담지 검토 후 상담 일정 확인</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="phase-badge ${st.consultFinalized?'phase-badge-done':'phase-badge-active'}">
+          ${st.consultFinalized?'확정 완료':'진행 중'}
+        </span>
+        <span class="phase-toggle">▼</span>
+      </div>
+    </div>
+
+    <!-- 단계 내용 -->
+    <div class="phase-body">
+
+      <!-- 상담기록지 안내 배너 -->
+      <div style="border:1px solid #c7d7f5;border-radius:10px;background:#f0f5ff;padding:14px 18px;display:flex;flex-direction:column;gap:9px;margin-bottom:12px">
+        <div style="font-size:11px;font-weight:700;color:#3f6ff2;letter-spacing:0.04em">이 기록지 활용 안내</div>
+        <div style="display:flex;align-items:flex-start;gap:9px">
+          <span style="min-width:19px;height:19px;border-radius:50%;background:#3f6ff2;color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">1</span>
+          <div style="font-size:13px;color:#1e3a6e;line-height:1.55">상담 전 이 기록지를 미리 확인하고 상담을 준비하세요. <b>상담 준비 시간을 크게 줄여드립니다.</b></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:9px">
+          <span style="min-width:19px;height:19px;border-radius:50%;background:#3f6ff2;color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">2</span>
+          <div style="font-size:13px;color:#1e3a6e;line-height:1.55">기록지의 진료·투약 정보는 <b>환자가 건강보험공단 이력을 기반으로 앱에서 전달한 데이터</b>입니다. 공단에서 받은 자료와 반드시 대조 확인하세요.</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:9px">
+          <span style="min-width:19px;height:19px;border-radius:50%;background:#3f6ff2;color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">3</span>
+          <div style="font-size:13px;color:#1e3a6e;line-height:1.55">검토가 완료되면 <b>인쇄 버튼(또는 Ctrl+P)</b>으로 출력해서 상담 중 직접 활용하세요.</div>
+        </div>
+      </div>
+
+      <!-- 디지털 상담지 -->
+      <div class="box">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+            <div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding-left:16px;border-left:1px solid #e5e7eb">
+              <input type="date" class="field-input" id="consultDate" value="${st.date||'2026-05-28'}" style="width:140px;height:30px;font-size:12px">
+              <div class="method-group" style="margin-top:0">
+                <button class="method-btn ${st.method==='방문'?'sel':''}" data-m="방문">방문</button>
+                <button class="method-btn ${st.method==='유선'?'sel':''}" data-m="유선">유선</button>
+                <button class="method-btn ${st.method==='비대면'?'sel':''}" data-m="비대면">비대면</button>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button class="guide-btn" id="autoFillBtn" ${st.consultFinalized?'disabled':''}>업데이트</button>
+            <button class="guide-btn ${st.consultFinalized?'':'primary'}" id="finalizeBtn">${st.consultFinalized?'✓ 확정 완료':'최종 확정'}</button>
+            <button class="guide-btn" id="printBtn">🖨 인쇄</button>
+            <button class="guide-btn" id="pdfBtn">⬇ PDF 저장</button>
+          </div>
+        </div>
+
+        <div id="dashboardIframeWrap" style="margin-bottom:0"></div>
+        <div id="c4MemoWrap" style="border-top:1px solid #e5e7eb;padding-top:12px;margin-top:12px">
+          <div class="field-label" style="margin-bottom:8px">메모</div>
+          <textarea id="c4MemoText" class="field-textarea" rows="3" placeholder="상담 시 필요한 메모를 추가하세요." style="background:${st.consultFinalized?'#f9fafb':'#fff'}" ${st.consultFinalized?'readonly':''}>${st.c4Memo||''}</textarea>
+          ${st.consultFinalized?'':`<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px">
+            <button class="guide-btn" id="c4MemoEditBtn">수정</button>
+            <button class="guide-btn primary" id="c4MemoSaveBtn">저장</button>
+          </div>`}
+        </div>
+      </div>
+
+    </div><!-- /phase-body -->
+  </div><!-- /phase1 -->
+
+  <!-- ════════════════════════════════
+       STEP 2 · 상담 의견 작성
+  ════════════════════════════════ -->
+  <div class="phase-block ${nowStep===2?'':'collapsed'}" id="phase2">
+    <div class="phase-header" onclick="(()=>{const b=document.getElementById('phase2');b.classList.toggle('collapsed')})()" style="cursor:pointer">
+      <div class="phase-header-l">
+        <div class="phase-num ${st.opinion?'phase-num-done':st.consultFinalized?'phase-num-active':'phase-num-idle'}">
+          ${st.opinion?'✓':'2'}
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#9ca3af;margin-bottom:2px">STEP 2</div>
+          <div class="phase-title">상담 의견 작성</div>
+          <div class="phase-sub">상담 후 약사 소견 기록</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="phase-badge ${st.opinion?'phase-badge-done':st.consultFinalized?'phase-badge-active':'phase-badge-idle'}">
+          ${st.opinion?'작성 완료':st.consultFinalized?'작성 필요':'대기 중'}
+        </span>
+        <span class="phase-toggle">▼</span>
+      </div>
+    </div>
+
+    <div class="phase-body">
+      <div class="box">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div>
+            <p class="box-title" style="margin:0 0 2px">상담 의견</p>
+            <div style="font-size:11px;color:#6b7280">이번 1차 상담 전반에 대한 약사 소견을 기록합니다</div>
+          </div>
+          <div id="opinionActions">
+            ${st.opinionEditing
+              ? `<button class="guide-btn primary" id="opinionSaveBtn">저장</button>
+                 <button class="guide-btn" id="opinionCancelBtn">취소</button>`
+              : `<button class="guide-btn" id="opinionEditBtn">수정</button>`
+            }
+          </div>
+        </div>
+        ${st.opinionEditing
+          ? `<textarea class="field-textarea" rows="5" id="opinionInput" placeholder="이번 1차 상담에서의 전체 소견을 기록하세요.">${st.opinion||''}</textarea>`
+          : `<div id="opinionView" style="font-size:13px;color:${st.opinion?'#374151':'#9ca3af'};line-height:1.7;white-space:pre-wrap;min-height:72px;padding:8px;border:1px solid #e5e7eb;border-radius:7px;background:#fafafa">${st.opinion||'상담을 마친 후 전체 소견을 기록하세요.'}</div>`
+        }
+      </div>
+    </div>
+  </div><!-- /phase2 -->
+
+  <!-- ════════════════════════════════
+       STEP 3 · 복약지도문 발송
+  ════════════════════════════════ -->
+  <div class="phase-block ${nowStep===3?'':'collapsed'}" id="phase3">
+    <div class="phase-header" onclick="(()=>{const b=document.getElementById('phase3');b.classList.toggle('collapsed')})()" style="cursor:pointer">
+      <div class="phase-header-l">
+        <div class="phase-num ${st.submitted?'phase-num-done':st.consultCompleted?'phase-num-active':'phase-num-idle'}">
+          ${st.submitted?'✓':'3'}
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#9ca3af;margin-bottom:2px">STEP 3</div>
+          <div class="phase-title">복약지도문 발송 &amp; 기록 제출</div>
+          <div class="phase-sub">복약지도문 발송 후 기록 제출</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="phase-badge ${st.submitted?'phase-badge-done':st.consultCompleted?'phase-badge-active':'phase-badge-idle'}">
+          ${st.submitted?'제출 완료':st.consultCompleted?'발송 필요':'대기 중'}
+        </span>
+        <span class="phase-toggle">▼</span>
+      </div>
+    </div>
+
+    <div class="phase-body">
+      <!-- 복약지도문 발송 -->
+      <div class="box" style="margin-bottom:12px;${st.consultCompleted?'':'opacity:0.55;pointer-events:none'}">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <p class="box-title" style="margin:0 0 2px">복약지도문 발송</p>
+            <div style="font-size:11px;color:#6b7280">작성된 복약지도문을 확인하고 환자에게 발송합니다</div>
+          </div>
+          <button class="guide-btn primary" id="sideGuideBtn" style="height:38px;padding:0 18px;font-size:13px">발송하기 →</button>
+        </div>
+      </div>
+
+      <!-- 상담 완료 확정 -->
+      <div id="completeBox" style="${st.consultCompleted?'display:none':'margin-bottom:12px'}">
+        <div style="border:2px solid #3f6ff2;border-radius:12px;background:#f0f5ff;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+          <div>
+            <div style="font-weight:800;font-size:13px;color:#1e40af;margin-bottom:4px">상담 완료 확정 <span style="font-size:11px;font-weight:600;background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:99px;margin-left:6px">발송 전 필수</span></div>
+            <div style="font-size:12px;color:#4b5563">1차 상담이 모두 완료되었으면 완료 처리 후 복약지도문을 발송하세요.</div>
+          </div>
+          <button id="completeBtn" style="min-width:140px;height:40px;background:#3f6ff2;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap">✓ 1차 상담 완료</button>
+        </div>
+      </div>
+      <div id="completeDoneBox" style="${st.consultCompleted?'margin-bottom:12px':'display:none'}">
+        <div style="border:1px solid #bbf7d0;border-radius:10px;background:#f0fdf4;padding:12px 18px;display:flex;align-items:center;gap:10px">
+          <span style="font-size:18px">✅</span>
+          <div style="font-size:12px;font-weight:700;color:#15803d">1차 상담 완료 처리됨 · 완료 일시: 2026-05-29</div>
+        </div>
+      </div>
+
+      <!-- 최종 제출 -->
+      <div class="submit-box ${st.submitted?'done':''}" id="submitBox">
+        ${st.submitted
+          ? `<div class="done-banner">✅ 1차 상담기록이 최종 제출되었습니다.</div><div class="small">제출 일시: 2026-05-28 14:32 · 제출자: 김체크 약사 · 이후 수정이 필요하면 관리자에게 문의하세요.</div>`
+          : `<div class="submit-title">상담기록 최종제출</div>
+             <div class="submit-desc">${st.consultCompleted?'제출 후에는 수정이 불가합니다. 상담지·상담의견·복약지도문을 모두 확인한 후 제출하세요.':'상담 완료 확정 후 제출이 가능합니다. 위에서 먼저 완료 처리해 주세요.'}</div>
+             <button class="submit-btn" id="submitBtn" ${st.consultCompleted?'':'disabled'}>1차 상담기록 최종 제출</button>`
+        }
+      </div>
+    </div>
+  </div><!-- /phase3 -->
+  `;
+
+  wrap.append(mainEl);
+
+  // ── 이벤트 바인딩 ──
+  initTab1Events(c,st);
+}
+
+function problemHTML(p,i){
+  return `<div class="problem-item" data-pi="${i}">
+    <div>
+      <span class="problem-badge ${p.sev==='위험'?'sev-risk':'sev-caution'}">${p.sev}</span>
+      <div style="font-size:10px;color:#6b7280;margin-top:3px">${p.type}</div>
+    </div>
+    <div class="problem-body">
+      <div class="problem-title">${p.drug}</div>
+      <div class="problem-action">→ ${p.action}</div>
+    </div>
+    <button class="med-add-btn" style="align-self:center" onclick="this.closest('.problem-item').remove();toast('문제가 삭제되었습니다.')">삭제</button>
+  </div>`;
+}
+
+
+function initTab1Events(c,st){
+
+  // C4 dashboard iframe
+  const iframeWrap=$('#dashboardIframeWrap');
+  if(iframeWrap&&!iframeWrap.querySelector('iframe')){
+    iframeWrap.style.cssText='margin-bottom:12px;display:grid;grid-template-columns:minmax(0,1fr);overflow:hidden;border-radius:8px;';
+    const ifrm=document.createElement('iframe');
+    ifrm.src='dashboard_v2.html';
+    ifrm.scrolling='no';
+    ifrm.style.cssText='border:none;display:block;width:100%;min-width:0;border-radius:8px;';
+    ifrm.onload=function(){
+      const doc=this.contentWindow.document;
+      this.style.height=(doc.documentElement.scrollHeight+4)+'px';
+      if(st.consultFinalized)lockIframe();
+    };
+    iframeWrap.appendChild(ifrm);
+  }
+
+  // C2 상담 일자
+  if($('#consultDate'))$('#consultDate').onchange=e=>st.date=e.target.value;
+
+  // C2 방식
+  $$('.method-btn').forEach(btn=>btn.onclick=()=>{
+    $$('.method-btn').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');st.method=btn.dataset.m;
+  });
+
+  // C3 투약 추가 버튼
+  ['addRx','addOtc','addSupp'].forEach(id=>{const b=$(`#${id}`);if(b)b.onclick=()=>toast('약물 추가 기능은 다음 단계에서 연결합니다.')});
+  $$('.med-add-btn').forEach(b=>{if(!b.id)b.onclick=()=>toast('수정 기능은 다음 단계에서 연결합니다.')});
+
+  // C4 자동 생성
+  if($('#autoFillBtn'))$('#autoFillBtn').onclick=()=>{
+    toast('상담지가 앱 데이터 기반으로 자동 채워졌습니다.');
+  };
+
+  // iframe 수정 잠금 함수
+  function lockIframe(){
+    const wrap=$('#dashboardIframeWrap');
+    if(!wrap||wrap.querySelector('.iframe-lock'))return;
+    wrap.style.position='relative';
+    const lock=document.createElement('div');
+    lock.className='iframe-lock';
+    lock.style.cssText='position:absolute;inset:0;z-index:10;cursor:default;';
+    wrap.appendChild(lock);
+  }
+
+  // 확정 처리 공통 함수
+  function doFinalize(afterAction){
+    st.consultFinalized=true;
+    if($('#finalizeBtn')){$('#finalizeBtn').textContent='✓ 확정 완료';$('#finalizeBtn').classList.remove('primary');}
+    if($('#autoFillBtn'))$('#autoFillBtn').disabled=true;
+    const memo=st.c4Memo||'';
+    if($('#printBtn'))$('#printBtn').onclick=()=>printWithMemo(memo);
+    if($('#pdfBtn'))$('#pdfBtn').onclick=()=>pdfWithMemo(memo);
+    const ta=$('#c4MemoText');if(ta){ta.setAttribute('readonly','');ta.style.background='#f9fafb';}
+    const memoButtons=$('#c4MemoWrap').querySelector('div[style*="flex-end"]');if(memoButtons)memoButtons.remove();
+    lockIframe();
+    toast('상담지가 최종 확정되었습니다.');
+    if(afterAction==='print')printWithMemo(memo);
+    else if(afterAction==='pdf')pdfWithMemo(memo);
+  }
+
+  // 이미 확정된 경우 초기화
+  if(st.consultFinalized){
+    const memo=st.c4Memo||'';
+    if($('#printBtn'))$('#printBtn').onclick=()=>printWithMemo(memo);
+    if($('#pdfBtn'))$('#pdfBtn').onclick=()=>pdfWithMemo(memo);
+    // iframe이 로드된 뒤 잠금
+    const ifrm2=$('#dashboardIframeWrap iframe');
+    if(ifrm2){if(ifrm2.complete||ifrm2.contentDocument)lockIframe();else ifrm2.addEventListener('load',lockIframe);}
+  }
+
+  // C4 최종 확정
+  if($('#finalizeBtn'))$('#finalizeBtn').onclick=()=>{
+    if(st.consultFinalized){return;}
+    $('#finalizeConfirmModal').classList.add('open');$('#finalizeConfirmModal').setAttribute('aria-hidden','false');
+  };
+  if($('#finalizeCancelBtn'))$('#finalizeCancelBtn').onclick=()=>{
+    $('#finalizeConfirmModal').classList.remove('open');$('#finalizeConfirmModal').setAttribute('aria-hidden','true');
+  };
+  if($('#finalizeConfirmBtn'))$('#finalizeConfirmBtn').onclick=()=>{
+    $('#finalizeConfirmModal').classList.remove('open');$('#finalizeConfirmModal').setAttribute('aria-hidden','true');
+    doFinalize();
+  };
+
+  // 확정 전 인쇄/PDF 팝업
+  let _pendingPrintAction=null;
+  function showPrefinalizeModal(action,label){
+    _pendingPrintAction=action;
+    $('#prefinalizeModalMsg').innerHTML=label+' 상담지 최종 확정 후에 가능합니다.<br>최종 확정할까요?';
+    $('#prefinalizeModal').classList.add('open');$('#prefinalizeModal').setAttribute('aria-hidden','false');
+  }
+  if($('#prefinalizeCancelBtn'))$('#prefinalizeCancelBtn').onclick=()=>{
+    $('#prefinalizeModal').classList.remove('open');$('#prefinalizeModal').setAttribute('aria-hidden','true');
+    _pendingPrintAction=null;
+  };
+  if($('#prefinalizeConfirmBtn'))$('#prefinalizeConfirmBtn').onclick=()=>{
+    $('#prefinalizeModal').classList.remove('open');$('#prefinalizeModal').setAttribute('aria-hidden','true');
+    const action=_pendingPrintAction;_pendingPrintAction=null;
+    doFinalize(action);
+  };
+
+  if($('#printBtn')&&!st.consultFinalized)$('#printBtn').onclick=()=>showPrefinalizeModal('print','인쇄는');
+  if($('#pdfBtn')&&!st.consultFinalized)$('#pdfBtn').onclick=()=>showPrefinalizeModal('pdf','PDF 저장은');
+
+  // C4 메모 수정/저장
+  if($('#c4MemoEditBtn'))$('#c4MemoEditBtn').onclick=()=>{
+    const ta=$('#c4MemoText');
+    ta.removeAttribute('readonly');
+    ta.focus();
+    ta.style.background='#fff';
+  };
+  if($('#c4MemoSaveBtn'))$('#c4MemoSaveBtn').onclick=()=>{
+    const ta=$('#c4MemoText');
+    st.c4Memo=ta.value;
+    ta.setAttribute('readonly','');
+    ta.style.background='#f9fafb';
+    toast('메모가 저장되었습니다.');
+  };
+
+  // C6 문제 추가
+  if($('#addProblemBtn'))$('#addProblemBtn').onclick=()=>{
+    const newP={type:'직접입력',drug:'약물명 입력 필요',sev:'주의',action:'약사 검토 필요'};
+    st.problems.push(newP);
+    $('#problemList').insertAdjacentHTML('beforeend',problemHTML(newP,st.problems.length-1));
+    toast('새 약물관련문제가 추가되었습니다.');
+  };
+
+  // C7 상담의견 수정/저장
+  function reRenderOpinion(){
+    const box=$('#opinionActions').closest('.box');
+    box.outerHTML=`<div class="box">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <p class="box-title" style="margin:0">상담 의견</p>
+        <div id="opinionActions">
+          ${st.opinionEditing
+            ?`<button class="guide-btn primary" id="opinionSaveBtn">저장</button>
+              <button class="guide-btn" id="opinionCancelBtn">취소</button>`
+            :`<button class="guide-btn" id="opinionEditBtn">수정</button>`}
+        </div>
+      </div>
+      ${st.opinionEditing
+        ?`<textarea class="field-textarea" rows="4" id="opinionInput" placeholder="이번 1차 상담에서의 전체 소견을 기록하세요.">${st.opinion||''}</textarea>`
+        :`<div id="opinionView" style="font-size:13px;color:${st.opinion?'#374151':'#9ca3af'};line-height:1.7;white-space:pre-wrap;min-height:60px">${st.opinion||'이번 1차 상담에서의 전체 소견을 기록하세요.'}</div>`}
+    </div>`;
+    bindOpinionButtons();
+  }
+  function bindOpinionButtons(){
+    if($('#opinionEditBtn'))$('#opinionEditBtn').onclick=()=>{st.opinionEditing=true;reRenderOpinion();};
+    if($('#opinionSaveBtn'))$('#opinionSaveBtn').onclick=()=>{
+      st.opinion=$('#opinionInput')?.value||'';
+      st.opinionEditing=false;
+      reRenderOpinion();
+      toast('상담의견이 저장되었습니다.');
+    };
+    if($('#opinionCancelBtn'))$('#opinionCancelBtn').onclick=()=>{st.opinionEditing=false;reRenderOpinion();};
+  }
+  bindOpinionButtons();
+
+  // C9 사이드바 복약지도문 발송
+  if($('#sideGuideBtn'))$('#sideGuideBtn').onclick=()=>openGuideModal(c,st);
+
+  // C10 최종 제출
+  if($('#submitBtn'))$('#submitBtn').onclick=()=>submitTab1(c,st);
+  // 상담 완료 버튼 (제출 완료 상태로 탭 재진입 시)
+  if($('#completeBtn'))$('#completeBtn').onclick=()=>completeConsult(c,st);
+}
+
+
+function submitTab1(c,st){
+  if(!confirm('1차 상담기록을 최종 제출하시겠습니까?\n제출 후에는 수정이 불가합니다.'))return;
+  st.submitted=true;
+  // 폼 전체 읽기 전용
+  $$('#tab1Main input,#tab1Main textarea,#tab1Main button').forEach(el=>{
+    if(el.id!=='sideQuickBtn'&&el.id!=='completeBtn')el.disabled=true;
+  });
+  // 제출 박스 교체
+  const box=$('#submitBox');
+  box.className='submit-box done';
+  box.innerHTML=`<div class="done-banner">✅ 1차 상담기록이 최종 제출되었습니다.</div><div class="small">제출 일시: 2026-05-28 14:32 · 제출자: 김체크 약사 · 이후 수정이 필요하면 관리자에게 문의하세요.</div>`;
+  toast('1차 상담기록이 최종 제출되었습니다.');
+}
+
+window.openConsultPopup=function openConsultPopup(round){
+  const modal=$('#consultPopupModal');
+  const iframe=$('#consultPopupIframe');
+  $('#consultPopupTitle').textContent=`${round}차 디지털 상담지`;
+  modal.classList.add('open');modal.setAttribute('aria-hidden','false');
+  iframe.style.height='';
+  iframe.onload=function(){
+    try{this.style.height=(this.contentWindow.document.documentElement.scrollHeight+4)+'px';}catch(e){this.style.height='800px';}
+  };
+  if(iframe.contentDocument&&iframe.contentDocument.readyState==='complete'){
+    try{iframe.style.height=(iframe.contentWindow.document.documentElement.scrollHeight+4)+'px';}catch(e){iframe.style.height='800px';}
+  }
+}
+
+function printConsultPopup(){
+  const iframe=$('#consultPopupIframe');
+  try{iframe.contentWindow.print();}catch(e){window.print();}
+}
+
+function pdfConsultPopup(){
+  toast('PDF 저장은 인쇄 → "PDF로 저장" 을 선택하세요.');
+  setTimeout(()=>printConsultPopup(),600);
+}
+
+// 상담지 미확정 확인 팝업
+window.openConsultConfirm=function(round){
+  const modal=$('#consultConfirmModal');
+  modal.dataset.round=round;
+  modal.classList.add('open');modal.setAttribute('aria-hidden','false');
+};
+
+(function(){
+  const modal=$('#consultConfirmModal');
+  function closeConfirm(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');}
+  $('#consultConfirmCancel').onclick=closeConfirm;
+  modal.addEventListener('click',e=>{if(e.target===modal)closeConfirm();});
+  $('#consultConfirmOk').onclick=function(){
+    const round=parseInt(modal.dataset.round)||1;
+    closeConfirm();
+    // 해당 차수 탭으로 이동 (1차=0, 2차=1, 3차=2, 4차=3) - 상단 topTab 2개 제외
+    const tabBtn=$$('#polyTabs .tab')[round-1];
+    if(tabBtn)tabBtn.click();
+  };
+})();
+
+// 팝업 모달 이벤트
+(function(){
+  const closeBtn=$('#consultPopupCloseBtn');
+  if(closeBtn)closeBtn.onclick=()=>{
+    const m=$('#consultPopupModal');m.classList.remove('open');m.setAttribute('aria-hidden','true');
+  };
+  const printBtn=$('#consultPopupPrintBtn');
+  if(printBtn)printBtn.onclick=()=>printConsultPopup();
+  const pdfBtn=$('#consultPopupPdfBtn');
+  if(pdfBtn)pdfBtn.onclick=()=>pdfConsultPopup();
+  const backdrop=$('#consultPopupModal');
+  if(backdrop)backdrop.addEventListener('click',e=>{if(e.target===backdrop){backdrop.classList.remove('open');backdrop.setAttribute('aria-hidden','true');}});
+})();
+
+function completeConsult(c,st){
+  if(!confirm('1차 상담 완료로 처리하시겠습니까?\n진행 상태와 타임라인이 업데이트됩니다.'))return;
+  st.consultCompleted=true;
+  c.status='1차 상담 완료';
+  // 상단 배지 업데이트
+  const badge=$('#statusBadge');
+  if(badge){badge.textContent='1차 상담 완료';badge.className='badge';}
+  // 완료 버튼 섹션 교체
+  const cb=$('#completeBox');if(cb)cb.style.display='none';
+  const db=$('#completeDoneBox');if(db)db.style.display='';
+  // 최종 제출 버튼 활성화
+  const sb=$('#submitBtn');
+  if(sb){sb.disabled=false;const desc=sb.previousElementSibling;if(desc&&desc.classList.contains('submit-desc'))desc.textContent='제출 후에는 수정이 불가합니다. 상담지·약물관련문제·상담의견·복약지도문을 모두 확인한 후 제출하세요.';}
+  toast('1차 상담 완료 처리되었습니다. 이제 최종 제출이 가능합니다.');
+}
+
+// ─── 초대 모달 ────────────────────────────────────────────
+function updateInvite(){const n=$('#inviteName').value||'고객',p=$('#invitePhone').value||'010-0000-0000';$('#invitePreview').textContent=['[웰체크] '+n+'님, 안녕하세요.','다제약물 관리사업 참여를 안내드립니다.','','아래 링크를 통해 동의서를 작성해 주세요.','👉 https://wellcheck.co.kr/invite/abc123','','문의: 하나누리 약국 '+p].join(NL)}
+function openInvite(){updateInvite();$('#inviteModal').classList.add('open');$('#inviteModal').setAttribute('aria-hidden','false')}
+function closeInvite(){$('#inviteModal').classList.remove('open');$('#inviteModal').setAttribute('aria-hidden','true')}
+
+// ─── 다제약물 복약지도문 발송 모달 (4단계) ──────────────────
+let _gmStep=1, _gmPatient=null, _gmSt=null;
+
+// 단일 약물 데이터 소스 — dashboard_v2.html의 rxDrugs/suppDrugs와 동일하게 유지
+const GM_MEDS={
+  rx:[
+    '암로디핀 5mg (고혈압)',
+    '메트포르민 500mg (혈당강하)',
+    '글리메피리드 2mg (혈당강하)',
+    '알렌드로네이트 70mg (골다공증)',
+    '졸피뎀 10mg (수면)',
+    '트리아졸람 0.25mg (수면)',
+    '로수바스타틴 10mg (고지혈증)',
+    '에소메프라졸 20mg (위장)',
+    '칼슘+비타민D (골다공증)',
+    '알프라졸람 0.25mg (항불안)',
+  ],
+  otc:[],
+  supp:['오메가3','홍삼','비타민C','마그네슘']
+};
+
+// 복약지도문 상태
+const _gmDoc={
+  keepMeds:{},
+  discardMeds:[],
+  cautions:[],
+  opinion:'',
+  sendMethod:''
+};
+
+function gmUpdateStepUI(step){
+  $$('.gm-step').forEach(s=>{
+    const n=parseInt(s.dataset.step);
+    const circle=s.querySelector('.gm-step-circle');
+    const label=s.querySelector('.gm-step-label');
+    if(n<step){circle.style.cssText='width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;border:2px solid #3f6ff2;color:#fff;background:#3f6ff2';circle.textContent='✓';label.style.color='#3f6ff2';}
+    else if(n===step){circle.style.cssText='width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;border:2px solid #3f6ff2;color:#3f6ff2;background:#eff6ff';circle.textContent=n;label.style.color='#3f6ff2';}
+    else{circle.style.cssText='width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;border:2px solid #d1d5db;color:#6b7280;background:#fff';circle.textContent=n;label.style.color='#6b7280';}
+  });
+  const labels=['','Step 1 / 4 · 상담지 확인','Step 2 / 4 · 복약지도문 작성','Step 3 / 4 · 발송 방법','Step 4 / 4 · 전송 완료'];
+  $('#gmStepLabel').textContent=labels[step]||'';
+  const prev=$('#gmPrev'),next=$('#gmNext');
+  prev.style.display=(step===1||step===4)?'none':'';
+  if(step===4){next.textContent='확인';next.style.background='#3f6ff2';next.style.color='#fff';next.style.border='none';}
+  else if(step===3){next.textContent='발송하기';}
+  else{next.textContent='다음 단계 →';next.style.background='#3f6ff2';next.style.color='#fff';next.style.border='none';}
+}
+
+function gmStep1HTML(){
+  const probs=(_gmSt&&_gmSt.problems)||[];
+  return `<div style="padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+    <div>
+      <div style="font-size:13px;font-weight:900;color:#111827;margin-bottom:10px">현재 복용 약물 <span style="font-size:11px;font-weight:600;color:#6b7280;margin-left:4px">총 ${GM_MEDS.rx.length+GM_MEDS.otc.length+GM_MEDS.supp.length}종</span></div>
+      <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;margin-bottom:12px">
+        <div style="background:#f8fafc;padding:8px 12px;font-size:11px;font-weight:900;color:#6b7280;border-bottom:1px solid #e5e7eb">처방약 (${GM_MEDS.rx.length}종)</div>
+        ${GM_MEDS.rx.map(m=>`<div style="padding:8px 12px;font-size:13px;border-bottom:1px solid #f1f5f9">${m}</div>`).join('')}
+        <div style="background:#f8fafc;padding:8px 12px;font-size:11px;font-weight:900;color:#6b7280;border-bottom:1px solid #e5e7eb;border-top:1px solid #e5e7eb">OTC / 건기식</div>
+        ${[...GM_MEDS.otc,...GM_MEDS.supp].map(m=>`<div style="padding:8px 12px;font-size:13px;border-bottom:1px solid #f1f5f9;color:#6b7280">${m}</div>`).join('')}
+      </div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:900;color:#111827;margin-bottom:10px">약물관련문제 <span style="font-size:11px;font-weight:600;color:#6b7280;margin-left:4px">${probs.length}건</span></div>
+      ${probs.length?probs.map(p=>`<div style="border:1px solid ${p.sev==='위험'?'#fecaca':'#fde68a'};border-radius:8px;background:${p.sev==='위험'?'#fff9f9':'#fffbeb'};padding:10px 12px;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span style="display:inline-flex;align-items:center;height:18px;padding:0 7px;border-radius:99px;font-size:10px;font-weight:900;background:${p.sev==='위험'?'#fee2e2':'#fef3c7'};color:${p.sev==='위험'?'#dc2626':'#b45309'}">${p.sev}</span>
+          <span style="font-size:11px;color:#6b7280">${p.type}</span>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:#374151">${p.drug}</div>
+        <div style="font-size:12px;color:#3f6ff2;margin-top:3px">→ ${p.action}</div>
+      </div>`).join(''):`<div style="border:1px solid #e5e7eb;border-radius:8px;padding:20px;text-align:center;color:#9ca3af;font-size:13px">확인된 약물관련문제가 없습니다</div>`}
+      <div style="margin-top:12px;padding:10px 12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;font-size:12px;color:#1d4ed8;line-height:1.6">
+        <b>다음 단계에서 작성할 내용</b><br>
+        · <b>이것만 드세요</b> — 꼭 복용해야 할 약물 체크<br>
+        · <b>정리할 약</b> — 중단/폐기 권고 약물<br>
+        · 약사 의견 및 전달 메시지
+      </div>
+    </div>
+  </div>`;
+}
+
+function gmStep2HTML(){
+  const allMeds=[...GM_MEDS.rx,...GM_MEDS.otc,...GM_MEDS.supp];
+  const keepHTML=allMeds.map(m=>{
+    const checked=_gmDoc.keepMeds[m]!==false;
+    return `<label style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;border:1px solid ${checked?'#bfdbfe':'#e5e7eb'};background:${checked?'#eff6ff':'#fafafa'};cursor:pointer;margin-bottom:6px">
+      <input type="checkbox" data-keep="${m}" ${checked?'checked':''} style="accent-color:#3f6ff2;width:16px;height:16px;flex-shrink:0">
+      <span style="font-size:13px;font-weight:${checked?'700':'400'};color:${checked?'#1e40af':'#6b7280'}">${m}</span>
+      ${checked?'<span style="margin-left:auto;font-size:10px;font-weight:900;color:#3f6ff2;background:#dbeafe;padding:1px 7px;border-radius:99px">복용</span>':'<span style="margin-left:auto;font-size:10px;font-weight:900;color:#9ca3af;background:#f3f4f6;padding:1px 7px;border-radius:99px">제외</span>'}
+    </label>`;
+  }).join('');
+
+  const discardHTML=_gmDoc.discardMeds.map((m,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;border:1px solid #fecaca;background:#fff9f9;margin-bottom:6px">
+    <span style="font-size:13px;color:#374151;flex:1">${m}</span>
+    <button onclick="this.closest('div').remove();_gmDoc.discardMeds.splice(${i},1)" style="width:22px;height:22px;border:none;border-radius:5px;background:#fee2e2;color:#dc2626;font-size:14px;cursor:pointer;line-height:1">×</button>
+  </div>`).join('');
+
+  return `<div style="display:grid;grid-template-columns:260px 1fr;height:100%;min-height:0">
+    <!-- 왼쪽: 섹션 가이드 -->
+    <div style="border-right:1px solid #e5e7eb;padding:20px 16px;background:#f8fafc;overflow-y:auto">
+      <div style="font-size:12px;font-weight:900;color:#374151;margin-bottom:10px">복약지도문 구성</div>
+      <div style="font-size:11px;color:#6b7280;line-height:1.7;margin-bottom:16px">다제약물 관리 상담 후 복약지도문은 단순 주의사항 전달이 아닌, 꼭 먹어야 할 약과 정리해야 할 약을 명확히 안내합니다.</div>
+      ${[
+        {icon:'✅',label:'이것만 드세요',sub:'복용해야 할 필수 약물 리스트',color:'#eff6ff',border:'#bfdbfe',tc:'#1d4ed8'},
+        {icon:'🗑',label:'정리할 약',sub:'중단 또는 폐기 권고 약물',color:'#fff9f9',border:'#fecaca',tc:'#dc2626'},
+        {icon:'⚠️',label:'주의사항',sub:'병용금기, 복용법 주의사항',color:'#fffbeb',border:'#fde68a',tc:'#b45309'},
+        {icon:'💬',label:'약사 의견',sub:'약사가 직접 작성하는 소견',color:'#f0fdf4',border:'#bbf7d0',tc:'#15803d'},
+      ].map(s=>`<div style="border:1px solid ${s.border};border-radius:8px;background:${s.color};padding:10px 12px;margin-bottom:8px">
+        <div style="font-size:13px;font-weight:800;color:${s.tc}">${s.icon} ${s.label}</div>
+        <div style="font-size:11px;color:#6b7280;margin-top:2px">${s.sub}</div>
+      </div>`).join('')}
+      <div style="margin-top:16px;padding:10px 12px;border-radius:8px;background:#fff;border:1px solid #e5e7eb;font-size:11px;color:#6b7280;line-height:1.6">
+        <b style="color:#374151">발송 방법 (다음 단계)</b><br>
+        · 카카오 알림톡<br>· 환자 앱 전송<br>· PDF 저장 · 인쇄
+      </div>
+    </div>
+
+    <!-- 오른쪽: 편집 영역 -->
+    <div style="padding:20px 24px;overflow-y:auto">
+
+      <!-- 이것만 드세요 -->
+      <div style="margin-bottom:20px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:14px;font-weight:900;color:#111827">✅ 이것만 드세요</span>
+          <span style="font-size:11px;color:#3f6ff2;background:#eff6ff;padding:2px 8px;border-radius:99px;font-weight:700">복용 유지 약물</span>
+        </div>
+        <div style="font-size:12px;color:#6b7280;margin-bottom:8px">체크된 약물이 환자에게 전달되는 "꼭 드셔야 할 약물" 리스트입니다.</div>
+        <div id="gmKeepList">${keepHTML}</div>
+      </div>
+
+      <div style="height:1px;background:#f1f5f9;margin:16px 0"></div>
+
+      <!-- 정리할 약 -->
+      <div style="margin-bottom:20px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:14px;font-weight:900;color:#111827">🗑 정리할 약</span>
+          <span style="font-size:11px;color:#dc2626;background:#fee2e2;padding:2px 8px;border-radius:99px;font-weight:700">중단/폐기 권고</span>
+        </div>
+        <div style="font-size:12px;color:#6b7280;margin-bottom:8px">아래 약물은 중복 투약 또는 상담 결과에 따라 복용 중단·정리가 필요합니다.</div>
+        <div id="gmDiscardList">${discardHTML}</div>
+        <button id="gmAddDiscard" style="width:100%;height:34px;border:1px dashed #fca5a5;border-radius:7px;background:#fff;font-size:12px;color:#dc2626;cursor:pointer;margin-top:4px">+ 정리할 약 추가</button>
+      </div>
+
+      <div style="height:1px;background:#f1f5f9;margin:16px 0"></div>
+
+      <!-- 주의사항 -->
+      <div style="margin-bottom:20px">
+        <div style="font-size:14px;font-weight:900;color:#111827;margin-bottom:8px">⚠️ 주의사항</div>
+        ${_gmDoc.cautions.map(c=>`<div style="padding:8px 12px;border-left:3px solid #f59e0b;background:#fffbeb;border-radius:0 6px 6px 0;font-size:12px;color:#374151;margin-bottom:6px;line-height:1.6;white-space:pre-line">${c}</div>`).join('')}
+      </div>
+
+      <div style="height:1px;background:#f1f5f9;margin:16px 0"></div>
+
+      <!-- 약사 의견 -->
+      <div>
+        <div style="font-size:14px;font-weight:900;color:#111827;margin-bottom:6px">💬 약사 의견</div>
+        <div style="font-size:12px;color:#6b7280;margin-bottom:8px">이번 상담에서의 소견을 자유롭게 기록하세요. 복약지도문에 포함되어 전달됩니다.</div>
+        <textarea id="gmOpinion" class="field-textarea" rows="4" placeholder="예) 현재 혈압약과 혈당약을 꾸준히 복용 중이십니다. 중복 처방된 메트포르민을 정리하고, 이후 복약 순응도를 개선하는 것이 중요합니다." style="background:#fff">${_gmDoc.opinion}</textarea>
+      </div>
+    </div>
+  </div>`;
+}
+
+function gmStep3HTML(){
+  const keep=Object.entries(_gmDoc.keepMeds).filter(([,v])=>v).map(([k])=>k);
+  const discard=_gmDoc.discardMeds;
+  const opinion=$('#gmOpinion')?$('#gmOpinion').value:_gmDoc.opinion;
+  const preview=`[웰체크 다제약물 복약지도문]\n안녕하세요, ${_gmPatient?_gmPatient.name:'환자'}님.\n1차 다제약물 관리 상담 결과를 안내드립니다.\n\n✅ 이것만 드세요 (${keep.length}종)\n${keep.map((m,i)=>`${i+1}. ${m}`).join('\n')}\n\n🗑 정리하실 약 (${discard.length}종)\n${discard.map((m,i)=>`${i+1}. ${m}`).join('\n')}\n\n⚠️ 주의사항\n${_gmDoc.cautions.join('\n')}\n${opinion?'\n💬 약사 의견\n'+opinion:''}\n\n문의: 하나누리 약국 김체크 약사`;
+
+  const methods=[
+    {id:'kakao',icon:'💬',label:'카카오 알림톡',sub:'카카오톡으로 즉시 발송됩니다.'},
+    {id:'app',icon:'📱',label:'환자 앱 전송',sub:'웰체크 앱으로 전달됩니다.'},
+  ];
+
+  return `<div style="padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+    <div>
+      <div style="font-size:13px;font-weight:900;color:#111827;margin-bottom:12px">발송 방법 선택</div>
+      ${methods.map(m=>`<label style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:10px;border:2px solid #e5e7eb;background:#fff;cursor:pointer;margin-bottom:10px;transition:border .15s" data-method="${m.id}" id="gml-${m.id}">
+        <input type="radio" name="gmMethod" value="${m.id}" ${_gmDoc.sendMethod===m.id?'checked':''} style="accent-color:#3f6ff2;width:16px;height:16px">
+        <span style="font-size:18px">${m.icon}</span>
+        <div><div style="font-size:13px;font-weight:800;color:#111827">${m.label}</div><div style="font-size:11px;color:#6b7280;margin-top:1px">${m.sub}</div></div>
+      </label>`).join('')}
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:900;color:#111827;margin-bottom:8px">복약지도문 미리보기</div>
+      <div style="border:1px solid #e5e7eb;border-radius:10px;background:#fafafa;padding:16px;font-size:12px;line-height:1.8;white-space:pre-wrap;max-height:400px;overflow-y:auto;color:#374151">${preview}</div>
+    </div>
+  </div>`;
+}
+
+function gmStep4HTML(){
+  const name=_gmPatient?_gmPatient.name:'환자';
+  const methodLabel={'kakao':'카카오 알림톡','app':'환자 앱','pdf':'PDF','print':'인쇄'}[_gmDoc.sendMethod]||'선택한 방법';
+  return `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center">
+    <div style="width:72px;height:72px;border-radius:50%;background:#f0fdf4;border:2px solid #bbf7d0;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:20px">✅</div>
+    <div style="font-size:22px;font-weight:900;color:#111827;margin-bottom:8px">전송 완료</div>
+    <div style="font-size:14px;color:#4b5563;line-height:1.7">${name}님께 복약지도문이 <b>${methodLabel}</b>으로 발송되었습니다.</div>
+    <div style="margin-top:24px;padding:14px 20px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;font-size:12px;color:#6b7280;line-height:1.7;text-align:left;min-width:280px">
+      <div><b style="color:#374151">발송 시각</b> 2026-05-29 · 지금</div>
+      <div><b style="color:#374151">발송자</b> 김체크 약사 (하나누리 약국)</div>
+      <div><b style="color:#374151">차수</b> 1차 상담 복약지도문</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button onclick="window.print()" style="display:flex;align-items:center;gap:6px;padding:10px 20px;border:1px solid #d1d5db;border-radius:8px;background:#fff;font-size:13px;font-weight:600;color:#374151;cursor:pointer">🖨 인쇄</button>
+      <button onclick="toast('PDF 저장 기능은 다음 단계에서 연결합니다.')" style="display:flex;align-items:center;gap:6px;padding:10px 20px;border:1px solid #d1d5db;border-radius:8px;background:#fff;font-size:13px;font-weight:600;color:#374151;cursor:pointer">⬇ PDF 저장</button>
+    </div>
+  </div>`;
+}
+
+function gmRenderStep(step){
+  _gmStep=step;
+  gmUpdateStepUI(step);
+  const body=$('#gmBody');
+  body.style.padding='0';
+  if(step===1)body.innerHTML=gmStep1HTML();
+  else if(step===2){body.innerHTML=gmStep2HTML();gmBindStep2();}
+  else if(step===3){body.innerHTML=gmStep3HTML();gmBindStep3();}
+  else body.innerHTML=gmStep4HTML();
+}
+
+function gmBindStep2(){
+  $$('#gmKeepList input[type=checkbox]').forEach(cb=>{
+    cb.onchange=()=>{
+      const m=cb.dataset.keep;
+      _gmDoc.keepMeds[m]=cb.checked;
+      gmRenderStep(2);
+    };
+  });
+  const addBtn=$('#gmAddDiscard');
+  if(addBtn)addBtn.onclick=()=>{
+    const name=prompt('정리할 약 이름을 입력하세요:');
+    if(name&&name.trim()){_gmDoc.discardMeds.push(name.trim());gmRenderStep(2);}
+  };
+  if($('#gmOpinion'))$('#gmOpinion').oninput=e=>{_gmDoc.opinion=e.target.value;};
+}
+
+function gmBindStep3(){
+  $$('input[name=gmMethod]').forEach(r=>{
+    r.onchange=()=>{
+      _gmDoc.sendMethod=r.value;
+      $$('label[data-method]').forEach(l=>{
+        const sel=l.dataset.method===r.value;
+        l.style.borderColor=sel?'#3f6ff2':'#e5e7eb';
+        l.style.background=sel?'#eff6ff':'#fff';
+      });
+    };
+    if(r.value===_gmDoc.sendMethod){
+      r.closest('label').style.borderColor='#3f6ff2';
+      r.closest('label').style.background='#eff6ff';
+    }
+  });
+}
+
+function gmInitDocFromSt(st){
+  const probs=(st&&st.problems)||[];
+  const allMeds=[...GM_MEDS.rx,...GM_MEDS.otc,...GM_MEDS.supp];
+
+  // cautions: 상담지 약물관련문제에서 생성
+  _gmDoc.cautions=probs.length
+    ? probs.map(p=>`${p.drug} ${p.type==='상호작용'?'병용 시 주의':p.type==='중복투약'?'중복 처방 확인':p.sev+' 주의'}\n→ ${p.action}`)
+    : [];
+
+  // discardMeds: 중복투약 문제에서 해당 약물 매칭
+  const discardKeys=new Set();
+  const discardMeds=[];
+  probs.filter(p=>p.type==='중복투약').forEach(p=>{
+    const keyword=p.drug.replace(/중복.*/,'').trim().split(' ')[0];
+    const matched=allMeds.filter(m=>m.includes(keyword));
+    if(matched.length>=2){
+      // 중복 중 첫 번째(낮은 용량 등) 폐기
+      discardMeds.push(matched[0]+' (중복 처방 확인됨)');
+      discardKeys.add(matched[0]);
+    } else if(matched.length===1){
+      discardMeds.push(matched[0]+' (중복 처방 확인됨)');
+      discardKeys.add(matched[0]);
+    } else {
+      discardMeds.push(p.drug+' (처방 확인 필요)');
+    }
+  });
+  _gmDoc.discardMeds=discardMeds;
+
+  // keepMeds: 전체 약물 기본 true, 폐기 약물만 false
+  const keepMeds={};
+  allMeds.forEach(m=>keepMeds[m]=!discardKeys.has(m));
+  _gmDoc.keepMeds=keepMeds;
+
+  // opinion: 상담지 약사 의견 초기값
+  _gmDoc.opinion=(st&&st.opinion)||'';
+  _gmDoc.sendMethod='';
+}
+
+function openGuideModal(c,st){
+  _gmPatient=c;_gmSt=st;
+  gmInitDocFromSt(st);
+  if(c){
+    $('#gmAvatar').textContent=c.name[0];
+    $('#gmName').textContent=c.name;
+    $('#gmSub').textContent=`${c.birth} · ${c.ageGender} · ${c.phone}`;
+  }
+  $('#guideModal').classList.add('open');$('#guideModal').setAttribute('aria-hidden','false');
+  gmRenderStep(1);
+
+  $('#gmPrev').onclick=()=>{if(_gmStep>1)gmRenderStep(_gmStep-1);};
+  $('#gmNext').onclick=()=>{
+    if(_gmStep===4){
+      closeGuideModal();
+      const sideBtn=$('#sideGuideBtn');
+      if(sideBtn){sideBtn.textContent='복약지도문 내용 보기';sideBtn.style.background='#fff';sideBtn.style.color='#3f6ff2';sideBtn.style.border='1px solid #3f6ff2';}
+      return;
+    }
+    if(_gmStep===2){
+      // 의견 저장
+      if($('#gmOpinion'))_gmDoc.opinion=$('#gmOpinion').value;
+    }
+    if(_gmStep===3){
+      if(!_gmDoc.sendMethod){toast('발송 방법을 선택하세요.');return;}
+      gmRenderStep(4);
+      return;
+    }
+    gmRenderStep(_gmStep+1);
+  };
+}
+function closeGuideModal(){$('#guideModal').classList.remove('open');$('#guideModal').setAttribute('aria-hidden','true')}
+
+// ─── 빠른 연락 모달 (C9) ──────────────────────────────────
+const TEMPLATES={
+  remind:'[웰체크] 안녕하세요. 하나누리 약국입니다.\n오늘 복약을 잊지 않으셨나요? 꾸준한 복약이 건강 관리의 첫걸음입니다. 💊',
+  appt:'[웰체크] 안녕하세요. 하나누리 약국입니다.\n다제약물 관리 상담 일정을 안내드립니다.\n■ 일시: 2026-05-30 14:00\n■ 방식: 유선 상담\n문의: 02-0000-0000',
+  check:'[웰체크] 안녕하세요. 하나누리 약국입니다.\n이번 주 복약은 잘 되고 계신가요? 불편하신 점이 있으시면 언제든 알려주세요.',
+  result:'[웰체크] 안녕하세요. 하나누리 약국입니다.\n오늘 1차 상담 결과를 안내드립니다. 상세 복약지도문은 앱에서 확인하실 수 있습니다.'
+};
+function openQuick(c){
+  if(c)$('#quickPhone').value=c.phone||'010-0000-0000';
+  $('#quickModal').classList.add('open');$('#quickModal').setAttribute('aria-hidden','false');
+}
+function closeQuick(){$('#quickModal').classList.remove('open');$('#quickModal').setAttribute('aria-hidden','true')}
+
+// ─── 네비게이션 이벤트 ────────────────────────────────────
+$$('.nav button').forEach(b=>{b.onclick=()=>b.dataset.page?renderList(b.dataset.page):toast(b.dataset.message)});
+$('#inviteClose').onclick=closeInvite;
+$('#inviteModal').onclick=e=>{if(e.target===$('#inviteModal'))closeInvite()};
+$('#inviteSend').onclick=()=>{toast('초대 문자를 발송했습니다.');closeInvite()};
+$('#inviteName').oninput=updateInvite;$('#invitePhone').oninput=updateInvite;
+$('#guideModalClose').onclick=closeGuideModal;
+$('#quickClose').onclick=closeQuick;
+$('#quickModal').onclick=e=>{if(e.target===$('#quickModal'))closeQuick()};
+$('#quickSend').onclick=()=>{toast('문자가 발송되었습니다.');closeQuick()};
+$$('.quick-tpl').forEach(b=>b.onclick=()=>{
+  $$('.quick-tpl').forEach(t=>t.classList.remove('sel'));b.classList.add('sel');
+  $('#quickMsg').value=TEMPLATES[b.dataset.tpl]||'';
+});
+document.onkeydown=e=>{if(e.key==='Escape'){closeInvite();closeQuick()}};
+
+renderList('customers');
+
+// iframe 높이 동기화 — dashboard_v2.html의 ResizeObserver가 보내는 메시지 수신
+window.addEventListener('message', e => {
+  if (!e.data || e.data.type !== 'iframeResize') return;
+  const h = e.data.height + 4;
+  // consultPopupIframe
+  const popupIframe = $('#consultPopupIframe');
+  if (popupIframe && popupIframe.contentWindow === e.source) {
+    popupIframe.style.height = h + 'px'; return;
+  }
+  // dashboardIframeWrap iframe
+  const dashIframe = $('#dashboardIframeWrap iframe');
+  if (dashIframe && dashIframe.contentWindow === e.source) {
+    dashIframe.style.height = h + 'px';
+  }
+});
+
+})();
+</script>
+</body>
+</html>

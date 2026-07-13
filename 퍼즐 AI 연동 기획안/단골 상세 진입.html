@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웰체크 약사웹 — 단골 상세 Flow 3</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-height:100vh;overflow:hidden;}
+
+/* ═══ LNB ═══ */
+.lnb{position:fixed;left:0;top:0;width:200px;height:100vh;background:#fff;border-right:1px solid #E8EAED;display:flex;flex-direction:column;z-index:10;}
+.lnb-logo{padding:20px 20px 16px;border-bottom:1px solid #E8EAED;}
+.lnb-logo svg{width:100px;}
+.lnb-nav{padding:8px 0;flex:1;}
+.lnb-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;color:#555;cursor:pointer;position:relative;transition:background .1s;}
+.lnb-item:hover{background:#F4F5F7;}
+.lnb-item.active{background:#2563EB;color:#fff;font-weight:600;border-radius:6px;margin:0 8px;padding:10px 12px;}
+.lnb-item.active svg path,.lnb-item.active svg circle,.lnb-item.active svg rect{stroke:#fff;}
+.lnb-icon{width:16px;height:16px;flex-shrink:0;opacity:.6;}
+.lnb-item.active .lnb-icon{opacity:1;}
+.lnb-badge{margin-left:auto;background:#EF4444;color:#fff;font-size:10px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.lnb-bottom{border-top:1px solid #E8EAED;padding:12px 16px;margin-top:auto;}
+.lnb-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.lnb-avatar{width:32px;height:32px;border-radius:50%;background:#EBF2FF;color:#2563EB;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lnb-username{font-size:12px;font-weight:600;color:#111;}
+.lnb-pharmacy{font-size:11px;color:#888;}
+.lnb-btns{display:flex;gap:6px;}
+.lnb-btn-sm{flex:1;padding:6px;font-size:11px;color:#555;border:1px solid #E0E0E0;border-radius:6px;background:#fff;cursor:pointer;font-family:inherit;text-align:center;}
+
+/* ═══ MAIN ═══ */
+.main{margin-left:200px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+/* topbar */
+.topbar{height:52px;flex-shrink:0;background:#fff;border-bottom:1px solid #E8EAED;display:flex;align-items:center;padding:0 28px;gap:10px;}
+.topbar-back{color:#888;font-size:14px;cursor:pointer;display:flex;align-items:center;}
+.topbar-name{font-size:18px;font-weight:700;color:#111;}
+.topbar-info{font-size:13px;color:#888;}
+.topbar-gender{color:#2563EB;font-weight:600;}
+
+/* body */
+.body-wrap{flex:1;overflow:hidden;padding:16px 20px;display:grid;grid-template-columns:280px 1fr 230px;gap:12px;}
+
+/* 카드 공통 */
+.card{background:#fff;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.07);overflow:hidden;display:flex;flex-direction:column;}
+
+/* ── 통합 상담 채널 ── */
+.chat-card{height:100%;}
+.chat-header{padding:14px 18px 12px;border-bottom:1px solid #F2F2F2;font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:7px;}
+.chat-date-wrap{padding:12px 0 8px;text-align:center;}
+.chat-date-badge{display:inline-flex;align-items:center;gap:5px;background:#F4F5F7;border-radius:20px;padding:3px 10px;font-size:10.5px;color:#888;}
+.chat-bubbles{flex:1;overflow-y:auto;padding:0 14px 12px;}
+.chat-bubble{display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;}
+.chat-w-ava{width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.chat-sender{font-size:10px;font-weight:600;color:#333;margin-bottom:3px;}
+.chat-msg{background:#F4F5F7;border-radius:0 10px 10px 10px;padding:9px 11px;font-size:11px;line-height:1.75;color:#333;max-width:190px;}
+.chat-time{font-size:10px;color:#BBB;margin-top:3px;text-align:right;}
+.chat-input{border-top:1px solid #F0F0F0;padding:9px 12px;display:flex;align-items:center;gap:7px;}
+.chat-input-ph{flex:1;font-size:11.5px;color:#BBB;background:#F8F9FA;border:none;border-radius:18px;padding:7px 13px;font-family:inherit;}
+.chat-send{width:28px;height:28px;border-radius:50%;background:#E8EAED;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* ── 처방전 목록 ── */
+.rx-card{height:100%;}
+.rx-header{padding:14px 20px 10px;display:flex;align-items:center;gap:8px;}
+.rx-header-icon{width:24px;height:24px;background:#E8F5F0;border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.rx-header-title{font-size:13.5px;font-weight:700;color:#111;}
+.rx-filters{padding:0 20px 10px;display:flex;gap:6px;align-items:center;}
+.rx-tab{height:30px;padding:0 13px;border-radius:20px;font-size:12px;border:1px solid #E0E0E0;background:#fff;cursor:pointer;color:#555;display:flex;align-items:center;gap:4px;font-family:inherit;}
+.rx-tab.active{background:#2563EB;color:#fff;border-color:#2563EB;font-weight:600;}
+.rx-select{height:30px;padding:0 26px 0 10px;border:1px solid #E0E0E0;border-radius:6px;font-size:11.5px;color:#555;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center;appearance:none;margin-left:auto;font-family:inherit;}
+.rx-meta{padding:0 20px 8px;display:flex;align-items:center;justify-content:space-between;}
+.rx-count{font-size:12px;color:#888;}.rx-count span{color:#2563EB;font-weight:700;}
+.rx-search{width:200px;height:32px;border:1px solid #E0E0E0;border-radius:7px;padding:0 10px 0 30px;font-size:11.5px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 9px center;outline:none;font-family:inherit;}
+.rx-table-wrap{flex:1;overflow-y:auto;padding:0 12px 12px;}
+.rx-tbl{width:100%;border-collapse:collapse;}
+.rx-tbl thead tr{border-bottom:1px solid #F2F2F2;}
+.rx-tbl th{padding:8px 6px;font-size:11px;color:#999;font-weight:500;text-align:center;white-space:nowrap;}
+.rx-tbl th:first-child{text-align:left;padding-left:8px;}
+.rx-tbl tbody tr{border-bottom:1px solid #F7F7F7;transition:background .1s;}
+.rx-tbl tbody tr:hover{background:#FAFBFF;}
+.rx-tbl td{padding:0;height:48px;font-size:12px;color:#333;text-align:center;vertical-align:middle;}
+.rx-tbl td:first-child{padding-left:8px;text-align:left;}
+.tag-route{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;color:#2563EB;cursor:pointer;}
+.status-drop{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:11.5px;font-weight:500;border:1px solid #E0E0E0;color:#555;cursor:pointer;white-space:nowrap;}
+.status-drop.green{color:#059669;border-color:#059669;background:#F0FDF4;}
+.status-drop.gray{color:#999;border-color:#DDD;}
+.btn-send{height:26px;padding:0 12px;background:#2563EB;color:#fff;border:none;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;}
+.btn-send:hover{opacity:.85;}
+.btn-sent{height:26px;padding:0 12px;background:#fff;color:#3D4B5C;border:1px solid #D0D4DA;border-radius:6px;font-size:11.5px;font-weight:500;cursor:default;white-space:nowrap;}
+.btn-send-dis{height:26px;padding:0 12px;background:#F0F0F0;color:#BBB;border:none;border-radius:6px;font-size:11.5px;font-weight:600;cursor:not-allowed;white-space:nowrap;}
+.rx-pagination{display:flex;align-items:center;justify-content:center;gap:3px;padding:10px 0 4px;position:relative;}
+.pg{width:26px;height:26px;border-radius:5px;border:1px solid #E0E0E0;background:#fff;color:#555;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+.pg.active{background:#2563EB;color:#fff;border-color:#2563EB;font-weight:700;}
+.pg-select{position:absolute;right:8px;height:26px;padding:0 20px 0 8px;border:1px solid #E0E0E0;border-radius:5px;font-size:11px;color:#555;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 6px center;appearance:none;font-family:inherit;}
+
+/* ── 약사 메모 ── */
+.memo-card{background:#FFFBF0;border:1px solid #F5E6B8;border-radius:12px;padding:14px 16px;align-self:start;box-shadow:0 1px 6px rgba(0,0,0,.06);}
+.memo-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.memo-title{font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;}
+.memo-auto{font-size:11px;color:#F59E0B;font-weight:500;}
+.memo-body{font-size:12px;line-height:1.9;color:#444;}
+.memo-item{margin-bottom:10px;}
+.memo-num{font-weight:700;color:#333;}
+.memo-footer{text-align:right;font-size:10.5px;color:#CCC;margin-top:10px;}
+
+/* ── AI 복약 상담 FAB ── */
+.ai-fab{position:fixed;bottom:28px;right:24px;background:#fff;border:1.5px solid #E8EAED;border-radius:40px;padding:10px 18px 10px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);cursor:pointer;transition:transform .15s,box-shadow .15s;z-index:50;font-family:inherit;}
+.ai-fab:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.16);}
+.ai-fab-text{font-size:14px;font-weight:700;color:#111;}
+
+/* ═══ BACKDROP ═══ */
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none;align-items:center;justify-content:center;}
+.backdrop.on{display:flex;}
+
+/* ═══ MODAL ═══ */
+.modal{background:#fff;border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.22);width:830px;max-height:92vh;overflow:hidden;position:relative;animation:mIn .2s ease;}
+@keyframes mIn{from{opacity:0;transform:scale(.97) translateY(8px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid #E8EAED;}
+.modal-title{font-size:18px;font-weight:700;color:#111;}
+.modal-x{width:30px;height:30px;background:none;border:none;cursor:pointer;color:#888;font-size:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+.modal-x:hover{background:#F4F5F7;}
+.modal-pt{display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid #E8EAED;}
+.pt-ava{width:36px;height:36px;border-radius:50%;background:#EBF2FF;color:#2563EB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pt-name{font-size:14px;font-weight:700;color:#111;}
+.pt-info{font-size:11.5px;color:#888;margin-top:1px;}
+.step-tabs{display:flex;border-bottom:1px solid #E8EAED;}
+.step-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 0;font-size:12.5px;color:#BBB;border-bottom:2px solid transparent;white-space:nowrap;}
+.step-tab.on{color:#2563EB;border-bottom-color:#2563EB;font-weight:600;}
+.step-num{width:18px;height:18px;border-radius:50%;background:#E8EAED;color:#AAA;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-tab.on .step-num{background:#2563EB;color:#fff;}
+.modal-body{padding:24px;}
+.modal-ft{padding:14px 24px 20px;display:flex;align-items:center;justify-content:center;gap:10px;}
+.btn-prev{height:44px;padding:0 28px;background:#fff;border:1.5px solid #D0D0D0;border-radius:9px;font-size:14px;font-weight:600;color:#444;cursor:pointer;font-family:inherit;}
+.btn-next{height:44px;padding:0 44px;background:#2563EB;border:none;border-radius:9px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
+.btn-next:disabled{background:#C8D7F5;cursor:not-allowed;}
+.btn-send-modal{height:44px;padding:0 32px;background:#2563EB;border:none;border-radius:9px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit;}
+.btn-close{height:44px;padding:0 56px;background:#2563EB;border:none;border-radius:10px;font-size:15px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;}
+
+/* step1 */
+.s1-guide{font-size:12.5px;color:#777;}
+.s1-title{font-size:15px;font-weight:700;color:#111;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.rx-pick-tbl{width:100%;border-collapse:collapse;}
+.rx-pick-tbl thead tr{background:#F8F9FA;border-bottom:2px solid #E8EAED;}
+.rx-pick-tbl th{padding:10px 14px;font-size:12px;color:#888;font-weight:500;text-align:left;}
+.rx-pick-tbl tbody tr{border-bottom:1px solid #F2F4F6;cursor:pointer;transition:background .1s;}
+.rx-pick-tbl tbody tr:hover{background:#F8FAFF;}
+.rx-pick-tbl tbody tr.sel{background:#EBF2FF;}
+.rx-pick-tbl td{padding:14px;font-size:13px;color:#333;vertical-align:middle;}
+.rx-pick-tbl td:first-child{width:42px;}
+.radio{width:17px;height:17px;border-radius:50%;border:2px solid #D0D0D0;display:flex;align-items:center;justify-content:center;transition:border-color .15s;}
+.radio.on{border-color:#2563EB;}
+.radio-dot{width:8px;height:8px;border-radius:50%;background:#2563EB;display:none;}
+.radio.on .radio-dot{display:block;}
+.rx-pick-tbl tbody tr.sel td{color:#111;font-weight:500;}
+.sbadge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:500;background:#F0FDF4;color:#059669;border:1px solid #059669;}
+
+/* step2 */
+.s2-grid{display:grid;grid-template-columns:220px 1fr;gap:20px;}
+.rx-prev{border:1px solid #E8EAED;border-radius:8px;overflow:hidden;}
+.rx-prev-lbl{padding:8px 12px;font-size:11.5px;font-weight:600;color:#666;background:#F8F9FA;border-bottom:1px solid #E8EAED;}
+.rx-img{background:#fff;padding:10px;}
+.rx-fake{font-size:7.5px;line-height:1.7;color:#333;border:1px solid #DDD;padding:8px;}
+.rx-fake-ttl{text-align:center;font-size:12px;font-weight:700;margin-bottom:6px;letter-spacing:4px;}
+.rx-fake table{width:100%;border-collapse:collapse;}
+.rx-fake td{border:1px solid #CCC;padding:2px 4px;vertical-align:top;}
+.rx-fake .dr{background:#FAFAFA;}
+.s2-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
+.s2-ttl{font-size:14px;font-weight:700;color:#111;}
+.s2-sub{font-size:11.5px;color:#2563EB;cursor:pointer;}
+.dtbl{width:100%;border-collapse:collapse;}
+.dtbl thead tr{border-bottom:2px solid #E8EAED;}
+.dtbl th{font-size:11.5px;color:#999;font-weight:500;padding:0 0 8px;text-align:left;}
+.dtbl tbody tr{border-bottom:1px solid #F2F4F6;}
+.dtbl td{padding:10px 0;font-size:12.5px;vertical-align:middle;}
+.d-no{color:#BBB;width:22px;}
+.d-main{font-weight:600;color:#111;}
+.d-sub{font-size:10.5px;color:#999;margin-top:1px;}
+.d-days{color:#555;}
+.d-acts{display:flex;gap:4px;justify-content:flex-end;}
+.ico{background:none;border:none;cursor:pointer;font-size:14px;color:#D0D0D0;padding:2px;}
+.ico:hover{color:#555;}
+.add-drug{width:100%;margin-top:10px;padding:9px;background:none;border:1.5px dashed #D5D5D5;border-radius:7px;color:#AAA;font-size:12.5px;cursor:pointer;font-family:inherit;}
+.add-drug:hover{border-color:#2563EB;color:#2563EB;}
+
+/* step3 */
+.mic-area{display:flex;flex-direction:column;align-items:center;padding:4px 0 18px;gap:10px;}
+.mic-outer{position:relative;width:86px;height:86px;display:flex;align-items:center;justify-content:center;}
+.mic-pulse{position:absolute;inset:0;border-radius:50%;border:3px solid #15C784;opacity:0;pointer-events:none;}
+.mic-pulse.on{animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%{transform:scale(.9);opacity:.8;}50%{transform:scale(1.15);opacity:.3;}100%{transform:scale(.9);opacity:.8;}}
+.mic-btn{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;position:relative;z-index:1;transition:transform .15s,background .2s;}
+.mic-btn:hover{transform:scale(1.05);}
+.mic-btn.idle{background:#fff;border:2px solid #E0E0E0;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.mic-btn.rec{background:#15C784;box-shadow:0 0 0 4px rgba(21,199,132,.2);}
+.mic-btn.sum,.mic-btn.done{background:#15C784;}
+.mic-tip{background:#2E3A47;color:#fff;font-size:12.5px;padding:8px 18px;border-radius:24px;white-space:nowrap;position:relative;}
+.mic-tip::before{content:'';position:absolute;top:-7px;left:50%;transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:8px solid #2E3A47;}
+.summ-tabs{display:flex;border-bottom:1px solid #E8EAED;}
+.summ-tab{padding:9px 14px;font-size:12.5px;color:#AAA;cursor:pointer;border-bottom:2px solid transparent;}
+.summ-tab.on{color:#2563EB;border-bottom-color:#2563EB;font-weight:600;}
+.summ-body{border:1px solid #E8EAED;border-top:none;min-height:180px;padding:16px;font-size:12.5px;line-height:1.9;color:#333;border-radius:0 0 8px 8px;}
+.summ-empty{color:#C0C0C0;text-align:center;padding-top:55px;font-size:12.5px;}
+.skel{height:13px;background:#EEEEEE;border-radius:6px;margin-bottom:9px;animation:sk 1.4s ease-in-out infinite;}
+@keyframes sk{0%,100%{opacity:1}50%{opacity:.4}}
+.spin-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;padding-top:18px;}
+.spin{width:18px;height:18px;border:2.5px solid #2563EB;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* step4 */
+.s4-grid{display:grid;grid-template-columns:220px 1fr;gap:24px;}
+.tag-ttl{font-size:14px;font-weight:700;color:#111;margin-bottom:12px;}
+.tag-chips{display:flex;flex-direction:column;gap:8px;}
+.tag-chip{padding:10px 14px;border:1.5px solid #E0E0E0;border-radius:8px;font-size:13px;color:#444;cursor:pointer;line-height:1.4;transition:all .12s;}
+.tag-chip:hover{border-color:#A5BCEC;background:#F4F8FF;}
+.tag-chip.on{border-color:#2563EB;background:#EBF2FF;color:#2563EB;font-weight:600;}
+.msg-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+.msg-ttl{font-size:14px;font-weight:700;color:#111;}
+.msg-reset{font-size:12px;color:#AAA;cursor:pointer;background:none;border:none;font-family:inherit;}
+.msg-reset:hover{color:#2563EB;}
+.msg-ta{width:100%;height:232px;border:1.5px solid #E0E0E0;border-radius:10px;padding:14px;font-size:13px;line-height:1.8;color:#333;resize:none;font-family:inherit;transition:border-color .15s;}
+.msg-ta:focus{outline:none;border-color:#2563EB;}
+.msg-cnt{text-align:right;font-size:11px;color:#BBB;margin-top:4px;}
+
+/* step4 preview */
+.prev-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.prev-msg{background:#FFF9E6;border-radius:10px;padding:16px;font-size:12px;line-height:1.9;color:#333;min-height:200px;overflow-y:auto;max-height:240px;}
+.sum-tbl{width:100%;border-collapse:collapse;}
+.sum-tbl tr{border-bottom:1px solid #F2F4F6;}
+.sum-tbl td{padding:11px 4px;font-size:13px;vertical-align:top;}
+.sum-tbl td:first-child{color:#888;width:90px;white-space:nowrap;}
+.sum-tbl td:last-child{color:#333;font-weight:500;}
+
+/* complete */
+.cpl-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 40px;gap:16px;text-align:center;}
+.cpl-ttl{font-size:18px;font-weight:700;color:#111;}
+.cpl-sub{font-size:14px;color:#777;}
+</style>
+</head>
+<body>
+
+<!-- LNB -->
+<nav class="lnb">
+  <div class="lnb-logo">
+    <svg viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <text x="0" y="22" font-family="'Noto Sans KR', sans-serif" font-size="20" font-weight="700" fill="#2563EB">Wellcheck</text>
+    </svg>
+  </div>
+  <div class="lnb-nav">
+    <a class="lnb-item active" href="단골 목록 진입.html" style="text-decoration:none;">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="#555" stroke-width="1.4"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
+      단골 고객
+    </a>
+    <a class="lnb-item" href="처방전 목록 진입.html" style="text-decoration:none;color:inherit;">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#555" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
+      처방전
+      <span class="lnb-badge">N</span>
+    </a>
+    <div class="lnb-item">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="#555" stroke-width="1.4"/><path d="M1 6h14" stroke="#555" stroke-width="1.4"/></svg>
+      앱 설치 문자 발송
+    </div>
+  </div>
+  <div class="lnb-bottom">
+    <div class="lnb-user">
+      <div class="lnb-avatar">김</div>
+      <div>
+        <div class="lnb-username">김체크 약사</div>
+        <div class="lnb-pharmacy">하나누리 약국</div>
+      </div>
+    </div>
+    <div class="lnb-btns">
+      <button class="lnb-btn-sm">내 정보</button>
+      <button class="lnb-btn-sm">로그아웃</button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-back">‹</div>
+    <div class="topbar-name">김체크</div>
+    <div class="topbar-info">1991년 01월 01생(만 33세)&nbsp;&nbsp;<span class="topbar-gender">여</span>&nbsp;&nbsp;010-8330-0492</div>
+  </div>
+
+  <div class="body-wrap">
+    <!-- 통합 상담 채널 -->
+    <div class="card chat-card">
+      <div class="chat-header">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M14 2H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h2v2.5l3-2.5h7a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z" stroke="#555" stroke-width="1.3"/></svg>
+        통합 상담 채널
+      </div>
+      <div class="chat-date-wrap">
+        <span class="chat-date-badge">📅 2023년 11월 1일 수요일</span>
+      </div>
+      <div class="chat-bubbles">
+        <div class="chat-bubble">
+          <div class="chat-w-ava">
+            <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
+              <circle cx="18" cy="18" r="18" fill="#EBF2FF"/>
+              <path d="M8 12C8 12 10 19 11 22C11.5 24 12.5 25 14 25C15.5 25 16.5 24 17 22L18 17L19 22C19.5 24 20.5 25 22 25C23.5 25 24.5 24 25 22C26 19 28 12 28 12H25L22 20L20 14H16L14 20L11 12H8Z" fill="#2563EB"/>
+              <circle cx="10" cy="23" r="3" fill="#10B981"/>
+            </svg>
+          </div>
+          <div>
+            <div class="chat-sender">웰체크</div>
+            <div class="chat-msg">혈압/혈당을 측정하시면 웰체크 앱에 기록해 주세요.<br><br>일만시 참여 기간 동안 병원에서 매 월 혈압/혈당 관리 상태를 확인하여 메시지를 보내드릴 예정입니다. 앱에 기록된 가장 최근 혈압/혈당에 대한 피드백을 받으실 수 있습니다.<br><br>※ 메시지에 최근 혈압, 혈당 자동 답변이 생성됩니다.</div>
+            <div class="chat-time">09:00</div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input class="chat-input-ph" placeholder="+ 서비스 준비 중입니다" disabled>
+        <button class="chat-send">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 처방전 목록 -->
+    <div class="card rx-card">
+      <div class="rx-header">
+        <div class="rx-header-icon">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#059669" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="rx-header-title">보낸 처방전 목록</div>
+      </div>
+      <div class="rx-filters">
+        <button class="rx-tab active">전체</button>
+        <button class="rx-tab">📷 고객 앱 촬영</button>
+        <button class="rx-tab">🖨 비대면 진료</button>
+        <select class="rx-select"><option>모든 상태</option></select>
+      </div>
+      <div class="rx-meta">
+        <div class="rx-count">총 대상자 <span>(3)</span></div>
+        <input class="rx-search" placeholder="병원명 검색">
+      </div>
+      <div class="rx-table-wrap">
+        <table class="rx-tbl">
+          <thead>
+            <tr>
+              <th style="width:130px">접수 일시 ↓</th>
+              <th style="width:100px">접수 경로</th>
+              <th style="width:66px">대체조제<br>동의</th>
+              <th style="width:72px">수령 방법</th>
+              <th style="width:120px">발행 병원</th>
+              <th style="width:80px">상태 ⓘ</th>
+              <th style="width:72px">AI 복약 상담</th>
+            </tr>
+          </thead>
+          <tbody id="rxBody"></tbody>
+        </table>
+        <div class="rx-pagination">
+          <button class="pg">≪</button><button class="pg">‹</button>
+          <button class="pg">1</button><button class="pg">2</button>
+          <button class="pg active">3</button>
+          <button class="pg">4</button><button class="pg">5</button>
+          <button class="pg">›</button><button class="pg">≫</button>
+          <select class="pg-select"><option>10</option><option>20</option></select>
+          <span style="position:absolute;right:48px;font-size:11px;color:#888">건씩 보기</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 약사 메모 -->
+    <div class="memo-card">
+      <div class="memo-header">
+        <div class="memo-title">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="2" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.2"/><path d="M4 5h8M4 8h6M4 11h4" stroke="#F59E0B" stroke-width="1.2" stroke-linecap="round"/></svg>
+          약사 메모
+        </div>
+        <span class="memo-auto">자동 저장됨</span>
+      </div>
+      <div class="memo-body">
+        <div class="memo-item">
+          <span class="memo-num">1. 고객 특이사항:</span><br>
+          &nbsp;&nbsp;- 알약 삼키는 것을 힘들어함<br>
+          &nbsp;&nbsp;- 저녁 식후 복약 선호
+        </div>
+        <div class="memo-item">
+          <span class="memo-num">2. 다음 상담 시 확인:</span><br>
+          &nbsp;&nbsp;- 어지럼증 호전 여부
+        </div>
+      </div>
+      <div class="memo-footer">80 / 1,000</div>
+    </div>
+  </div>
+</main>
+
+<!-- AI 복약 상담 FAB -->
+<button class="ai-fab" onclick="openModal()">
+  <svg width="44" height="33" viewBox="0 0 44 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_264_5121)">
+<path d="M35.2488 26.6409L25.2811 9.97327L19.855 17.848L27.6524 30.8692C28.8582 32.8993 31.5511 33.5846 33.6412 32.4209C35.7446 31.2571 36.4546 28.658 35.2488 26.6409Z" fill="#113694"/>
+<path d="M16.2652 32.4339C18.3687 31.2702 19.0787 28.6711 17.873 26.6539L8.18651 10.4647C6.98072 8.43458 4.28776 7.74925 2.19774 8.91301C0.0943135 10.0768 -0.615776 12.6758 0.590008 14.6931L10.2765 30.8822C11.4823 32.9122 14.1752 33.5976 16.2652 32.4339Z" fill="#3E71F0"/>
+<path d="M8.76208 12.5594C8.76208 10.2189 6.80601 8.33105 4.38104 8.33105C1.95608 8.33105 0 10.2189 0 12.5594C0 14.8999 1.95608 16.7878 4.38104 16.7878C6.80601 16.7878 8.76208 14.8999 8.76208 12.5594Z" fill="#20C4A0"/>
+<path d="M11.2676 25.6323C15.9434 20.7703 17.9396 10.4129 17.4974 4.4519C17.2965 1.78818 19.0516 0.107232 21.5436 0.00378672C23.8881 -0.0996585 25.938 1.93045 26.0853 4.36141C26.581 12.4301 23.5666 26.1496 17.417 31.684C15.6352 33.2744 13.0629 33.4813 11.2274 31.9555C9.43211 30.4684 9.47234 27.5848 11.2676 25.6452V25.6323Z" fill="#3E71F0"/>
+<path d="M28.5372 25.6323C33.2129 20.7703 35.2092 10.4129 34.767 4.4519C34.566 1.78818 36.3212 0.107232 38.813 0.00378672C41.1577 -0.0996585 43.2076 1.93045 43.3549 4.36141C43.8506 12.4301 40.8361 26.1496 34.6866 31.684C32.9048 33.2744 30.3324 33.4813 28.4969 31.9555C26.7017 30.4684 26.7418 27.5848 28.5372 25.6452V25.6323Z" fill="#3E71F0"/>
+</g>
+<defs>
+<clipPath id="clip0_264_5121">
+<rect width="44" height="33" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+  <span class="ai-fab-text">AI 복약 상담</span>
+</button>
+
+<!-- BACKDROP + MODAL -->
+<div class="backdrop" id="bd" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hd">
+      <span class="modal-title">AI 복약 상담</span>
+      <button class="modal-x" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-pt">
+      <div class="pt-ava">김</div>
+      <div>
+        <div class="pt-name">김철수</div>
+        <div class="pt-info">1980-01-01 · 40세 · 남성 · 010-1234-5678</div>
+      </div>
+    </div>
+    <div class="step-tabs" id="stabs">
+      <div class="step-tab" id="s1"><span class="step-num">1</span> 처방전 선택</div>
+      <div class="step-tab" id="s2"><span class="step-num">2</span> 처방전 확인</div>
+      <div class="step-tab" id="s3"><span class="step-num">3</span> AI 녹음·요약</div>
+      <div class="step-tab" id="s4"><span class="step-num">4</span> 복약지도 전송</div>
+    </div>
+    <div id="mbody" class="modal-body"></div>
+    <div id="mfoot" class="modal-ft"></div>
+  </div>
+</div>
+
+<script>
+// ── 처방전 테이블 ──────────────────────
+const rows=[
+  {date:'2024-01-01 14:00',route:'고객 앱 촬영',consent:'동의',method:'본인 방문',hospital:'연세세브란스병원',status:'접수됨',ai:'go'},
+  {date:'2024-01-01 14:00',route:'비대면 진료', consent:'동의',method:'본인 방문',hospital:'연세세브란스병원',status:'조제완료',ai:'done'},
+  {date:'2024-01-01 14:00',route:'고객 앱 촬영',consent:'동의',method:'본인 방문',hospital:'연세세브란스병원',status:'취소됨',ai:'off'},
+];
+(function(){
+  document.getElementById('rxBody').innerHTML=rows.map(r=>`
+    <tr style="${r.ai==='off'?'opacity:.5':''}">
+      <td style="font-size:12px;color:#333">${r.date}</td>
+      <td><span class="tag-route">${r.route==='고객 앱 촬영'?'📷':'🖨'} ${r.route} ›</span></td>
+      <td style="color:#555;font-size:12px">${r.consent}</td>
+      <td style="color:#555;font-size:12px">${r.method}</td>
+      <td style="color:#555;font-size:12px">${r.hospital}</td>
+      <td>${r.status==='조제완료'?`<span class="status-drop green">조제 완료 ∨</span>`:r.status==='취소됨'?`<span class="status-drop gray">취소됨 ∨</span>`:`<span class="status-drop">접수됨 ∨</span>`}</td>
+      <td>${r.ai==='go'?`<button class="btn-send" onclick="openModalStep2()">전송하기</button>`:r.ai==='done'?`<button class="btn-sent">전송완료</button>`:`<span style="font-size:12px;color:#A0AAB4">취소됨</span>`}</td>
+    </tr>`).join('');
+})();
+
+// ── State ─────────────────────────────
+let sc='s1', selRx=-1;
+const DRUGS=[['메트포르민 500mg','1회 1정, 하루 3회','30일분'],['글리메피리드 2mg','1회 1정, 하루 1회','30일분'],['로수바스타틴 10mg','1회 1정, 하루 1회','30일분'],['오메프라졸 20mg','1회 1정, 하루 1회','30일분']];
+const RXS=[{date:'2026-05-11',hospital:'연세세브란스병원',cnt:'5종'},{date:'2024-10-15',hospital:'연세세브란스병원',cnt:'4종'},{date:'2024-09-18',hospital:'강남성심병원',cnt:'6종'}];
+const SUMM=`오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편 가능함. 수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요. 밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능함.`;
+const FULL=`흡연이나 음주는 하실까요?\n담배는 가끔 피우고 술은 일주일에 한두 번 정도는 마시는 것 같아요.\n말씀하신 증상이라면 비타민 B군이랑 철분 같은 건강기능식품이 도움될 수 있어요. 헤모큐라는 철분제랑 임팩타민 영양제 같이 드릴 테니까 한번 드셔보세요. 식후에 드시는 게 좋고 공복에 드시면 속이 불편할 수 있어요.\n네. 혹시 추가로 밀크시슬 좋은 걸로 같이 주실래요?\n밀크시슬은 재고 확인해보니 품절돼서 내일 오전에 입고 예정이라 12시 이후에 방문 가능하실까요?\n네. 내일 오후에 방문할게요.`;
+const MSGDEF=`[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n1. 크라목신듀오정 500mg - 1회 1정, 하루 3회, 5일분\n2. 비오플 250캡슐 - 1회 1정, 하루 2회, 5일분\n3. 엘도테인정 300mg - 1회 1정, 하루 3회, 5일분\n4. 투리온정 10mg - 1회 1정, 하루 2회, 5일분\n5. 덱스핀정 300mg - 1회 1정, 하루 2회, 5일분\n6. 펙수클루정 10mg - 1회 1정, 하루 2회, 5일분\n\n[복약 방법]\n하루 3번, 아침, 점심, 저녁 식후 30분에 복약하세요.\n\n[약사 상담 메모]\n오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편할 수 있습니다.\n수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요합니다.\n밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능합니다.`;
+const TAGS=['공복에 복용하세요.','충분한 물과 함께 드세요.','잠이 올 수 있으니 주의하세요.','술을 드시지 마세요.','임의로 복용을 중단하지 마세요.'];
+let selTags=new Set(), msg=MSGDEF;
+
+function openModal(){sc='s1';selRx=-1;document.getElementById('bd').classList.add('on');render();}
+function openModalStep2(){sc='s2';selRx=0;document.getElementById('bd').classList.add('on');render();}
+function closeModal(){document.getElementById('bd').classList.remove('on');}
+function go(s){sc=s;render();}
+
+function updateTabs(){
+  const map={s1:1,s2:2,s3a:3,s3b:3,s3l:3,s3d:3,s3f:3,s4:4,s4p:4,cpl:null};
+  const cur=map[sc];
+  document.getElementById('stabs').style.display=sc==='cpl'?'none':'flex';
+  for(let i=1;i<=4;i++){const el=document.getElementById('s'+i);el.className='step-tab';if(i===cur)el.classList.add('on');}
+}
+
+function render(){
+  updateTabs();
+  const B=document.getElementById('mbody'),F=document.getElementById('mfoot');
+  B.innerHTML='';F.innerHTML='';
+  ({s1:rS1,s2:rS2,s3a:rS3a,s3b:rS3b,s3l:rS3l,s3d:rS3d,s3f:rS3f,s4:rS4,s4p:rS4p,cpl:rCpl}[sc]||rS1)(B,F);
+}
+
+// ── Step 1 ────────────────────────────
+function rS1(B,F){
+  B.innerHTML=`<div class="s1-title">처방전을 선택하세요 <span class="s1-guide">선택한 처방전을 기반으로 AI 복약 상담이 진행됩니다.</span></div>
+  <table class="rx-pick-tbl"><thead><tr><th></th><th>날짜</th><th>병원명</th><th>처방약 수</th><th>상태</th></tr></thead><tbody>
+  ${RXS.map((r,i)=>`<tr class="${selRx===i?'sel':''}" onclick="pickRx(${i})">
+    <td><div class="radio ${selRx===i?'on':''}"><div class="radio-dot"></div></div></td>
+    <td>${r.date}</td><td>${r.hospital}</td><td>${r.cnt}</td>
+    <td><span class="sbadge">조제 완료</span></td>
+  </tr>`).join('')}
+  </tbody></table>`;
+  F.innerHTML=`<button class="btn-next"${selRx<0?' disabled':''} onclick="go('s2')">다음</button>`;
+}
+function pickRx(i){selRx=i;rS1(document.getElementById('mbody'),document.getElementById('mfoot'));}
+
+// ── Step 2 ────────────────────────────
+function rS2(B,F){
+  B.innerHTML=`<div class="s2-grid">
+    <div><div class="rx-prev"><div class="rx-prev-lbl">처방전 원본</div><div class="rx-img"><div class="rx-fake">
+      <div class="rx-fake-ttl">처 방 전</div>
+      <table><tr><td style="width:40%">요양기관명</td><td>연세세브란스병원</td></tr>
+      <tr><td>환자명</td><td>김철수</td></tr><tr><td>주민번호</td><td>800101-1×××××</td></tr>
+      <tr><td>처방일</td><td>2026-05-11</td></tr></table><br>
+      <table><tr style="background:#f0f0f0"><td>약품명</td><td>1회량</td><td>횟수</td><td>일수</td></tr>
+      ${DRUGS.map(d=>`<tr class="dr"><td>${d[0]}</td><td>1</td><td>3</td><td>30</td></tr>`).join('')}
+      </table>
+      <br><div style="font-size:7px;color:#999">의사면허번호: 제12345호 / 이○○</div>
+    </div></div></div></div>
+    <div><div class="s2-top"><span class="s2-ttl">조제 내역</span><span class="s2-sub">대체 조제 시 직접 수정하세요</span></div>
+    <table class="dtbl"><thead><tr><th style="width:26px">NO</th><th>약명</th><th style="width:65px">복용일</th><th style="width:55px"></th></tr></thead><tbody>
+    ${DRUGS.map((d,i)=>`<tr><td class="d-no">${i+1}</td><td><div class="d-main">${d[0]}</div><div class="d-sub">${d[1]}</div></td><td class="d-days">${d[2]}</td><td><div class="d-acts"><button class="ico">✏️</button><button class="ico">🗑</button></div></td></tr>`).join('')}
+    </tbody></table>
+    <button class="add-drug">+ 약품 추가</button></div>
+  </div>`;
+  F.innerHTML=`<button class="btn-next" onclick="go('s3a')">다음</button>`;
+}
+
+// ── Step 3a ───────────────────────────
+function rS3a(B,F){
+  B.innerHTML=`<div class="mic-area"><div class="mic-outer"><div class="mic-pulse"></div>
+    <button class="mic-btn idle" onclick="go('s3b')">${micSvg('idle')}</button></div>
+    <div class="mic-tip">녹음 버튼을 눌러 상담을 시작하세요.</div></div>
+  <div class="summ-tabs"><div class="summ-tab on">요약</div><div class="summ-tab">전체 내용</div></div>
+  <div class="summ-body"><div class="summ-empty">녹음을 완료하면 결과 요약이 여기에 표시됩니다.</div></div>`;
+  F.innerHTML=`<button class="btn-prev" onclick="go('s2')">취소</button><button class="btn-next" disabled style="opacity:.4;cursor:not-allowed">다음</button>`;
+}
+
+// ── Step 3b ───────────────────────────
+function rS3b(B,F){
+  B.innerHTML=`<div class="mic-area"><div class="mic-outer"><div class="mic-pulse on"></div>
+    <button class="mic-btn rec" onclick="stopRec()">${micSvg('rec')}</button></div>
+    <div class="mic-tip">녹음 중입니다. 다시 누르면 요약합니다.</div></div>
+  <div class="summ-tabs"><div class="summ-tab on">요약</div><div class="summ-tab">전체 내용</div></div>
+  <div class="summ-body"><div class="summ-empty" style="color:#DDD;font-size:12px">상담이 진행 중입니다...</div></div>`;
+  F.innerHTML=`<button class="btn-prev" onclick="go('s3a')">취소</button><button class="btn-next" disabled style="opacity:.4;cursor:not-allowed">다음</button>`;
+}
+function stopRec(){go('s3l');setTimeout(()=>go('s3d'),1200);}
+
+// ── Step 3l ───────────────────────────
+function rS3l(B,F){
+  B.innerHTML=`<div class="mic-area"><div class="mic-outer"><div class="mic-pulse on"></div>
+    <button class="mic-btn sum">${micSvg('rec')}</button></div>
+    <div class="mic-tip">AI가 요약하고 있습니다...</div></div>
+  <div class="summ-tabs"><div class="summ-tab on">요약</div><div class="summ-tab">전체 내용</div></div>
+  <div class="summ-body"><div class="skel" style="width:90%"></div><div class="skel" style="width:74%"></div><div class="skel" style="width:52%"></div>
+    <div class="spin-wrap"><div class="spin"></div><span style="font-size:12px;color:#2563EB">요약 중...</span></div></div>`;
+  F.innerHTML=`<button class="btn-prev" onclick="go('s3a')">취소</button><button class="btn-next" disabled style="opacity:.4;cursor:not-allowed">다음</button>`;
+}
+
+// ── Step 3d ───────────────────────────
+function rS3d(B,F){
+  B.innerHTML=`<div class="mic-area"><div class="mic-outer"><div class="mic-pulse"></div>
+    <button class="mic-btn done">${micSvg('rec')}</button></div>
+    <div class="mic-tip">요약이 완료되었습니다.</div></div>
+  <div class="summ-tabs"><div class="summ-tab on">요약</div><div class="summ-tab" onclick="go('s3f')" style="cursor:pointer">전체 내용</div></div>
+  <div class="summ-body">${SUMM}</div>`;
+  F.innerHTML=`<button class="btn-prev" onclick="go('s3a')">취소</button><button class="btn-next" onclick="go('s4')">다음</button>`;
+}
+
+// ── Step 3f ───────────────────────────
+function rS3f(B,F){
+  B.innerHTML=`<div class="mic-area"><div class="mic-outer"><div class="mic-pulse"></div>
+    <button class="mic-btn done">${micSvg('rec')}</button></div>
+    <div class="mic-tip">요약이 완료되었습니다.</div></div>
+  <div class="summ-tabs"><div class="summ-tab" onclick="go('s3d')" style="cursor:pointer">요약</div><div class="summ-tab on">전체 내용</div></div>
+  <div class="summ-body" style="font-size:12px;line-height:2;overflow-y:auto;max-height:190px">${FULL.replace(/\n/g,'<br>')}</div>`;
+  F.innerHTML=`<button class="btn-prev" onclick="go('s3a')">취소</button><button class="btn-next" onclick="go('s4')">다음</button>`;
+}
+
+// ── Step 4 ────────────────────────────
+function rS4(B,F){
+  B.innerHTML=`<div class="s4-grid">
+    <div><div class="tag-ttl">자주 사용하는 태그</div><div class="tag-chips">
+      ${TAGS.map((t,i)=>`<div class="tag-chip${selTags.has(i)?' on':''}" onclick="toggleTag(${i},'${t.replace(/'/g,"\\'")}')">${t}</div>`).join('')}
+    </div></div>
+    <div><div class="msg-hdr"><span class="msg-ttl">메시지 편집</span><button class="msg-reset" onclick="resetMsg()">초기화 ↺</button></div>
+    <textarea class="msg-ta" id="mta" oninput="onMsg(this)">${msg}</textarea>
+    <div class="msg-cnt" id="mcnt">${msg.length} / 500자</div></div>
+  </div>`;
+  F.innerHTML=`<button class="btn-prev" onclick="go('s3d')">이전</button><button class="btn-next" onclick="go('s4p')">다음</button>`;
+}
+function toggleTag(i,t){const ta=document.getElementById('mta');if(selTags.has(i)){selTags.delete(i);if(ta)ta.value=ta.value.replace('\n'+t,'').replace(t+'\n','');}else{selTags.add(i);if(ta)ta.value+='\n'+t;}if(ta){msg=ta.value;document.getElementById('mcnt').textContent=ta.value.length+' / 500자';}document.querySelectorAll('.tag-chip').forEach((el,idx)=>el.classList.toggle('on',selTags.has(idx)));}
+function onMsg(el){msg=el.value;document.getElementById('mcnt').textContent=el.value.length+' / 500자';}
+function resetMsg(){msg=MSGDEF;selTags.clear();rS4(document.getElementById('mbody'),document.getElementById('mfoot'));}
+
+// ── Step 4p ───────────────────────────
+function rS4p(B,F){
+  B.innerHTML=`<div class="prev-grid">
+    <div><div class="tag-ttl" style="margin-bottom:10px">웰체크 메시지 미리보기</div>
+    <div class="prev-msg">${msg.replace(/\n/g,'<br>')}</div></div>
+    <div><div class="tag-ttl" style="margin-bottom:10px">전송 요약</div>
+    <table class="sum-tbl">
+      <tr><td>고객명</td><td>김철수</td></tr>
+      <tr><td>생년월일</td><td>1980-01-01</td></tr>
+      <tr><td>나이</td><td>40세</td></tr>
+      <tr><td>성별</td><td>남성</td></tr>
+      <tr><td>휴대폰 번호</td><td>010-1234-5678</td></tr>
+      <tr><td>단골 여부</td><td>단골 등록됨</td></tr>
+    </table></div>
+  </div>`;
+  F.innerHTML=`<button class="btn-prev" onclick="go('s4')">이전</button><button class="btn-send-modal" onclick="go('cpl')">➤ 전송하기</button>`;
+}
+
+// ── Complete ──────────────────────────
+function rCpl(B,F){
+  B.innerHTML=`<div class="cpl-wrap">
+    <svg width="100" height="100" viewBox="0 0 112 112" fill="none">
+      <rect x="10" y="38" width="92" height="60" rx="6" fill="#E4E4E4"/>
+      <path d="M10 44 L56 68 L102 44" stroke="#CACACA" stroke-width="2" fill="none"/>
+      <rect x="26" y="16" width="60" height="58" rx="4" fill="white" stroke="#E8E8E8"/>
+      <rect x="36" y="28" width="40" height="4" rx="2" fill="#E4E4E4"/>
+      <rect x="36" y="38" width="34" height="3" rx="1.5" fill="#EEEEEE"/>
+      <rect x="36" y="46" width="26" height="3" rx="1.5" fill="#EEEEEE"/>
+      <circle cx="78" cy="36" r="15" fill="#15C784"/>
+      <path d="M70 36 L76 42 L88 30" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="cpl-ttl">AI 복약 상담 전송 완료</div>
+    <div class="cpl-sub">김철수 님께 복약 안내 메시지가 발송되었습니다.</div>
+  </div>`;
+  F.innerHTML=`<button class="btn-close" onclick="closeModal()">닫기</button>`;
+}
+
+function micSvg(s){const c=s==='idle'?'#15C784':'#fff';return`<svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="8.5" y="1" width="7" height="11" rx="3.5" fill="${c}"/><path d="M5 11c0 3.866 3.134 7 7 7s7-3.134 7-7" stroke="${c}" stroke-width="2" stroke-linecap="round"/><path d="M12 18v3M9 21h6" stroke="${c}" stroke-width="2" stroke-linecap="round"/></svg>`;}
+</script>
+</body>
+</html>

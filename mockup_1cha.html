@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans KR', sans-serif; background: #f3f4f6; color: #111827; font-size: 14px; }
+
+.shell { max-width: 860px; margin: 32px auto; display: flex; flex-direction: column; gap: 0; }
+.label { font-size: 11px; font-weight: 700; color: #9ca3af; letter-spacing: 0.06em; margin-bottom: 8px; text-transform: uppercase; }
+
+/* 탭 */
+.tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.tab { padding: 6px 18px; border-radius: 8px; border: 1px solid #d1d5db; background: #fff; font-weight: 700; font-size: 13px; color: #6b7280; cursor: pointer; }
+.tab.active { border-color: #3f6ff2; background: #eaf0ff; color: #3f6ff2; }
+
+/* ── A: 지금 할 일 박스 ── */
+.action-box {
+  background: #fff;
+  border: 1.5px solid #3f6ff2;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.action-left { display: flex; align-items: center; gap: 14px; }
+.action-badge {
+  background: #3f6ff2;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 3px 10px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+.action-title { font-size: 15px; font-weight: 800; color: #111827; }
+.action-desc { font-size: 12px; color: #6b7280; margin-top: 2px; }
+.action-btn {
+  background: #3f6ff2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ── STEP 섹션 ── */
+.step-block {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  cursor: pointer;
+}
+.step-header-l { display: flex; align-items: center; gap: 12px; }
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900;
+  flex-shrink: 0;
+}
+.step-num.active { background: #3f6ff2; color: #fff; }
+.step-num.done { background: #10b981; color: #fff; }
+.step-num.waiting { background: #f3f4f6; color: #9ca3af; border: 1px solid #e5e7eb; }
+.step-label { font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 2px; }
+.step-title { font-size: 15px; font-weight: 800; color: #111827; }
+.step-title.waiting { color: #9ca3af; }
+.step-badge {
+  font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: 99px;
+}
+.step-badge.active { background: #eaf0ff; color: #3f6ff2; }
+.step-badge.done { background: #d1fae5; color: #065f46; }
+.step-badge.waiting { background: #f3f4f6; color: #9ca3af; }
+.step-toggle { font-size: 12px; color: #9ca3af; margin-left: 8px; transition: transform 0.2s; }
+.step-toggle.open { transform: rotate(180deg); }
+
+/* 펼쳐진 내용 */
+.step-body {
+  border-top: 1px solid #f3f4f6;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.step-body.hidden { display: none; }
+
+/* 기록지 프리뷰 박스 */
+.record-preview {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.record-topbar {
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.record-topbar-title { font-size: 13px; font-weight: 700; color: #374151; }
+.record-actions { display: flex; gap: 6px; }
+.record-btn {
+  font-size: 11px; padding: 4px 10px;
+  border: 1px solid #d1d5db; border-radius: 6px;
+  background: #fff; color: #374151; cursor: pointer;
+}
+.record-btn.primary { background: #3f6ff2; color: #fff; border-color: #3f6ff2; }
+.record-content {
+  background: #f0f5ff;
+  padding: 20px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 13px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 의견 박스 */
+.opinion-box {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px 16px;
+  min-height: 80px;
+  background: #f9fafb;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* 구분선 */
+.divider { height: 1px; background: #f3f4f6; margin: 4px 0; }
+
+/* 날짜/방식 */
+.meta-row { display: flex; align-items: center; gap: 12px; }
+.date-input {
+  border: 1px solid #d1d5db; border-radius: 7px;
+  padding: 6px 10px; font-size: 13px; color: #374151;
+  background: #fff;
+}
+.method-group { display: flex; gap: 4px; }
+.method-btn {
+  padding: 5px 12px; border-radius: 7px;
+  border: 1px solid #d1d5db; background: #fff;
+  font-size: 12px; font-weight: 700; color: #6b7280; cursor: pointer;
+}
+.method-btn.sel { background: #3f6ff2; color: #fff; border-color: #3f6ff2; }
+
+/* 안내 배너 */
+.info-banner {
+  background: #f0f5ff;
+  border: 1px solid #c7d7f5;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: #1e3a6e;
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.info-row { display: flex; gap: 8px; align-items: flex-start; }
+.info-num {
+  min-width: 18px; height: 18px; border-radius: 50%;
+  background: #3f6ff2; color: #fff;
+  font-size: 10px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <div class="label">현재 구조 (AS-IS)</div>
+
+  <!-- AS-IS -->
+  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:32px">
+    <div class="tabs" style="margin-bottom:12px">
+      <div class="tab active">1차</div>
+      <div class="tab">2차</div>
+      <div class="tab">3차</div>
+      <div class="tab">4차</div>
+    </div>
+
+    <!-- 배너 -->
+    <div class="info-banner" style="margin-bottom:12px">
+      <div class="info-row"><span class="info-num">1</span><span>상담 전 이 기록지를 미리 확인하고 준비하세요...</span></div>
+      <div class="info-row"><span class="info-num">2</span><span>기록지는 건보공단 이력 기반...</span></div>
+      <div class="info-row"><span class="info-num">3</span><span>검토 완료 후 인쇄 버튼으로 출력...</span></div>
+    </div>
+
+    <!-- STEP 1 헤더 + 내용 (다 펼쳐져 있음) -->
+    <div style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;margin-bottom:8px">
+      <div style="padding:12px 16px;background:#f9fafb;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="step-num active">1</div>
+          <div>
+            <div style="font-size:10px;color:#9ca3af;font-weight:700">STEP 1</div>
+            <div style="font-weight:800">상담 준비</div>
+          </div>
+        </div>
+        <span class="step-badge active">진행 중</span>
+      </div>
+      <div style="padding:14px 16px;border-top:1px solid #f3f4f6">
+        <div style="font-size:11px;color:#9ca3af;margin-bottom:8px">날짜 / 방식</div>
+        <div class="meta-row" style="margin-bottom:12px">
+          <input class="date-input" type="date" value="2026-05-28">
+          <div class="method-group">
+            <button class="method-btn sel">방문</button>
+            <button class="method-btn">유선</button>
+            <button class="method-btn">비대면</button>
+          </div>
+        </div>
+        <div class="record-preview">
+          <div class="record-topbar">
+            <span class="record-topbar-title">📋 다제약물관리사업 상담 기록지 · 1회차/4회</span>
+            <div class="record-actions">
+              <button class="record-btn">업데이트</button>
+              <button class="record-btn primary">최종 확정</button>
+              <button class="record-btn">🖨 인쇄</button>
+              <button class="record-btn">⬇ PDF</button>
+            </div>
+          </div>
+          <div class="record-content" style="min-height:80px">
+            [ 기록지 전체 내용 — 매우 길어짐 ]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2/3 -->
+    <div style="border:1px solid #e5e7eb;border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="step-num waiting">2</div>
+        <div>
+          <div style="font-size:10px;color:#9ca3af;font-weight:700">STEP 2</div>
+          <div style="font-weight:800;color:#9ca3af">상담 의견 작성</div>
+        </div>
+      </div>
+      <span class="step-badge waiting">대기</span>
+    </div>
+    <div style="border:1px solid #e5e7eb;border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="step-num waiting">3</div>
+        <div>
+          <div style="font-size:10px;color:#9ca3af;font-weight:700">STEP 3</div>
+          <div style="font-weight:800;color:#9ca3af">복약지도문 발송</div>
+        </div>
+      </div>
+      <span class="step-badge waiting">대기</span>
+    </div>
+
+    <div style="margin-top:12px;padding:10px 14px;background:#fef9c3;border-radius:8px;font-size:12px;color:#854d0e">
+      ⚠️ STEP 2/3가 보이려면 기록지 전체(매우 긴 iframe)를 스크롤해야 함 — 존재 자체를 모를 수 있음
+    </div>
+  </div>
+
+  <!-- ───── TO-BE ───── -->
+  <div class="label">제안 구조 (TO-BE)</div>
+
+  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px">
+    <div class="tabs" style="margin-bottom:16px">
+      <div class="tab active">1차</div>
+      <div class="tab">2차</div>
+      <div class="tab">3차</div>
+      <div class="tab">4차</div>
+    </div>
+
+    <!-- ① 지금 할 일 박스 -->
+    <div class="action-box" style="margin-bottom:16px">
+      <div class="action-left">
+        <div>
+          <div style="font-size:11px;color:#9ca3af;font-weight:700;margin-bottom:3px">지금 할 일 · STEP 1</div>
+          <div class="action-title">상담 기록지 검토 후 상담 일정 확인</div>
+          <div class="action-desc">기록지를 미리 확인하고 상담을 준비하세요. 완료 후 STEP 2로 진행됩니다.</div>
+        </div>
+      </div>
+      <button class="action-btn">기록지 열기 →</button>
+    </div>
+
+    <!-- ② STEP 1 — 펼쳐짐 -->
+    <div class="step-block">
+      <div class="step-header" onclick="toggle(this)">
+        <div class="step-header-l">
+          <div class="step-num active">1</div>
+          <div>
+            <div class="step-label">STEP 1</div>
+            <div class="step-title">상담 준비</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="step-badge active">진행 중</span>
+          <span class="step-toggle open">▼</span>
+        </div>
+      </div>
+      <div class="step-body">
+        <!-- 안내 배너 — 기록지 바로 위 -->
+        <div class="info-banner">
+          <div class="info-row"><span class="info-num">1</span><span>상담 전 이 기록지를 미리 확인하고 준비하세요. <b>상담 준비 시간을 크게 줄여드립니다.</b></span></div>
+          <div class="info-row"><span class="info-num">2</span><span>기록지 정보는 <b>건보공단 이력 기반으로 환자가 앱에서 전달한 데이터</b>입니다. 공단 자료와 대조하세요.</span></div>
+          <div class="info-row"><span class="info-num">3</span><span>검토 완료 후 <b>인쇄 버튼</b>으로 출력해서 상담 중 활용하세요.</span></div>
+        </div>
+        <!-- 날짜/방식 -->
+        <div class="meta-row">
+          <input class="date-input" type="date" value="2026-05-28">
+          <div class="method-group">
+            <button class="method-btn sel">방문</button>
+            <button class="method-btn">유선</button>
+            <button class="method-btn">비대면</button>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="record-btn">업데이트</button>
+            <button class="record-btn primary">최종 확정</button>
+            <button class="record-btn">🖨 인쇄</button>
+            <button class="record-btn">⬇ PDF</button>
+          </div>
+        </div>
+        <!-- 기록지 -->
+        <div class="record-preview">
+          <div class="record-content">[ 상담 기록지 ]</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ STEP 2 — 접혀 있음 -->
+    <div class="step-block">
+      <div class="step-header" onclick="toggle(this)">
+        <div class="step-header-l">
+          <div class="step-num waiting">2</div>
+          <div>
+            <div class="step-label">STEP 2</div>
+            <div class="step-title waiting">상담 의견 작성</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="step-badge waiting">대기</span>
+          <span class="step-toggle">▼</span>
+        </div>
+      </div>
+      <div class="step-body hidden">
+        <div class="opinion-box">상담을 마친 후 전체 소견을 기록하세요.</div>
+      </div>
+    </div>
+
+    <!-- ④ STEP 3 — 접혀 있음 -->
+    <div class="step-block">
+      <div class="step-header" onclick="toggle(this)">
+        <div class="step-header-l">
+          <div class="step-num waiting">3</div>
+          <div>
+            <div class="step-label">STEP 3</div>
+            <div class="step-title waiting">복약지도문 발송 & 기록 제출</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="step-badge waiting">대기</span>
+          <span class="step-toggle">▼</span>
+        </div>
+      </div>
+      <div class="step-body hidden">
+        <div style="color:#9ca3af;font-size:13px">STEP 1·2 완료 후 활성화됩니다.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;padding:10px 14px;background:#d1fae5;border-radius:8px;font-size:12px;color:#065f46">
+      ✅ 진입 즉시 "지금 할 일"이 보임 / STEP 1~3 전체 구조가 한눈에 파악됨 / 기록지는 STEP 1 안에 정리됨
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const toggle = header.querySelector('.step-toggle');
+  body.classList.toggle('hidden');
+  toggle.classList.toggle('open');
+}
+</script>
+</body>
+</html>

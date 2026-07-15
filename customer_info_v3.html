@@ -115,13 +115,13 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .cl-item-rx-chips{display:flex;flex-wrap:wrap;gap:4px;flex:1;align-items:center;overflow:hidden;}
 .cl-rx-chip{display:inline-flex;align-items:center;background:var(--color-blue-200);color:var(--color-primary);border-radius:5px;padding:2px 8px;font-size:12px;font-weight:500;white-space:nowrap;}
 .cl-rx-chip.no-rx{background:var(--color-grey-100);color:var(--color-grey-500);}
-.cl-rx-group{padding-top:10px;margin-top:10px;border-top:1px dashed var(--color-grey-250);}
+.cl-rx-group{display:flex;align-items:center;justify-content:space-between;padding-top:10px;margin-top:10px;border-top:1px dashed var(--color-grey-250);}
 .cl-rx-group:first-child{padding-top:12px;margin-top:0;border-top:none;}
-.cl-rx-group-label{font-size:12px;font-weight:500;color:var(--color-grey-600);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.cl-rx-group-label{font-size:12px;font-weight:500;color:var(--color-grey-600);display:flex;align-items:center;gap:5px;}
 .cl-rx-group-label::before{content:'';display:inline-block;width:3px;height:11px;background:var(--color-primary);border-radius:2px;flex-shrink:0;}
+.cl-rx-view{font-size:13px;color:var(--color-primary);cursor:pointer;white-space:nowrap;}
 .cl-drugs{margin-bottom:12px;padding-top:12px;}
 .cl-drugs-label{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
-.cl-drug-chip{display:inline-flex;align-items:center;gap:4px;background:var(--color-grey-100);border-radius:6px;padding:3px 9px;font-size:13px;color:var(--color-grey-800);margin:2px 3px 2px 0;}
 .cl-section{margin-top:12px;}
 .cl-section-label{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
 .cl-section-label svg{flex-shrink:0;}
@@ -352,14 +352,11 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
                   </div>
                   <div class="cl-rx-group">
                     <div class="cl-rx-group-label">웰체크내과</div>
-                    <span class="cl-drug-chip">아토르바스타틴 20mg</span>
-                    <span class="cl-drug-chip">암로디핀 5mg</span>
-                    <span class="cl-drug-chip">메트포르민 500mg</span>
+                    <span class="cl-rx-view">처방전 보기 ›</span>
                   </div>
                   <div class="cl-rx-group">
                     <div class="cl-rx-group-label">하나로내과의원</div>
-                    <span class="cl-drug-chip">메트포르민 500mg</span>
-                    <span class="cl-drug-chip">글리메피리드 2mg</span>
+                    <span class="cl-rx-view">처방전 보기 ›</span>
                   </div>
                 </div>
                 <div class="cl-section">
@@ -396,11 +393,7 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
                   </div>
                   <div class="cl-rx-group">
                     <div class="cl-rx-group-label">우리동네내과의원</div>
-                    <span class="cl-drug-chip">암로디핀 5mg</span>
-                    <span class="cl-drug-chip">로사르탄 50mg</span>
-                    <span class="cl-drug-chip">아토르바스타틴 20mg</span>
-                    <span class="cl-drug-chip">메트포르민 500mg</span>
-                    <span class="cl-drug-chip">졸피뎀 5mg</span>
+                    <span class="cl-rx-view">처방전 보기 ›</span>
                   </div>
                 </div>
                 <div class="cl-section">
@@ -534,10 +527,21 @@ renderRows('all');
 
 function toggleCl(header) {
   const body = header.nextElementSibling;
+  const willOpen = !body.classList.contains('open');
+
+  document.querySelectorAll('.cl-item-body.open').forEach(openBody => {
+    if (openBody === body) return;
+    openBody.classList.remove('open');
+    const openHeader = openBody.previousElementSibling;
+    const openBtn = openHeader.querySelector('.cl-item-toggle');
+    openBtn.classList.remove('open');
+    openBtn.childNodes[0].textContent = '펼치기 ';
+  });
+
+  body.classList.toggle('open', willOpen);
   const btn = header.querySelector('.cl-item-toggle');
-  const isOpen = body.classList.toggle('open');
-  btn.classList.toggle('open', isOpen);
-  btn.childNodes[0].textContent = isOpen ? '접기 ' : '펼치기 ';
+  btn.classList.toggle('open', willOpen);
+  btn.childNodes[0].textContent = willOpen ? '접기 ' : '펼치기 ';
 }
 
 function switchTab(tab) {

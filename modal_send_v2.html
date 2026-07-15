@@ -912,7 +912,7 @@ function parseRxDate(dateStr) {
   return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
 }
 
-const RX_SOURCE_LABEL = { here: '우리 약국', other: '타 약국', patient: '환자 기록' };
+const RX_SOURCE_LABEL = { here: '우리 약국', other: '타 약국', patient: '고객 기록' };
 
 function buildRxGroupHTML(groups) {
   const chevronSVG = `<svg class="s2-rx-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
@@ -1205,7 +1205,7 @@ function renderDrugTableHTML(rx) {
           <div class="s2-consent-icon"><span>!</span></div>
           <div>
             <div class="s2-consent-title">대체 조제인가요?</div>
-            <div class="s2-consent-sub">환자에게 대체조제 사실을 알려야 합니다.</div>
+            <div class="s2-consent-sub">고객에게 대체조제 사실을 알려야 합니다.</div>
           </div>
         </div>
         <div class="s2-consent-radios">
@@ -1502,7 +1502,7 @@ function goStep4() {
     + (isNew
       ? '<label id="consent-label" style="display:flex;align-items:flex-start;gap:8px;margin-top:20px;cursor:pointer;">'
         + '<input type="checkbox" id="consent-chk" data-figma="checkbox" onchange="toggleSendBtn()" style="margin-top:5px;width:14px;height:14px;flex-shrink:0;accent-color:var(--color-primary);cursor:pointer;">'
-        + '<span style="font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-500);line-height:25px;">본인은 초대장 문자 발송 대상자(환자 등)의 동의를 받았거나, 해당 정보 제공이 가능한 정당한 권한이 있음을 확인합니다.</span>'
+        + '<span style="font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-500);line-height:25px;">본인은 초대장 문자 발송 대상자(고객 등)의 동의를 받았거나, 해당 정보 제공이 가능한 정당한 권한이 있음을 확인합니다.</span>'
         + '</label>'
       : '');
 

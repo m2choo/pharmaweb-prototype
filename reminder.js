@@ -57,15 +57,17 @@ function renderReminderBody() {
     var drugs = editingDrugsMap[id] || rx.drugs;
     var s = reminderSettings[id];
     var isOpen = rmExpandedIds.has(id);
-    var timesPills = [1, 2, 3, 4].map(function(n) {
-      return '<button class="rm-pill' + (s.times === n ? ' on' : '') + '" onclick="rmSetTimes(\'' + id + '\',' + n + ')">' + n + '회</button>';
-    }).join('');
+    var timesSelect = '<select class="rm-select" onclick="event.stopPropagation();" onchange="rmSetTimes(\'' + id + '\',parseInt(this.value,10))">'
+      + [1, 2, 3, 4].map(function(n) {
+        return '<option value="' + n + '"' + (s.times === n ? ' selected' : '') + '>' + n + '회</option>';
+      }).join('') + '</select>';
     var slotPills = ['아침', '점심', '저녁', '취침전'].map(function(t) {
       return '<button class="rm-pill' + (s.slots.has(t) ? ' on' : '') + '" onclick="rmToggleSlot(\'' + id + '\',\'' + t + '\')">' + t + '</button>';
     }).join('');
-    var timingPills = ['식전', '식후', '식후 30분'].map(function(t) {
-      return '<button class="rm-pill' + (s.timing === t ? ' on' : '') + '" onclick="rmSetTiming(\'' + id + '\',\'' + t + '\')">' + t + '</button>';
-    }).join('');
+    var timingSelect = '<select class="rm-select" onclick="event.stopPropagation();" onchange="rmSetTiming(\'' + id + '\',this.value)">'
+      + ['식전', '식후', '식후 30분'].map(function(t) {
+        return '<option value="' + t + '"' + (s.timing === t ? ' selected' : '') + '>' + t + '</option>';
+      }).join('') + '</select>';
     var summaryChip = s.enabled ? (s.times + '회 · ' + s.days + '일분') : '전송 안 함';
 
     var row = '<div class="rm-row' + (isOpen ? ' open' : '') + '" onclick="rmToggleExpand(\'' + id + '\')">'
@@ -79,14 +81,12 @@ function renderReminderBody() {
       + chevronSVG
       + '</div></div>';
 
-    var drugChips = drugs.map(function(d) {
-      return '<span class="rm-drug-chip">' + d.name + '</span>';
-    }).join('');
     var panel = '<div class="rm-panel' + (isOpen ? ' open' : '') + (s.enabled ? '' : ' disabled') + '">'
-      + '<div class="rm-field rm-drug-list-field"><div class="rm-field-label">포함 약품</div><div class="rm-drug-chips">' + drugChips + '</div></div>'
-      + '<div class="rm-field"><div class="rm-field-label">복약 횟수</div><div class="rm-pills">' + timesPills + '</div></div>'
+      + '<div class="rm-2col">'
+      + '<div class="rm-field"><div class="rm-field-label">복약 횟수</div>' + timesSelect + '</div>'
+      + '<div class="rm-field"><div class="rm-field-label">복약 시점</div>' + timingSelect + '</div>'
+      + '</div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 시간</div><div class="rm-pills">' + slotPills + '</div></div>'
-      + '<div class="rm-field"><div class="rm-field-label">복약 시점</div><div class="rm-pills">' + timingPills + '</div></div>'
       + '<div class="rm-2col">'
       + '<div class="rm-field"><div class="rm-field-label">복약 시작일</div><input class="rm-date-input" type="date" value="' + s.startDate + '" onclick="event.stopPropagation();" onchange="rmSetStartDate(\'' + id + '\',this.value)"></div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 기간</div><div class="rm-days-ctrl">'
@@ -100,7 +100,7 @@ function renderReminderBody() {
     return '<div class="rm-item">' + row + panel + '</div>';
   }).join('');
 
-  B.innerHTML = '<p style="font-size:12px;color:var(--color-grey-500);margin-bottom:14px;line-height:1.6;">환자의 처방전 정보를 기반으로 복약 알림을 자동 설정했습니다. 설정한 알림은 웰체크 환자 앱에 자동 등록됩니다.<br>알림 수정이 필요한 경우, 수정할 처방전을 클릭해 주세요. 알림을 발송하지 않을 처방전은 토글을 꺼 주세요.</p>'
+  B.innerHTML = '<p style="font-size:12px;color:var(--color-grey-500);margin-bottom:14px;line-height:1.6;">고객의 처방전 정보를 기반으로 복약 알림을 자동 설정했습니다. 설정한 알림은 웰체크 고객 앱에 자동 등록됩니다.<br>알림 수정이 필요한 경우, 수정할 처방전을 클릭해 주세요. 알림을 발송하지 않을 처방전은 토글을 꺼 주세요.</p>'
     + (itemsHTML || '<div class="rm-empty-tip">설정할 처방전이 없습니다.</div>');
 
   F.innerHTML = ''

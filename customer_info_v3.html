@@ -22,8 +22,6 @@
   --color-blue-200:#E3EBFF;
   --color-blue-100:#ECF1FF;
   --color-red:#EE4951;
-  --color-wellda-purple:#6053F3;
-  --color-wellda-orange:#FF7B1C;
   --lnb-bg:#F5F6F9;
   --lnb-border:#D7D7D7;
   --lnb-text-1depth:#191F28;
@@ -143,10 +141,9 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .rx-tbl td{padding:0;height:56px;font-size:15px;color:var(--color-grey-800);text-align:center;vertical-align:middle;}
 .tag-route{display:inline-flex;align-items:center;gap:3px;font-size:13px;color:var(--color-primary);cursor:pointer;}
 .tag-route.purple{color:#8A30FF;}
-.tag-source{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;}
-.tag-source.pharmacy{background:var(--color-blue-200);color:var(--color-primary);}
-.tag-source.other{background:var(--color-grey-150);color:var(--color-wellda-orange);}
-.tag-source.patient{background:var(--color-grey-150);color:var(--color-wellda-purple);}
+.tag-source{flex-shrink:0;height:24px;padding:0 10px;border-radius:999px;background:var(--color-blue-200);color:var(--color-primary);font-size:13px;font-weight:500;letter-spacing:-0.26px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;}
+.tag-source.other{background:var(--color-grey-150);color:var(--color-grey-600);}
+.tag-source.patient{background:#FFFAE9;color:#FF8A00;}
 .status-drop{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:13px;font-weight:500;border:1px solid var(--color-grey-300);color:var(--color-grey-600);cursor:pointer;white-space:nowrap;}
 .status-drop.green{color:#059669;border-color:#059669;background:#F0FDF4;}
 .status-drop.gray{color:var(--color-grey-500);border-color:var(--color-grey-300);}
@@ -292,9 +289,9 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
       <div id="panelRx" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
       <div class="rx-filters">
         <button class="rx-tab active" onclick="filterSource(this,'all')">전체</button>
-        <button class="rx-tab" onclick="filterSource(this,'pharmacy')">우리 약국</button>
+        <button class="rx-tab" onclick="filterSource(this,'here')">우리 약국</button>
         <button class="rx-tab" onclick="filterSource(this,'other')">타 약국</button>
-        <button class="rx-tab" onclick="filterSource(this,'patient')">환자 기록</button>
+        <button class="rx-tab" onclick="filterSource(this,'patient')">고객 기록</button>
       </div>
       <div class="rx-meta">
         <div class="rx-count">총 처방전 <span>(4)</span></div>
@@ -492,16 +489,16 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
 
 <script>
 // ── 처방전 테이블 ──────────────────────
-// 등록 경로(고객 앱 촬영/비대면 진료)는 수신처(우리 약국/타 약국/환자 기록)와
-// 무관하게 이 둘 중 하나다. 환자 기록도 결국 촬영해서 등록한 것이라 원본이
+// 등록 경로(고객 앱 촬영/비대면 진료)는 수신처(우리 약국/타 약국/고객 기록)와
+// 무관하게 이 둘 중 하나다. 고객 기록도 결국 촬영해서 등록한 것이라 원본이
 // 있다 — 셋 다 원본 확인이 가능하다.
 const rows=[
-  {date:'2026-07-08 14:00', mode:'고객 앱 촬영', icon:'📷', routeColor:'', source:'pharmacy', hasOriginal:true, hospital:'웰체크내과'},
-  {date:'2026-07-08 14:00', mode:'비대면 진료',  icon:'🖨', routeColor:'purple', source:'pharmacy', hasOriginal:true, hospital:'하나로내과의원'},
+  {date:'2026-07-08 14:00', mode:'고객 앱 촬영', icon:'📷', routeColor:'', source:'here', hasOriginal:true, hospital:'웰체크내과'},
+  {date:'2026-07-08 14:00', mode:'비대면 진료',  icon:'🖨', routeColor:'purple', source:'here', hasOriginal:true, hospital:'하나로내과의원'},
   {date:'2026-07-06 11:20', mode:'비대면 진료',  icon:'🖨', routeColor:'purple', source:'other', hasOriginal:true, hospital:'우리동네내과의원'},
   {date:'2026-06-28 09:40', mode:'고객 앱 촬영', icon:'📷', routeColor:'', source:'patient', hasOriginal:true, hospital:'정다운정형외과'},
 ];
-const sourceLabel={pharmacy:'우리 약국',other:'타 약국',patient:'환자 기록'};
+const RX_SOURCE_LABEL={here:'우리 약국',other:'타 약국',patient:'고객 기록'};
 
 function renderRows(filter){
   const filtered = filter==='all' ? rows : rows.filter(r=>r.source===filter);
@@ -511,7 +508,8 @@ function renderRows(filter){
       <td>${r.hasOriginal
         ? `<span class="tag-route ${r.routeColor}">${r.icon} ${r.mode} ›</span>`
         : `<span style="font-size:13px;color:var(--color-grey-400)">${r.icon} ${r.mode}</span>`}</td>
-      <td><span class="tag-source ${r.source}" data-figma="new/source-tag">${sourceLabel[r.source]}</span></td>
+      <!-- component: new/tag-source (기존 컴포넌트 매핑 없음, 마스터 가이드 확인 필요) -->
+      <td><span class="tag-source ${r.source !== 'here' ? r.source : ''}" data-figma="new/tag-source-${r.source}">${RX_SOURCE_LABEL[r.source]}</span></td>
       <td style="color:#666;font-size:15px">${r.hospital}</td>
     </tr>`).join('');
   document.querySelector('.rx-count span').textContent = `(${filtered.length})`;

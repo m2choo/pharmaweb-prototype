@@ -28,6 +28,8 @@
 .rm-pill{flex:1;min-width:64px;height:36px;border:1.5px solid #E0E0E0;border-radius:8px;background:#fff;font-size:12.5px;color:#444;cursor:pointer;font-family:inherit;transition:all .12s;}
 .rm-pill:hover{border-color:#A5BCEC;background:#F4F8FF;}
 .rm-pill.on{background:#2563EB;border-color:#2563EB;color:#fff;font-weight:600;}
+.rm-select{width:100%;height:36px;border:1.5px solid #E0E0E0;border-radius:8px;padding:0 10px;font-size:13px;color:#444;font-family:inherit;background:#fff;cursor:pointer;}
+.rm-select:focus{border-color:#2563EB;outline:none;}
 .rm-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .rm-date-input,.rm-days-input{border:1.5px solid #E0E0E0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
 .rm-date-input{width:100%;height:36px;padding:0 10px;}
@@ -44,7 +46,3 @@
 .rm-switch input:checked + .rm-slider:before{transform:translateX(17px);}
 .rm-empty-tip{font-size:12.5px;color:#AAA;text-align:center;padding:32px 0;}
 .rm-step-lbl{margin-right:auto;font-size:12px;color:#AAA;align-self:center;}
-/* ── 약품 목록 (패널 상단) ── */
-.rm-drug-list-field{border-bottom:1px solid #EEF0F3;padding-bottom:12px;margin-bottom:6px;}
-.rm-drug-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px;}
-.rm-drug-chip{font-size:11.5px;color:#444;background:#F1F3F6;border-radius:20px;padding:3px 10px;white-space:nowrap;}

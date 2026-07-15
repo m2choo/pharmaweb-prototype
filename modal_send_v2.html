@@ -53,8 +53,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .modal-pt-avatar{width:40px;height:40px;border-radius:50%;background:#EEF0F3;color:var(--color-grey-500);font-size:18px;font-weight:500;letter-spacing:-0.72px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-pt-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);}
 .modal-pt-info{font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);margin-left:4px;}
-.modal-pt-remove{margin-left:auto;padding:4px 10px;background:none;border:1px solid var(--color-grey-300);border-radius:6px;font-size:13px;font-weight:350;letter-spacing:0;color:var(--color-grey-500);cursor:pointer;font-family:inherit;white-space:nowrap;}
-.modal-pt-remove:hover{background:#FFF4F5;border-color:var(--color-red);color:var(--color-red);}
+.modal-pt-remove{margin-left:auto;width:28px;height:28px;padding:0;background:none;border:none;border-radius:6px;color:var(--color-grey-500);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.modal-pt-remove:hover{background:#FFF4F5;color:var(--color-red);}
 .step-tabs{display:flex;margin-top:16px;border-bottom:1px solid var(--color-grey-300);flex-shrink:0;}
 .step-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 20px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-step-inactive);border-bottom:2px solid transparent;white-space:nowrap;}
 .step-tab.on{font-weight:700;color:var(--color-primary);border-bottom-color:var(--color-primary);}
@@ -71,13 +71,11 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .ccb-btn-confirm{height:34px;padding:0 16px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;font-family:inherit;white-space:nowrap;}
 
 /* Step 1 고객 선택 */
-.s1-guide{font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-500);margin-bottom:16px;}
-#modalPt.on ~ .step-tabs ~ #mbody .s1-guide,
 #modalPt.on ~ .step-tabs ~ #mbody .s1-search-wrap,
 #modalPt.on ~ .step-tabs ~ #mbody .s1-error-msg{display:none!important;}
 .s1-error-msg{font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-red);margin-top:-10px;margin-bottom:12px;padding:0 2px;}
 .s1-search-wrap{position:relative;margin-bottom:16px;}
-.s1-search{width:100%;height:40px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 36px 0 12px;font-size:12px;font-weight:500;font-family:inherit;outline:none;}
+.s1-search{width:100%;height:40px;box-sizing:border-box;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 36px 0 12px;font-size:12px;font-weight:500;font-family:inherit;outline:none;}
 .s1-search:focus{border-color:var(--color-primary);}
 .s1-search-icon{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--color-grey-400);pointer-events:none;}
 .s1-result-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--color-grey-250);border-radius:8px;cursor:pointer;transition:background .1s;margin-bottom:6px;}
@@ -87,7 +85,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .s1-result-body{flex:1;min-width:0;}
 .s1-result-name{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-700);}
 .s1-result-info{font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-grey-800);margin-top:2px;}
-.s1-result-tag{flex-shrink:0;height:28px;padding:0 10px;border-radius:999px;background:var(--color-blue-100);border:1px solid var(--color-blue-200);color:var(--color-primary);font-size:12px;font-weight:500;letter-spacing:-0.48px;display:flex;align-items:center;justify-content:center;white-space:nowrap;}
 .s1-empty{text-align:center;padding:20px 0 8px;color:var(--color-grey-400);font-size:15px;font-weight:400;letter-spacing:-0.6px;}
 .s1-dd-hd{display:flex;align-items:center;justify-content:space-between;height:30px;padding:10px;border-bottom:1px solid var(--color-grey-200);font-size:12px;font-weight:500;}
 .s1-dd-hd .s1-dd-hd-label{color:var(--color-grey-600);}
@@ -107,6 +104,9 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .s1-add-inline-sub{font-size:13px;font-weight:350;letter-spacing:0;color:var(--color-primary);margin-top:1px;}
 .s1-add-inline-btn{padding:6px 14px;border:none;border-radius:8px;background:var(--color-primary);color:var(--color-white);font-size:15px;font-weight:500;letter-spacing:-0.6px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;}
 .s1-add-inline-btn:hover{background:var(--color-primary);}
+.s1-add-link-row{display:flex;align-items:center;gap:6px;padding:12px 14px;cursor:pointer;color:var(--color-primary);font-size:13px;font-weight:500;letter-spacing:-0.52px;}
+.s1-add-link-row:hover{background:var(--color-blue-100);}
+.s1-add-link-plus{width:16px;height:16px;border-radius:50%;background:var(--color-blue-100);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;line-height:1;}
 .btn-next{height:40px;padding:0 28px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
 .btn-next.btn-send{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:4px 10px;font-weight:700;}
 .btn-next:disabled{opacity:.4;cursor:not-allowed;}
@@ -120,7 +120,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .s2-label{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-600);margin-bottom:10px;display:block;}
 .s2-date-group{margin-bottom:14px;}
 .s2-date-header{font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-500);padding:0 2px 6px;display:flex;align-items:center;gap:6px;}
-.s2-date-count{font-size:13px;font-weight:500;letter-spacing:-0.26px;background:var(--color-grey-200);color:var(--color-grey-600);padding:1px 7px;border-radius:10px;}
 .s2-rx-list{display:flex;flex-direction:column;gap:0;}
 .s2-rx-item{width:100%;margin-bottom:6px;}
 .s2-rx-card{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid var(--color-grey-250);border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none;width:100%;box-sizing:border-box;}
@@ -129,21 +128,17 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .s2-rx-card-check{width:17px;height:17px;accent-color:var(--color-primary);cursor:pointer;flex-shrink:0;}
 .s2-rx-card-body{flex:1;min-width:0;overflow:hidden;}
 .s2-rx-card-top{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
-.s2-rx-card-hospital{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.s2-rx-card-dept{font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-500);white-space:nowrap;flex-shrink:0;}
-.s2-rx-card-meta{font-size:13px;font-weight:350;letter-spacing:0;color:var(--color-grey-400);margin-top:1px;}
+.s2-rx-card-hospital{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
 .s2-rx-card-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.s2-rx-card-chip{font-size:13px;font-weight:500;letter-spacing:-0.26px;padding:2px 8px;border-radius:10px;background:var(--color-grey-150);color:var(--color-grey-600);white-space:nowrap;}
-.s2-rx-card.checked .s2-rx-card-chip{background:var(--color-blue-200);color:var(--color-primary);}
 .s2-rx-chevron{transition:transform .18s;color:var(--color-grey-400);flex-shrink:0;}
 .s2-rx-card.checked .s2-rx-chevron{transform:rotate(180deg);color:var(--color-primary);}
 .s2-rx-expand{display:none;width:100%;box-sizing:border-box;border:1.5px solid var(--color-primary);border-top:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;overflow:hidden;}
 .s2-rx-expand.open{display:block;}
 .s2-rx-box{border:none;}
-.s2-rx-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--color-blue-100);border-bottom:1px solid var(--color-blue-200);gap:8px;}
-.s2-rx-hd-info{font-size:15px;font-weight:400;line-height:25px;letter-spacing:-0.6px;color:var(--color-grey-800);min-width:0;}
-.s2-rx-hd-info strong{font-weight:700;color:var(--color-grey-900);}
-.s2-rx-img-btn{padding:5px 12px;border:1px solid var(--color-grey-300);border-radius:6px;background:var(--color-white);font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0;}
+.s2-rx-src-chip{flex-shrink:0;height:24px;padding:0 10px;border-radius:999px;background:var(--color-blue-200);color:var(--color-primary);font-size:13px;font-weight:500;letter-spacing:-0.26px;display:flex;align-items:center;justify-content:center;white-space:nowrap;}
+.s2-rx-src-chip.other{background:var(--color-grey-150);color:var(--color-grey-600);}
+.s2-rx-src-chip.patient{background:#FFFAE9;color:#FF8A00;}
+.s2-rx-img-btn{height:26px;padding:0 6px;border:none;border-radius:6px;background:none;color:var(--color-grey-600);display:flex;align-items:center;gap:3px;font-size:12px;font-weight:500;letter-spacing:-0.24px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;}
 .s2-rx-img-btn:hover{background:var(--color-grey-150);}
 .s2-drug-table{width:100%;border-collapse:collapse;table-layout:fixed;}
 .s2-drug-table thead tr{background:#EEF0F3;}
@@ -338,7 +333,10 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
           <span class="modal-pt-name" id="ptName"></span>
           <span class="modal-pt-info" id="ptInfo"></span>
         </div>
-        <button class="modal-pt-remove" onclick="removeCustomer()">✕ 고객 삭제</button>
+        <!-- component: button/ghost -->
+        <button class="modal-pt-remove" data-figma="button/ghost" onclick="removeCustomer()" title="고객 삭제">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
       </div>
       <div class="step-tabs">
         <div class="step-tab on" id="st1"><span class="step-num">1</span> 고객·처방전 선택</div>
@@ -712,9 +710,8 @@ function renderStep1() {
   const B = document.getElementById('mbody');
   const F = document.getElementById('mfoot');
   B.innerHTML = `
-    <p class="s1-guide" id="s1guide">고객 이름 또는 휴대전화 번호를 검색하세요.</p>
     <div class="s1-search-wrap" id="s1searchWrap">
-      <input class="s1-search" id="s1input" data-figma="search/default" type="text" placeholder="이름 또는 휴대전화 번호" oninput="onSearch(this.value)" autocomplete="off">
+      <input class="s1-search" id="s1input" data-figma="search/default" type="text" placeholder="고객 이름 또는 휴대전화 번호를 검색하세요." oninput="onSearch(this.value)" autocomplete="off">
       <span class="s1-search-icon">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#A9ADB9" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#A9ADB9" stroke-width="1.5" stroke-linecap="round"/></svg>
       </span>
@@ -756,7 +753,7 @@ function onSearch(val) {
   const matched = (KIMCHECK.name.includes(q) || KIMCHECK.phone.includes(q)) ? [KIMCHECK] : [];
   dd.style.display = 'block';
 
-  const addRowHTML = q.length >= 2 ? `
+  const addRowHTML = (q.length >= 2 && !matched.length) ? `
     <div class="s1-add-inline-row" onclick="addNewCustomerByName('${q.replace(/'/g, "\\'")}')">
       <div class="s1-add-inline-left">
         <div class="s1-add-inline-avatar">${q.charAt(0)}</div>
@@ -777,11 +774,16 @@ function onSearch(val) {
         <div class="s1-result-name">${KIMCHECK.name}</div>
         <div class="s1-result-info">${KIMCHECK.phone}</div>
       </div>
-      <span class="s1-result-tag">단골 등록됨</span>
+    </div>` : '';
+
+  const addLinkHTML = matched.length ? `
+    <div class="s1-add-link-row" onclick="addNewCustomerByName('${q.replace(/'/g, "\\'")}')">
+      <span class="s1-add-link-plus">+</span>
+      <span>'${q}'로 새 고객 추가</span>
     </div>` : '';
 
   const noMatchMsg = !matched.length && q.length >= 2 ? `<div class="s1-empty-dd"><div class="s1-empty-dd-icon"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="s1-empty-dd-msg">검색되는 고객이 없습니다</div><div class="s1-empty-dd-sub">'고객 추가' 버튼을 눌러 새 고객을 추가해 주세요</div></div>` : '';
-  dd.innerHTML = (noMatchMsg + addRowHTML + matchedHTML) || `<div class="s1-empty-dd"><div class="s1-empty-dd-icon"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="s1-empty-dd-msg">이름 또는 전화번호를 2자 이상 입력해 주세요</div></div>`;
+  dd.innerHTML = (noMatchMsg + addRowHTML + matchedHTML + addLinkHTML) || `<div class="s1-empty-dd"><div class="s1-empty-dd-icon"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="s1-empty-dd-msg">이름 또는 전화번호를 2자 이상 입력해 주세요</div></div>`;
 }
 
 function setCustomerHeader(name, info, pzVisitTxt) {
@@ -796,7 +798,6 @@ function setCustomerHeader(name, info, pzVisitTxt) {
 
 function hideSearchSection() {
   const sw = document.getElementById('s1searchWrap'); if (sw) sw.style.display = 'none';
-  const sg = document.getElementById('s1guide'); if (sg) sg.style.display = 'none';
   const se = document.getElementById('s1error'); if (se) se.style.display = 'none';
 }
 
@@ -827,7 +828,7 @@ function addNewCustomerByName(name) {
 
 const PRESCRIPTIONS = [
   {
-    id: 'rx5', date: '2026.07.06', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90,
+    id: 'rx5', date: '2026.07.06', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90, source: 'here',
     drugs: [
       { name: '아토르바스타틴정 10mg', ingredient: '아토르바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
       { name: '메트포르민염산염정 500mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 2회', days: 90, sub: false },
@@ -838,14 +839,14 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx4', date: '2026.07.06', hospital: '네모안과의원', dept: '안과', doctor: '이의사', days: 7,
+    id: 'rx4', date: '2026.07.06', hospital: '네모안과의원', dept: '안과', doctor: '이의사', days: 7, source: 'other',
     drugs: [
       { name: '오플록사신점안액 0.3%', ingredient: '오플록사신', dosage: '1~2방울', freq: '1일 4회', days: 7, sub: false },
       { name: '케토롤락트로메타민점안액 0.5%', ingredient: '케토롤락트로메타민', dosage: '1방울', freq: '1일 4회', days: 7, sub: true },
     ]
   },
   {
-    id: 'rx3', date: '2026.07.05', hospital: '엠서클의원', dept: '내과', doctor: '정의사', days: 90,
+    id: 'rx3', date: '2026.07.05', hospital: '엠서클의원', dept: '내과', doctor: '정의사', days: 90, source: 'patient',
     drugs: [
       { name: '글리메피리드정 2mg', ingredient: '글리메피리드', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
       { name: '로수바스타틴정 10mg', ingredient: '로수바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: true },
@@ -854,7 +855,7 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx2', date: '2026.07.02', hospital: '세모가정의학과의원', dept: '가정의학과', doctor: '최의사', days: 30,
+    id: 'rx2', date: '2026.07.02', hospital: '세모가정의학과의원', dept: '가정의학과', doctor: '최의사', days: 30, source: 'here',
     drugs: [
       { name: '에소메프라졸마그네슘삼수화물캡슐 20mg', ingredient: '에소메프라졸마그네슘', dosage: '1캡슐', freq: '1일 1회', days: 30, sub: false },
       { name: '돔페리돈정 10mg', ingredient: '돔페리돈', dosage: '1정', freq: '1일 3회', days: 30, sub: false },
@@ -863,7 +864,7 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx1', date: '2026.06.29', hospital: '네모네모정형외과의원', dept: '정형외과', doctor: '이의사', days: 5,
+    id: 'rx1', date: '2026.06.29', hospital: '네모네모정형외과의원', dept: '정형외과', doctor: '이의사', days: 5, source: 'other',
     drugs: [
       { name: '세레콕시브캡슐 200mg', ingredient: '세레콕시브', dosage: '1캡슐', freq: '1일 1회', days: 5, sub: false },
       { name: '티잔이딘염산염정 2mg', ingredient: '티잔이딘염산염', dosage: '1정', freq: '1일 3회', days: 5, sub: true },
@@ -871,7 +872,7 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx0c', date: '2026.06.30', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90,
+    id: 'rx0c', date: '2026.06.30', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90, source: 'here',
     drugs: [
       { name: '아토르바스타틴정 10mg', ingredient: '아토르바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
       { name: '메트포르민염산염정 500mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 2회', days: 90, sub: false },
@@ -880,14 +881,14 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx0b', date: '2026.06.27', hospital: '세모가정의학과의원', dept: '가정의학과', doctor: '최의사', days: 30,
+    id: 'rx0b', date: '2026.06.27', hospital: '세모가정의학과의원', dept: '가정의학과', doctor: '최의사', days: 30, source: 'patient',
     drugs: [
       { name: '에소메프라졸마그네슘삼수화물캡슐 20mg', ingredient: '에소메프라졸마그네슘', dosage: '1캡슐', freq: '1일 1회', days: 30, sub: false },
       { name: '돔페리돈정 10mg', ingredient: '돔페리돈', dosage: '1정', freq: '1일 3회', days: 30, sub: false },
     ]
   },
   {
-    id: 'rx0a', date: '2026.06.25', hospital: '엠서클의원', dept: '내과', doctor: '정의사', days: 90,
+    id: 'rx0a', date: '2026.06.25', hospital: '엠서클의원', dept: '내과', doctor: '정의사', days: 90, source: 'other',
     drugs: [
       { name: '글리메피리드정 2mg', ingredient: '글리메피리드', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
       { name: '로수바스타틴정 10mg', ingredient: '로수바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: true },
@@ -898,6 +899,9 @@ const PRESCRIPTIONS = [
 
 let selectedRx = null;
 let selectedRxIds = [];
+let olderRxGroupEntries = [];
+let olderRxRevealedCount = 0;
+const OLDER_RX_GROUPS_PER_LOAD = 3;
 let editingDrugsMap = {};
 let aiSummaryText = '';
 let currentStep = 1;
@@ -908,13 +912,14 @@ function parseRxDate(dateStr) {
   return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
 }
 
+const RX_SOURCE_LABEL = { here: '우리 약국', other: '타 약국', patient: '환자 기록' };
+
 function buildRxGroupHTML(groups) {
   const chevronSVG = `<svg class="s2-rx-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   return Object.entries(groups).map(([date, rxList]) => `
     <div class="s2-date-group">
       <div class="s2-date-header">
         ${date}
-        <span class="s2-date-count" data-figma="new/count-badge">${rxList.length}건</span>
       </div>
       ${rxList.map(rx => `
         <div class="s2-rx-item">
@@ -923,12 +928,16 @@ function buildRxGroupHTML(groups) {
             <div class="s2-rx-card-body">
               <div class="s2-rx-card-top">
                 <span class="s2-rx-card-hospital">${rx.hospital}</span>
-                <span class="s2-rx-card-dept">${rx.dept} · ${rx.doctor}</span>
+                <!-- component: new/tag-source (기존 컴포넌트 매핑 없음, 마스터 가이드 확인 필요) -->
+                <span class="s2-rx-src-chip ${rx.source !== 'here' ? rx.source : ''}" data-figma="new/tag-source-${rx.source}">${RX_SOURCE_LABEL[rx.source]}</span>
               </div>
-              <div class="s2-rx-card-meta">${rx.days}일분 · ${rx.drugs.length}품목</div>
             </div>
             <div class="s2-rx-card-right">
-              <span class="s2-rx-card-chip" data-figma="new/count-badge">${rx.drugs.length}품목</span>
+              <!-- component: button/ghost -->
+              <button class="s2-rx-img-btn" data-figma="button/ghost" onclick="event.stopPropagation();openRxViewer('${rx.date} ${rx.hospital}')" title="처방전 원본 보기">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><circle cx="5.5" cy="6.5" r="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 11l4-3 3 3 2-2 5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                원본
+              </button>
               ${chevronSVG}
             </div>
           </div>
@@ -975,16 +984,26 @@ function renderRxSection(preserveSelection) {
     }
   });
 
-  var hasOlder = Object.keys(olderGroups).length > 0;
+  olderRxGroupEntries = Object.entries(olderGroups).sort((a, b) => b[0].localeCompare(a[0]));
+  olderRxRevealedCount = 0;
+
+  var hasOlder = olderRxGroupEntries.length > 0;
   S.innerHTML = `
     <label class="s2-label">처방전 선택 <span style="color:var(--color-grey-500);font-weight:400;">(최근 6개월 · 복수 선택 가능)</span></label>
     <div id="s2polyAlert"></div>
     <div class="s2-rx-list">${buildRxGroupHTML(recentGroups)}</div>
     ${hasOlder ? `
-      <div id="s2olderSection" style="display:none"><div class="s2-rx-list">${buildRxGroupHTML(olderGroups)}</div></div>
-      <button class="s2-more-btn" id="s2moreBtn" onclick="toggleOlderRx()">이전 처방전 더보기 ▾</button>
+      <div id="s2olderSection" class="s2-rx-list"></div>
+      <button class="s2-more-btn" id="s2moreBtn" onclick="loadMoreOlderRx()">이전 처방전 더보기 ▾</button>
     ` : ''}
   `;
+
+  if (preserveSelection && hasOlder) {
+    while (olderRxRevealedCount < olderRxGroupEntries.length &&
+           selectedRxIds.some(id => !document.getElementById('rxchk_' + id))) {
+      loadMoreOlderRx();
+    }
+  }
 
   if (preserveSelection) {
     selectedRxIds.forEach(id => {
@@ -1000,13 +1019,28 @@ function renderRxSection(preserveSelection) {
   }
 }
 
-function toggleOlderRx() {
+function loadMoreOlderRx() {
   var sec = document.getElementById('s2olderSection');
   var btn = document.getElementById('s2moreBtn');
   if (!sec) return;
-  var isHidden = sec.style.display === 'none';
-  sec.style.display = isHidden ? 'block' : 'none';
-  btn.textContent = isHidden ? '이전 처방전 접기 ▴' : '이전 처방전 더보기 ▾';
+  var nextEntries = olderRxGroupEntries.slice(olderRxRevealedCount, olderRxRevealedCount + OLDER_RX_GROUPS_PER_LOAD);
+  sec.insertAdjacentHTML('beforeend', buildRxGroupHTML(Object.fromEntries(nextEntries)));
+  olderRxRevealedCount += nextEntries.length;
+
+  nextEntries.forEach(([, rxList]) => {
+    rxList.forEach(rx => {
+      if (selectedRxIds.includes(rx.id)) {
+        const chk = document.getElementById('rxchk_' + rx.id);
+        if (chk) chk.checked = true;
+        const card = document.getElementById('rxcard_' + rx.id);
+        if (card) card.classList.add('checked');
+      }
+    });
+  });
+
+  if (olderRxRevealedCount >= olderRxGroupEntries.length && btn) {
+    btn.style.display = 'none';
+  }
 }
 
 function goBackToStep1() {
@@ -1016,9 +1050,8 @@ function goBackToStep1() {
   const F = document.getElementById('mfoot');
   const hidden = selectedCustomer ? 'style="display:none"' : '';
   B.innerHTML = `
-    <p class="s1-guide" id="s1guide" ${hidden}>고객 이름 또는 휴대전화 번호를 검색하세요.</p>
     <div class="s1-search-wrap" id="s1searchWrap" ${hidden}>
-      <input class="s1-search" id="s1input" data-figma="search/default" type="text" placeholder="이름 또는 휴대전화 번호" oninput="onSearch(this.value)" autocomplete="off">
+      <input class="s1-search" id="s1input" data-figma="search/default" type="text" placeholder="고객 이름 또는 휴대전화 번호를 검색하세요." oninput="onSearch(this.value)" autocomplete="off">
       <span class="s1-search-icon">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#A9ADB9" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#A9ADB9" stroke-width="1.5" stroke-linecap="round"/></svg>
       </span>
@@ -1148,17 +1181,6 @@ function renderDrugTableHTML(rx) {
 
   return `
     <div class="s2-rx-box">
-      <div class="s2-rx-hd">
-        <div class="s2-rx-hd-info">
-          <strong>${rx.hospital}</strong>
-          <span style="color:var(--color-grey-500);font-size:15px;font-weight:400;letter-spacing:-0.6px;margin-left:6px;">${rx.days}일분</span>
-        </div>
-        <!-- component: button/outlined-secondary -->
-        <button class="s2-rx-img-btn" data-figma="button/outlined-secondary" onclick="openRxViewer('${rx.date} ${rx.hospital}')">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="2" stroke="#666666" stroke-width="1.3"/><circle cx="5.5" cy="6.5" r="1.5" stroke="#666666" stroke-width="1.3"/><path d="M1 11l4-3 3 3 2-2 5 4" stroke="#666666" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          처방전 원본 이미지 보기
-        </button>
-      </div>
       <table class="s2-drug-table">
         <thead>
           <tr>

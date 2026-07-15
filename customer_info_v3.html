@@ -22,6 +22,8 @@
   --color-blue-200:#E3EBFF;
   --color-blue-100:#ECF1FF;
   --color-red:#EE4951;
+  --color-wellda-purple:#6053F3;
+  --color-wellda-orange:#FF7B1C;
   --lnb-bg:#F5F6F9;
   --lnb-border:#D7D7D7;
   --lnb-text-1depth:#191F28;
@@ -142,6 +144,10 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .rx-tbl td{padding:0;height:48px;font-size:15px;color:var(--color-grey-800);text-align:center;vertical-align:middle;}
 .rx-tbl td:first-child{padding-left:8px;text-align:left;}
 .tag-route{display:inline-flex;align-items:center;gap:3px;font-size:13px;color:var(--color-primary);cursor:pointer;}
+.tag-source{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;}
+.tag-source.pharmacy{background:var(--color-blue-200);color:var(--color-primary);}
+.tag-source.other{background:var(--color-grey-150);color:var(--color-wellda-orange);}
+.tag-source.patient{background:var(--color-grey-150);color:var(--color-wellda-purple);}
 .status-drop{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:13px;font-weight:500;border:1px solid var(--color-grey-300);color:var(--color-grey-600);cursor:pointer;white-space:nowrap;}
 .status-drop.green{color:#059669;border-color:#059669;background:#F0FDF4;}
 .status-drop.gray{color:var(--color-grey-500);border-color:var(--color-grey-300);}
@@ -275,7 +281,7 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
       <div class="rx-header">
         <div class="rx-header-tab active" id="tabRx" onclick="switchTab('rx')">
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#059669" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/></svg>
-          보낸 처방전 목록
+          받은 처방전 목록
         </div>
         <div class="rx-header-tab" id="tabCl" onclick="switchTab('cl')">
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M4.5 1.5h5l3 3v9a1 1 0 01-1 1h-7a1 1 0 01-1-1v-11a1 1 0 011-1z" stroke="#38BDF8" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 7.5h4M6 10h4" stroke="#38BDF8" stroke-width="1.4" stroke-linecap="round"/></svg>
@@ -286,13 +292,13 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
       <!-- 처방전 패널 -->
       <div id="panelRx" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
       <div class="rx-filters">
-        <button class="rx-tab active">전체</button>
-        <button class="rx-tab">📷 고객 앱 촬영</button>
-        <button class="rx-tab">🖨 비대면 진료</button>
-        <select class="rx-select"><option>모든 상태</option></select>
+        <button class="rx-tab active" onclick="filterSource(this,'all')">전체</button>
+        <button class="rx-tab" onclick="filterSource(this,'pharmacy')">약국</button>
+        <button class="rx-tab" onclick="filterSource(this,'other')">타 약국</button>
+        <button class="rx-tab" onclick="filterSource(this,'patient')">환자 기록</button>
       </div>
       <div class="rx-meta">
-        <div class="rx-count">총 대상자 <span>(3)</span></div>
+        <div class="rx-count">총 대상자 <span>(4)</span></div>
         <input class="rx-search" placeholder="병원명 검색">
       </div>
       <div class="rx-table-wrap">
@@ -300,12 +306,9 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
           <thead>
             <tr>
               <th style="width:130px">접수 일시 ↓</th>
-              <th style="width:100px">접수 경로</th>
-              <th style="width:66px">대체조제<br>동의</th>
-              <th style="width:72px">수령 방법</th>
-              <th style="width:144px">발행 병원</th>
-              <th style="width:80px">상태 ⓘ</th>
-              <th style="width:72px">AI 복약 상담</th>
+              <th style="width:130px">접수 방식</th>
+              <th style="width:80px">출처</th>
+              <th style="width:220px">발행 병원</th>
             </tr>
           </thead>
           <tbody id="rxBody"></tbody>
@@ -497,23 +500,37 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
 
 <script>
 // ── 처방전 테이블 ──────────────────────
+// 고객이 어떤 경로로든(약국 자체 접수 / 타 약국 공유 / 환자 자가 기록) 웰체크 서버에
+// 올린 모든 처방전을 출처와 함께 리스트업한다.
 const rows=[
-  {date:'2026-07-08 14:00',route:'고객 앱 촬영',consent:'동의',method:'본인 방문',hospital:'웰체크내과',status:'접수됨',ai:'go'},
-  {date:'2026-07-08 14:00',route:'비대면 진료', consent:'동의',method:'본인 방문',hospital:'하나로내과의원',status:'조제완료',ai:'done'},
-  {date:'2026-07-08 14:00',route:'고객 앱 촬영',consent:'동의',method:'본인 방문',hospital:'우리동네내과의원',status:'취소됨',ai:'off'},
+  {date:'2026-07-08 14:00', mode:'고객 앱 촬영', icon:'📷', source:'pharmacy', hasOriginal:true, hospital:'웰체크내과'},
+  {date:'2026-07-08 14:00', mode:'비대면 진료',  icon:'🖨', source:'pharmacy', hasOriginal:true, hospital:'하나로내과의원'},
+  {date:'2026-07-06 11:20', mode:'처방전 공유받음', icon:'🔗', source:'other', hasOriginal:true, hospital:'우리동네내과의원'},
+  {date:'2026-06-28 09:40', mode:'복약알림 등록', icon:'📱', source:'patient', hasOriginal:false, hospital:'정다운정형외과'},
 ];
-(function(){
-  document.getElementById('rxBody').innerHTML=rows.map(r=>`
-    <tr style="${r.ai==='off'?'opacity:.5':''}">
+const sourceLabel={pharmacy:'약국',other:'타 약국',patient:'환자 기록'};
+
+function renderRows(filter){
+  const filtered = filter==='all' ? rows : rows.filter(r=>r.source===filter);
+  document.getElementById('rxBody').innerHTML = filtered.map(r=>`
+    <tr>
       <td style="font-size:15px;color:#333D48">${r.date}</td>
-      <td><span class="tag-route">${r.route==='고객 앱 촬영'?'📷':'🖨'} ${r.route} ›</span></td>
-      <td style="color:#666;font-size:15px">${r.consent}</td>
-      <td style="color:#666;font-size:15px">${r.method}</td>
+      <td>${r.hasOriginal
+        ? `<span class="tag-route">${r.icon} ${r.mode} ›</span>`
+        : `<span style="font-size:13px;color:var(--color-grey-400)">${r.icon} ${r.mode}</span>`}</td>
+      <td><span class="tag-source ${r.source}" data-figma="new/source-tag">${sourceLabel[r.source]}</span></td>
       <td style="color:#666;font-size:15px">${r.hospital}</td>
-      <td>${r.status==='조제완료'?`<span class="status-drop green">조제 완료 ∨</span>`:r.status==='취소됨'?`<span class="status-drop gray">취소됨 ∨</span>`:`<span class="status-drop">접수됨 ∨</span>`}</td>
-      <td>${r.ai==='go'?`<button class="btn-send" onclick="openModalStep2()">전송하기</button>`:r.ai==='done'?`<button class="btn-sent">전송완료</button>`:`<span style="font-size:15px;color:#A9ADB9">취소됨</span>`}</td>
     </tr>`).join('');
-})();
+  document.querySelector('.rx-count span').textContent = `(${filtered.length})`;
+}
+
+function filterSource(btn, key){
+  document.querySelectorAll('.rx-filters .rx-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderRows(key);
+}
+
+renderRows('all');
 
 function toggleCl(header) {
   const body = header.nextElementSibling;

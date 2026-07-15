@@ -61,8 +61,8 @@ function renderReminderBody() {
       + [1, 2, 3, 4].map(function(n) {
         return '<option value="' + n + '"' + (s.times === n ? ' selected' : '') + '>' + n + '회</option>';
       }).join('') + '</select>';
-    var slotPills = ['아침', '점심', '저녁', '취침전'].map(function(t) {
-      return '<button class="rm-pill' + (s.slots.has(t) ? ' on' : '') + '" onclick="rmToggleSlot(\'' + id + '\',\'' + t + '\')">' + t + '</button>';
+    var slotChecks = ['아침', '점심', '저녁', '취침전'].map(function(t) {
+      return '<label class="rm-check" onclick="event.stopPropagation();"><input type="checkbox" ' + (s.slots.has(t) ? 'checked' : '') + ' onchange="rmToggleSlot(\'' + id + '\',\'' + t + '\')">' + t + '</label>';
     }).join('');
     var timingSelect = '<select class="rm-select" onclick="event.stopPropagation();" onchange="rmSetTiming(\'' + id + '\',this.value)">'
       + ['식전', '식후', '식후 30분'].map(function(t) {
@@ -86,7 +86,7 @@ function renderReminderBody() {
       + '<div class="rm-field"><div class="rm-field-label">복약 횟수</div>' + timesSelect + '</div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 시점</div>' + timingSelect + '</div>'
       + '</div>'
-      + '<div class="rm-field"><div class="rm-field-label">복약 시간</div><div class="rm-pills">' + slotPills + '</div></div>'
+      + '<div class="rm-field"><div class="rm-field-label">복약 시간</div><div class="rm-checks">' + slotChecks + '</div></div>'
       + '<div class="rm-2col">'
       + '<div class="rm-field"><div class="rm-field-label">복약 시작일</div><input class="rm-date-input" type="date" value="' + s.startDate + '" onclick="event.stopPropagation();" onchange="rmSetStartDate(\'' + id + '\',this.value)"></div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 기간</div><div class="rm-days-ctrl">'

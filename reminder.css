@@ -12,7 +12,6 @@
 .rm-row-top{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
 .rm-row-hospital{font-size:13px;font-weight:700;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .rm-row-dept{font-size:12px;color:#888;white-space:nowrap;flex-shrink:0;}
-.rm-row-meta{font-size:11.5px;color:#AAA;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .rm-row-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .rm-chip{font-size:11px;padding:2px 8px;border-radius:10px;background:#F4F5F7;color:#666;white-space:nowrap;}
 .rm-row.open .rm-chip{background:#D1E0FF;color:#1D4ED8;}

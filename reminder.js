@@ -36,9 +36,17 @@ function initReminderSettings() {
   });
 }
 
+var rmExcludedCount = 0;
+
 function goStep2() {
   if (!selectedCustomer) return;
   if (!selectedRxIds.length && !(selectedCustomer && selectedCustomer.isNew)) return;
+  var keptIds = selectedRxIds.filter(function(id) {
+    var rx = PRESCRIPTIONS.find(function(r) { return r.id === id; });
+    return rx && rx.source === 'here';
+  });
+  rmExcludedCount = selectedRxIds.length - keptIds.length;
+  selectedRxIds = keptIds;
   if (selectedCustomer.isNew) { goStep3(); return; }
   currentStep = 2;
   setStepTab(2);
@@ -54,7 +62,6 @@ function renderReminderBody() {
 
   var itemsHTML = selectedRxIds.map(function(id) {
     var rx = PRESCRIPTIONS.find(function(r) { return r.id === id; });
-    var drugs = editingDrugsMap[id] || rx.drugs;
     var s = reminderSettings[id];
     var isOpen = rmExpandedIds.has(id);
     var timesSelect = '<select class="rm-select" onclick="event.stopPropagation();" onchange="rmSetTimes(\'' + id + '\',parseInt(this.value,10))">'
@@ -73,7 +80,6 @@ function renderReminderBody() {
     var row = '<div class="rm-row' + (isOpen ? ' open' : '') + '" onclick="rmToggleExpand(\'' + id + '\')">'
       + '<div class="rm-row-body">'
       + '<div class="rm-row-top"><span class="rm-row-hospital">' + rx.hospital + '</span><span class="rm-row-dept">' + rx.dept + '</span></div>'
-      + '<div class="rm-row-meta">' + rx.dept + ' · ' + drugs.length + '개 약품</div>'
       + '</div>'
       + '<div class="rm-row-right">'
       + '<span class="rm-chip">' + summaryChip + '</span>'
@@ -100,7 +106,12 @@ function renderReminderBody() {
     return '<div class="rm-item">' + row + panel + '</div>';
   }).join('');
 
-  B.innerHTML = '<p style="font-size:12px;color:var(--color-grey-500);margin-bottom:14px;line-height:1.6;">고객의 처방전 정보를 기반으로 복약 알림을 자동 설정했습니다. 설정한 알림은 웰체크 고객 앱에 자동 등록됩니다.<br>알림 수정이 필요한 경우, 수정할 처방전을 클릭해 주세요. 알림을 발송하지 않을 처방전은 토글을 꺼 주세요.</p>'
+  var excludedNotice = rmExcludedCount > 0
+    ? '<p style="font-size:12px;color:var(--color-red);margin-bottom:8px;">타 약국·고객 기록 처방전 ' + rmExcludedCount + '건 제외됨</p>'
+    : '';
+
+  B.innerHTML = excludedNotice
+    + '<p style="font-size:12px;color:var(--color-grey-500);margin-bottom:14px;line-height:1.6;">환자의 웰체크 앱에 알림이 자동 등록됩니다.<br>처방전을 클릭하면 알림을 수정할 수 있고, 토글로 알림 설정을 끌 수 있습니다.</p>'
     + (itemsHTML || '<div class="rm-empty-tip">설정할 처방전이 없습니다.</div>');
 
   F.innerHTML = ''

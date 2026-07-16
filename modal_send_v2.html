@@ -93,14 +93,14 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .s1-add-btn:hover{background:var(--color-blue-200);}
 .s1-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:5px;box-shadow:0 4px 7.5px rgba(0,0,0,.1);z-index:100;overflow:hidden;}
 .s1-dropdown .s1-result-item{border-radius:0;border:none;border-bottom:1px solid var(--color-grey-200);margin-bottom:0;}
-.s1-empty-dd{display:flex;flex-direction:column;align-items:center;gap:8px;padding:32px 20px;}
-.s1-empty-dd-icon{width:40px;height:40px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-400);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.s1-empty-dd-msg{font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-800);}
-.s1-empty-dd-sub{font-size:13px;font-weight:350;color:var(--color-grey-500);}
+.s1-empty-dd{display:flex;flex-direction:column;align-items:center;gap:5px;padding:16px 16px 14px;}
+.s1-empty-dd-icon{width:26px;height:26px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-400);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s1-empty-dd-msg{font-size:13.5px;font-weight:500;letter-spacing:-0.54px;color:var(--color-grey-800);}
+.s1-empty-dd-sub{font-size:12px;font-weight:350;color:var(--color-grey-500);}
 .s1-add-inline-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:var(--color-blue-200);border-bottom:1px solid var(--color-blue-200);}
 .s1-add-inline-left{display:flex;align-items:center;gap:10px;min-width:0;}
 .s1-add-inline-avatar{width:28px;height:28px;border-radius:50%;background:var(--color-white);color:var(--color-primary);font-size:13px;font-weight:500;letter-spacing:-0.26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.s1-add-inline-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-900);}
+.s1-add-inline-name{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-900);}
 .s1-add-inline-sub{font-size:13px;font-weight:350;letter-spacing:0;color:var(--color-primary);margin-top:1px;}
 .s1-add-inline-btn{padding:6px 14px;border:none;border-radius:8px;background:var(--color-primary);color:var(--color-white);font-size:15px;font-weight:500;letter-spacing:-0.6px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;}
 .s1-add-inline-btn:hover{background:var(--color-primary);}
@@ -858,8 +858,8 @@ function onSearch(val) {
       <span>'${q}'로 새 고객 추가</span>
     </div>` : '';
 
-  const noMatchMsg = !matched.length && q.length >= 2 ? `<div class="s1-empty-dd"><div class="s1-empty-dd-icon"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="s1-empty-dd-msg">검색되는 고객이 없습니다</div><div class="s1-empty-dd-sub">'고객 추가' 버튼을 눌러 새 고객을 추가해 주세요</div></div>` : '';
-  dd.innerHTML = (noMatchMsg + addRowHTML + matchedHTML + addLinkHTML) || `<div class="s1-empty-dd"><div class="s1-empty-dd-icon"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="s1-empty-dd-msg">이름 또는 전화번호를 2자 이상 입력해 주세요</div></div>`;
+  const noMatchMsg = !matched.length && q.length >= 2 ? `<div class="s1-empty-dd"><div class="s1-empty-dd-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="s1-empty-dd-msg">검색되는 고객이 없습니다</div><div class="s1-empty-dd-sub">'고객 추가' 버튼을 눌러 새 고객을 추가해 주세요</div></div>` : '';
+  dd.innerHTML = (noMatchMsg + addRowHTML + matchedHTML + addLinkHTML) || `<div class="s1-empty-dd"><div class="s1-empty-dd-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="s1-empty-dd-msg">이름 또는 전화번호를 2자 이상 입력해 주세요</div></div>`;
 }
 
 function setCustomerHeader(name, info, pzVisitTxt) {

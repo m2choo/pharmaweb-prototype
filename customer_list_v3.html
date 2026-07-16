@@ -87,9 +87,15 @@ td{padding:12px 14px;font-size:15px;color:#333;vertical-align:middle;}
 .badge-none{color:#CCC;font-size:14.4px;}
 
 /* 다제약물 상태 */
-.poly-check{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:13.2px;font-weight:600;background:#FFF3E0;color:#E07800;white-space:nowrap;}
-.poly-target{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:13.2px;font-weight:600;background:#FEE2E2;color:#DC2626;white-space:nowrap;}
-.poly-none{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:13.2px;font-weight:600;background:#F0FDF4;color:#16A34A;white-space:nowrap;}
+.poly-check{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:13.2px;font-weight:600;background:#FFF3E0;color:#E07800;white-space:nowrap;cursor:pointer;border:none;font-family:inherit;}
+.poly-target{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:13.2px;font-weight:600;background:#FEE2E2;color:#DC2626;white-space:nowrap;cursor:pointer;border:none;font-family:inherit;}
+.poly-none{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:13.2px;font-weight:600;background:#F0FDF4;color:#16A34A;white-space:nowrap;cursor:pointer;border:none;font-family:inherit;}
+.poly-caret{flex-shrink:0;opacity:.75;}
+.poly-wrap{position:relative;display:inline-block;}
+.poly-menu{display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #E0E4EA;border-radius:8px;box-shadow:0 8px 20px rgba(20,30,50,.12);padding:4px;z-index:20;min-width:96px;}
+.poly-menu.on{display:block;}
+.poly-menu-item{display:block;width:100%;text-align:left;padding:7px 10px;font-size:13px;font-weight:500;color:#333D48;background:none;border:none;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.poly-menu-item:hover{background:#F6F8FB;}
 
 /* 복약순응도 */
 .adherence-high{color:#16A34A;font-weight:600;}
@@ -248,22 +254,48 @@ const rows = [
   { date:'2026.07.05 13:53', name:'김반달',  birth:'1990-11-04', phone:'010-3456-7890', gender:'남성', rx:5,  regular:false, polyStatus:'비대상',    tags:[], adh:'' },
   { date:'2026.07.03 18:38', name:'정네모',  birth:'1968-05-30', phone:'010-4567-8901', gender:'여성', rx:3,  regular:false, polyStatus:'비대상',    tags:[], adh:'' },
   { date:'2026.07.03 18:39', name:'홍동글',  birth:'1972-04-09', phone:'010-5678-9012', gender:'남성', rx:34, regular:true,  polyStatus:'대상',      tags:[{cls:'tag-purple',txt:'당뇨 전단계'},{cls:'tag-orange',txt:'고혈압'},{cls:'tag-blue',txt:'심혈관질환'}], adh:'' },
-  { date:'2026.07.02 18:28', name:'임별표',  birth:'1988-12-03', phone:'010-6789-0123', gender:'여성', rx:15, regular:false, polyStatus:'대상 확인', tags:[], adh:'' },
-  { date:'2026.07.01 18:19', name:'권물음',  birth:'1965-07-22', phone:'010-7890-1234', gender:'남성', rx:7,  regular:false, polyStatus:'대상 확인', tags:[], adh:'' },
+  { date:'2026.07.02 18:28', name:'임별표',  birth:'1988-12-03', phone:'010-6789-0123', gender:'여성', rx:15, regular:false, polyStatus:'확인 필요', tags:[], adh:'' },
+  { date:'2026.07.01 18:19', name:'권물음',  birth:'1965-07-22', phone:'010-7890-1234', gender:'남성', rx:7,  regular:false, polyStatus:'확인 필요', tags:[], adh:'' },
   { date:'2026.07.01 18:24', name:'오느낌',  birth:'1985-07-14', phone:'010-8901-2345', gender:'남성', rx:28, regular:false, polyStatus:'대상',      tags:[{cls:'tag-purple',txt:'당뇨'},{cls:'tag-orange',txt:'고혈압'}], adh:'' },
   { date:'2026.06.30 11:20', name:'박하트',  birth:'1993-02-18', phone:'010-9012-3456', gender:'여성', rx:2,  regular:false, polyStatus:'비대상',    tags:[], adh:'' },
   { date:'2026.06.28 16:05', name:'최번개',  birth:'1980-09-27', phone:'010-0123-4567', gender:'남성', rx:4,  regular:false, polyStatus:'비대상',    tags:[{cls:'tag-orange',txt:'고혈압'}], adh:'' },
-  { date:'2026.06.25 10:33', name:'윤구름',  birth:'1970-06-11', phone:'010-1122-3344', gender:'여성', rx:11, regular:false, polyStatus:'대상 확인', tags:[{cls:'tag-purple',txt:'당뇨'}], adh:'' },
+  { date:'2026.06.25 10:33', name:'윤구름',  birth:'1970-06-11', phone:'010-1122-3344', gender:'여성', rx:11, regular:false, polyStatus:'확인 필요', tags:[{cls:'tag-purple',txt:'당뇨'}], adh:'' },
+  { date:'2026.06.24 09:41', name:'신모래',  birth:'1995-01-30', phone:'010-2233-9988', gender:'남성', rx:0,  regular:false, polyStatus:null,       tags:[], adh:'' },
 ];
 
-function polyBadge(s) {
-  if (s === '대상') return `<span class="poly-target">대상</span>`;
-  if (s === '대상 확인') return `<span class="poly-check">대상 확인</span>`;
-  return `<span class="poly-none">비대상</span>`;
+const POLY_OPTIONS = ['대상', '확인 필요', '비대상'];
+
+function polyBadge(s, idx) {
+  // 처방전 데이터 자체가 없어 판단 근거가 없는 경우 — 배지 없이 대시로 표시(비대상으로 단정하지 않음)
+  if (!s) return `<span class="cell-empty" style="color:#CCC;">—</span>`;
+  const cls = s === '대상' ? 'poly-target' : s === '확인 필요' ? 'poly-check' : 'poly-none';
+  return `
+    <span class="poly-wrap">
+      <button type="button" class="${cls}" onclick="togglePolyMenu(event, ${idx})">${s}<svg class="poly-caret" width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5l3.5 3 3.5-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="poly-menu" id="polyMenu${idx}">
+        ${POLY_OPTIONS.map(o => `<button type="button" class="poly-menu-item" onclick="setPolyStatus(event, ${idx}, '${o}')">${o}</button>`).join('')}
+      </div>
+    </span>`;
 }
 
+function togglePolyMenu(e, idx) {
+  e.stopPropagation();
+  const menu = document.getElementById('polyMenu' + idx);
+  const isOpen = menu.classList.contains('on');
+  document.querySelectorAll('.poly-menu.on').forEach(m => m.classList.remove('on'));
+  if (!isOpen) menu.classList.add('on');
+}
+function setPolyStatus(e, idx, status) {
+  e.stopPropagation();
+  rows[idx].polyStatus = status;
+  render();
+}
+document.addEventListener('click', () => {
+  document.querySelectorAll('.poly-menu.on').forEach(m => m.classList.remove('on'));
+});
+
 function render() {
-  document.getElementById('tbody').innerHTML = rows.map(r => `
+  document.getElementById('tbody').innerHTML = rows.map((r, idx) => `
     <tr onclick="location.href='customer_info_v3.html'">
       <td class="td-date">${r.date}</td>
       <td class="td-name ${r.regular ? 'regular' : 'muted'}">${r.name}</td>
@@ -272,7 +304,7 @@ function render() {
       <td>${r.phone}</td>
       <td>${r.gender}</td>
       <td class="td-count">${r.rx}건</td>
-      <td>${polyBadge(r.polyStatus)}</td>
+      <td onclick="event.stopPropagation()">${polyBadge(r.polyStatus, idx)}</td>
       <td>
         ${r.tags.length
           ? `<div class="tags">${r.tags.map(t=>`<span class="tag ${t.cls}">${t.txt}</span>`).join('')}</div>`

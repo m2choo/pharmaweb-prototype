@@ -303,6 +303,38 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .mic-perm-btn:hover{background:var(--color-primary);}
 .mic-perm-btn:disabled{opacity:.5;cursor:not-allowed;}
 .mic-perm-hint{font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-grey-500);line-height:1.7;margin-top:2px;}
+
+/* ── 퍼즐 AI 상태 레이어 (라이선스 없음/만료/정지/한도초과, 조회 실패, 처리 지연) ── */
+.pz-body{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;min-height:0;}
+.pz-status-layer{display:none;position:absolute;inset:0;background:var(--color-white);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 28px;gap:10px;z-index:4;}
+.pz-status-layer.on{display:flex;}
+.pz-status-icon{font-size:38px;line-height:1;margin-bottom:2px;}
+.pz-status-title{font-size:16px;font-weight:500;letter-spacing:-0.64px;color:var(--color-grey-900);}
+.pz-status-desc{font-size:13.5px;font-weight:400;letter-spacing:-0.5px;color:var(--color-grey-600);line-height:1.7;max-width:240px;}
+.pz-status-link{margin-top:6px;height:40px;padding:0 20px;background:var(--color-primary);color:var(--color-white);border:none;border-radius:8px;font-size:14px;font-weight:500;letter-spacing:-0.56px;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;}
+.pz-status-retry-btn{margin-top:6px;height:38px;padding:0 20px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:14px;font-weight:500;letter-spacing:-0.56px;color:var(--color-grey-800);cursor:pointer;font-family:inherit;}
+.pz-status-retry-btn:hover{border-color:var(--color-primary);color:var(--color-primary);}
+.pz-status-note{font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-grey-500);margin-top:4px;max-width:240px;line-height:1.6;}
+.pz-status-contact{font-size:13.5px;font-weight:600;letter-spacing:-0.54px;color:var(--color-grey-800);margin-top:6px;line-height:1.7;}
+.pz-status-spinner{width:30px;height:30px;border:3px solid var(--color-grey-200);border-top-color:var(--color-primary);border-radius:50%;animation:pzSpin .8s linear infinite;}
+@keyframes pzSpin{to{transform:rotate(360deg);}}
+/* 동일 세션 내 연결 재시도 — 진행 중이던 내용은 유지한 채 반투명 오버레이만 표시 */
+.pz-reconnect-layer{display:none;position:absolute;inset:0;background:rgba(255,255,255,.82);flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:5;}
+.pz-reconnect-layer.on{display:flex;}
+
+/* ── 세션 초기화(iframe reload) 확인 팝업 ── */
+.restart-confirm-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:601;align-items:center;justify-content:center;}
+.restart-confirm-layer.on{display:flex;}
+.restart-confirm-box{background:var(--color-white);border-radius:16px;padding:36px 36px 28px;max-width:380px;width:90%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.restart-confirm-icon{font-size:44px;line-height:1;}
+.restart-confirm-title{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-900);}
+.restart-confirm-desc{font-size:14px;font-weight:400;letter-spacing:-0.56px;color:var(--color-grey-600);line-height:1.75;}
+.restart-confirm-btn{height:44px;padding:0 32px;background:var(--color-primary);color:var(--color-white);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;cursor:pointer;font-family:inherit;}
+
+/* ── QA 전용: 케이스 전환 패널 (실서비스 반영 대상 아님) ── */
+.qa-panel{position:fixed;top:14px;left:14px;z-index:9999;background:var(--color-grey-900);color:#fff;padding:10px 12px;border-radius:10px;font-size:12px;font-family:inherit;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.3);}
+.qa-panel select{font-size:12px;padding:4px 6px;border-radius:6px;border:none;}
+.qa-panel span{opacity:.7;white-space:nowrap;}
 </style>
 <link rel="stylesheet" href="reminder.css">
 </head>
@@ -375,38 +407,50 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
         </div>
       </div>
 
-      <!-- 채팅 영역 + ✦ 플로팅 버튼 -->
-      <div style="flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;">
-        <div class="pz-chat" id="pzChat"></div>
-        <!-- component: button/outlined-secondary -->
-        <button class="pz-sparkle-btn" data-figma="button/outlined-secondary" style="position:absolute;right:12px;bottom:10px;" onclick="showSummary()">✦ 복약지도 요약하기</button>
-      </div>
-
-      <!-- 녹음 상태 바 -->
-      <div class="pz-rec-bar">
-        <div class="pz-rec-dot"></div>
-        <span class="pz-rec-label">녹음 중</span>
-        <span class="pz-rec-time" id="pzTimer">00:00</span>
-      </div>
-
-      <div class="pz-bottom">
-        <div class="pz-chips">
-          <button class="pz-chip" data-figma="new/chip">의약품 복용 이력</button>
-          <button class="pz-chip" data-figma="new/chip">과거 복약지도 이력</button>
+      <div class="pz-body" id="pzBody">
+        <!-- 채팅 영역 + ✦ 플로팅 버튼 -->
+        <div style="flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;">
+          <div class="pz-chat" id="pzChat"></div>
+          <!-- component: button/outlined-secondary -->
+          <button class="pz-sparkle-btn" data-figma="button/outlined-secondary" style="position:absolute;right:12px;bottom:10px;" onclick="showSummary()">✦ 복약지도 요약하기</button>
         </div>
-        <div class="pz-input-row">
-          <!-- component: button/solid -->
-          <button class="pz-mic-btn" data-figma="button/solid">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="8.5" y="1" width="7" height="11" rx="3.5" fill="#FFFFFF"/><path d="M5 11c0 3.866 3.134 7 7 7s7-3.134 7-7" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/><path d="M12 18v3M9 21h6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg>
-          </button>
-          <div class="pz-input-box">
-            <input class="pz-input" placeholder="버튼을 눌러 수정사항을 알려보세요">
-            <div class="pz-wave">
-              <span></span><span></span><span></span><span></span><span></span>
+
+        <!-- 녹음 상태 바 -->
+        <div class="pz-rec-bar">
+          <div class="pz-rec-dot"></div>
+          <span class="pz-rec-label">녹음 중</span>
+          <span class="pz-rec-time" id="pzTimer">00:00</span>
+        </div>
+
+        <div class="pz-bottom">
+          <div class="pz-chips">
+            <button class="pz-chip" data-figma="new/chip">의약품 복용 이력</button>
+            <button class="pz-chip" data-figma="new/chip">과거 복약지도 이력</button>
+          </div>
+          <div class="pz-input-row">
+            <!-- component: button/solid -->
+            <button class="pz-mic-btn" data-figma="button/solid">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="8.5" y="1" width="7" height="11" rx="3.5" fill="#FFFFFF"/><path d="M5 11c0 3.866 3.134 7 7 7s7-3.134 7-7" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/><path d="M12 18v3M9 21h6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <div class="pz-input-box">
+              <input class="pz-input" placeholder="버튼을 눌러 수정사항을 알려보세요">
+              <div class="pz-wave">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- 라이선스/조회 상태 레이어 — 문제가 있으면 모듈을 로드하지 않고 이 자리에 상태를 표시 -->
+        <div class="pz-status-layer" id="pzStatusLayer"></div>
+
+        <!-- 연결 재시도 오버레이 — 동일 세션 내 재시도, 진행 중이던 대화는 그대로 유지 -->
+        <div class="pz-reconnect-layer" id="pzReconnectLayer">
+          <div class="pz-status-spinner"></div>
+          <div class="pz-status-title">연결을 재시도하고 있습니다...</div>
+        </div>
       </div>
+
     </div>
 
   </div>
@@ -447,6 +491,37 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
   </div>
 </div>
 
+<!-- 세션 초기화(iframe reload) 확인 팝업 -->
+<div class="restart-confirm-layer" id="restartConfirmLayer">
+  <!-- component: popup -->
+  <div class="restart-confirm-box" data-figma="popup">
+    <div class="restart-confirm-icon">⚠️</div>
+    <div class="restart-confirm-title">상담을 처음부터 다시 시작해야 합니다</div>
+    <div class="restart-confirm-desc">연결이 끊겨 지금까지의 녹음을 이어갈 수 없습니다.<br>지금까지 나눈 대화는 임시 저장되며, 녹음을 처음부터 다시 시작합니다.</div>
+    <!-- component: button/solid -->
+    <button class="restart-confirm-btn" data-figma="button/solid" onclick="confirmRestart()">처음부터 다시 시작</button>
+  </div>
+</div>
+
+<!-- QA 전용: 케이스 전환 패널 (실서비스 반영 대상 아님 — 리뷰용) -->
+<div class="qa-panel">
+  <span>QA 상태</span>
+  <select onchange="applyQaState(this.value)">
+    <option value="normal">정상(녹음 중)</option>
+    <option value="license-missing">① 라이선스 없음</option>
+    <option value="license-expired">① 라이선스 만료</option>
+    <option value="license-suspended">① 라이선스 정지·차단</option>
+    <option value="license-quota">① 사용 한도 초과</option>
+    <option value="license-checking">② 라이선스 확인 중</option>
+    <option value="license-check-failed">② 조회 실패 (재시도)</option>
+    <option value="license-check-failed-admin">② 조회 실패 (관리자 문의)</option>
+    <option value="processing-delay">④ 처리 지연 (로딩)</option>
+    <option value="processing-delay-failed">④ 처리 지연 실패 (재시도)</option>
+    <option value="reconnecting">⑤ 연결 재시도 중 (세션 유지)</option>
+    <option value="session-reset">⑤ 세션 초기화 확인</option>
+    <option value="summary-lost">⑥ 복약지도 기록을 불러오지 못함</option>
+  </select>
+</div>
 
 <script src="reminder.js"></script>
 <script>
@@ -1662,6 +1737,122 @@ async function requestMicAccess() {
     btn.disabled = false;
     document.getElementById('micPermHint').style.display = '';
   }
+}
+
+/* ===== 퍼즐 AI 구독권/연결 상태 케이스 ===== */
+const DASHOP_CONTACT = '더샵 고객센터: 1566-7173<br>(평일 09:30~18:00 / 토,일,공휴일 휴무)';
+const AI_ONLY_NOTE = 'AI 상담 외 기능은 계속 이용하실 수 있어요.<br>(고객·처방전 선택, 복약지도 작성 및 전송)';
+const LICENSE_INFO = {
+  missing:   { icon:'🔒', title:'구독권이 없습니다', desc:'CL note AI 복약 지도 기능을 사용하려면 구독권 구매가 필요합니다.', action:'link' },
+  expired:   { icon:'⏳', title:'구독권이 만료되었습니다', desc:'이용 중인 구독권의 사용 기간이 종료되었습니다.<br>AI 상담 기능을 계속 사용하시려면 갱신이 필요합니다.', action:'link' },
+  suspended: { icon:'⛔', title:'이용이 정지되었습니다', desc:'결제 또는 약관 문제로 이용이 정지되었습니다.<br>더샵 고객센터로 문의해 주세요.', action:'contact' },
+  quota:     { icon:'📊', title:'사용 한도를 초과했습니다', desc:'설정된 사용 한도를 모두 사용했습니다.', action:'none' }
+};
+
+function setPuzzleStatus(html) {
+  const layer = document.getElementById('pzStatusLayer');
+  if (!html) { layer.classList.remove('on'); layer.innerHTML = ''; return; }
+  layer.innerHTML = html;
+  layer.classList.add('on');
+}
+
+function showLicenseStatus(kind) {
+  const info = LICENSE_INFO[kind];
+  const actionHtml = info.action === 'link'
+    ? `<a class="pz-status-link" href="#" onclick="return false;">구독권 구매하기</a>`
+    : info.action === 'contact'
+      ? `<div class="pz-status-contact">${DASHOP_CONTACT}</div>`
+      : '';
+  setPuzzleStatus(`
+    <div class="pz-status-icon">${info.icon}</div>
+    <div class="pz-status-title">${info.title}</div>
+    <div class="pz-status-desc">${info.desc}</div>
+    ${actionHtml}
+    <div class="pz-status-note">${AI_ONLY_NOTE}</div>
+  `);
+}
+
+let statusFailCount = 0;
+function showLoadingStatus(label) {
+  setPuzzleStatus(`<div class="pz-status-spinner"></div><div class="pz-status-title">${label}</div>`);
+}
+function showRetryStatus(title, desc, retryHandler) {
+  statusFailCount++;
+  const adminHint = statusFailCount >= 2
+    ? `<div class="pz-status-note">동일한 오류가 지속된다면 관리자에게 문의해 주세요.<br>${DASHOP_CONTACT}</div>` : '';
+  setPuzzleStatus(`
+    <div class="pz-status-icon">⚠️</div>
+    <div class="pz-status-title">${title}</div>
+    <div class="pz-status-desc">${desc}</div>
+    <button class="pz-status-retry-btn" data-figma="button/outlined-secondary" onclick="${retryHandler}">다시 시도</button>
+    ${adminHint}
+  `);
+}
+function demoLicenseChecking() {
+  statusFailCount = 0;
+  showLoadingStatus('구독권 확인 중입니다...');
+}
+function demoLicenseCheckFailed() {
+  showRetryStatus('구독권 정보를 확인할 수 없습니다', '일시적인 오류일 수 있습니다.<br>다시 시도해 주세요.', 'demoLicenseCheckFailed()');
+}
+function demoProcessingDelay() {
+  statusFailCount = 0;
+  showLoadingStatus('AI 모듈을 불러오는 중입니다...');
+}
+function demoProcessingDelayFailed() {
+  showRetryStatus('AI 모듈을 불러오지 못했습니다', '네트워크 상태를 확인하고 다시 시도해 주세요.', 'demoProcessingDelayFailed()');
+}
+
+function demoReconnecting() {
+  document.getElementById('pzReconnectLayer').classList.add('on');
+}
+function demoReconnectDone() {
+  document.getElementById('pzReconnectLayer').classList.remove('on');
+}
+function demoSessionResetNeeded() {
+  document.getElementById('restartConfirmLayer').classList.add('on');
+}
+function confirmRestart() {
+  document.getElementById('restartConfirmLayer').classList.remove('on');
+  document.getElementById('pzReconnectLayer').classList.remove('on');
+  const chat = document.getElementById('pzChat');
+  chat.innerHTML = '';
+  const recBar = document.querySelector('.pz-rec-bar');
+  if (recBar) recBar.style.display = '';
+  stopStream(); stopTimer();
+  startTimer(); startStream();
+  showToast('처음부터 다시 시작합니다.');
+}
+
+function demoSummaryLost() {
+  stopStream(); stopTimer();
+  const recBar = document.querySelector('.pz-rec-bar');
+  if (recBar) recBar.style.display = 'none';
+  setPuzzleStatus(`
+    <div class="pz-status-icon">⚠️</div>
+    <div class="pz-status-title">이전 상담 기록을 불러오지 못했습니다</div>
+    <div class="pz-status-desc">복약지도 내용을 직접 작성해 주세요.</div>
+    <button class="pz-status-retry-btn" data-figma="button/outlined-secondary" onclick="setPuzzleStatus(null)">확인</button>
+  `);
+}
+
+function applyQaState(v) {
+  setPuzzleStatus(null);
+  demoReconnectDone();
+  document.getElementById('restartConfirmLayer').classList.remove('on');
+  if (v === 'normal') return;
+  if (v === 'license-missing') return showLicenseStatus('missing');
+  if (v === 'license-expired') return showLicenseStatus('expired');
+  if (v === 'license-suspended') return showLicenseStatus('suspended');
+  if (v === 'license-quota') return showLicenseStatus('quota');
+  if (v === 'license-checking') return demoLicenseChecking();
+  if (v === 'license-check-failed') return demoLicenseCheckFailed();
+  if (v === 'license-check-failed-admin') { statusFailCount = 1; return demoLicenseCheckFailed(); }
+  if (v === 'processing-delay') return demoProcessingDelay();
+  if (v === 'processing-delay-failed') return demoProcessingDelayFailed();
+  if (v === 'reconnecting') return demoReconnecting();
+  if (v === 'session-reset') return demoSessionResetNeeded();
+  if (v === 'summary-lost') return demoSummaryLost();
 }
 
 // ↓↓↓ 확인용 임시 코드 — 다 보고 나면 이 블록만 지우세요 ↓↓↓

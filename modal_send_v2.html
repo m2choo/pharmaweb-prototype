@@ -1857,7 +1857,11 @@ function applyQaState(v) {
 }
 
 // ↓↓↓ 확인용 임시 코드 — 다 보고 나면 이 블록만 지우세요 ↓↓↓
-openModal();
+// 이 파일을 다른 화면의 iframe으로 내장했을 때는 자동으로 열리면 안 됨(그 경우 매번
+// beforeunload 가드가 걸려 다른 메뉴로 이동할 때마다 "나가시겠습니까" 경고가 뜨는 버그가 있었음)
+if (window.parent === window) {
+  openModal();
+}
 // ↑↑↑ 확인용 임시 코드 ↑↑↑
 </script>
 </body>

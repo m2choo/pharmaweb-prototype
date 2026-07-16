@@ -1759,7 +1759,7 @@ function setPuzzleStatus(html) {
 function showLicenseStatus(kind) {
   const info = LICENSE_INFO[kind];
   const actionHtml = info.action === 'link'
-    ? `<a class="pz-status-link" href="#" onclick="return false;">구독권 구매하기</a>`
+    ? `<a class="pz-status-link" href="#" target="_blank" rel="noopener">구독권 구매하기 ↗</a>`
     : info.action === 'contact'
       ? `<div class="pz-status-contact">${DASHOP_CONTACT}</div>`
       : '';

@@ -644,6 +644,7 @@ function upsertNoteRecord(status) {
     gender: (selectedCustomer.gender && selectedCustomer.gender !== '-') ? selectedCustomer.gender : '',
     age: (selectedCustomer.age && selectedCustomer.age !== '-') ? selectedCustomer.age : '',
     isNew: !!selectedCustomer.isNew,
+    rxIds: selectedRxIds.slice(),
     status,
     message: s3Msg,
     createdAt: idx !== -1 ? notes[idx].createdAt : now,

@@ -90,7 +90,7 @@ function renderReminderBody() {
     var panel = '<div class="rm-panel' + (isOpen ? ' open' : '') + (s.enabled ? '' : ' disabled') + '">'
       + '<div class="rm-3col">'
       + '<div class="rm-field"><div class="rm-field-label">복약 횟수</div>' + timesSelect + '</div>'
-      + '<div class="rm-field"><div class="rm-field-label">복약 시간</div><div class="rm-slot-group">' + slotChecks + '</div></div>'
+      + '<div class="rm-field"><div class="rm-field-label">복약 시간<span class="rm-slot-error" id="rmSlotError_' + id + '" style="display:none;">설정된 복약 횟수 이상으로 선택할 수 없습니다.</span></div><div class="rm-slot-group">' + slotChecks + '</div></div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 시점</div>' + timingSelect + '</div>'
       + '</div>'
       + '<div class="rm-2col">'
@@ -136,7 +136,17 @@ function rmSetTimes(id, n) {
 }
 function rmToggleSlot(id, slot) {
   var s = reminderSettings[id];
-  if (s.slots.has(slot)) s.slots.delete(slot); else s.slots.add(slot);
+  var errEl = document.getElementById('rmSlotError_' + id);
+  if (s.slots.has(slot)) {
+    s.slots.delete(slot);
+  } else {
+    if (s.slots.size >= s.times) {
+      if (errEl) errEl.style.display = 'inline';
+      return;
+    }
+    s.slots.add(slot);
+  }
+  if (errEl) errEl.style.display = 'none';
   renderReminderBody();
 }
 function rmSetTiming(id, val) {

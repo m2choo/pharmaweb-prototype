@@ -32,12 +32,15 @@
 body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-grey-100);min-height:100vh;overflow:hidden;}
 
 /* ═══ LNB ═══ */
-.lnb{position:fixed;left:0;top:0;width:200px;height:100vh;background:var(--lnb-bg);border-right:1px solid var(--lnb-border);display:flex;flex-direction:column;z-index:10;}
+.lnb{position:fixed;left:0;top:0;width:200px;height:100vh;background:var(--lnb-bg);border-right:1px solid var(--lnb-border);display:flex;flex-direction:column;z-index:10;overflow:hidden;transition:width .2s;}
+.lnb.collapsed{width:0;border-right:none;}
+.lnb-collapse-btn{position:fixed;top:132px;left:200px;transform:translate(-50%,-50%);width:28.8px;height:28.8px;border-radius:50%;background:var(--color-white);border:1px solid #E0E4EA;box-shadow:0 2px 6px rgba(20,30,50,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:20;color:var(--color-grey-500);font-size:16.8px;transition:left .2s;}
+.lnb-collapse-btn.collapsed{left:0;}
 .lnb-logo{padding:20px 20px 16px;border-bottom:1px solid var(--lnb-border);}
 .lnb-logo svg{width:100px;}
 .lnb-nav{padding:8px 0;}
 .lnb-secondary{border-top:1px solid var(--lnb-border);padding:8px 0;}
-.lnb-item.sub{font-size:14px;color:var(--lnb-text-sub);padding:8px 20px;}
+.lnb-item.sub{font-size:15px;color:var(--lnb-text-sub);padding:8px 20px;}
 .lnb-item.sub.active{background:var(--color-grey-100);color:var(--color-grey-800);font-weight:500;}
 .lnb-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:15px;font-weight:400;color:var(--lnb-text-1depth-regular);cursor:pointer;position:relative;transition:background .1s;}
 .lnb-item:hover{background:var(--color-grey-100);}
@@ -55,7 +58,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .lnb-btn-sm{flex:1;padding:6px;font-size:13px;color:var(--color-grey-600);border:1px solid var(--color-grey-250);border-radius:6px;background:var(--color-white);cursor:pointer;font-family:inherit;text-align:center;}
 
 /* ═══ MAIN ═══ */
-.main{margin-left:200px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+.main{margin-left:200px;height:100vh;display:flex;flex-direction:column;overflow:hidden;transition:margin-left .2s;}
+.main.expanded{margin-left:0;}
 
 /* topbar */
 .topbar{height:52px;flex-shrink:0;background:var(--color-white);border-bottom:1px solid var(--color-grey-200);display:flex;align-items:center;padding:0 28px;gap:10px;}
@@ -115,16 +119,16 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .cl-rx-chip.no-rx{background:var(--color-grey-100);color:var(--color-grey-500);}
 .cl-rx-group{display:flex;align-items:center;justify-content:space-between;padding-top:10px;margin-top:10px;border-top:1px dashed var(--color-grey-250);}
 .cl-rx-group:first-child{padding-top:12px;margin-top:0;border-top:none;}
-.cl-rx-group-label{font-size:12px;font-weight:500;color:var(--color-grey-600);display:flex;align-items:center;gap:5px;}
+.cl-rx-group-label{font-size:13px;font-weight:500;color:var(--color-grey-600);display:flex;align-items:center;gap:5px;}
 .cl-rx-group-label::before{content:'';display:inline-block;width:3px;height:11px;background:var(--color-primary);border-radius:2px;flex-shrink:0;}
-.cl-rx-view{font-size:13px;color:var(--color-primary);cursor:pointer;white-space:nowrap;}
+.cl-rx-view{font-size:14px;color:var(--color-primary);cursor:pointer;white-space:nowrap;}
 .cl-drugs{margin-bottom:12px;padding-top:12px;}
 .cl-drugs-label{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
 .cl-section{margin-top:12px;}
 .cl-section-label{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
 .cl-section-label svg{flex-shrink:0;}
-.cl-stt-box{background:var(--color-grey-150);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--color-grey-800);line-height:1.85;}
-.cl-summary-box{background:var(--color-blue-100);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--color-grey-800);line-height:1.85;}
+.cl-stt-box{background:var(--color-grey-150);border-radius:8px;padding:10px 12px;font-size:15px;color:var(--color-grey-800);line-height:1.85;}
+.cl-summary-box{background:var(--color-blue-100);border-radius:8px;padding:10px 12px;font-size:15px;color:var(--color-grey-800);line-height:1.85;}
 .rx-filters{padding:10px 20px 10px;display:flex;gap:8px;align-items:center;}
 .rx-tab{height:30px;padding:0 13px;border-radius:20px;font-size:14px;border:1px solid var(--color-grey-300);background:var(--color-white);cursor:pointer;color:var(--color-grey-600);display:flex;align-items:center;gap:4px;font-family:inherit;}
 .rx-tab.active{background:var(--color-blue-200);color:var(--color-primary);border-color:var(--color-blue-200);font-weight:500;}
@@ -230,8 +234,10 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
   </div>
 </nav>
 
+<button class="lnb-collapse-btn" id="lnbCollapseBtn" onclick="toggleLnbCollapse()">‹</button>
+
 <!-- MAIN -->
-<main class="main">
+<main class="main" id="mainContent">
   <div class="topbar">
     <div class="topbar-back">‹</div>
     <div class="topbar-name">김체크</div>
@@ -561,6 +567,16 @@ function openModalFrame() {
 }
 function closeModalFrame() {
   document.getElementById('modalFrame').style.display = 'none';
+}
+
+function toggleLnbCollapse() {
+  var lnb = document.querySelector('.lnb');
+  var main = document.getElementById('mainContent');
+  var btn = document.getElementById('lnbCollapseBtn');
+  var collapsed = lnb.classList.toggle('collapsed');
+  main.classList.toggle('expanded', collapsed);
+  btn.classList.toggle('collapsed', collapsed);
+  btn.textContent = collapsed ? '›' : '‹';
 }
 </script>
 </body>

@@ -10,12 +10,15 @@
 body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-height:100vh;display:flex;}
 
 /* ── LNB ── */
-.lnb{width:200px;min-height:100vh;background:#fff;border-right:1px solid #E8EAED;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:10;}
+.lnb{width:200px;min-height:100vh;background:#fff;border-right:1px solid #E8EAED;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:10;overflow:hidden;transition:width .2s;}
+.lnb.collapsed{width:0;border-right:none;}
+.lnb-collapse-btn{position:fixed;top:132px;left:200px;transform:translate(-50%,-50%);width:28.8px;height:28.8px;border-radius:50%;background:#fff;border:1px solid #E0E4EA;box-shadow:0 2px 6px rgba(20,30,50,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:20;color:#8B95A1;font-size:16.8px;transition:left .2s;}
+.lnb-collapse-btn.collapsed{left:0;}
 .lnb-logo{padding:20px 20px 16px;border-bottom:1px solid #E8EAED;}
 .lnb-logo svg{width:100px;}
 .lnb-nav{padding:8px 0;}
 .lnb-secondary{border-top:1px solid #E8EAED;padding:8px 0;}
-.lnb-item.sub{font-size:17.3px;color:#888;padding:8px 20px;}
+.lnb-item.sub{font-size:15px;color:#888;padding:8px 20px;}
 .lnb-item.sub.active{background:#F4F5F7;color:#333;font-weight:500;}
 .lnb-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:15.6px;color:#555;cursor:pointer;position:relative;text-decoration:none;transition:background .1s;}
 .lnb-item:hover{background:#F4F5F7;}
@@ -33,7 +36,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
 .lnb-btn-sm{flex:1;padding:6px;font-size:13.2px;color:#555;border:1px solid #E0E0E0;border-radius:6px;background:#fff;cursor:pointer;font-family:inherit;text-align:center;}
 
 /* ── MAIN ── */
-.main{margin-left:200px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
+.main{margin-left:200px;flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left .2s;}
+.main.expanded{margin-left:0;}
 
 /* page header */
 .page-hd{padding:20px 32px 12px;background:#fff;border-bottom:1px solid #E8EAED;}
@@ -56,13 +60,13 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
 .tbl-wrap{background:#fff;border-radius:8px;border:1px solid #E8EAED;overflow:hidden;flex:1;}
 table{width:100%;border-collapse:collapse;}
 thead tr{background:#F8F9FA;border-bottom:1px solid #E8EAED;}
-th{padding:10px 14px;font-size:13.8px;font-weight:600;color:#888;text-align:left;white-space:nowrap;}
+th{padding:10px 14px;font-size:13.8px;font-weight:600;color:#888;text-align:center;white-space:nowrap;}
 th.sort{cursor:pointer;}
 th.sort:hover{color:#555;}
 tbody tr{border-bottom:1px solid #F2F4F6;cursor:pointer;}
 tbody tr:last-child{border-bottom:none;}
 tbody tr:hover{background:#F8FBFF;}
-td{padding:12px 14px;font-size:15px;color:#333;vertical-align:middle;}
+td{padding:12px 14px;font-size:15px;color:#333;vertical-align:middle;text-align:center;}
 .td-date{color:#666;font-size:14.4px;}
 .td-name{font-weight:500;}
 .td-name.regular{color:#2563EB;}
@@ -85,8 +89,8 @@ td{padding:12px 14px;font-size:15px;color:#333;vertical-align:middle;}
 /* 단골 배지 */
 .badge-regular{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:13.2px;font-weight:700;background:#EBF2FF;color:#2563EB;white-space:nowrap;}
 .badge-none{color:#CCC;font-size:14.4px;}
-.badge-app-on{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:13.2px;font-weight:600;background:#F0FDF4;color:#16A34A;white-space:nowrap;}
-.badge-app-off{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:13.2px;font-weight:600;background:#FFF3E0;color:#E07800;white-space:nowrap;}
+.app-joined{color:#333;font-size:13.2px;}
+.app-not-joined{color:#E5405E;font-size:13.2px;}
 
 /* 다제약물 상태 */
 .poly-check{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:13.2px;font-weight:600;background:#FFF3E0;color:#E07800;white-space:nowrap;cursor:pointer;border:none;font-family:inherit;}
@@ -160,7 +164,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
   </div>
   <div class="lnb-bottom">
     <div class="lnb-user">
-      <div class="lnb-avatar">추</div>
+      <div class="lnb-avatar">김</div>
       <div>
         <div class="lnb-username">김체크 약사</div>
         <div class="lnb-pharmacy">하나누리 약국</div>
@@ -173,8 +177,10 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
   </div>
 </nav>
 
+<button class="lnb-collapse-btn" id="lnbCollapseBtn" onclick="toggleLnbCollapse()">‹</button>
+
 <!-- MAIN -->
-<main class="main">
+<main class="main" id="mainContent">
   <div class="page-hd">
     <div class="page-hd-top">
       <div>
@@ -203,7 +209,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
             <th class="sort">최근 방문일시 ↓</th>
             <th>고객명</th>
             <th>단골</th>
-            <th>웰체크 앱</th>
+            <th>웰체크 가입 여부</th>
             <th class="sort">생년월일 ⇅</th>
             <th>휴대전화 번호</th>
             <th>성별</th>
@@ -303,7 +309,7 @@ function render() {
       <td class="td-date">${r.date}</td>
       <td class="td-name ${r.regular ? 'regular' : 'muted'}">${r.name}</td>
       <td>${r.regular ? `<span class="badge-regular">단골</span>` : `<span class="badge-none">—</span>`}</td>
-      <td>${r.appInstalled ? `<span class="badge-app-on">설치됨</span>` : `<span class="badge-app-off">미설치</span>`}</td>
+      <td>${r.appInstalled ? `<span class="app-joined">가입 완료</span>` : `<span class="app-not-joined">미가입</span>`}</td>
       <td>${r.birth}</td>
       <td>${r.phone}</td>
       <td>${r.gender}</td>
@@ -321,6 +327,16 @@ function render() {
   `).join('');
 }
 render();
+
+function toggleLnbCollapse() {
+  var lnb = document.querySelector('.lnb');
+  var main = document.getElementById('mainContent');
+  var btn = document.getElementById('lnbCollapseBtn');
+  var collapsed = lnb.classList.toggle('collapsed');
+  main.classList.toggle('expanded', collapsed);
+  btn.classList.toggle('collapsed', collapsed);
+  btn.textContent = collapsed ? '›' : '‹';
+}
 
 function openModalFrame() {
   var f = document.getElementById('modalFrame');

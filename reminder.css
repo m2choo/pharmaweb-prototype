@@ -6,7 +6,6 @@
 .rm-row-body{flex:1;min-width:0;overflow:hidden;}
 .rm-row-top{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
 .rm-row-hospital{font-size:16px;font-weight:700;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.rm-row-dept{font-size:13px;color:#888;white-space:nowrap;flex-shrink:0;}
 .rm-row-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .rm-chevron{transition:transform .15s;color:#999;flex-shrink:0;}
 .rm-row.open .rm-chevron{transform:rotate(180deg);color:#2563EB;}

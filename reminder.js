@@ -79,7 +79,7 @@ function renderReminderBody() {
 
     var row = '<div class="rm-row' + (isOpen ? ' open' : '') + '" onclick="rmToggleExpand(\'' + id + '\')">'
       + '<div class="rm-row-body">'
-      + '<div class="rm-row-top"><span class="rm-row-hospital">' + rx.hospital + '</span><span class="rm-row-dept">' + rx.dept + '</span></div>'
+      + '<div class="rm-row-top"><span class="rm-row-hospital">' + rx.hospital + '</span></div>'
       + '</div>'
       + '<div class="rm-row-right">'
       + sourceChip
@@ -115,9 +115,9 @@ function renderReminderBody() {
     + (itemsHTML || '<div class="rm-empty-tip">설정할 처방전이 없습니다.</div>');
 
   F.innerHTML = ''
-    + '<button class="btn-cancel is-back" onclick="goBackToStep1()">← 이전</button>'
+    + '<button class="btn-cancel is-back" onclick="goBackToStep1()">이전</button>'
     + '<button class="btn-cancel" onclick="goStep2Skip()">이 단계 건너뛰기</button>'
-    + '<button class="btn-next" onclick="goStep3()">다음 단계 →</button>';
+    + '<button class="btn-next" onclick="goStep3()">다음</button>';
 }
 
 function rmToggleExpand(id) {

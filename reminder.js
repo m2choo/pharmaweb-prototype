@@ -43,7 +43,7 @@ function goStep2() {
   if (!selectedRxIds.length && !(selectedCustomer && selectedCustomer.isNew)) return;
   var keptIds = selectedRxIds.filter(function(id) {
     var rx = PRESCRIPTIONS.find(function(r) { return r.id === id; });
-    return rx && rx.source === 'here';
+    return rx && !getDispenseBlockReason(rx);
   });
   rmExcludedCount = selectedRxIds.length - keptIds.length;
   selectedRxIds = keptIds;
@@ -69,30 +69,30 @@ function renderReminderBody() {
         return '<option value="' + n + '"' + (s.times === n ? ' selected' : '') + '>' + n + '회</option>';
       }).join('') + '</select>';
     var slotChecks = ['아침', '점심', '저녁', '취침전'].map(function(t) {
-      return '<label class="rm-check" onclick="event.stopPropagation();"><input type="checkbox" ' + (s.slots.has(t) ? 'checked' : '') + ' onchange="rmToggleSlot(\'' + id + '\',\'' + t + '\')">' + t + '</label>';
+      return '<div class="rm-slotchip' + (s.slots.has(t) ? ' active' : '') + '" onclick="event.stopPropagation();rmToggleSlot(\'' + id + '\',\'' + t + '\')">' + t + '</div>';
     }).join('');
     var timingSelect = '<select class="rm-select" onclick="event.stopPropagation();" onchange="rmSetTiming(\'' + id + '\',this.value)">'
       + ['식전', '식후', '식후 30분'].map(function(t) {
         return '<option value="' + t + '"' + (s.timing === t ? ' selected' : '') + '>' + t + '</option>';
       }).join('') + '</select>';
-    var summaryChip = s.enabled ? (s.times + '회 · ' + s.days + '일분') : '전송 안 함';
+    var sourceChip = '<span class="s2-rx-src-chip' + (rx.source !== 'here' ? ' ' + rx.source : '') + '">' + RX_SOURCE_LABEL[rx.source] + '</span>';
 
     var row = '<div class="rm-row' + (isOpen ? ' open' : '') + '" onclick="rmToggleExpand(\'' + id + '\')">'
       + '<div class="rm-row-body">'
       + '<div class="rm-row-top"><span class="rm-row-hospital">' + rx.hospital + '</span><span class="rm-row-dept">' + rx.dept + '</span></div>'
       + '</div>'
       + '<div class="rm-row-right">'
-      + '<span class="rm-chip">' + summaryChip + '</span>'
+      + sourceChip
       + '<label class="rm-switch" onclick="event.stopPropagation();"><input type="checkbox" ' + (s.enabled ? 'checked' : '') + ' onchange="rmToggleEnabled(\'' + id + '\')"><span class="rm-slider"></span></label>'
       + chevronSVG
       + '</div></div>';
 
     var panel = '<div class="rm-panel' + (isOpen ? ' open' : '') + (s.enabled ? '' : ' disabled') + '">'
-      + '<div class="rm-2col">'
+      + '<div class="rm-3col">'
       + '<div class="rm-field"><div class="rm-field-label">복약 횟수</div>' + timesSelect + '</div>'
+      + '<div class="rm-field"><div class="rm-field-label">복약 시간</div><div class="rm-slot-group">' + slotChecks + '</div></div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 시점</div>' + timingSelect + '</div>'
       + '</div>'
-      + '<div class="rm-field"><div class="rm-field-label">복약 시간</div><div class="rm-checks">' + slotChecks + '</div></div>'
       + '<div class="rm-2col">'
       + '<div class="rm-field"><div class="rm-field-label">복약 시작일</div><input class="rm-date-input" type="date" value="' + s.startDate + '" onclick="event.stopPropagation();" onchange="rmSetStartDate(\'' + id + '\',this.value)"></div>'
       + '<div class="rm-field"><div class="rm-field-label">복약 기간</div><div class="rm-days-ctrl">'
@@ -107,11 +107,11 @@ function renderReminderBody() {
   }).join('');
 
   var excludedNotice = rmExcludedCount > 0
-    ? '<p style="font-size:12px;color:var(--color-red);margin-bottom:8px;">타 약국·고객 기록 처방전 ' + rmExcludedCount + '건 제외됨</p>'
+    ? '<p style="font-size:13px;color:var(--color-red);margin-bottom:8px;">조제 불가 처방전(타 약국·고객 기록·이미 조제 완료·조제 기한 경과) ' + rmExcludedCount + '건 제외됨</p>'
     : '';
 
   B.innerHTML = excludedNotice
-    + '<p style="font-size:12px;color:var(--color-grey-500);margin-bottom:14px;line-height:1.6;">환자의 웰체크 앱에 알림이 자동 등록됩니다.<br>처방전을 클릭하면 알림을 수정할 수 있고, 토글로 알림 설정을 끌 수 있습니다.</p>'
+    + '<p style="font-size:13px;color:var(--color-grey-500);margin-bottom:14px;line-height:1.6;">처방전을 클릭하면 알림을 수정할 수 있고, 토글로 알림 설정을 끌 수 있습니다. 환자의 웰체크 앱에 알림이 자동 등록됩니다.</p>'
     + (itemsHTML || '<div class="rm-empty-tip">설정할 처방전이 없습니다.</div>');
 
   F.innerHTML = ''

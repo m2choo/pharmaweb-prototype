@@ -52,6 +52,9 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .modal-pt.on{display:flex;}
 .modal-pt-avatar{width:40px;height:40px;border-radius:50%;background:#EEF0F3;color:var(--color-grey-500);font-size:18px;font-weight:500;letter-spacing:-0.72px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-pt-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);}
+.modal-pt-name-edit{width:22px;height:22px;padding:0;margin-left:2px;background:none;border:none;border-radius:5px;color:var(--color-grey-400);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;}
+.modal-pt-name-edit:hover{background:var(--color-blue-100);color:var(--color-primary);}
+.modal-pt-name-input{width:110px;height:26px;padding:0 6px;border:1.5px solid var(--color-primary);border-radius:5px;font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);font-family:inherit;outline:none;vertical-align:middle;}
 .modal-pt-info{font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);margin-left:4px;}
 .modal-pt-remove{margin-left:auto;width:28px;height:28px;padding:0;background:none;border:none;border-radius:6px;color:var(--color-grey-500);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-pt-remove:hover{background:#FFF4F5;color:var(--color-red);}
@@ -74,6 +77,10 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 #modalPt.on ~ .step-tabs ~ #mbody .s1-search-wrap,
 #modalPt.on ~ .step-tabs ~ #mbody .s1-error-msg{display:none!important;}
 .s1-error-msg{font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-red);margin-top:-10px;margin-bottom:12px;padding:0 2px;}
+/* TEMP-DEV-ONLY: 최종 발표 전 이 블록과 관련 마크업/함수 호출 삭제할 것 */
+.dev-quickpick{display:flex;gap:8px;margin-bottom:10px;}
+.dev-quickpick-btn{height:30px;padding:0 12px;border:1.5px dashed #F5AC1F;border-radius:6px;background:#FFFAE9;color:#8A6D1F;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;}
+.dev-quickpick-btn:hover{background:#FFF3C4;}
 .s1-search-wrap{position:relative;margin-bottom:16px;}
 .s1-search{width:100%;height:40px;box-sizing:border-box;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 36px 0 12px;font-size:12px;font-weight:500;font-family:inherit;outline:none;}
 .s1-search:focus{border-color:var(--color-primary);}
@@ -198,6 +205,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .s2-poly-alert-icon{width:20px;height:20px;border-radius:50%;background:var(--color-red);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .s2-poly-alert-icon span{font-size:13px;font-weight:900;color:var(--color-white);line-height:1;}
 .s2-poly-alert-txt{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-red);}
+.s2-dispense-blocked{display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--color-grey-100);color:var(--color-grey-600);font-size:13px;font-weight:500;letter-spacing:-0.26px;}
+.s2-dispense-blocked svg{flex-shrink:0;color:var(--color-grey-500);}
 
 /* ── Step 3 복약지도 전송 ── */
 .s4-grid{display:grid;grid-template-columns:250px 1fr;gap:20px;}
@@ -228,6 +237,9 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .sum-tbl td{padding:11px 12px;font-size:15px;font-weight:400;letter-spacing:-0.6px;vertical-align:middle;}
 .sum-tbl td:first-child{background:var(--color-grey-100);color:var(--color-grey-600);width:100px;white-space:nowrap;text-align:center;}
 .sum-tbl td:last-child{color:var(--color-grey-700);font-weight:400;}
+.s4-name-edit-btn{width:20px;height:20px;padding:0;margin-left:2px;background:none;border:none;border-radius:5px;color:var(--color-grey-400);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;}
+.s4-name-edit-btn:hover{background:var(--color-blue-100);color:var(--color-primary);}
+.s4-name-input{width:120px;height:28px;padding:0 6px;border:1.5px solid var(--color-primary);border-radius:5px;font-size:15px;font-family:inherit;color:var(--color-grey-700);outline:none;}
 .s4-phone-input{width:100%;height:36px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 10px;font-size:12px;font-weight:500;font-family:inherit;outline:none;margin-top:4px;}
 .s4-phone-input:focus{border-color:var(--color-primary);}
 .s4-birth-input{width:100%;height:36px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 10px;font-size:12px;font-weight:500;font-family:inherit;outline:none;margin-top:4px;color:var(--color-grey-800);}
@@ -364,6 +376,10 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
         <div class="modal-pt-avatar" id="ptAvatar"></div>
         <div>
           <span class="modal-pt-name" id="ptName"></span>
+          <!-- component: button/ghost -->
+          <button class="modal-pt-name-edit" id="ptNameEdit" data-figma="button/ghost" style="display:none" onclick="editCustomerName()" title="이름 수정">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </button>
           <span class="modal-pt-info" id="ptInfo"></span>
         </div>
         <!-- component: button/ghost -->
@@ -576,7 +592,7 @@ function openModalAtStep2(customerData) {
   };
   selectedCustomer = matched;
   const info = matched.age ? `${matched.age}세 · ${matched.gender} · ${matched.phone}` : `${matched.birth || ''} · ${matched.phone}`;
-  setCustomerHeader(matched.name, info, customerData.visitInfo || '방문 이력');
+  setCustomerHeader(matched.name, info, customerData.visitInfo || '방문 이력', false);
 
   // 해당 행의 처방전 1건만 선택 (가장 최근 처방전)
   var targetRx = PRESCRIPTIONS[0];
@@ -787,6 +803,11 @@ function renderStep1() {
   const B = document.getElementById('mbody');
   const F = document.getElementById('mfoot');
   B.innerHTML = `
+    <!-- TEMP-DEV-ONLY: 고객 검색 없이 바로 채우는 테스트용 버튼. 최종 발표 전 삭제할 것 -->
+    <div class="dev-quickpick">
+      <button type="button" class="dev-quickpick-btn" onclick="selectCustomer()">⚡ 단골(테스트)</button>
+      <button type="button" class="dev-quickpick-btn" onclick="addNewCustomerByName('테스트고객')">⚡ 신규(테스트)</button>
+    </div>
     <div class="s1-search-wrap" id="s1searchWrap">
       <input class="s1-search" id="s1input" data-figma="search/default" type="text" placeholder="고객 이름 또는 휴대전화 번호를 검색하세요." oninput="onSearch(this.value)" autocomplete="off">
       <span class="s1-search-icon">
@@ -863,14 +884,83 @@ function onSearch(val) {
   dd.innerHTML = (noMatchMsg + addRowHTML + matchedHTML + addLinkHTML) || `<div class="s1-empty-dd"><div class="s1-empty-dd-msg">이름 또는 전화번호를 2자 이상 입력해 주세요</div></div>`;
 }
 
-function setCustomerHeader(name, info, pzVisitTxt) {
+function setCustomerHeader(name, info, pzVisitTxt, isNew) {
   const pt = document.getElementById('modalPt');
   document.getElementById('ptAvatar').textContent = name.charAt(0);
   document.getElementById('ptName').textContent = name;
   document.getElementById('ptInfo').textContent = info;
   pt.classList.add('on');
+  document.getElementById('ptNameEdit').style.display = isNew ? '' : 'none';
   document.getElementById('pzName').innerHTML = name + `<span class="pz-name-sub" id="pzSub">${info ? ' (' + info.split('·')[0].trim() + ')' : ''}</span>`;
   document.getElementById('pzVisit').textContent = pzVisitTxt;
+}
+
+function syncCustomerNameDisplays() {
+  document.getElementById('ptAvatar').textContent = selectedCustomer.name.charAt(0);
+  const ptNameEl = document.getElementById('ptName');
+  if (ptNameEl) ptNameEl.textContent = selectedCustomer.name;
+  const pzSub = document.getElementById('pzSub');
+  const pzNameEl = document.getElementById('pzName');
+  if (pzNameEl) pzNameEl.innerHTML = selectedCustomer.name + (pzSub ? pzSub.outerHTML : '');
+}
+
+function commitNameInput(input) {
+  const v = input.value.trim();
+  if (v.length >= 2 && !/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z\s]/.test(v)) {
+    selectedCustomer.name = v;
+  }
+}
+
+function editCustomerName() {
+  if (!selectedCustomer || !selectedCustomer.isNew) return;
+  const span = document.getElementById('ptName');
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'modal-pt-name-input';
+  input.value = selectedCustomer.name;
+  span.replaceWith(input);
+  input.focus();
+  input.select();
+
+  function commit() {
+    commitNameInput(input);
+    const newSpan = document.createElement('span');
+    newSpan.className = 'modal-pt-name';
+    newSpan.id = 'ptName';
+    newSpan.textContent = selectedCustomer.name;
+    input.replaceWith(newSpan);
+    syncCustomerNameDisplays();
+    if (currentStep === 4) {
+      const savedState = captureStep4FormState();
+      goStep4();
+      restoreStep4FormState(savedState);
+    }
+  }
+  input.addEventListener('blur', commit);
+  input.addEventListener('keydown', function(e) { if (e.key === 'Enter') input.blur(); });
+}
+
+function editCustomerNameInTable() {
+  if (!selectedCustomer || !selectedCustomer.isNew) return;
+  const span = document.getElementById('s4nameText');
+  if (!span) return;
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 's4-name-input';
+  input.value = selectedCustomer.name;
+  span.replaceWith(input);
+  input.focus();
+  input.select();
+
+  function commit() {
+    commitNameInput(input);
+    syncCustomerNameDisplays();
+    const savedState = captureStep4FormState();
+    goStep4();
+    restoreStep4FormState(savedState);
+  }
+  input.addEventListener('blur', commit);
+  input.addEventListener('keydown', function(e) { if (e.key === 'Enter') input.blur(); });
 }
 
 function hideSearchSection() {
@@ -880,7 +970,7 @@ function hideSearchSection() {
 
 function selectCustomer() {
   selectedCustomer = KIMCHECK;
-  setCustomerHeader(KIMCHECK.name, `${KIMCHECK.age}세 · ${KIMCHECK.gender} · ${KIMCHECK.phone}`, '3회 방문  최근 26.06.22 · 처방전 8건');
+  setCustomerHeader(KIMCHECK.name, `${KIMCHECK.age}세 · ${KIMCHECK.gender} · ${KIMCHECK.phone}`, '3회 방문  최근 26.06.22 · 처방전 8건', false);
   const B = document.getElementById('mbody');
   B.innerHTML = '<div id="rxSection"></div>';
   renderRxSection();
@@ -897,7 +987,7 @@ function addNewCustomerByName(name) {
     return;
   }
   selectedCustomer = { name, birth: null, gender: '-', phone: '-', age: null, isNew: true };
-  setCustomerHeader(name, '정보 없음', '방문 이력 없음');
+  setCustomerHeader(name, '정보 없음', '방문 이력 없음', true);
   const B2 = document.getElementById('mbody');
   B2.innerHTML = '<div id="rxSection"></div>';
   renderRxSection();
@@ -905,7 +995,7 @@ function addNewCustomerByName(name) {
 
 const PRESCRIPTIONS = [
   {
-    id: 'rx5', date: '2026.07.06', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90, source: 'here',
+    id: 'rx5', date: '2026.07.18', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90, source: 'here',
     drugs: [
       { name: '아토르바스타틴정 10mg', ingredient: '아토르바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
       { name: '메트포르민염산염정 500mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 2회', days: 90, sub: false },
@@ -916,14 +1006,14 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx4', date: '2026.07.06', hospital: '네모안과의원', dept: '안과', doctor: '이의사', days: 7, source: 'other',
+    id: 'rx4', date: '2026.07.18', hospital: '네모안과의원', dept: '안과', doctor: '이의사', days: 7, source: 'other',
     drugs: [
       { name: '오플록사신점안액 0.3%', ingredient: '오플록사신', dosage: '1~2방울', freq: '1일 4회', days: 7, sub: false },
       { name: '케토롤락트로메타민점안액 0.5%', ingredient: '케토롤락트로메타민', dosage: '1방울', freq: '1일 4회', days: 7, sub: true },
     ]
   },
   {
-    id: 'rx3', date: '2026.07.05', hospital: '엠서클의원', dept: '내과', doctor: '정의사', days: 90, source: 'patient',
+    id: 'rx3', date: '2026.07.17', hospital: '엠서클의원', dept: '내과', doctor: '정의사', days: 90, source: 'patient',
     drugs: [
       { name: '글리메피리드정 2mg', ingredient: '글리메피리드', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
       { name: '로수바스타틴정 10mg', ingredient: '로수바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: true },
@@ -932,7 +1022,7 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx2', date: '2026.07.02', hospital: '세모가정의학과의원', dept: '가정의학과', doctor: '최의사', days: 30, source: 'here',
+    id: 'rx2', date: '2026.07.14', hospital: '세모가정의학과의원', dept: '가정의학과', doctor: '최의사', days: 30, source: 'here', dispensed: true,
     drugs: [
       { name: '에소메프라졸마그네슘삼수화물캡슐 20mg', ingredient: '에소메프라졸마그네슘', dosage: '1캡슐', freq: '1일 1회', days: 30, sub: false },
       { name: '돔페리돈정 10mg', ingredient: '돔페리돈', dosage: '1정', freq: '1일 3회', days: 30, sub: false },
@@ -941,7 +1031,7 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx1', date: '2026.06.29', hospital: '네모네모정형외과의원', dept: '정형외과', doctor: '이의사', days: 5, source: 'other',
+    id: 'rx1', date: '2026.07.11', hospital: '네모네모정형외과의원', dept: '정형외과', doctor: '이의사', days: 5, source: 'other',
     drugs: [
       { name: '세레콕시브캡슐 200mg', ingredient: '세레콕시브', dosage: '1캡슐', freq: '1일 1회', days: 5, sub: false },
       { name: '티잔이딘염산염정 2mg', ingredient: '티잔이딘염산염', dosage: '1정', freq: '1일 3회', days: 5, sub: true },
@@ -949,7 +1039,7 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx0c', date: '2026.06.30', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90, source: 'here',
+    id: 'rx0c', date: '2026.07.12', hospital: '웰체크내과의원', dept: '내과', doctor: '김의사', days: 90, source: 'here',
     drugs: [
       { name: '아토르바스타틴정 10mg', ingredient: '아토르바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
       { name: '메트포르민염산염정 500mg', ingredient: '메트포르민염산염', dosage: '1정', freq: '1일 2회', days: 90, sub: false },
@@ -958,14 +1048,14 @@ const PRESCRIPTIONS = [
     ]
   },
   {
-    id: 'rx0b', date: '2026.06.27', hospital: '세모가정의학과의원', dept: '가정의학과', doctor: '최의사', days: 30, source: 'patient',
+    id: 'rx0b', date: '2026.07.09', hospital: '세모가정의학과의원', dept: '가정의학과', doctor: '최의사', days: 30, source: 'patient',
     drugs: [
       { name: '에소메프라졸마그네슘삼수화물캡슐 20mg', ingredient: '에소메프라졸마그네슘', dosage: '1캡슐', freq: '1일 1회', days: 30, sub: false },
       { name: '돔페리돈정 10mg', ingredient: '돔페리돈', dosage: '1정', freq: '1일 3회', days: 30, sub: false },
     ]
   },
   {
-    id: 'rx0a', date: '2026.06.25', hospital: '엠서클의원', dept: '내과', doctor: '정의사', days: 90, source: 'other',
+    id: 'rx0a', date: '2026.07.07', hospital: '엠서클의원', dept: '내과', doctor: '정의사', days: 90, source: 'other',
     drugs: [
       { name: '글리메피리드정 2mg', ingredient: '글리메피리드', dosage: '1정', freq: '1일 1회', days: 90, sub: false },
       { name: '로수바스타틴정 10mg', ingredient: '로수바스타틴칼슘', dosage: '1정', freq: '1일 1회', days: 90, sub: true },
@@ -990,6 +1080,15 @@ function parseRxDate(dateStr) {
 }
 
 const RX_SOURCE_LABEL = { here: '우리 약국', other: '타 약국', patient: '고객 기록' };
+
+function getDispenseBlockReason(rx) {
+  if (rx.source !== 'here') return '우리 약국으로 접수된 처방전만 조제할 수 있습니다. 조제 내역 수정이 불가합니다.';
+  if (rx.dispensed) return '이미 조제 완료한 처방전입니다.';
+  var cutoff7d = new Date();
+  cutoff7d.setDate(cutoff7d.getDate() - 7);
+  if (parseRxDate(rx.date) < cutoff7d) return '처방일로부터 7일이 지나 조제할 수 없습니다.';
+  return null;
+}
 
 function buildRxGroupHTML(groups) {
   const chevronSVG = `<svg class="s2-rx-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
@@ -1039,8 +1138,8 @@ function renderRxSection(preserveSelection) {
     S.innerHTML = `
       <label class="s2-label">처방전 선택 <span style="color:var(--color-grey-500);font-weight:400;">(최근 6개월 · 복수 선택 가능)</span></label>
       <div class="s2-empty-tip">
-        <div style="font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-600);margin-bottom:6px;">확인되는 처방전이 없습니다</div>
-        <div style="font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-400);line-height:1.7;">신규로 추가된 고객은 아직 처방 이력이 없습니다.<br>지속적으로 복약 상태를 추적 관리하시려면<br>단골 고객으로 연결해 주세요.</div>
+        <div style="font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-600);margin-bottom:6px;">처방전을 확인할 수 없습니다</div>
+        <div style="font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-400);line-height:1.7;">신규 고객은 처방전을 조회할 수 없습니다.<br>지속적으로 복약 상태를 추적 관리하시려면 단골 고객으로 연결해 주세요.<br>지금 진행한 복약 상담 내용은 요약해서 환자에게 보내드릴 수 있습니다.</div>
       </div>
     `;
     document.getElementById('btnNext').disabled = false;
@@ -1127,6 +1226,11 @@ function goBackToStep1() {
   const F = document.getElementById('mfoot');
   const hidden = selectedCustomer ? 'style="display:none"' : '';
   B.innerHTML = `
+    <!-- TEMP-DEV-ONLY: 고객 검색 없이 바로 채우는 테스트용 버튼. 최종 발표 전 삭제할 것 -->
+    <div class="dev-quickpick" ${hidden}>
+      <button type="button" class="dev-quickpick-btn" onclick="selectCustomer()">⚡ 단골(테스트)</button>
+      <button type="button" class="dev-quickpick-btn" onclick="addNewCustomerByName('테스트고객')">⚡ 신규(테스트)</button>
+    </div>
     <div class="s1-search-wrap" id="s1searchWrap" ${hidden}>
       <input class="s1-search" id="s1input" data-figma="search/default" type="text" placeholder="고객 이름 또는 휴대전화 번호를 검색하세요." oninput="onSearch(this.value)" autocomplete="off">
       <span class="s1-search-icon">
@@ -1208,7 +1312,7 @@ function updatePolyAlert() {
   el.innerHTML = qualifyingCount >= 10 ? `
     <div class="s2-poly-alert" style="margin-bottom:14px;">
       <div class="s2-poly-alert-icon"><span>!</span></div>
-      <span class="s2-poly-alert-txt">다제약물관리사업 대상자 확인이 필요합니다</span>
+      <span class="s2-poly-alert-txt">다제약물관리사업 대상자 확인이 필요합니다(10종 이상의 약물을 3개월 이상 지속 복용)</span>
     </div>` : '';
 }
 
@@ -1229,12 +1333,22 @@ function renderDrugTableHTML(rx) {
   const drugs = editingDrugsMap[rx.id] || [];
   const hasSub = drugs.some(d => d.sub);
   const origDrugs = rx.drugs;
+  const blockReason = getDispenseBlockReason(rx);
 
   const drugRows = drugs.map((d, i) => {
     const changed = JSON.stringify(d) !== JSON.stringify(origDrugs[i]);
     const isNew = i >= origDrugs.length;
     const badge = (changed || isNew) ? `<span class="s2-changed-badge" data-figma="new/tag-medium">${isNew ? '추가' : '변경'}</span>` : '';
     const usageLine = `1회 ${d.dosage}, ${d.freq.replace('1일', '하루')}`;
+    const actionCell = blockReason ? '' : `
+        <!-- component: button/ghost -->
+        <button class="s2-row-edit-btn" data-figma="button/ghost" onclick="openEditRow('${rx.id}',${i})" title="편집">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </button>
+        <!-- component: button/ghost -->
+        <button class="s2-row-del-btn" data-figma="button/ghost" onclick="deleteDrug('${rx.id}',${i})" title="삭제">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>`;
     return `
     <tr id="drow_${rx.id}_${i}">
       <td>${i + 1}</td>
@@ -1243,18 +1357,31 @@ function renderDrugTableHTML(rx) {
         <div class="s2-drug-sub">${usageLine}</div>
       </td>
       <td>${d.days}일분</td>
-      <td class="td-action">
-        <!-- component: button/ghost -->
-        <button class="s2-row-edit-btn" data-figma="button/ghost" onclick="openEditRow('${rx.id}',${i})" title="편집">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-        </button>
-        <!-- component: button/ghost -->
-        <button class="s2-row-del-btn" data-figma="button/ghost" onclick="deleteDrug('${rx.id}',${i})" title="삭제">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </td>
+      <td class="td-action">${actionCell}</td>
     </tr>`;
   }).join('');
+
+  if (blockReason) {
+    return `
+    <div class="s2-rx-box">
+      <table class="s2-drug-table">
+        <thead>
+          <tr>
+            <th>NO</th>
+            <th>약명</th>
+            <th>복용일</th>
+            <th class="th-action"></th>
+          </tr>
+        </thead>
+        <tbody id="drugTbody_${rx.id}">${drugRows}</tbody>
+      </table>
+      <div class="s2-dispense-blocked">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V7a4 4 0 018 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span>${blockReason}</span>
+      </div>
+    </div>
+    `;
+  }
 
   return `
     <div class="s2-rx-box">
@@ -1506,7 +1633,7 @@ function goStep3() {
 function appendJoinNoteIfNew(text) {
   if (!(selectedCustomer && selectedCustomer.isNew)) return text;
   if (text.includes('웰체크 앱 가입 안내')) return text;
-  return text + '\n\n[웰체크 앱 가입 안내]\n지속적인 건강 관리의 시작, 웰체크 앱과 함께하세요. 우리 약국을 단골 약국으로 연결하시면 더 편리해집니다.\nhttps://wellcheck.co.kr/join?ref=pharmacy';
+  return text + '\n\n[웰체크 앱 가입 안내]\n지속적인 건강 관리의 시작, 웰체크 앱과 함께하세요.\n우리 약국을 단골 약국으로 연결하시면 더 편리해집니다.\nhttps://wellcheck.co.kr/join?ref=pharmacy';
 }
 
 function stripJoinNote(text) {
@@ -1530,6 +1657,57 @@ function renderMsgBody() {
     + '<button class="btn-next" data-figma="button/solid" onclick="goStep4()">다음</button>';
 }
 
+function formatPhoneInput(el) {
+  var digits = el.value.replace(/[^0-9]/g, '').slice(0, 11);
+  var out = digits;
+  if (digits.length > 7) {
+    out = digits.slice(0, 3) + '-' + digits.slice(3, 7) + '-' + digits.slice(7);
+  } else if (digits.length > 3) {
+    out = digits.slice(0, 3) + '-' + digits.slice(3);
+  }
+  el.value = out;
+}
+
+function formatBirthInput(el) {
+  var digits = el.value.replace(/[^0-9]/g, '').slice(0, 8);
+  var out = digits;
+  if (digits.length > 6) {
+    out = digits.slice(0, 4) + '-' + digits.slice(4, 6) + '-' + digits.slice(6);
+  } else if (digits.length > 4) {
+    out = digits.slice(0, 4) + '-' + digits.slice(4);
+  }
+  el.value = out;
+
+  var ageCell = document.getElementById('s4ageCell');
+  if (!ageCell) return;
+  if (digits.length === 8) {
+    var age = calcAgeFromBirthDigits(digits);
+    if (age < 0 || age > 120 || isNaN(age)) {
+      if (selectedCustomer) selectedCustomer.age = null;
+      ageCell.textContent = '—';
+    } else {
+      if (selectedCustomer) selectedCustomer.age = age;
+      ageCell.textContent = age + '세';
+    }
+  } else {
+    if (selectedCustomer) selectedCustomer.age = null;
+    ageCell.textContent = '—';
+  }
+}
+
+function calcAgeFromBirthDigits(digits) {
+  var y = parseInt(digits.slice(0, 4), 10);
+  var mo = parseInt(digits.slice(4, 6), 10) - 1;
+  var d = parseInt(digits.slice(6, 8), 10);
+  var birth = new Date(y, mo, d);
+  var today = new Date();
+  var age = today.getFullYear() - birth.getFullYear();
+  var hadBirthdayThisYear = (today.getMonth() > birth.getMonth()) ||
+    (today.getMonth() === birth.getMonth() && today.getDate() >= birth.getDate());
+  if (!hadBirthdayThisYear) age--;
+  return age;
+}
+
 function goStep4() {
   currentStep = 4;
   setStepTab(4);
@@ -1540,16 +1718,16 @@ function goStep4() {
 
   var previewMsg = s3Msg;
   if (isNew) {
-    var linkNote = '\n\n[웰체크 앱 가입 안내]\n지속적인 건강 관리의 시작, 웰체크 앱과 함께하세요. 우리 약국을 단골 약국으로 연결하시면 더 편리해집니다.\nhttps://wellcheck.co.kr/join?ref=pharmacy';
+    var linkNote = '\n\n[웰체크 앱 가입 안내]\n지속적인 건강 관리의 시작, 웰체크 앱과 함께하세요.\n우리 약국을 단골 약국으로 연결하시면 더 편리해집니다.\nhttps://wellcheck.co.kr/join?ref=pharmacy';
     if (!previewMsg.includes('웰체크 앱 가입 안내')) previewMsg += linkNote;
   }
 
   var phoneRow = isNew
-    ? '<tr><td>휴대폰 번호</td><td><input class="s4-phone-input" id="s4phone" type="tel" placeholder="010-0000-0000"></td></tr>'
+    ? '<tr><td>휴대폰 번호</td><td><input class="s4-phone-input" id="s4phone" type="tel" placeholder="숫자만 입력해 주세요 (예:01012345678)" maxlength="13" oninput="formatPhoneInput(this)"></td></tr>'
     : '<tr><td>휴대폰 번호</td><td>' + c.phone + '</td></tr>';
 
   var birthRow = isNew
-    ? '<tr><td>생년월일<span class="s4-opt-label">(선택)</span></td><td><input class="s4-birth-input" id="s4birth" type="text" placeholder="예) 1990-01-01"></td></tr>'
+    ? '<tr><td>생년월일<span class="s4-opt-label">(선택)</span></td><td><input class="s4-birth-input" id="s4birth" type="text" placeholder="숫자만 입력해 주세요 (예:19990101)" maxlength="10" oninput="formatBirthInput(this)"></td></tr>'
     : '<tr><td>생년월일</td><td>' + (c.birth || '—') + '</td></tr>';
 
   var regularRow = isNew
@@ -1561,14 +1739,18 @@ function goStep4() {
     ? reminderCount + '건 설정 (웰체크 앱 자동 등록)'
     : '<span style="color:var(--color-grey-400);">설정 안 함</span>') + '</td></tr>';
 
+  var previewTitle = isNew ? '카카오 알림톡 미리보기' : '웰체크 메시지 미리보기';
+
   B.innerHTML = '<div class="prev-grid">'
-    + '<div><div class="tag-ttl" style="margin-bottom:10px">카카오 알림톡 미리보기</div>'
+    + '<div><div class="tag-ttl" style="margin-bottom:10px">' + previewTitle + '</div>'
     + '<div class="prev-phone" data-figma="new/chat-bubble"><div class="prev-msg">' + previewMsg.replace(/</g,'&lt;').replace(/\n/g,'<br>') + '</div></div></div>'
     + '<div><div class="tag-ttl" style="margin-bottom:10px">전송 요약</div>'
     + '<table class="sum-tbl">'
-    + '<tr><td>고객명</td><td>' + c.name + '</td></tr>'
+    + '<tr><td>고객명</td><td><span id="s4nameText">' + c.name + '</span>' + (isNew
+        ? ' <button type="button" class="s4-name-edit-btn" onclick="editCustomerNameInTable()" title="이름 수정"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>'
+        : '') + '</td></tr>'
     + birthRow
-    + '<tr><td>나이</td><td>' + (c.age !== '-' && c.age !== undefined ? c.age + '세' : '—') + '</td></tr>'
+    + '<tr><td>나이</td><td id="s4ageCell">' + (c.age !== '-' && c.age != null ? c.age + '세' : '—') + '</td></tr>'
     + '<tr><td>성별</td><td>' + (c.gender !== '-' ? c.gender : '—') + '</td></tr>'
     + phoneRow
     + regularRow
@@ -1588,6 +1770,26 @@ function goStep4() {
     + '<button class="btn-cancel is-back" data-figma="button/outlined-secondary" onclick="renderMsgBody();setStepTab(3);currentStep=3;">← 이전</button>'
     + '<button class="btn-cancel" data-figma="button/outlined" onclick="saveDraft()" style="color:var(--color-primary);border-color:var(--color-primary);">임시저장</button>'
     + '<button id="btn-send-final" class="btn-next btn-send" data-figma="button/solid" onclick="sendFinal()"' + sendBtnStyle + '><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14.5 1.5L7.5 8.5M14.5 1.5L10 14.5L7.5 8.5M14.5 1.5L1.5 6L7.5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>전송하기</button>';
+}
+
+function captureStep4FormState() {
+  var phoneEl = document.getElementById('s4phone');
+  var birthEl = document.getElementById('s4birth');
+  var consentEl = document.getElementById('consent-chk');
+  return {
+    phone: phoneEl ? phoneEl.value : null,
+    birth: birthEl ? birthEl.value : null,
+    consent: consentEl ? consentEl.checked : false
+  };
+}
+
+function restoreStep4FormState(state) {
+  var phoneEl = document.getElementById('s4phone');
+  var birthEl = document.getElementById('s4birth');
+  var consentEl = document.getElementById('consent-chk');
+  if (phoneEl && state.phone) phoneEl.value = state.phone;
+  if (birthEl && state.birth) birthEl.value = state.birth;
+  if (consentEl && state.consent) { consentEl.checked = true; toggleSendBtn(); }
 }
 
 function toggleSendBtn() {

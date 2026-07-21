@@ -29,7 +29,7 @@
   --lnb-text-sub:#555;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-grey-100);min-height:100vh;overflow:hidden;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-white);min-height:100vh;overflow:hidden;}
 
 /* ═══ LNB ═══ */
 .lnb{position:fixed;left:0;top:0;width:200px;height:100vh;background:var(--lnb-bg);border-right:1px solid var(--lnb-border);display:flex;flex-direction:column;z-index:10;overflow:hidden;transition:width .2s;}
@@ -62,20 +62,20 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .main.expanded{margin-left:0;}
 
 /* topbar */
-.topbar{height:52px;flex-shrink:0;background:var(--color-white);border-bottom:1px solid var(--color-grey-200);display:flex;align-items:center;padding:0 28px;gap:10px;}
-.topbar-back{color:var(--color-grey-500);font-size:16px;cursor:pointer;display:flex;align-items:center;}
-.topbar-name{font-size:24px;font-weight:350;letter-spacing:-0.96px;color:var(--color-grey-900);}
-.topbar-info{font-size:15px;letter-spacing:-0.6px;color:var(--color-grey-600);}
+.topbar{height:68px;flex-shrink:0;background:var(--color-white);border-bottom:1px solid var(--color-grey-200);display:flex;align-items:center;padding:0 28px;gap:14px;}
+.topbar-back{color:var(--color-grey-800);font-size:22px;font-weight:600;cursor:pointer;display:flex;align-items:center;}
+.topbar-name{font-size:26px;font-weight:700;letter-spacing:-1.04px;color:var(--color-grey-900);}
+.topbar-info{font-size:16px;letter-spacing:-0.64px;color:var(--color-grey-600);}
 .topbar-gender{color:var(--color-primary);font-weight:500;}
 
 /* body */
-.body-wrap{flex:1;overflow:hidden;padding:16px 20px;display:grid;grid-template-columns:280px 1fr 230px;gap:12px;}
+.body-wrap{flex:1;overflow:hidden;padding:20px 24px;display:grid;grid-template-columns:390px 1fr 300px;gap:20px;}
 
 /* 카드 공통 */
 .card{background:var(--color-white);border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.07);overflow:hidden;display:flex;flex-direction:column;}
 
 /* ── 통합 상담 채널 ── */
-.chat-card{height:100%;}
+.chat-card{height:100%;background:var(--color-grey-100);}
 .chat-header{padding:14px 18px 12px;border-bottom:1px solid var(--color-grey-150);font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-900);display:flex;align-items:center;gap:7px;}
 .chat-date-wrap{padding:12px 0 8px;text-align:center;}
 .chat-date-badge{display:inline-flex;align-items:center;gap:5px;background:var(--color-grey-100);border-radius:20px;padding:3px 10px;font-size:12px;letter-spacing:-0.48px;color:var(--color-grey-500);}
@@ -83,11 +83,11 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .chat-bubble{display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;}
 .chat-w-ava{width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
 .chat-sender{font-size:13px;font-weight:500;color:var(--color-grey-800);margin-bottom:3px;}
-.chat-msg{background:var(--color-grey-100);border-radius:0 10px 10px 10px;padding:9px 11px;font-size:13px;line-height:1.75;color:var(--color-grey-800);max-width:190px;}
+.chat-msg{background:var(--color-white);border-radius:0 10px 10px 10px;padding:9px 11px;font-size:13px;line-height:1.75;color:var(--color-grey-800);max-width:280px;}
 .chat-time{font-size:12px;color:var(--color-grey-400);margin-top:3px;text-align:right;}
-.chat-input{border-top:1px solid var(--color-grey-150);padding:9px 12px;display:flex;align-items:center;gap:7px;}
-.chat-input-ph{flex:1;font-size:13px;color:var(--color-grey-400);background:var(--color-grey-100);border:none;border-radius:18px;padding:7px 13px;font-family:inherit;}
-.chat-send{width:28px;height:28px;border-radius:50%;background:var(--color-grey-200);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.chat-input{border-top:1px solid var(--color-grey-200);padding:9px 12px;display:flex;align-items:center;gap:7px;}
+.chat-input-ph{flex:1;font-size:13px;color:var(--color-grey-400);background:var(--color-white);border:1px solid var(--color-grey-250);border-radius:18px;padding:7px 13px;font-family:inherit;}
+.chat-send{width:28px;height:28px;border-radius:50%;background:var(--color-white);border:1px solid var(--color-grey-250);cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
 /* ── 처방전/CL note 탭 카드 ── */
 .rx-card{height:100%;}
@@ -99,36 +99,35 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .rx-header-icon{width:24px;height:24px;background:#E8F5F0;border-radius:6px;display:flex;align-items:center;justify-content:center;}
 .rx-header-title{font-size:15px;font-weight:500;color:var(--color-grey-900);}
 
-/* ── CL note 이력 ── */
-.cl-panel{flex:1;overflow-y:auto;padding:8px 14px 14px;}
-.cl-year-group{margin-top:12px;}
-.cl-year-label{font-size:13px;font-weight:500;color:var(--color-grey-400);padding:0 4px 6px;letter-spacing:.05em;}
-.cl-item{border:1px solid var(--color-grey-250);border-radius:10px;margin-bottom:8px;overflow:hidden;background:var(--color-white);}
-.cl-item-header{display:flex;align-items:center;padding:11px 14px;cursor:pointer;gap:10px;transition:background .1s;}
-.cl-item-header:hover{background:var(--color-blue-100);}
-.cl-item-date{font-size:13px;color:var(--color-grey-400);flex-shrink:0;}
-.cl-item-hospital{font-size:15px;font-weight:500;color:var(--color-grey-900);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.cl-item-toggle{font-size:13px;color:var(--color-grey-600);display:flex;align-items:center;gap:4px;flex-shrink:0;padding:3px 8px;border-radius:6px;border:1px solid var(--color-grey-250);background:var(--color-white);cursor:pointer;font-family:inherit;transition:background .1s;}
-.cl-item-toggle:hover{background:var(--color-grey-100);}
-.cl-item-toggle svg{transition:transform .2s;}
-.cl-item-toggle.open svg{transform:rotate(180deg);}
-.cl-item-body{display:none;padding:0 14px 14px;border-top:1px solid var(--color-grey-150);}
-.cl-item-body.open{display:block;}
-.cl-item-rx-chips{display:flex;flex-wrap:wrap;gap:4px;flex:1;align-items:center;overflow:hidden;}
-.cl-rx-chip{display:inline-flex;align-items:center;background:var(--color-blue-200);color:var(--color-primary);border-radius:5px;padding:2px 8px;font-size:12px;font-weight:500;white-space:nowrap;}
-.cl-rx-chip.no-rx{background:var(--color-grey-100);color:var(--color-grey-500);}
-.cl-rx-group{display:flex;align-items:center;justify-content:space-between;padding-top:10px;margin-top:10px;border-top:1px dashed var(--color-grey-250);}
-.cl-rx-group:first-child{padding-top:12px;margin-top:0;border-top:none;}
-.cl-rx-group-label{font-size:13px;font-weight:500;color:var(--color-grey-600);display:flex;align-items:center;gap:5px;}
-.cl-rx-group-label::before{content:'';display:inline-block;width:3px;height:11px;background:var(--color-primary);border-radius:2px;flex-shrink:0;}
-.cl-rx-view{font-size:14px;color:var(--color-primary);cursor:pointer;white-space:nowrap;}
-.cl-drugs{margin-bottom:12px;padding-top:12px;}
-.cl-drugs-label{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
-.cl-section{margin-top:12px;}
-.cl-section-label{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
-.cl-section-label svg{flex-shrink:0;}
-.cl-stt-box{background:var(--color-grey-150);border-radius:8px;padding:10px 12px;font-size:15px;color:var(--color-grey-800);line-height:1.85;}
-.cl-summary-box{background:var(--color-blue-100);border-radius:8px;padding:10px 12px;font-size:15px;color:var(--color-grey-800);line-height:1.85;}
+/* ── CL note 이력 — 받은 처방전 목록과 동일한 rx-tbl 재사용 ── */
+.cl-panel{flex:1;overflow-y:auto;padding:0 15px 15px;}
+.cl-rx-chip{display:inline-flex;align-items:center;background:var(--color-grey-100);color:var(--color-grey-500);border-radius:5px;padding:2px 8px;font-size:12px;font-weight:500;white-space:nowrap;}
+.cl-rx-stack{display:flex;flex-direction:column;gap:4px;align-items:center;}
+.cl-rx-link{font-size:15px;color:var(--color-primary);cursor:pointer;white-space:nowrap;}
+.cl-rx-link:hover{text-decoration:underline;}
+.cl-summary-cell{text-align:left!important;padding-left:14px!important;padding-right:14px!important;color:var(--color-grey-800);font-size:13px;overflow:hidden;}
+.cl-summary-row{display:flex;align-items:center;gap:4px;overflow:hidden;min-width:0;}
+.cl-summary-text{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cl-more-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:2px;color:var(--color-primary);cursor:pointer;font-weight:500;white-space:nowrap;}
+.cl-more-btn svg{transition:transform .2s;}
+.cl-more-btn.open svg{transform:rotate(180deg);}
+.cl-more-btn:hover{text-decoration:underline;}
+
+/* CL note 상담 상세 팝업(Popup 스펙 재사용: radius 10px, border grey-300, shadow) */
+.cl-popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:center;justify-content:center;}
+.cl-popup-overlay.on{display:flex;}
+.cl-popup{width:540px;max-width:92vw;max-height:80vh;overflow-y:auto;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:10px;box-shadow:0 4px 7.5px rgba(0,0,0,.1);padding:32px 32px 28px;}
+.cl-popup-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.cl-popup-date{font-size:18px;font-weight:500;color:var(--color-grey-700);}
+.cl-popup-x{width:24px;height:24px;border:none;background:none;cursor:pointer;color:var(--color-grey-500);font-size:16px;font-family:inherit;}
+.cl-detail{padding:12px 14px;display:flex;flex-direction:column;gap:12px;}
+.cl-detail-block{padding-left:10px;border-left:3px solid var(--color-grey-300);}
+.cl-detail-block.summary{border-left-color:var(--color-primary);}
+.cl-detail-label{font-size:12px;font-weight:500;color:var(--color-grey-500);margin-bottom:4px;}
+.cl-detail-text{font-size:14px;color:var(--color-grey-800);line-height:1.75;}
+.cl-popup-ft{display:flex;justify-content:center;margin-top:24px;}
+.cl-popup-confirm{height:40px;padding:0 60px;background:var(--color-primary);color:var(--color-white);border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;}
+.cl-popup-confirm:hover{opacity:.9;}
 .rx-filters{padding:10px 20px 10px;display:flex;gap:8px;align-items:center;}
 .rx-tab{height:30px;padding:0 13px;border-radius:20px;font-size:14px;border:1px solid var(--color-grey-300);background:var(--color-white);cursor:pointer;color:var(--color-grey-600);display:flex;align-items:center;gap:4px;font-family:inherit;}
 .rx-tab.active{background:var(--color-blue-200);color:var(--color-primary);border-color:var(--color-blue-200);font-weight:500;}
@@ -138,11 +137,14 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .rx-search{width:200px;height:32px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 10px 0 30px;font-size:12px;background:var(--color-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%23A9ADB9' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 9px center;outline:none;font-family:inherit;}
 .rx-table-wrap{flex:1;overflow-y:auto;padding:0 15px 15px;}
 .rx-tbl{width:100%;border-collapse:collapse;}
+.cl-tbl{table-layout:fixed;}
 .rx-tbl thead tr{background:var(--color-grey-150);border-top:1px solid var(--color-grey-250);border-bottom:1px solid var(--color-grey-250);}
 .rx-tbl th{padding:12px;font-size:12px;color:#5F6E7D;font-weight:400;text-align:center;white-space:nowrap;}
 .rx-tbl tbody tr{border-bottom:1px solid var(--color-grey-250);transition:background .1s;}
 .rx-tbl tbody tr:hover{background:var(--color-blue-100);}
+.rx-tbl tbody tr.cl-detail-row:hover{background:none;}
 .rx-tbl td{padding:0;height:56px;font-size:15px;color:var(--color-grey-800);text-align:center;vertical-align:middle;}
+.cl-detail-row td{height:auto;padding:14px 16px!important;text-align:left;}
 .tag-route{display:inline-flex;align-items:center;gap:3px;font-size:13px;color:var(--color-primary);cursor:pointer;}
 .tag-route.purple{color:#8A30FF;}
 .tag-source{flex-shrink:0;height:24px;padding:0 10px;border-radius:999px;background:var(--color-blue-200);color:var(--color-primary);font-size:13px;font-weight:500;letter-spacing:-0.26px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;}
@@ -155,21 +157,22 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .btn-send:hover{opacity:.85;}
 .btn-sent{height:26px;padding:0 12px;background:var(--color-white);color:var(--color-grey-800);border:1px solid var(--color-grey-250);border-radius:6px;font-size:13px;font-weight:500;cursor:default;white-space:nowrap;}
 .btn-send-dis{height:26px;padding:0 12px;background:var(--color-grey-200);color:var(--color-grey-400);border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:not-allowed;white-space:nowrap;}
-.rx-pagination{display:flex;align-items:center;justify-content:center;gap:3px;padding:10px 0 4px;position:relative;}
-.pg{width:26px;height:26px;border-radius:8px;border:1px solid var(--color-grey-300);background:var(--color-white);color:var(--color-grey-600);font-size:13px;font-family:'Poppins','Noto Sans KR',sans-serif;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.pg.active{background:var(--color-blue-200);color:var(--color-primary);border-color:var(--color-blue-200);font-weight:600;}
-.pg:first-child,.pg:nth-child(2),.pg:nth-last-child(2),.pg:last-child{background:var(--color-blue-100);border-color:var(--color-blue-100);color:var(--color-primary);}
-.pg-select{position:absolute;right:8px;height:26px;padding:0 20px 0 8px;border:1px solid var(--color-grey-300);border-radius:5px;font-size:13px;color:var(--color-grey-600);background:var(--color-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23A9ADB9' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 6px center;appearance:none;font-family:inherit;}
+.rx-pagination{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 15px 4px;}
+.pg-btns{grid-column:2;display:flex;gap:3px;}
+.pg-size{grid-column:3;justify-self:end;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-grey-600);white-space:nowrap;}
+.pg{width:26px;height:26px;border:none;background:none;color:var(--color-grey-500);font-size:13px;font-family:'Poppins','Noto Sans KR',sans-serif;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.pg:hover{color:var(--color-primary);}
+.pg-select{height:26px;padding:0 20px 0 8px;border:1px solid var(--color-grey-300);border-radius:5px;font-size:13px;color:var(--color-grey-600);background:var(--color-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23A9ADB9' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 6px center;appearance:none;font-family:inherit;}
 
 /* ── 약사 메모 (기능 강조색: 원안 유지) ── */
-.memo-card{background:#FFFBF0;border:1px solid #F5E6B8;border-radius:12px;padding:14px 16px;align-self:start;box-shadow:0 1px 6px rgba(0,0,0,.06);}
+.memo-card{align-self:start;background:#FFFBF0;border:1px solid #F5E6B8;border-radius:12px;padding:14px 16px;box-shadow:0 1px 6px rgba(0,0,0,.06);display:flex;flex-direction:column;}
 .memo-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .memo-title{font-size:15px;font-weight:500;color:var(--color-grey-900);display:flex;align-items:center;gap:6px;}
 .memo-auto{font-size:13px;color:#F59E0B;font-weight:500;}
 .memo-body{font-size:15px;line-height:1.9;color:var(--color-grey-800);}
 .memo-item{margin-bottom:10px;}
 .memo-num{font-weight:500;color:var(--color-grey-800);}
-.memo-footer{text-align:right;font-size:12px;color:var(--color-grey-400);margin-top:10px;}
+.memo-footer{text-align:right;font-size:12px;color:var(--color-grey-400);margin-top:10px;padding-top:10px;}
 
 /* ── AI 복약 상담 FAB (기능 강조색: 원안 유지) ── */
 .ai-fab{position:fixed;bottom:82px;right:40px;background:#38BDF8;border:none;border-radius:44px;padding:16px 28px 16px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(56,189,248,.35);cursor:pointer;transition:transform .15s,box-shadow .15s;z-index:50;font-family:inherit;}
@@ -224,7 +227,7 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
       <div class="lnb-avatar">김</div>
       <div>
         <div class="lnb-username">김체크 약사</div>
-        <div class="lnb-pharmacy">하나누리 약국</div>
+        <div class="lnb-pharmacy">웰체크약국</div>
       </div>
     </div>
     <div class="lnb-btns">
@@ -265,7 +268,7 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
           </div>
           <div>
             <div class="chat-sender">웰체크</div>
-            <div class="chat-msg">혈압/혈당을 측정하시면 웰체크 앱에 기록해 주세요.<br><br>일만시 참여 기간 동안 병원에서 매 월 혈압/혈당 관리 상태를 확인하여 메시지를 보내드릴 예정입니다. 앱에 기록된 가장 최근 혈압/혈당에 대한 피드백을 받으실 수 있습니다.<br><br>※ 메시지에 최근 혈압, 혈당 자동 답변이 생성됩니다.</div>
+            <div class="chat-msg">안녕하세요 김체크 고객님!<br>웰체크약국 운영시간을 알려드릴게요.<br><br>월요일 08:00 ~ 23:00<br>화요일 08:00 ~ 23:00<br>수요일 08:00 ~ 23:00<br>목요일 08:00 ~ 23:00<br>금요일 09:00 ~ 19:00<br>토요일 09:00 ~ 19:00<br>일요일, 공휴일 휴무</div>
             <div class="chat-time">09:00</div>
           </div>
         </div>
@@ -316,13 +319,14 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
           <tbody id="rxBody"></tbody>
         </table>
         <div class="rx-pagination">
-          <button class="pg">≪</button><button class="pg">‹</button>
-          <button class="pg">1</button><button class="pg">2</button>
-          <button class="pg active">3</button>
-          <button class="pg">4</button><button class="pg">5</button>
-          <button class="pg">›</button><button class="pg">≫</button>
-          <select class="pg-select"><option>10</option><option>20</option></select>
-          <span style="position:absolute;right:48px;font-size:13px;color:var(--color-grey-600)">건씩 보기</span>
+          <div class="pg-btns">
+            <button class="pg">&lt;&lt;</button><button class="pg">&lt;</button>
+            <button class="pg">&gt;</button><button class="pg">&gt;&gt;</button>
+          </div>
+          <div class="pg-size">
+            <select class="pg-select"><option>10</option><option>20</option></select>
+            건씩 보기
+          </div>
         </div>
       </div>
       </div><!-- /panelRx -->
@@ -330,119 +334,29 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
       <!-- CL note 이력 패널 -->
       <div id="panelCl" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
         <div style="padding:10px 20px 6px;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:15px;color:var(--color-grey-600);">총 <strong style="color:var(--color-primary);">3</strong>건의 복약 상담</span>
+          <span style="font-size:15px;color:var(--color-grey-600);">총 복약상담 (<strong style="color:var(--color-primary);" id="clCount">3</strong>)</span>
           <input class="rx-search" placeholder="약품·병원 검색" style="width:160px;">
         </div>
         <div class="cl-panel">
-          <div class="cl-year-group">
-            <div class="cl-year-label">2026</div>
-
-            <!-- 상담 1: 2026.07.08 — 처방전 2건 -->
-            <div class="cl-item">
-              <div class="cl-item-header" onclick="toggleCl(this)">
-                <span class="cl-item-date">2026.07.08</span>
-                <div class="cl-item-rx-chips">
-                  <span class="cl-rx-chip">웰체크내과</span>
-                  <span class="cl-rx-chip">하나로내과의원</span>
-                </div>
-                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#8B95A1" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-              </div>
-              <div class="cl-item-body">
-                <div class="cl-drugs">
-                  <div class="cl-drugs-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#8B95A1" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#8B95A1" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    선택된 처방전
-                  </div>
-                  <div class="cl-rx-group">
-                    <div class="cl-rx-group-label">웰체크내과</div>
-                    <span class="cl-rx-view">처방전 보기 ›</span>
-                  </div>
-                  <div class="cl-rx-group">
-                    <div class="cl-rx-group-label">하나로내과의원</div>
-                    <span class="cl-rx-view">처방전 보기 ›</span>
-                  </div>
-                </div>
-                <div class="cl-section">
-                  <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#8B95A1" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#8B95A1" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    녹음 내용
-                  </div>
-                  <div class="cl-stt-box">오늘 두 곳에서 처방받으셨네요. 아토르바스타틴은 고지혈증 약인데 저녁에 드시면 더 효과적이에요. 최근에 근육이 당기거나 아프신 느낌은 없으셨나요? 며칠 전부터 허벅지가 좀 뻐근하긴 했는데요. 가벼운 근육통은 초기에 나타날 수 있어요. 심해지거나 소변 색이 이상해지면 병원 오셔야 해요. 또 메트포르민이 두 처방전에 다 있는데, 이미 드시고 계신 거 맞죠? 속 불편함은 없으세요? 식사 직후에 드시면 훨씬 나아요.</div>
-                </div>
-                <div class="cl-section">
-                  <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#3E71F0" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    복약지도 요약
-                  </div>
-                  <div class="cl-summary-box">처방전 2건 통합 상담. 아토르바스타틴 저녁 복용 안내, 근육통 부작용 경과 관찰. 메트포르민 중복 처방 확인 — 위장장애 예방 위해 식후 즉시 복용 안내. 글리메피리드 저혈당 증상 교육.</div>
-                </div>
-              </div>
+          <table class="rx-tbl cl-tbl">
+            <thead>
+              <tr>
+                <th style="width:160px">상담일시</th>
+                <th style="width:190px">처방전 원본</th>
+                <th>복약지도 요약</th>
+              </tr>
+            </thead>
+            <tbody id="clBody"></tbody>
+          </table>
+          <div class="rx-pagination">
+            <div class="pg-btns">
+              <button class="pg">&lt;&lt;</button><button class="pg">&lt;</button>
+              <button class="pg">&gt;</button><button class="pg">&gt;&gt;</button>
             </div>
-
-            <!-- 상담 2: 2026.06.28 — 처방전 1건 -->
-            <div class="cl-item">
-              <div class="cl-item-header" onclick="toggleCl(this)">
-                <span class="cl-item-date">2026.06.28</span>
-                <div class="cl-item-rx-chips">
-                  <span class="cl-rx-chip">우리동네내과의원</span>
-                </div>
-                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#8B95A1" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-              </div>
-              <div class="cl-item-body">
-                <div class="cl-drugs">
-                  <div class="cl-drugs-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#8B95A1" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#8B95A1" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    선택된 처방전
-                  </div>
-                  <div class="cl-rx-group">
-                    <div class="cl-rx-group-label">우리동네내과의원</div>
-                    <span class="cl-rx-view">처방전 보기 ›</span>
-                  </div>
-                </div>
-                <div class="cl-section">
-                  <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#8B95A1" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#8B95A1" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    녹음 내용
-                  </div>
-                  <div class="cl-stt-box">오늘 5가지 약이 나왔는데, 혹시 지금 다른 약국에서 따로 받아드시는 약은 없으세요? 소화제 같은 거 사 먹는 건 있어요. 혹시 어떤 거 드세요? 성분에 따라 겹칠 수 있어서요. 겔포스 그거요. 겔포스는 괜찮아요. 그런데 메트포르민이랑 시간 좀 띄워서 드세요. 같이 드시면 메트포르민 흡수가 좀 떨어질 수 있거든요.</div>
-                </div>
-                <div class="cl-section">
-                  <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#3E71F0" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    복약지도 요약
-                  </div>
-                  <div class="cl-summary-box">5종 다약제 복약 상담. 겔포스 자가 복용 확인 — 메트포르민과 2시간 간격 복용 안내. 중복 처방 없음. 졸피뎀 취침 30분 전, 암로디핀·로사르탄 아침 식후, 아토르바스타틴 저녁 복용으로 시간표 정리.</div>
-                </div>
-              </div>
+            <div class="pg-size">
+              <select class="pg-select"><option>10</option><option>20</option></select>
+              건씩 보기
             </div>
-
-            <!-- 상담 3: 2026.06.25 — 처방전 없이 상담 -->
-            <div class="cl-item">
-              <div class="cl-item-header" onclick="toggleCl(this)">
-                <span class="cl-item-date">2026.06.25</span>
-                <div class="cl-item-rx-chips">
-                  <span class="cl-rx-chip no-rx">처방전 없이 상담</span>
-                </div>
-                <button class="cl-item-toggle">펼치기 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#8B95A1" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-              </div>
-              <div class="cl-item-body">
-                <div class="cl-section">
-                  <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#8B95A1" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="#8B95A1" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    녹음 내용
-                  </div>
-                  <div class="cl-stt-box">처음 오셨죠? 기존에 약국은 어디서 이용하셨어요? 집 근처 약국 다니다가 이사 오면서요. 혈압이랑 혈당 약 처음 드시는 건가요? 아니요, 혈압 약은 1년 넘게 먹었는데 알약을 좀 삼키기 어렵더라고요. 크면 좀 힘들어서요. 아, 그러면 조제할 때 참고할게요. 복용 시간은 아침 저녁 중에 어떤 게 더 편하세요? 저녁 밥 먹고 나서가 편해요.</div>
-                </div>
-                <div class="cl-section">
-                  <div class="cl-section-label">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#3E71F0" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    복약지도 요약
-                  </div>
-                  <div class="cl-summary-box">첫 방문 고객. 타 약국 전환. 알약 삼키기 어려움 확인 — 조제 시 소형 정제 우선 고려. 저녁 식후 복용 선호 확인. 어지럼증 간헐적 호소, 다음 방문 시 확인 예정.</div>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
       </div><!-- /panelCl -->
@@ -471,18 +385,18 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
       <div class="memo-footer">80 / 1,000</div>
     </div>
   </div>
-</main>
 
-<footer>
-  <div>
-    <div class="footer-links">
-      <a href="#">이용약관</a>
-      <a href="#">개인정보처리방침</a>
+  <footer>
+    <div>
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+      </div>
+      <div>(주)엠서클 &nbsp;·&nbsp; 사업자등록번호: 288-87-03573 &nbsp;·&nbsp; 통신판매업신고번호: 제2009-서울강남-00209호 &nbsp;·&nbsp; 주소: 서울특별시 강남구 봉은사로 114길 12, 7층 &nbsp;·&nbsp; 대표자: 이찬란, 정윤미 &nbsp;·&nbsp; 대표번호: 1551-3633</div>
     </div>
-    <div>(주)엠서클 &nbsp;·&nbsp; 사업자등록번호: 288-87-03573 &nbsp;·&nbsp; 통신판매업신고번호: 제2009-서울강남-00209호 &nbsp;·&nbsp; 주소: 서울특별시 강남구 봉은사로 114길 12, 7층 &nbsp;·&nbsp; 대표자: 이찬란, 정윤미 &nbsp;·&nbsp; 대표번호: 1551-3633</div>
-  </div>
-  <div>Copyright © Mcircle Corp. All rights reserved.</div>
-</footer>
+    <div>Copyright © Mcircle Corp. All rights reserved.</div>
+  </footer>
+</main>
 
 <!-- AI 복약 상담 FAB -->
 <button class="ai-fab" onclick="openModalFrame()">
@@ -492,6 +406,23 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
 
 <!-- 모달 iframe 오버레이 -->
 <iframe id="modalFrame" src="modal_send_v2.html?v=20260716"></iframe>
+
+<!-- 처방전 원본 뷰어 팝업 (modal_send_v2.html의 처방전 이미지 뷰어와 동일한 패턴 재사용) -->
+<div class="cl-popup-overlay" id="rxPopupOverlay" onclick="closeRxDetail()">
+  <div class="cl-popup" style="width:480px;padding:0;" onclick="event.stopPropagation()">
+    <div class="cl-popup-hd" style="padding:16px 20px;margin-bottom:0;border-bottom:1px solid var(--color-grey-250);">
+      <div class="cl-popup-date" id="rxPopupTitle"></div>
+      <button class="cl-popup-x" onclick="closeRxDetail()">✕</button>
+    </div>
+    <div class="rx-viewer-placeholder" style="text-align:center;padding:40px 20px;color:var(--color-grey-500);">
+      <div style="font-size:57.6px;margin-bottom:12px;">📋</div>
+      <p style="font-size:15px;font-weight:400;letter-spacing:-0.6px;line-height:1.7;">처방전 원본 이미지<br>준비 중입니다.</p>
+    </div>
+    <div class="cl-popup-ft" style="padding:0 20px 20px;margin-top:0;">
+      <button class="cl-popup-confirm" onclick="closeRxDetail()">확인</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // ── 처방전 테이블 ──────────────────────
@@ -505,6 +436,16 @@ const rows=[
   {date:'2026-06-28 09:40', mode:'고객 앱 촬영', icon:'📷', routeColor:'', source:'patient', hasOriginal:true, hospital:'정다운정형외과'},
 ];
 const RX_SOURCE_LABEL={here:'우리 약국',other:'타 약국',patient:'고객 기록'};
+
+function openRxDetail(hospital){
+  const r = rows.find(x => x.hospital === hospital);
+  if (!r) return;
+  document.getElementById('rxPopupTitle').textContent = hospital + ' 처방전 원본';
+  document.getElementById('rxPopupOverlay').classList.add('on');
+}
+function closeRxDetail(){
+  document.getElementById('rxPopupOverlay').classList.remove('on');
+}
 
 function renderRows(filter){
   const filtered = filter==='all' ? rows : rows.filter(r=>r.source===filter);
@@ -529,23 +470,74 @@ function filterSource(btn, key){
 
 renderRows('all');
 
-function toggleCl(header) {
-  const body = header.nextElementSibling;
-  const willOpen = !body.classList.contains('open');
+// ── CL note 상담 이력 ──────────────────────
+const CL_RECORDS = [
+  {
+    date: '2026-07-08 14:20',
+    rx: ['웰체크내과', '하나로내과의원'],
+    stt: '오늘 두 곳에서 처방받으셨네요. 아토르바스타틴은 고지혈증 약인데 저녁에 드시면 더 효과적이에요. 최근에 근육이 당기거나 아프신 느낌은 없으셨나요? 며칠 전부터 허벅지가 좀 뻐근하긴 했는데요. 가벼운 근육통은 초기에 나타날 수 있어요. 심해지거나 소변 색이 이상해지면 병원 오셔야 해요. 또 메트포르민이 두 처방전에 다 있는데, 이미 드시고 계신 거 맞죠? 속 불편함은 없으세요? 식사 직후에 드시면 훨씬 나아요.',
+    summary: '처방전 2건 통합 상담. 아토르바스타틴 저녁 복용 안내, 근육통 부작용 경과 관찰. 메트포르민 중복 처방 확인 — 위장장애 예방 위해 식후 즉시 복용 안내. 글리메피리드 저혈당 증상 교육.'
+  },
+  {
+    date: '2026-06-28 10:05',
+    rx: ['우리동네내과의원'],
+    stt: '오늘 5가지 약이 나왔는데, 혹시 지금 다른 약국에서 따로 받아드시는 약은 없으세요? 소화제 같은 거 사 먹는 건 있어요. 혹시 어떤 거 드세요? 성분에 따라 겹칠 수 있어서요. 겔포스 그거요. 겔포스는 괜찮아요. 그런데 메트포르민이랑 시간 좀 띄워서 드세요. 같이 드시면 메트포르민 흡수가 좀 떨어질 수 있거든요.',
+    summary: '5종 다약제 복약 상담. 겔포스 자가 복용 확인 — 메트포르민과 2시간 간격 복용 안내. 중복 처방 없음. 졸피뎀 취침 30분 전, 암로디핀·로사르탄 아침 식후, 아토르바스타틴 저녁 복용으로 시간표 정리.'
+  },
+  {
+    date: '2026-06-25 09:40',
+    rx: [],
+    stt: '처음 오셨죠? 기존에 약국은 어디서 이용하셨어요? 집 근처 약국 다니다가 이사 오면서요. 혈압이랑 혈당 약 처음 드시는 건가요? 아니요, 혈압 약은 1년 넘게 먹었는데 알약을 좀 삼키기 어렵더라고요. 크면 좀 힘들어서요. 아, 그러면 조제할 때 참고할게요. 복용 시간은 아침 저녁 중에 어떤 게 더 편하세요? 저녁 밥 먹고 나서가 편해요.',
+    summary: '첫 방문 고객. 타 약국 전환. 알약 삼키기 어려움 확인 — 조제 시 소형 정제 우선 고려. 저녁 식후 복용 선호 확인. 어지럼증 간헐적 호소, 다음 방문 시 확인 예정.'
+  }
+];
 
-  document.querySelectorAll('.cl-item-body.open').forEach(openBody => {
-    if (openBody === body) return;
-    openBody.classList.remove('open');
-    const openHeader = openBody.previousElementSibling;
-    const openBtn = openHeader.querySelector('.cl-item-toggle');
-    openBtn.classList.remove('open');
-    openBtn.childNodes[0].textContent = '펼치기 ';
+function renderClTable() {
+  document.getElementById('clCount').textContent = CL_RECORDS.length;
+  document.getElementById('clBody').innerHTML = CL_RECORDS.map((r, idx) => `
+    <tr>
+      <td style="font-family:'Poppins','Noto Sans KR',sans-serif;font-size:15px;color:#666666">${r.date}</td>
+      <td>${r.rx.length
+        ? `<div class="cl-rx-stack">` + r.rx.map(h => `<span class="cl-rx-link" onclick="event.stopPropagation();openRxDetail('${h}')">${h}</span>`).join('') + `</div>`
+        : `<span class="cl-rx-chip no-rx">처방전 없이 상담</span>`}</td>
+      <td class="cl-summary-cell">
+        <div class="cl-summary-row">
+          <span class="cl-summary-text">${r.summary}</span>
+          <span class="cl-more-btn" id="clToggleBtn${idx}" onclick="toggleClDetail(${idx})"><span class="cl-more-txt">더보기</span> <svg width="8" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></span>
+        </div>
+      </td>
+    </tr>
+    <tr class="cl-detail-row" id="clDetailRow${idx}" style="display:none;">
+      <td colspan="3">
+        <div class="cl-detail">
+          <div class="cl-detail-block summary">
+            <div class="cl-detail-label">복약지도 요약</div>
+            <div class="cl-detail-text">${r.summary}</div>
+          </div>
+          <div class="cl-detail-block">
+            <div class="cl-detail-label">녹음 내용</div>
+            <div class="cl-detail-text">${r.stt}</div>
+          </div>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+renderClTable();
+
+function toggleClDetail(idx) {
+  const row = document.getElementById('clDetailRow' + idx);
+  const btn = document.getElementById('clToggleBtn' + idx);
+  const willOpen = row.style.display === 'none';
+  document.querySelectorAll('.cl-detail-row').forEach(r => r.style.display = 'none');
+  document.querySelectorAll('[id^="clToggleBtn"]').forEach(b => {
+    b.classList.remove('open');
+    b.querySelector('.cl-more-txt').textContent = '더보기';
   });
-
-  body.classList.toggle('open', willOpen);
-  const btn = header.querySelector('.cl-item-toggle');
-  btn.classList.toggle('open', willOpen);
-  btn.childNodes[0].textContent = willOpen ? '접기 ' : '펼치기 ';
+  if (willOpen) {
+    row.style.display = '';
+    btn.classList.add('open');
+    btn.querySelector('.cl-more-txt').textContent = '접기';
+  }
 }
 
 function switchTab(tab) {

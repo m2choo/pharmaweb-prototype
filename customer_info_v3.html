@@ -127,6 +127,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .cl-detail-text{font-size:14px;color:var(--color-grey-800);line-height:1.75;}
 .cl-popup-ft{display:flex;justify-content:center;margin-top:24px;}
 .cl-popup-confirm{height:40px;padding:0 60px;background:var(--color-primary);color:var(--color-white);border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;}
+.rx-viewer-action-btn{height:40px;padding:0 20px;background:var(--color-white);color:var(--color-grey-800);border:1px solid var(--color-grey-250);border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;}
+.rx-viewer-action-btn:hover{background:var(--color-grey-100);}
 .cl-popup-confirm:hover{opacity:.9;}
 .rx-filters{padding:10px 20px 10px;display:flex;gap:8px;align-items:center;}
 .rx-tab{height:30px;padding:0 13px;border-radius:20px;font-size:14px;border:1px solid var(--color-grey-300);background:var(--color-white);cursor:pointer;color:var(--color-grey-600);display:flex;align-items:center;gap:4px;font-family:inherit;}
@@ -407,19 +409,25 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
 <!-- 모달 iframe 오버레이 -->
 <iframe id="modalFrame" src="modal_send_v2.html?v=20260716"></iframe>
 
-<!-- 처방전 원본 뷰어 팝업 (modal_send_v2.html의 처방전 이미지 뷰어와 동일한 패턴 재사용) -->
+<!-- 처방전 원본 뷰어 팝업 -->
 <div class="cl-popup-overlay" id="rxPopupOverlay" onclick="closeRxDetail()">
-  <div class="cl-popup" style="width:480px;padding:0;" onclick="event.stopPropagation()">
-    <div class="cl-popup-hd" style="padding:16px 20px;margin-bottom:0;border-bottom:1px solid var(--color-grey-250);">
+  <div class="cl-popup" style="width:680px;height:86vh;max-height:86vh;padding:0;display:flex;flex-direction:column;" onclick="event.stopPropagation()">
+    <div class="cl-popup-hd" style="padding:20px 24px;margin-bottom:0;border-bottom:1px solid var(--color-grey-250);flex-shrink:0;">
       <div class="cl-popup-date" id="rxPopupTitle"></div>
       <button class="cl-popup-x" onclick="closeRxDetail()">✕</button>
     </div>
-    <div class="rx-viewer-placeholder" style="text-align:center;padding:40px 20px;color:var(--color-grey-500);">
-      <div style="font-size:57.6px;margin-bottom:12px;">📋</div>
-      <p style="font-size:15px;font-weight:400;letter-spacing:-0.6px;line-height:1.7;">처방전 원본 이미지<br>준비 중입니다.</p>
+    <div class="rx-viewer-img" style="flex:1;overflow-y:auto;background:var(--color-grey-150);padding:24px;display:flex;align-items:flex-start;justify-content:center;">
+      <img src="rx_sample.png" alt="처방전 원본" style="width:100%;max-width:520px;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,.1);">
     </div>
-    <div class="cl-popup-ft" style="padding:0 20px 20px;margin-top:0;">
-      <button class="cl-popup-confirm" onclick="closeRxDetail()">확인</button>
+    <div class="cl-popup-ft" style="padding:16px 24px 20px;margin-top:0;gap:10px;flex-shrink:0;">
+      <button class="rx-viewer-action-btn" onclick="downloadRxImage()">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2v8m0 0l-3-3m3 3l3-3M2.5 12.5v1a1 1 0 001 1h9a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        다운로드
+      </button>
+      <button class="rx-viewer-action-btn" onclick="window.print()">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4.5 6V2h7v4M4.5 11.5h7V14h-7v-2.5zM3 6h10a1.5 1.5 0 011.5 1.5V10a1 1 0 01-1 1H12M3 6a1.5 1.5 0 00-1.5 1.5V10a1 1 0 001 1h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        프린트
+      </button>
     </div>
   </div>
 </div>
@@ -445,6 +453,12 @@ function openRxDetail(hospital){
 }
 function closeRxDetail(){
   document.getElementById('rxPopupOverlay').classList.remove('on');
+}
+function downloadRxImage(){
+  const a = document.createElement('a');
+  a.href = 'rx_sample.png';
+  a.download = '처방전_원본.png';
+  a.click();
 }
 
 function renderRows(filter){

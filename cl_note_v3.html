@@ -82,18 +82,15 @@ td{padding:13px 14px;font-size:15px;color:#333;text-align:center;vertical-align:
 /* 삭제 아이콘 칸이 관리 버튼과 동떨어져 보이지 않도록 왼쪽 여백을 좁혀 붙임 */
 .td-del{padding-left:2px;}
 
-/* 발송 현황 칩 */
-.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:14.4px;font-weight:600;white-space:nowrap;}
-.chip-draft{background:#F0F0F0;color:#666;border:1px solid #E0E0E0;}
-.chip-sent{background:#EEFAF0;color:#00A82D;border:1px solid #CFF4CE;}
-.chip-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
+/* 발송 현황 */
+.status-draft{color:#E07800;font-weight:500;}
+.status-sent{color:#888;font-weight:500;}
 
 .badge-regular-txt{color:#2563EB;font-weight:600;}
 .badge-new-txt{color:#888;}
 
 /* 웰체크 가입 여부 */
-.joined-badge{display:inline-flex;align-items:center;gap:5px;font-size:15px;color:#333;font-weight:500;white-space:nowrap;}
-.joined-badge svg{flex-shrink:0;}
+.joined-txt{color:#333;font-weight:500;}
 .notjoined-txt{color:#AAA;}
 
 /* 관리 버튼 */
@@ -383,15 +380,15 @@ function renderTable() {
 
 function rowHTML(n) {
   const chip = n.status === '발송완료'
-    ? '<span class="chip chip-sent"><span class="chip-dot"></span>발송완료</span>'
-    : '<span class="chip chip-draft"><span class="chip-dot"></span>임시저장</span>';
+    ? '<span class="status-sent">발송완료</span>'
+    : '<span class="status-draft">임시저장</span>';
   // 단골 고객은 이미 확인된 고객이므로 미가입일 수 없음 — 신규(단골 아님) 고객만 미가입 표시 가능
   const joined = (!n.isNew || n.appJoined)
-    ? '<span class="joined-badge"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="7" fill="#16A34A"/><path d="M4 7l2 2 4-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>가입 완료</span>'
+    ? '<span class="joined-txt">가입 완료</span>'
     : '<span class="notjoined-txt">미가입</span>';
   const regular = n.isNew
-    ? '<span class="badge-new-txt">단골 아님</span>'
-    : '<span class="badge-regular-txt">단골</span>';
+    ? '<span class="badge-new-txt">미등록</span>'
+    : '<span class="badge-regular-txt">등록완료</span>';
   const action = n.status === '발송완료'
     ? `<button class="mgmt-btn mgmt-btn-outline" onclick="openView('${n.id}')">전송완료</button>`
     : `<button class="mgmt-btn mgmt-btn-solid" onclick="goResume('${n.id}')">전송하기</button>`;

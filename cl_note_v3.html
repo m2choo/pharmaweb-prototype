@@ -276,7 +276,7 @@ function seedDummyNotes() {
       createdAt: '2026-07-01 14:20', updatedAt: '2026-07-01 14:30'
     },
     {
-      id: 'seed_2', name: '김반달', phone: '010-1234-5678', birth: '1990-11-02', gender: '남성', age: 36, isNew: true, status: '발송완료', appJoined: false,
+      id: 'seed_2', name: '김반달', phone: '010-1234-5678', birth: null, gender: '-', age: null, isNew: true, status: '발송완료', appJoined: false,
       message: '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n김반달 고객님, 지속적인 복약 관리를 위해 안내드립니다.\n\n[약사 상담 메모]\n처음 방문해 주셔서 감사합니다. 복용 중인 약물 확인 결과 특이사항 없었으며, 졸음을 유발할 수 있는 성분이 포함되어 있어 운전이나 기계 조작 시 주의가 필요합니다.' + JOIN_NOTE,
       createdAt: '2026-07-01 09:00', updatedAt: '2026-07-01 09:15'
     },
@@ -301,6 +301,12 @@ function seedDummyNotes() {
       id: 'seed_6', name: '박하트', phone: '', birth: null, gender: '-', age: null, isNew: true, status: '임시저장', appJoined: false,
       message: '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n박하트 고객님, 지속적인 복약 관리를 위해 안내드립니다.\n\n[약사 상담 메모]\n두통으로 처음 내원하셨습니다. 진통제 복용 시 공복을 피하고 물을 충분히 드시는 것이 좋습니다.' + JOIN_NOTE,
       createdAt: '2026-06-27 11:05', updatedAt: '2026-06-27 11:12'
+    },
+    {
+      // 비단골(신규)이지만 웰체크 앱 가입자라 계정 정보로 인적사항이 모두 채워진 채 발송완료된 케이스
+      id: 'seed_7', name: '윤구름', phone: '010-1122-3344', birth: '1970-06-11', gender: '여성', age: 56, isNew: true, status: '발송완료', appJoined: true,
+      message: '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n윤구름 고객님, 지속적인 복약 관리를 위해 안내드립니다.\n\n[약사 상담 메모]\n타 약국 이용 중 처음 방문하셨습니다. 공복 시 혈당 저하 증상 있어 식사 시간 규칙적으로 유지하도록 안내드렸습니다.' + JOIN_NOTE,
+      createdAt: '2026-06-26 15:40', updatedAt: '2026-06-26 15:50'
     }
   ];
   saveNotes(notes.concat(dummies));

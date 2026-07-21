@@ -89,8 +89,6 @@ td{padding:12px 14px;font-size:15px;color:#333;vertical-align:middle;text-align:
 /* 단골 배지 */
 .badge-regular{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:13.2px;font-weight:700;background:#EBF2FF;color:#2563EB;white-space:nowrap;}
 .badge-none{color:#CCC;font-size:14.4px;}
-.app-joined{color:#333;font-size:13.2px;}
-.app-not-joined{color:#E5405E;font-size:13.2px;}
 
 /* 다제약물 상태 */
 .poly-check{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:13.2px;font-weight:600;background:#FFF3E0;color:#E07800;white-space:nowrap;cursor:pointer;border:none;font-family:inherit;}
@@ -150,7 +148,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
     </a>
     <a class="lnb-item" href="cl_note_v3.html" style="text-decoration:none;color:inherit;">
       <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><path d="M4.5 1.5h5l3 3v9a1 1 0 01-1 1h-7a1 1 0 01-1-1v-11a1 1 0 011-1z" stroke="#555" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 7.5h4M6 10h4" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
-      CL note 복약 상담
+      복약 상담함
     </a>
     <div class="lnb-item">
       <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="#555" stroke-width="1.4"/><path d="M1 6h14" stroke="#555" stroke-width="1.4"/></svg>
@@ -185,7 +183,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
     <div class="page-hd-top">
       <div>
         <div class="page-title">약국 고객 현황</div>
-        <div class="page-sub">우리 약국을 방문한 고객 목록입니다. 단골 고객과 신규 고객을 모두 포함합니다.</div>
+        <div class="page-sub">웰체크 앱에 가입한 우리 약국 고객 목록입니다. 아직 가입하지 않은 신규 고객은 복약 상담함에서 확인할 수 있습니다.</div>
       </div>
       <button class="btn-refresh">↻ 새로고침</button>
     </div>
@@ -209,7 +207,6 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
             <th class="sort">최근 방문일시 ↓</th>
             <th>고객명</th>
             <th>단골</th>
-            <th>웰체크 가입 여부</th>
             <th class="sort">생년월일 ⇅</th>
             <th>휴대전화 번호</th>
             <th>성별</th>
@@ -260,16 +257,9 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 const rows = [
   { date:'2026.07.08 17:53', name:'김체크',  birth:'1982-03-15', phone:'010-1234-5678', gender:'여성', rx:8,  regular:true,  appInstalled:true,  polyStatus:'비대상',    tags:[{cls:'tag-purple',txt:'이상지질혈증'}], adh:'100%' },
   { date:'2026.07.07 15:49', name:'이세모',  birth:'1975-08-22', phone:'010-2345-6789', gender:'여성', rx:21, regular:true,  appInstalled:true,  polyStatus:'대상',      tags:[{cls:'tag-purple',txt:'당뇨'},{cls:'tag-orange',txt:'고혈압'}], adh:'' },
-  { date:'2026.07.05 13:53', name:'김반달',  birth:'1990-11-04', phone:'010-3456-7890', gender:'남성', rx:5,  regular:false, appInstalled:false, polyStatus:'비대상',    tags:[], adh:'' },
-  { date:'2026.07.03 18:38', name:'정네모',  birth:'1968-05-30', phone:'010-4567-8901', gender:'여성', rx:3,  regular:false, appInstalled:false, polyStatus:'비대상',    tags:[], adh:'' },
-  { date:'2026.07.03 18:39', name:'홍동글',  birth:'1972-04-09', phone:'010-5678-9012', gender:'남성', rx:34, regular:true,  appInstalled:false, polyStatus:'대상',      tags:[{cls:'tag-purple',txt:'당뇨 전단계'},{cls:'tag-orange',txt:'고혈압'},{cls:'tag-blue',txt:'심혈관질환'}], adh:'' },
+  { date:'2026.07.03 18:39', name:'홍동글',  birth:'1972-04-09', phone:'010-5678-9012', gender:'남성', rx:34, regular:true,  appInstalled:true,  polyStatus:'대상',      tags:[{cls:'tag-purple',txt:'당뇨 전단계'},{cls:'tag-orange',txt:'고혈압'},{cls:'tag-blue',txt:'심혈관질환'}], adh:'' },
   { date:'2026.07.02 18:28', name:'임별표',  birth:'1988-12-03', phone:'010-6789-0123', gender:'여성', rx:15, regular:false, appInstalled:true,  polyStatus:'확인 필요', tags:[], adh:'' },
-  { date:'2026.07.01 18:19', name:'권물음',  birth:'1965-07-22', phone:'010-7890-1234', gender:'남성', rx:7,  regular:false, appInstalled:false, polyStatus:'확인 필요', tags:[], adh:'' },
-  { date:'2026.07.01 18:24', name:'오느낌',  birth:'1985-07-14', phone:'010-8901-2345', gender:'남성', rx:28, regular:false, appInstalled:false, polyStatus:'대상',      tags:[{cls:'tag-purple',txt:'당뇨'},{cls:'tag-orange',txt:'고혈압'}], adh:'' },
-  { date:'2026.06.30 11:20', name:'박하트',  birth:'1993-02-18', phone:'010-9012-3456', gender:'여성', rx:2,  regular:false, appInstalled:false, polyStatus:'비대상',    tags:[], adh:'' },
-  { date:'2026.06.28 16:05', name:'최번개',  birth:'1980-09-27', phone:'010-0123-4567', gender:'남성', rx:4,  regular:false, appInstalled:false, polyStatus:'비대상',    tags:[{cls:'tag-orange',txt:'고혈압'}], adh:'' },
   { date:'2026.06.25 10:33', name:'윤구름',  birth:'1970-06-11', phone:'010-1122-3344', gender:'여성', rx:11, regular:false, appInstalled:true,  polyStatus:'확인 필요', tags:[{cls:'tag-purple',txt:'당뇨'}], adh:'' },
-  { date:'2026.06.24 09:41', name:'신모래',  birth:'1995-01-30', phone:'010-2233-9988', gender:'남성', rx:0,  regular:false, appInstalled:false, polyStatus:null,       tags:[], adh:'' },
 ];
 
 const POLY_OPTIONS = ['대상', '확인 필요', '비대상'];
@@ -309,7 +299,6 @@ function render() {
       <td class="td-date">${r.date}</td>
       <td class="td-name ${r.regular ? 'regular' : 'muted'}">${r.name}</td>
       <td>${r.regular ? `<span class="badge-regular">단골</span>` : `<span class="badge-none">—</span>`}</td>
-      <td>${r.appInstalled ? `<span class="app-joined">가입 완료</span>` : `<span class="app-not-joined">미가입</span>`}</td>
       <td>${r.birth}</td>
       <td>${r.phone}</td>
       <td>${r.gender}</td>

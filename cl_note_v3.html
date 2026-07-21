@@ -314,6 +314,17 @@ function seedDummyNotes() {
 function saveNotes(list) {
   localStorage.setItem(CL_NOTES_KEY, JSON.stringify(list));
 }
+// TEMP-DEV-ONLY: 새로고침(F5/Ctrl+R/Ctrl+Shift+R)으로 들어온 경우, 테스트 중 모달에서
+// 실제로 임시저장·발송한 기록까지 지우고 기본 데모 샘플(seed_1~7)만 남은 상태로 되돌림
+// (링크 클릭 등 일반 진입 시에는 기존 기록 유지 — reload 판정일 때만 초기화)
+function isPageReload() {
+  try {
+    const nav = performance.getEntriesByType('navigation')[0];
+    if (nav) return nav.type === 'reload';
+  } catch (e) {}
+  return performance.navigation && performance.navigation.type === 1;
+}
+if (isPageReload()) localStorage.removeItem(CL_NOTES_KEY);
 seedDummyNotes();
 
 const FILTERS = [

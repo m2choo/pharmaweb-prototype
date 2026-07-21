@@ -460,29 +460,29 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
 
       <div class="info-banner">
         <span class="info-banner-icon">ℹ️</span>
-        <span class="info-banner-text">앱에서 복약 알림이 발송되는 기본 시간입니다. 환자 앱에서 개별 수정도 가능합니다.</span>
+        <span class="info-banner-text">고객의 웰체크 앱에서 복약 알림이 생성되는 기본 시간입니다.<br>고객의 앱에서 개별적으로 수정할 수 있습니다.</span>
       </div>
 
       <div class="reminder-simple">
         <div class="reminder-time-row">
           <div class="reminder-time-name-wrap"><div class="reminder-time-dot" style="background:#2563EB;"></div><span class="reminder-time-name">아침</span></div>
-          <button class="reminder-time-btn" data-time="08:00">
+          <button class="reminder-time-btn" data-time="09:00">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-            <span class="tp-label">오전 8:00</span>
+            <span class="tp-label">오전 9:00</span>
           </button>
         </div>
         <div class="reminder-time-row">
           <div class="reminder-time-name-wrap"><div class="reminder-time-dot" style="background:#F59E0B;"></div><span class="reminder-time-name">점심</span></div>
-          <button class="reminder-time-btn" data-time="12:00">
+          <button class="reminder-time-btn" data-time="14:00">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-            <span class="tp-label">오후 12:00</span>
+            <span class="tp-label">오후 2:00</span>
           </button>
         </div>
         <div class="reminder-time-row">
           <div class="reminder-time-name-wrap"><div class="reminder-time-dot" style="background:#6366F1;"></div><span class="reminder-time-name">저녁</span></div>
-          <button class="reminder-time-btn" data-time="18:00">
+          <button class="reminder-time-btn" data-time="19:00">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-            <span class="tp-label">오후 6:00</span>
+            <span class="tp-label">오후 7:00</span>
           </button>
         </div>
         <div class="reminder-time-row">
@@ -616,10 +616,6 @@ document.querySelectorAll('.day-cell input[type=checkbox]').forEach(cb => {
 
     updateDisplay();
 
-    // 버튼 아래에 위치
-    const rect = btn.getBoundingClientRect();
-    dp.style.cssText = `position:fixed;top:${rect.bottom+4}px;left:${rect.left}px;`;
-
     dp.querySelector('.cancel').addEventListener('click', closeDropdown);
     dp.querySelector('.confirm').addEventListener('click',()=>{
       const h24 = selAmpm==='AM' ? parseInt(selH)%12 : parseInt(selH)%12+12;
@@ -628,7 +624,15 @@ document.querySelectorAll('.day-cell input[type=checkbox]').forEach(cb => {
       closeDropdown();
     });
 
+    // 위치 계산 전에 먼저 붙여야 실제 높이를 잴 수 있음 — 화면 아래쪽에 붙어서
+    // 열면 footer를 가릴 만큼 공간이 부족한 경우 버튼 위쪽으로 뒤집어서 연다
     document.body.appendChild(dp);
+    const rect = btn.getBoundingClientRect();
+    const dpHeight = dp.getBoundingClientRect().height;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const top = spaceBelow < dpHeight + 8 ? rect.top - dpHeight - 4 : rect.bottom + 4;
+    dp.style.cssText = `position:fixed;top:${top}px;left:${rect.left}px;`;
+
     currentDropdown = dp;
   }
 

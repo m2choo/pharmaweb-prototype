@@ -131,6 +131,12 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .msg-reset:hover{color:var(--color-primary);}
 .msg-cnt{text-align:right;font-size:12px;font-weight:400;letter-spacing:-0.48px;margin-top:6px;color:var(--color-grey-500);}
 
+/* v2 s4-grid 패턴 — 단골 전용, 텍스트 옆에 자주 쓰는 메시지 칩 */
+.msg-grid{display:grid;grid-template-columns:150px 1fr;gap:16px;}
+.quick-chips{display:flex;flex-direction:column;gap:6px;}
+.quick-chip{min-height:40px;padding:8px 12px;border:1px solid var(--color-grey-300);border-radius:8px;font-size:12.5px;font-weight:500;letter-spacing:-0.24px;color:var(--color-grey-600);cursor:pointer;display:flex;align-items:center;text-align:left;background:var(--color-white);font-family:inherit;line-height:1.4;transition:all .12s;}
+.quick-chip:hover{border-color:var(--color-primary);color:var(--color-primary);background:var(--color-blue-100);}
+
 /* 전송 (v2 sum-tbl 패턴) */
 .send-summary-label{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);margin-bottom:12px;}
 .sum-tbl{width:100%;border-collapse:collapse;border-left:1px solid var(--color-grey-250);}
@@ -140,11 +146,9 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .sum-tbl td:last-child{color:var(--color-grey-700);font-weight:400;}
 .phone-input-big{height:52px;border:1.5px solid var(--color-grey-300);border-radius:8px;padding:0 16px;font-size:20px;font-family:'Poppins','Noto Sans KR',sans-serif;font-weight:500;letter-spacing:1px;outline:none;color:var(--color-grey-800);width:100%;}
 .phone-input-big:focus{border-color:var(--color-primary);}
+.consent-row{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:14px;font-weight:400;letter-spacing:-0.56px;color:var(--color-grey-700);cursor:pointer;}
+.consent-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--color-primary);cursor:pointer;}
 
-/* 메시지 확인 — v2 prev-grid(좌: 미리보기 / 우: 요약) 패턴 */
-.prev-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-.prev-phone{background:var(--color-grey-100);border-radius:10px;padding:20px 16px;min-height:220px;display:flex;flex-direction:column;align-items:flex-end;}
-.prev-msg{background:#FFE790;border-radius:16px 0 16px 16px;padding:15px 12px;font-size:15px;font-weight:350;line-height:21px;letter-spacing:-0.75px;color:var(--color-grey-700);max-width:100%;white-space:pre-wrap;}
 
 /* 완료 (v2 cpl-wrap 패턴) */
 .cpl-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 40px;gap:16px;text-align:center;flex:1;}
@@ -299,7 +303,9 @@ function resetFlow(){
   document.getElementById('pzSub').textContent = '고객 확인 후 녹음이 시작됩니다';
   document.getElementById('pzBody').innerHTML = '<div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 고객을 먼저 확인해 주세요.</div>';
   document.getElementById('pzFooter').innerHTML = '';
-  document.getElementById('st3').innerHTML = '<span class="step-num">3</span> 메시지 확인';
+  var st3reset = document.getElementById('st3');
+  st3reset.style.display = '';
+  st3reset.innerHTML = '<span class="step-num">3</span> 메시지 확인';
   renderSearch();
 }
 
@@ -394,7 +400,13 @@ function removePatient(){
 function beginRecording(){
   setStep(1);
   renderModalPtBar(false);
-  document.getElementById('st3').innerHTML = '<span class="step-num">3</span> ' + (selectedPatient.isNew ? '전화번호 입력' : '메시지 확인');
+  var st3 = document.getElementById('st3');
+  if(selectedPatient.isNew){
+    st3.style.display = '';
+    st3.innerHTML = '<span class="step-num">3</span> 전화번호 입력';
+  } else {
+    st3.style.display = 'none';
+  }
   var refHtml = '';
   if(!selectedPatient.isNew){
     var rx = selectedPatient.recentRx;
@@ -444,20 +456,42 @@ function endRecording(){
   document.getElementById('pzSub').textContent = '상담 내용을 요약했습니다';
   goSummary();
 }
+/* 단골 전용 — 자주 쓰는 문구를 클릭해 커서 위치에 바로 삽입 */
+var QUICK_PHRASES = ['식후 30분 이내 복용해 주세요.','수분을 충분히 섭취해 주세요.','운전·기계 조작은 피해 주세요.','증상이 계속되면 다시 방문해 주세요.','임의로 복용을 중단하지 마세요.'];
+function insertQuickPhrase(text){
+  var ta = document.getElementById('draftText');
+  var sep = ta.value && !ta.value.endsWith('\n') ? '\n' : '';
+  ta.value += sep + text;
+  updateMsgCount();
+  ta.focus();
+}
 function goSummary(){
   setStep(2);
+  var isKnown = selectedPatient.phone && !selectedPatient.isNew;
   var draft = currentDraft !== null ? currentDraft : buildAiDraft();
+  var taBlock =
+    '<!-- component: new/message-draft --><textarea class="msg-ta" id="draftText" data-figma="new/message-draft" oninput="updateMsgCount()">' + draft + '</textarea>' +
+    '<div class="msg-cnt" id="msgCnt"></div>';
+  var bodyContent;
+  if(isKnown){
+    var chips = QUICK_PHRASES.map(function(p){
+      return '<!-- component: new/quick-phrase-chip --><button type="button" class="quick-chip" data-figma="new/quick-phrase-chip" onclick="insertQuickPhrase(\''+p.replace(/'/g,"\\'")+'\')">'+p+'</button>';
+    }).join('');
+    bodyContent = '<div class="msg-grid"><div class="quick-chips">'+chips+'</div><div>'+taBlock+'</div></div>';
+  } else {
+    bodyContent = taBlock;
+  }
   document.getElementById('mbody').innerHTML =
     '<div class="msg-hdr"><span class="msg-ttl">복약지도문 작성</span>' +
       '<!-- component: button/ghost --><button class="msg-reset" data-figma="button/ghost" onclick="resetDraft()">' +
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 2.34 5.66M4 12v5M4 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>다시 생성</button>' +
     '</div>' +
     '<div class="ai-caption">AI가 요약한 초안입니다 — 자유롭게 수정하세요.</div>' +
-    '<!-- component: new/message-draft --><textarea class="msg-ta" id="draftText" data-figma="new/message-draft" oninput="updateMsgCount()">' + draft + '</textarea>' +
-    '<div class="msg-cnt" id="msgCnt"></div>';
+    bodyContent;
   updateMsgCount();
-  document.getElementById('mfoot').innerHTML =
-    '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="goSend()">다음</button>';
+  document.getElementById('mfoot').innerHTML = isKnown
+    ? '<!-- component: button/solid --><button class="btn-next send" data-figma="button/solid" onclick="sendKnownDirect()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>앱으로 보내기</button>'
+    : '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="goSend()">다음</button>';
 }
 function updateMsgCount(){
   var len = document.getElementById('draftText').value.length;
@@ -468,39 +502,33 @@ function resetDraft(){
   document.getElementById('draftText').value = buildAiDraft();
   updateMsgCount();
 }
+function sendKnownDirect(){
+  currentDraft = document.getElementById('draftText').value;
+  renderComplete(selectedPatient.name+'님의 웰체크 앱으로 복약지도문이 발송되었습니다.');
+}
 
-/* ── 메시지 확인 — 단골은 웰체크 앱으로 바로, 신규는 문자(SMS)로 (연락처 여기서 처음 입력) ── */
+/* ── 전화번호 입력 — 신규 고객 전용(단골은 goSummary에서 바로 발송) ── */
+var PHARMACY_PHONE = '02-1234-5678';
 function goSend(){
   setStep(3);
   currentDraft = document.getElementById('draftText').value;
-  var isKnown = selectedPatient.phone && !selectedPatient.isNew;
-  var nameVal = selectedPatient.name || '미입력(신규)';
-  var channelLabel = isKnown ? '웰체크 앱 메시지' : '문자(SMS)';
-  var outgoing = currentDraft;
   var rightCol =
     '<!-- component: new/send-summary-table --><table class="sum-tbl" data-figma="new/send-summary-table">' +
-      '<tr><td>고객</td><td>'+nameVal+'</td></tr>' +
-      '<tr><td>발송 채널</td><td>'+channelLabel+'</td></tr>' +
-    '</table>';
-  if(!isKnown){
-    rightCol += '<div class="field"><label>연락처 <span class="req">(필수)</span></label>' +
+      '<tr><td>발송 채널</td><td>문자(SMS)</td></tr>' +
+      '<tr><td>약국 번호</td><td>'+PHARMACY_PHONE+'</td></tr>' +
+    '</table>' +
+    '<div class="field"><label>연락처 <span class="req">(필수)</span></label>' +
       '<!-- component: new/phone-input-big --><input id="sendPhone" class="phone-input-big" data-figma="new/phone-input-big" type="tel" inputmode="numeric" placeholder="010-0000-0000" maxlength="13" oninput="formatPhoneInput(this);checkSendEnabled();">' +
-      '</div>';
-  }
-  var body = isKnown
-    ? '<div class="send-summary-label">메시지 확인</div>' +
-      '<div class="prev-grid">' +
-        '<!-- component: new/message-preview --><div class="prev-phone" data-figma="new/message-preview"><div class="prev-msg">'+outgoing.replace(/</g,'&lt;')+'</div></div>' +
-        '<div>'+rightCol+'</div>' +
-      '</div>'
-    : '<div class="send-summary-label">전화번호 입력</div>' + rightCol;
-  document.getElementById('mbody').innerHTML = body;
-  var sendLabel = isKnown ? '앱으로 보내기' : '문자로 보내기';
+      '</div>' +
+    '<!-- component: new/consent-checkbox --><label class="consent-row" data-figma="new/consent-checkbox">' +
+      '<input type="checkbox" id="smsConsent" onchange="checkSendEnabled()"> 문자 수신에 동의합니다.' +
+    '</label>';
+  document.getElementById('mbody').innerHTML = '<div class="send-summary-label">전화번호 입력</div>' + rightCol;
   document.getElementById('mfoot').innerHTML =
     '<button class="btn-back" onclick="goSummary()">이전</button>' +
-    '<!-- component: button/solid --><button class="btn-next send" id="btnSend" data-figma="button/solid" '+(isKnown?'':'disabled')+' onclick="doSend()">' +
-    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'+sendLabel+'</button>';
-  if(!isKnown) document.getElementById('sendPhone').focus();
+    '<!-- component: button/solid --><button class="btn-next send" id="btnSend" data-figma="button/solid" disabled onclick="doSend()">' +
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>문자로 보내기</button>';
+  document.getElementById('sendPhone').focus();
 }
 function formatPhoneInput(el){
   var d = el.value.replace(/\D/g,'').slice(0,11);
@@ -511,16 +539,14 @@ function formatPhoneInput(el){
 }
 function checkSendEnabled(){
   var phone = document.getElementById('sendPhone').value.replace(/\D/g,'');
-  document.getElementById('btnSend').disabled = phone.length !== 11;
+  var consented = document.getElementById('smsConsent').checked;
+  document.getElementById('btnSend').disabled = phone.length !== 11 || !consented;
 }
 function doSend(){
-  var isKnown = selectedPatient.phone && !selectedPatient.isNew;
-  if(document.getElementById('sendPhone')){
-    selectedPatient.phone = document.getElementById('sendPhone').value || selectedPatient.phone;
-  }
-  var cplSub = isKnown
-    ? selectedPatient.name+'님의 웰체크 앱으로 복약지도문이 발송되었습니다.'
-    : selectedPatient.phone+'로 복약지도문과 웰체크 앱 초대 링크가 문자(SMS)로 발송되었습니다.';
+  selectedPatient.phone = document.getElementById('sendPhone').value || selectedPatient.phone;
+  renderComplete(selectedPatient.phone+'로 복약지도문과 웰체크 앱 초대 링크가 문자(SMS)로 발송되었습니다.');
+}
+function renderComplete(cplSub){
   document.getElementById('mbody').innerHTML =
     '<div class="cpl-wrap">' +
       '<div class="cpl-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="#33AF2E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +

@@ -244,12 +244,17 @@ function isChosungQuery(q){
   return q.length > 0 && q.split('').every(function(ch){ return CHOSUNG_LIST.indexOf(ch) > -1; });
 }
 var AI_DRAFT_FALLBACK = '오늘 처방받으신 약은 감기약으로 하루 3번, 아침·점심·저녁 식사 후 바로 드시면 됩니다. 먹으면 졸릴 수 있어 운전은 삼가주세요. 목 아프실 때는 용각산을 수시로 드셔도 됩니다.';
-/* 단골이고 최근 처방전이 있으면 그 처방전 약품을 실제로 반영한 초안 생성 */
+/* 신규 환자 메시지엔 웰체크 앱 초대 링크를 이어붙임 — 모객 채널 */
+var INVITE_LINK = 'https://wellcheck.app/invite/a1b2c3';
+var INVITE_BLOCK = '\n\n웰체크 앱을 설치하시면 복약 알림과 상담 기록을 편하게 받아보실 수 있어요.\n' + INVITE_LINK;
+/* 단골이고 최근 처방전이 있으면 그 처방전 약품을 실제로 반영한 초안 생성, 신규는 초대 링크까지 포함 */
 function buildAiDraft(){
   var rx = selectedPatient && !selectedPatient.isNew ? selectedPatient.recentRx : null;
-  if(!rx) return AI_DRAFT_FALLBACK;
-  var drugList = rx.drugs.join(', ');
-  return rx.hospital+'에서 '+rx.date+'에 처방받으신 '+drugList+' 관련해서 상담 드린 내용입니다. 말씀드린 대로 정해진 시간에 거르지 않고 복용해 주시고, 복용 중 어지럽거나 속이 불편하시면 임의로 중단하지 마시고 약국으로 먼저 연락 주세요.';
+  var base = rx
+    ? rx.hospital+'에서 '+rx.date+'에 처방받으신 '+rx.drugs.join(', ')+' 관련해서 상담 드린 내용입니다. 말씀드린 대로 정해진 시간에 거르지 않고 복용해 주시고, 복용 중 어지럽거나 속이 불편하시면 임의로 중단하지 마시고 약국으로 먼저 연락 주세요.'
+    : AI_DRAFT_FALLBACK;
+  if(selectedPatient && selectedPatient.isNew) base += INVITE_BLOCK;
+  return base;
 }
 var EDIT_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
 var REMOVE_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -286,6 +291,7 @@ function resetFlow(){
   document.getElementById('pzSub').textContent = '환자 확인 후 녹음이 시작됩니다';
   document.getElementById('pzBody').innerHTML = '<div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 환자를 먼저 확인해 주세요.</div>';
   document.getElementById('pzFooter').innerHTML = '';
+  document.getElementById('st3').innerHTML = '<span class="step-num">3</span> 메시지 확인';
   renderSearch();
 }
 
@@ -307,7 +313,7 @@ function renderSearch(){
       '<div id="searchResults"></div>' +
       '<div class="s1-divider">또는</div>' +
       '<!-- component: button/outlined-secondary -->' +
-      '<button class="s1-new-btn" data-figma="button/outlined-secondary" onclick="startAsNew()">＋ 신규로 시작</button>' +
+      '<button class="s1-new-btn" data-figma="button/outlined-secondary" onclick="startAsNew()">나중에 입력하기</button>' +
     '</div>';
   F.innerHTML = '';
 }
@@ -380,6 +386,7 @@ function removePatient(){
 function beginRecording(){
   setStep(1);
   renderModalPtBar(false);
+  document.getElementById('st3').innerHTML = '<span class="step-num">3</span> ' + (selectedPatient.isNew ? '전화번호 입력' : '메시지 확인');
   var refHtml = '';
   if(!selectedPatient.isNew){
     var rx = selectedPatient.recentRx;
@@ -454,13 +461,6 @@ function resetDraft(){
   updateMsgCount();
 }
 
-/* 신규 환자 메시지엔 웰체크 앱 초대 링크를 이어붙임 — 모객 채널 */
-var INVITE_LINK = 'https://wellcheck.app/invite/a1b2c3';
-function buildOutgoingMessage(isKnown){
-  if(isKnown) return currentDraft;
-  return currentDraft + '\n\n웰체크 앱을 설치하시면 복약 알림과 상담 기록을 편하게 받아보실 수 있어요.\n' + INVITE_LINK;
-}
-
 /* ── 메시지 확인 — 단골은 웰체크 앱으로 바로, 신규는 문자(SMS)로 (연락처 여기서 처음 입력) ── */
 function goSend(){
   setStep(3);
@@ -468,7 +468,7 @@ function goSend(){
   var isKnown = selectedPatient.phone && !selectedPatient.isNew;
   var nameVal = selectedPatient.name || '미입력(신규)';
   var channelLabel = isKnown ? '웰체크 앱 메시지' : '문자(SMS)';
-  var outgoing = buildOutgoingMessage(isKnown);
+  var outgoing = currentDraft;
   var rightCol =
     '<!-- component: new/send-summary-table --><table class="sum-tbl" data-figma="new/send-summary-table">' +
       '<tr><td>환자</td><td>'+nameVal+'</td></tr>' +

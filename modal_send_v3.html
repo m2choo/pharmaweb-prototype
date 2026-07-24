@@ -146,8 +146,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .sum-tbl td:last-child{color:var(--color-grey-700);font-weight:400;}
 .phone-input-big{height:52px;border:1.5px solid var(--color-grey-300);border-radius:8px;padding:0 16px;font-size:20px;font-family:'Poppins','Noto Sans KR',sans-serif;font-weight:500;letter-spacing:1px;outline:none;color:var(--color-grey-800);width:100%;}
 .phone-input-big:focus{border-color:var(--color-primary);}
-.consent-row{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:14px;font-weight:400;letter-spacing:-0.56px;color:var(--color-grey-700);cursor:pointer;}
-.consent-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--color-primary);cursor:pointer;}
+.consent-row{display:flex;align-items:flex-start;gap:8px;margin-top:14px;font-size:13px;font-weight:400;line-height:1.6;letter-spacing:-0.52px;color:var(--color-grey-600);cursor:pointer;}
+.consent-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--color-primary);cursor:pointer;flex-shrink:0;margin-top:2px;}
 
 
 /* 완료 (v2 cpl-wrap 패턴) */
@@ -521,7 +521,7 @@ function goSend(){
       '<!-- component: new/phone-input-big --><input id="sendPhone" class="phone-input-big" data-figma="new/phone-input-big" type="tel" inputmode="numeric" placeholder="010-0000-0000" maxlength="13" oninput="formatPhoneInput(this);checkSendEnabled();">' +
       '</div>' +
     '<!-- component: new/consent-checkbox --><label class="consent-row" data-figma="new/consent-checkbox">' +
-      '<input type="checkbox" id="smsConsent" onchange="checkSendEnabled()"> 문자 수신에 동의합니다.' +
+      '<input type="checkbox" id="smsConsent" onchange="checkSendEnabled()"> 본인은 초대장 문자 발송 대상자(환자 등)의 동의를 받았거나, 해당 정보 제공이 가능한 정당한 권한이 있음을 확인합니다.' +
     '</label>';
   document.getElementById('mbody').innerHTML = '<div class="send-summary-label">전화번호 입력</div>' + rightCol;
   document.getElementById('mfoot').innerHTML =

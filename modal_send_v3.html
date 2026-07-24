@@ -178,9 +178,14 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .pz-sub{font-size:14px;color:var(--color-grey-500);margin-top:4px;}
 .pz-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;}
 .pz-idle{color:var(--color-grey-500);font-size:14px;text-align:center;line-height:1.7;max-width:240px;}
-.rec-circle{width:76px;height:76px;border-radius:50%;background:var(--color-grey-150);display:flex;align-items:center;justify-content:center;position:relative;}
-.rec-circle.live{background:var(--color-blue-100);}
-.rec-circle.done{background:var(--color-grey-150);}
+.rec-wave-row{display:flex;align-items:center;justify-content:center;gap:6px;height:60px;}
+.rec-wave-row span{width:6px;border-radius:3px;background:var(--color-primary);animation:pzWave 1.1s ease-in-out infinite;}
+.rec-wave-row span:nth-child(1){height:18px;animation-delay:0s;}
+.rec-wave-row span:nth-child(2){height:36px;animation-delay:.15s;}
+.rec-wave-row span:nth-child(3){height:52px;animation-delay:.3s;}
+.rec-wave-row span:nth-child(4){height:32px;animation-delay:.45s;}
+.rec-wave-row span:nth-child(5){height:20px;animation-delay:.6s;}
+.rec-wave-row.done span{animation-play-state:paused;opacity:.4;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 .rec-timer{font-family:'Poppins','Noto Sans KR',sans-serif;font-size:24px;font-weight:600;color:var(--color-grey-800);font-variant-numeric:tabular-nums;}
 .rec-label{font-size:14px;font-weight:500;color:var(--color-grey-600);}
@@ -491,7 +496,7 @@ function beginRecording(){
     refHtml +
     '<div class="wait-stage">' +
       '<div class="wait-title">상담이 진행 중입니다</div>' +
-      '<div class="rec-circle live" id="recCircle"></div>' +
+      '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
       '<div class="rec-timer" id="recTimer">00:00</div>' +
       '<div class="rec-label" id="recLabel">녹음 중</div>' +
       '<div class="wait-sub">고객이 확정되어 바로 녹음이 시작되었습니다.</div>' +
@@ -530,7 +535,6 @@ function endRecording(){
   var cursor = document.querySelector('.pz-stt-cursor');
   if(cursor) cursor.remove();
   document.getElementById('btnStop').disabled = true;
-  document.getElementById('recCircle').classList.remove('live');
   document.getElementById('recCircle').classList.add('done');
   document.getElementById('recLabel').textContent = '녹음 종료';
   document.getElementById('pzSub').textContent = '상담 내용을 요약했습니다';

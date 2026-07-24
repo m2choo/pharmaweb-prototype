@@ -337,7 +337,7 @@ function onSearch(q){
           '<div><div class="s1-result-name">'+p.name+'</div><div class="s1-result-phone">'+p.phone+' · '+p.birth+'</div></div>' +
         '</div>';
       }).join('') + '</div>'
-    : '<div class="s1-empty">일치하는 고객이 없습니다. 신규로 시작해 주세요.</div>';
+    : '<div class="s1-empty">일치하는 고객이 없습니다. 나중에 입력하기로 진행해 주세요.</div>';
 }
 function confirmPatient(i){
   selectedPatient = Object.assign({}, currentMatches[i], {isNew:false});

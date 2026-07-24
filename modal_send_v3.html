@@ -79,7 +79,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .btn-next.send{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-weight:700;}
 .btn-back{height:40px;padding:0 20px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-800);cursor:pointer;font-family:inherit;}
 
-/* 환자 검색 (v2 search/default 패턴) */
+/* 고객 검색 (v2 search/default 패턴) */
 .field-col{display:flex;flex-direction:column;gap:14px;flex:1;}
 .field{display:flex;flex-direction:column;gap:6px;}
 .field label{font-size:13px;font-weight:500;color:var(--color-grey-600);}
@@ -104,7 +104,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .s1-new-btn{height:44px;border:1.5px dashed var(--color-grey-250);border-radius:8px;background:var(--color-grey-100);color:var(--color-grey-600);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;}
 .s1-new-btn:hover{background:var(--color-blue-100);border-color:var(--color-primary);color:var(--color-primary);}
 
-/* 환자 확정 후, 녹음 전 — 참고 정보 노출 (v2 카드 톤) */
+/* 고객 확정 후, 녹음 전 — 참고 정보 노출 (v2 카드 톤) */
 .ready-note{font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);line-height:1.7;}
 /* component: new/recent-rx-card */
 .recent-rx-card{border:1px solid var(--color-grey-250);border-radius:10px;padding:14px 16px;margin-bottom:14px;}
@@ -193,9 +193,9 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
         <!-- component: button/ghost -->
         <button class="modal-x" data-figma="button/ghost" title="닫기" onclick="closeModal()">✕</button>
       </div>
-      <div class="modal-pt" id="modalPt" data-figma="new/patient-identity-bar"><span class="modal-pt-placeholder">환자를 먼저 확인해 주세요</span></div>
+      <div class="modal-pt" id="modalPt" data-figma="new/patient-identity-bar"><span class="modal-pt-placeholder">고객을 먼저 확인해 주세요</span></div>
       <div class="step-tabs" id="stepTabs">
-        <div class="step-tab" id="st1"><span class="step-num">1</span> 환자 확인</div>
+        <div class="step-tab" id="st1"><span class="step-num">1</span> 고객 확인</div>
         <div class="step-tab" id="st2"><span class="step-num">2</span> 복약지도문 작성</div>
         <div class="step-tab" id="st3"><span class="step-num">3</span> 메시지 확인</div>
       </div>
@@ -207,10 +207,10 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
     <div class="puzzle-panel" data-figma="new/puzzle-panel">
       <div class="pz-header">
         <div class="pz-name">Puzzle AI</div>
-        <div class="pz-sub" id="pzSub">환자 확인 후 녹음이 시작됩니다</div>
+        <div class="pz-sub" id="pzSub">고객 확인 후 녹음이 시작됩니다</div>
       </div>
       <div class="pz-body" id="pzBody">
-        <div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 환자를 먼저 확인해 주세요.</div>
+        <div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 고객을 먼저 확인해 주세요.</div>
       </div>
       <div class="pz-footer" id="pzFooter"></div>
     </div>
@@ -244,7 +244,7 @@ function isChosungQuery(q){
   return q.length > 0 && q.split('').every(function(ch){ return CHOSUNG_LIST.indexOf(ch) > -1; });
 }
 var AI_DRAFT_FALLBACK = '오늘 처방받으신 약은 감기약으로 하루 3번, 아침·점심·저녁 식사 후 바로 드시면 됩니다. 먹으면 졸릴 수 있어 운전은 삼가주세요. 목 아프실 때는 용각산을 수시로 드셔도 됩니다.';
-/* 신규 환자 메시지엔 웰체크 앱 초대 링크를 이어붙임 — 모객 채널 */
+/* 신규 고객 메시지엔 웰체크 앱 초대 링크를 이어붙임 — 모객 채널 */
 var INVITE_LINK = 'https://wellcheck.app/invite/a1b2c3';
 var INVITE_BLOCK = '\n\n웰체크 앱을 설치하시면 복약 알림과 상담 기록을 편하게 받아보실 수 있어요.\n' + INVITE_LINK;
 /* 단골이고 최근 처방전이 있으면 그 처방전 약품을 실제로 반영한 초안 생성, 신규는 초대 링크까지 포함 */
@@ -287,15 +287,15 @@ function resetFlow(){
   seconds = 0;
   currentDraft = null;
   clearInterval(timerId);
-  document.getElementById('modalPt').innerHTML = '<span class="modal-pt-placeholder">환자를 먼저 확인해 주세요</span>';
-  document.getElementById('pzSub').textContent = '환자 확인 후 녹음이 시작됩니다';
-  document.getElementById('pzBody').innerHTML = '<div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 환자를 먼저 확인해 주세요.</div>';
+  document.getElementById('modalPt').innerHTML = '<span class="modal-pt-placeholder">고객을 먼저 확인해 주세요</span>';
+  document.getElementById('pzSub').textContent = '고객 확인 후 녹음이 시작됩니다';
+  document.getElementById('pzBody').innerHTML = '<div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 고객을 먼저 확인해 주세요.</div>';
   document.getElementById('pzFooter').innerHTML = '';
   document.getElementById('st3').innerHTML = '<span class="step-num">3</span> 메시지 확인';
   renderSearch();
 }
 
-/* ── 환자 검색 ── */
+/* ── 고객 검색 ── */
 function renderSearch(){
   setStep(1);
   var B = document.getElementById('mbody');
@@ -303,7 +303,7 @@ function renderSearch(){
   B.innerHTML =
     '<div class="field-col">' +
       '<div class="field">' +
-        '<label>환자 식별 정보</label>' +
+        '<label>고객 식별 정보</label>' +
         '<!-- component: search/default -->' +
         '<div class="s1-search-wrap">' +
           '<input id="s1input" data-figma="search/default" type="text" placeholder="이름, 초성(ㄱㅁㅇ), 전화번호, 생년월일" oninput="onSearch(this.value)" autocomplete="off">' +
@@ -337,7 +337,7 @@ function onSearch(q){
           '<div><div class="s1-result-name">'+p.name+'</div><div class="s1-result-phone">'+p.phone+' · '+p.birth+'</div></div>' +
         '</div>';
       }).join('') + '</div>'
-    : '<div class="s1-empty">일치하는 환자가 없습니다. 신규로 시작해 주세요.</div>';
+    : '<div class="s1-empty">일치하는 고객이 없습니다. 신규로 시작해 주세요.</div>';
 }
 function confirmPatient(i){
   selectedPatient = Object.assign({}, currentMatches[i], {isNew:false});
@@ -348,7 +348,7 @@ function startAsNew(){
   beginRecording();
 }
 
-/* ── 환자 정보 바 (v2 modal-pt 패턴: 아바타 + 이름(+수정, 신규만) + 정보 + 삭제(녹음 전까지)) ── */
+/* ── 고객 정보 바 (v2 modal-pt 패턴: 아바타 + 이름(+수정, 신규만) + 정보 + 삭제(녹음 전까지)) ── */
 function renderModalPtBar(showRemove){
   ptShowRemove = showRemove;
   var pt = document.getElementById('modalPt');
@@ -362,7 +362,7 @@ function renderModalPtBar(showRemove){
   } else {
     pt.innerHTML =
       '<div class="modal-pt-avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#8B95A1" stroke-width="1.8"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7" stroke="#8B95A1" stroke-width="1.8" stroke-linecap="round"/></svg></div>' +
-      '<div><span class="modal-pt-name">신규 환자</span>' +
+      '<div><span class="modal-pt-name">신규 고객</span>' +
       '<button class="modal-pt-name-edit" onclick="startEditName()" title="이름 입력">'+EDIT_ICON+'</button></div>' + removeBtn;
   }
 }
@@ -382,7 +382,7 @@ function removePatient(){
   resetFlow();
 }
 
-/* ── 환자 선택 즉시 녹음 시작 (검색/신규 선택 → 바로 녹음) ── */
+/* ── 고객 선택 즉시 녹음 시작 (검색/신규 선택 → 바로 녹음) ── */
 function beginRecording(){
   setStep(1);
   renderModalPtBar(false);
@@ -403,7 +403,7 @@ function beginRecording(){
     '<div class="wait-stage">' +
       '<div class="wait-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 003-3V6a3 3 0 10-6 0v6a3 3 0 003 3z" stroke="#3E71F0" stroke-width="1.8"/><path d="M19 11a7 7 0 01-14 0M12 18v3" stroke="#3E71F0" stroke-width="1.8" stroke-linecap="round"/></svg></div>' +
       '<div class="wait-title">상담이 진행 중입니다</div>' +
-      '<div class="wait-sub">환자가 확정되어 바로 녹음이 시작되었습니다.</div>' +
+      '<div class="wait-sub">고객이 확정되어 바로 녹음이 시작되었습니다.</div>' +
       '<div class="rec-hint">👉 상담이 끝나면 오른쪽 <b>Puzzle AI 패널</b>의 <b>"상담 종료"</b> 버튼을 눌러 주세요. 요약이 자동으로 생성됩니다.</div>' +
     '</div>';
   document.getElementById('mfoot').innerHTML = '';
@@ -471,7 +471,7 @@ function goSend(){
   var outgoing = currentDraft;
   var rightCol =
     '<!-- component: new/send-summary-table --><table class="sum-tbl" data-figma="new/send-summary-table">' +
-      '<tr><td>환자</td><td>'+nameVal+'</td></tr>' +
+      '<tr><td>고객</td><td>'+nameVal+'</td></tr>' +
       '<tr><td>발송 채널</td><td>'+channelLabel+'</td></tr>' +
     '</table>';
   if(!isKnown){
@@ -479,12 +479,13 @@ function goSend(){
       '<!-- component: new/phone-input-big --><input id="sendPhone" class="phone-input-big" data-figma="new/phone-input-big" type="tel" inputmode="numeric" placeholder="010-0000-0000" maxlength="13" oninput="formatPhoneInput(this);checkSendEnabled();">' +
       '</div>';
   }
-  var body =
-    '<div class="send-summary-label">메시지 확인</div>' +
-    '<div class="prev-grid">' +
-      '<!-- component: new/message-preview --><div class="prev-phone" data-figma="new/message-preview"><div class="prev-msg">'+outgoing.replace(/</g,'&lt;')+'</div></div>' +
-      '<div>'+rightCol+'</div>' +
-    '</div>';
+  var body = isKnown
+    ? '<div class="send-summary-label">메시지 확인</div>' +
+      '<div class="prev-grid">' +
+        '<!-- component: new/message-preview --><div class="prev-phone" data-figma="new/message-preview"><div class="prev-msg">'+outgoing.replace(/</g,'&lt;')+'</div></div>' +
+        '<div>'+rightCol+'</div>' +
+      '</div>'
+    : '<div class="send-summary-label">전화번호 입력</div>' + rightCol;
   document.getElementById('mbody').innerHTML = body;
   var sendLabel = isKnown ? '앱으로 보내기' : '문자로 보내기';
   document.getElementById('mfoot').innerHTML =

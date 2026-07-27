@@ -102,34 +102,29 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .memo-hd-title{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:500;color:var(--color-grey-800);}
 .memo-icon{width:22px;height:22px;border-radius:50%;background:#FDEDD5;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .memo-autosave{font-size:12px;font-weight:500;color:var(--color-grey-500);background:var(--color-grey-100);padding:3px 10px;border-radius:10px;}
-.memo-textarea{flex:1;min-height:70px;max-height:70px;width:100%;border:none;outline:none;resize:none;font-family:inherit;font-size:15px;line-height:1.7;color:var(--color-grey-800);}
+.memo-textarea{flex:1;min-height:40px;max-height:40px;width:100%;border:none;outline:none;resize:none;font-family:inherit;font-size:15px;line-height:1.7;color:var(--color-grey-800);}
 .memo-textarea::placeholder{color:var(--color-grey-400);}
 .memo-count{align-self:flex-end;font-size:12px;color:var(--color-grey-400);margin-top:8px;flex-shrink:0;}
 
-/* component: new/poly-drug-table — 다제약물관리사업 대상 추정 근거 */
-.poly-drug-section{flex-shrink:0;}
-.poly-drug-title{font-size:15px;font-weight:500;color:var(--color-grey-800);margin-bottom:10px;}
-.poly-drug-empty{text-align:center;color:var(--color-grey-400);padding:16px;}
-.poly-drug-scroll{max-height:180px;overflow-y:auto;border:1px solid var(--color-grey-200);border-radius:8px;}
-.poly-drug-table{width:100%;border-collapse:collapse;}
-.poly-drug-table thead tr{background:#EEF0F3;}
-.poly-drug-table th{position:sticky;top:0;padding:8px 10px;font-size:12px;font-weight:400;color:#5F6E7D;text-align:left;background:#EEF0F3;border-bottom:1px solid var(--color-grey-250);}
-.poly-drug-table td{padding:10px;font-size:14px;color:var(--color-grey-800);border-bottom:1px solid var(--color-grey-200);}
-.poly-drug-table tbody tr:last-child td{border-bottom:none;}
-.interaction-none{color:var(--color-grey-400);}
-.poly-ref-chip{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:700;margin-right:3px;flex-shrink:0;}
-.poly-ref-chip.interaction{background:#FFF4F5;color:var(--color-red);}
-.poly-ref-chip.caution{background:#FFF7E6;color:#F5AC1F;}
-.poly-ref-chip.duplicate{background:var(--color-blue-100);color:var(--color-primary);}
-.poly-footnotes{display:flex;flex-direction:column;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--color-grey-200);}
-.poly-footnotes:empty{display:none;margin:0;padding:0;border:none;}
-.poly-footnote-item{display:flex;align-items:flex-start;gap:6px;font-size:12.5px;color:var(--color-grey-600);line-height:1.6;}
-.poly-footnote-item b{color:var(--color-grey-800);}
-.poly-filter-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
-.poly-filter-chip{height:34px;padding:0 16px;border:1px solid var(--color-grey-250);border-radius:17px;background:var(--color-white);font-size:14px;font-weight:500;color:var(--color-grey-600);cursor:pointer;font-family:inherit;}
-.poly-filter-chip:hover{border-color:var(--color-primary);color:var(--color-primary);}
-.poly-filter-chip.active{background:var(--color-primary);border-color:var(--color-primary);color:var(--color-white);}
-.poly-footnote-empty{font-size:12.5px;color:var(--color-grey-400);padding:6px 0 0;}
+/* component: new/med-check — 복약 점검 항목(동일 성분/상호작용/금기·주의 요약 카드) */
+.med-check-section{flex-shrink:0;}
+.med-check-hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
+.med-check-title{font-size:15px;font-weight:500;color:var(--color-grey-800);}
+.med-check-basis{font-size:13px;color:var(--color-primary);}
+.med-check-stats{display:flex;gap:10px;margin-bottom:14px;}
+.med-check-stat{flex:1;border:1px solid var(--color-grey-200);border-radius:8px;padding:14px 0;text-align:center;}
+.med-check-stat-num{font-size:20px;font-weight:700;color:var(--color-grey-800);}
+.med-check-stat-label{font-size:13px;color:var(--color-grey-600);margin-top:4px;}
+.med-check-list{display:flex;flex-direction:column;gap:10px;}
+.med-check-empty{text-align:center;color:var(--color-grey-400);padding:16px;}
+.med-check-card{border-radius:8px;padding:12px 14px;border:1px solid;}
+.med-check-card.duplicate{background:#FFFCF5;border-color:#FFD5A4;}
+.med-check-card.interaction,.med-check-card.caution{background:#FFF6F6;border-color:#FFC9CC;}
+.med-check-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;margin-bottom:6px;}
+.med-check-tag.duplicate{background:#FFF0DA;color:#F5AC1F;}
+.med-check-tag.interaction,.med-check-tag.caution{background:#FFE3E4;color:var(--color-red);}
+.med-check-card-title{font-size:14px;font-weight:600;color:var(--color-grey-800);margin-bottom:3px;}
+.med-check-card-desc{font-size:12.5px;color:var(--color-grey-600);}
 
 .btn-next{height:40px;padding:0 28px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
 .btn-next:disabled{opacity:.4;cursor:not-allowed;}
@@ -1141,105 +1136,35 @@ function buildPolyFootnotes(drugs){
   });
   return footnotes;
 }
-function getRefNumsForDrug(name, footnotes){
-  var nums = [];
-  footnotes.forEach(function(f, i){ if(f.drugNames.indexOf(name) > -1) nums.push(i + 1); });
-  return nums;
-}
-/* 필터 칩: "전체(10)"은 항상 있고 다제약물관리사업 판정 근거가 된 원본 리스트 전체를 보여줌.
-   중복 성분/상호작용/금기·주의는 중복 선택 가능한 토글 — 하나라도 선택되면 표/각주 모두 선택된
-   유형에 해당하는 약물만 남도록 걸러짐. 하나도 선택 안 하면 "전체"로 간주 */
-var polySelectedTypes = [];
-function polyFilterChipsHtml(totalCount, footnotes){
-  var counts = { duplicate:0, interaction:0, caution:0 };
-  footnotes.forEach(function(f){ counts[f.type]++; });
-  var allActive = polySelectedTypes.length === 0;
-  var chips = ['<button type="button" class="poly-filter-chip' + (allActive ? ' active' : '') + '" onclick="setPolyFilterAll()">전체 (' + totalCount + ')</button>'];
-  ['duplicate', 'interaction', 'caution'].forEach(function(t){
-    if(counts[t] === 0) return;
-    var active = polySelectedTypes.indexOf(t) > -1;
-    chips.push('<button type="button" class="poly-filter-chip' + (active ? ' active' : '') + '" onclick="togglePolyFilterType(\'' + t + '\')">' + POLY_REF_TYPE_LABEL[t] + ' ' + counts[t] + '</button>');
-  });
-  return chips.join('');
-}
-/* "전체" 상태(카테고리 미선택)에서는 각주 설명을 안 보여줌 — 카테고리를 하나라도 골랐을 때만
-   그 항목들의 설명이 표 아래에 나타남. 카테고리를 하나만 선택했으면 이미 어떤 유형인지 칩으로
-   골라놓은 상태라 "중복 성분 — ..."처럼 유형 이름을 반복할 필요가 없어 생략하고, 2개 이상
-   동시 선택했을 때만 각 항목이 어느 유형인지 구분되게 유형 이름을 남겨둠 */
-function polyFootnoteListHtml(footnotes){
-  if(polySelectedTypes.length === 0) return '';
-  var filtered = footnotes.filter(function(f){ return polySelectedTypes.indexOf(f.type) > -1; });
-  if(!filtered.length) return '<div class="poly-footnote-empty">해당 유형의 항목이 없습니다.</div>';
-  var showLabel = polySelectedTypes.length > 1;
-  return filtered.map(function(f){
-    var num = footnotes.indexOf(f) + 1;
-    var text = showLabel ? '<b>' + POLY_REF_TYPE_LABEL[f.type] + '</b> — ' + f.desc : f.desc;
-    return '<div class="poly-footnote-item"><span class="poly-ref-chip ' + f.type + '">' + num + '</span>' +
-      '<span>' + text + '</span></div>';
-  }).join('');
-}
-function setPolyFilterAll(){
-  polySelectedTypes = [];
-  refreshPolySection();
-}
-function togglePolyFilterType(type){
-  var idx = polySelectedTypes.indexOf(type);
-  if(idx > -1) polySelectedTypes.splice(idx, 1); else polySelectedTypes.push(type);
-  refreshPolySection();
-}
-function refreshPolySection(){
-  var drugs = getPolyQualifyingDrugs(selectedPatient);
-  var footnotes = buildPolyFootnotes(drugs);
-  document.getElementById('polyFilterRow').innerHTML = polyFilterChipsHtml(drugs.length, footnotes);
-  document.getElementById('polyFootnotes').innerHTML = polyFootnoteListHtml(footnotes);
-  document.getElementById('polyDrugRows').innerHTML = polyRowsHtml(drugs, footnotes);
-}
-/* 다제약물관리사업 대상 추정 근거 — 해당 약품 목록 + 상호작용/금기·주의/중복성분을 각주 번호로 표시.
-   필터 칩을 표 위에 두고 누르면 표 자체가 선택된 카테고리 약물만 남도록 걸러지고, 설명(각주)도
-   표 아래에 같은 카테고리만 남아 보임 */
+var MED_CHECK_STAT_LABEL = { duplicate: '동일 성분', interaction: '상호작용', caution: '금기·주의' };
+var MED_CHECK_TAG_LABEL = { duplicate: '동일성분', interaction: '상호작용', caution: '금기·주의' };
+/* 복약 점검 항목 — 다제약물관리사업 대상 추정 근거(getPolyQualifyingDrugs)에서 나온 약물들의
+   동일 성분/상호작용/금기·주의 각주를 유형별 개수 요약(상단 3칸)과 카드 목록으로 보여줌.
+   예전엔 표 + 필터 칩 형태였으나, 필터링 없이 전체 항목을 카드로 나열하는 형태로 교체 */
 function renderPolyDrugTableHtml(patient){
   var drugs = getPolyQualifyingDrugs(patient);
   if(drugs.length < 10) return '';
-  polySelectedTypes = [];
   var footnotes = buildPolyFootnotes(drugs);
-  var filterRowHtml = '<div class="poly-filter-row" id="polyFilterRow">' + polyFilterChipsHtml(drugs.length, footnotes) + '</div>';
-  var footnoteHtml = footnotes.length
-    ? '<div class="poly-footnotes" id="polyFootnotes">' + polyFootnoteListHtml(footnotes) + '</div>'
-    : '';
-  return '<!-- component: new/poly-drug-table --><div class="poly-drug-section" data-figma="new/poly-drug-table">' +
-    '<div class="poly-drug-title">다제약물관리사업 대상 추정 근거</div>' +
-    filterRowHtml +
-    '<div class="poly-drug-scroll">' +
-      '<table class="poly-drug-table"><thead><tr><th>약품명</th><th>처방 병원</th><th>처방일</th><th>확인 필요</th></tr></thead>' +
-      '<tbody id="polyDrugRows">' + polyRowsHtml(drugs, footnotes) + '</tbody></table>' +
-    '</div>' +
-    footnoteHtml +
-  '</div>';
-}
-/* 같은 약품명이 여러 방문에 걸쳐 반복 처방된 경우(중복 성분 판정 대상) 약품명 기준으로 한 줄로
-   합쳐서 보여줌 — 처방 병원/처방일은 겹치는 방문 건들을 모아 표시 */
-function polyRowsHtml(drugs, footnotes){
-  var list = polySelectedTypes.length === 0 ? drugs : drugs.filter(function(d){
-    return getRefNumsForDrug(d.name, footnotes).some(function(n){ return polySelectedTypes.indexOf(footnotes[n - 1].type) > -1; });
-  });
-  if(!list.length) return '<tr><td colspan="4" class="poly-drug-empty">해당하는 약물이 없습니다.</td></tr>';
-  var byName = {};
-  var grouped = [];
-  list.forEach(function(d){
-    if(!byName[d.name]){
-      byName[d.name] = { name: d.name, hospitals: [], dates: [] };
-      grouped.push(byName[d.name]);
-    }
-    if(byName[d.name].hospitals.indexOf(d.hospital) === -1) byName[d.name].hospitals.push(d.hospital);
-    if(byName[d.name].dates.indexOf(d.date) === -1) byName[d.name].dates.push(d.date);
-  });
-  return grouped.map(function(g){
-    var refs = getRefNumsForDrug(g.name, footnotes);
-    var chips = refs.length
-      ? refs.map(function(n){ return '<span class="poly-ref-chip ' + footnotes[n - 1].type + '">' + n + '</span>'; }).join('')
-      : '<span class="interaction-none">-</span>';
-    return '<tr><td>' + g.name + '</td><td>' + g.hospitals.join(', ') + '</td><td>' + g.dates.join(', ') + '</td><td>' + chips + '</td></tr>';
+  if(!footnotes.length) return '';
+  var counts = { duplicate:0, interaction:0, caution:0 };
+  footnotes.forEach(function(f){ counts[f.type]++; });
+  var statsHtml = ['duplicate', 'interaction', 'caution'].map(function(t){
+    return '<div class="med-check-stat"><div class="med-check-stat-num">' + counts[t] + '</div>' +
+      '<div class="med-check-stat-label">' + MED_CHECK_STAT_LABEL[t] + '</div></div>';
   }).join('');
+  var cardsHtml = footnotes.map(function(f){
+    return '<div class="med-check-card ' + f.type + '">' +
+      '<span class="med-check-tag ' + f.type + '">' + MED_CHECK_TAG_LABEL[f.type] + '</span>' +
+      '<div class="med-check-card-title">' + f.drugNames.join(', ') + '</div>' +
+      '<div class="med-check-card-desc">' + f.desc + '</div>' +
+    '</div>';
+  }).join('');
+  return '<!-- component: new/med-check --><div class="med-check-section" data-figma="new/med-check">' +
+    '<div class="med-check-hd"><div class="med-check-title">복약 점검 항목</div>' +
+      '<span class="med-check-basis">오늘 기준 동일 복약 기간</span></div>' +
+    '<div class="med-check-stats">' + statsHtml + '</div>' +
+    '<div class="med-check-list">' + cardsHtml + '</div>' +
+  '</div>';
 }
 function ensureEditingDrugs(rx){
   if(!editingDrugsMap[rx.id]) editingDrugsMap[rx.id] = rx.drugs.map(function(d){ return Object.assign({}, d); });

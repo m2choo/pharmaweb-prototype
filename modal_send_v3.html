@@ -1254,22 +1254,23 @@ function beginRecording(fromSelectionStep){
         '</span>' +
         '<span class="memo-autosave">자동 저장됨</span>' +
       '</div>' +
-      '<textarea class="memo-textarea" id="pharmacistMemo" maxlength="1000" oninput="updateMemoCount()" placeholder="상담 중 참고할 내용을 자유롭게 메모해 보세요.&#10;예) 고객 특이사항, 다음 상담 시 확인할 점 등"></textarea>' +
+      '<textarea class="memo-textarea" id="pharmacistMemo" maxlength="1000" oninput="saveMemo()" placeholder="상담 중 참고할 내용을 자유롭게 메모해 보세요.&#10;예) 고객 특이사항, 다음 상담 시 확인할 점 등"></textarea>' +
       '<div class="memo-count" id="memoCount">0 / 1,000</div>' +
     '</div>' +
     renderPolyDrugTableHtml(selectedPatient);
   document.getElementById('mfoot').innerHTML = '';
+  var savedMemo = localStorage.getItem(getMemoKey());
+  if(savedMemo !== null) document.getElementById('pharmacistMemo').value = savedMemo;
+  updateMemoCount();
 
-  document.getElementById('pzSub').textContent = '녹음이 시작되었습니다';
+  document.getElementById('pzSub').textContent = '상담이 진행 중입니다 00:00';
   document.getElementById('pzName').textContent = selectedPatient.name || '신규 고객';
   var pzBody = document.getElementById('pzBody');
   pzBody.style.alignItems = 'stretch';
   pzBody.style.justifyContent = 'flex-start';
   pzBody.innerHTML =
     '<div class="pz-rec-indicator">' +
-      '<div class="wait-title">상담이 진행 중입니다</div>' +
       '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
-      '<div class="rec-timer" id="recTimer">00:00</div>' +
     '</div>' +
     '<div class="pz-stt-box" id="sttBox"></div>';
   startStt();
@@ -1284,12 +1285,20 @@ function beginRecording(fromSelectionStep){
     seconds++;
     var m = String(Math.floor(seconds/60)).padStart(2,'0');
     var s = String(seconds%60).padStart(2,'0');
-    document.getElementById('recTimer').textContent = m + ':' + s;
+    document.getElementById('pzSub').textContent = '상담이 진행 중입니다 ' + m + ':' + s;
   }, 1000);
 }
 function updateMemoCount(){
   var el = document.getElementById('pharmacistMemo');
   document.getElementById('memoCount').textContent = el.value.length + ' / 1,000';
+}
+/* 약사 메모는 고객 상세 페이지(customer_info_v3.html)의 약사 메모와 이름 기준으로 localStorage를 공유 — 여기서 쓰면 상세 페이지에도 그대로 반영됨 */
+function getMemoKey(){
+  return 'pharmacistMemo_' + ((selectedPatient && selectedPatient.name) || '');
+}
+function saveMemo(){
+  localStorage.setItem(getMemoKey(), document.getElementById('pharmacistMemo').value);
+  updateMemoCount();
 }
 
 function endRecording(){

@@ -172,6 +172,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .memo-title{font-size:15px;font-weight:500;color:var(--color-grey-900);display:flex;align-items:center;gap:6px;}
 .memo-auto{font-size:13px;color:#F59E0B;font-weight:500;}
 .memo-body{font-size:15px;line-height:1.9;color:var(--color-grey-800);}
+.memo-body-input{width:100%;min-height:150px;border:none;outline:none;resize:vertical;background:none;font-family:inherit;font-size:15px;line-height:1.9;color:var(--color-grey-800);}
 .memo-item{margin-bottom:10px;}
 .memo-num{font-weight:500;color:var(--color-grey-800);}
 .memo-footer{text-align:right;font-size:12px;color:var(--color-grey-400);margin-top:10px;padding-top:10px;}
@@ -246,7 +247,7 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
 <main class="main" id="mainContent">
   <div class="topbar">
     <div class="topbar-back">‹</div>
-    <div class="topbar-name">김체크</div>
+    <div class="topbar-name">김미영</div>
     <div class="topbar-info">1991년 01월 01생(만 33세)&nbsp;&nbsp;<span class="topbar-gender">여</span>&nbsp;&nbsp;010-8330-0492</div>
   </div>
 
@@ -271,7 +272,7 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
           </div>
           <div>
             <div class="chat-sender">웰체크</div>
-            <div class="chat-msg">안녕하세요 김체크 고객님!<br>웰체크약국 운영시간을 알려드릴게요.<br><br>월요일 08:00 ~ 23:00<br>화요일 08:00 ~ 23:00<br>수요일 08:00 ~ 23:00<br>목요일 08:00 ~ 23:00<br>금요일 09:00 ~ 19:00<br>토요일 09:00 ~ 19:00<br>일요일, 공휴일 휴무</div>
+            <div class="chat-msg">안녕하세요 김미영 고객님!<br>웰체크약국 운영시간을 알려드릴게요.<br><br>월요일 08:00 ~ 23:00<br>화요일 08:00 ~ 23:00<br>수요일 08:00 ~ 23:00<br>목요일 08:00 ~ 23:00<br>금요일 09:00 ~ 19:00<br>토요일 09:00 ~ 19:00<br>일요일, 공휴일 휴무</div>
             <div class="chat-time">09:00</div>
           </div>
         </div>
@@ -374,19 +375,25 @@ footer{background:var(--color-white);border-top:1px solid var(--color-grey-200);
         </div>
         <span class="memo-auto">자동 저장됨</span>
       </div>
-      <div class="memo-body">
-        <div class="memo-item">
-          <span class="memo-num">1. 고객 특이사항:</span><br>
-          &nbsp;&nbsp;- 알약 삼키는 것을 힘들어함<br>
-          &nbsp;&nbsp;- 저녁 식후 복약 선호
-        </div>
-        <div class="memo-item">
-          <span class="memo-num">2. 다음 상담 시 확인:</span><br>
-          &nbsp;&nbsp;- 어지럼증 호전 여부
-        </div>
-      </div>
-      <div class="memo-footer">80 / 1,000</div>
+      <textarea class="memo-body-input" id="pharmacistMemoInput" maxlength="1000" oninput="saveCiPharmacistMemo()"></textarea>
+      <div class="memo-footer" id="pharmacistMemoCount">0 / 1,000</div>
     </div>
+    <script>
+      var CI_MEMO_KEY = 'pharmacistMemo_김미영';
+      var CI_MEMO_DEFAULT = '1. 고객 특이사항:\n  - 알약 삼키는 것을 힘들어함\n  - 저녁 식후 복약 선호\n\n2. 다음 상담 시 확인:\n  - 어지럼증 호전 여부';
+      (function(){
+        var saved = localStorage.getItem(CI_MEMO_KEY);
+        document.getElementById('pharmacistMemoInput').value = saved !== null ? saved : CI_MEMO_DEFAULT;
+        updateCiMemoCount();
+      })();
+      function saveCiPharmacistMemo(){
+        localStorage.setItem(CI_MEMO_KEY, document.getElementById('pharmacistMemoInput').value);
+        updateCiMemoCount();
+      }
+      function updateCiMemoCount(){
+        document.getElementById('pharmacistMemoCount').textContent = document.getElementById('pharmacistMemoInput').value.length + ' / 1,000';
+      }
+    </script>
   </div>
 
   <footer>

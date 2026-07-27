@@ -112,7 +112,10 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .med-check-title{font-size:15px;font-weight:500;color:var(--color-grey-800);}
 .med-check-basis{font-size:13px;color:var(--color-primary);}
 .med-check-stats{display:flex;gap:10px;margin-bottom:14px;}
-.med-check-stat{flex:1;border:1px solid var(--color-grey-200);border-radius:8px;padding:14px 0;text-align:center;}
+.med-check-stat{flex:1;border:1px solid var(--color-grey-200);border-radius:8px;padding:14px 0;text-align:center;cursor:pointer;}
+.med-check-stat:hover{border-color:var(--color-primary);}
+.med-check-stat.active{border-color:var(--color-primary);background:var(--color-blue-100);}
+.med-check-stat.active .med-check-stat-num,.med-check-stat.active .med-check-stat-label{color:var(--color-primary);}
 .med-check-stat-num{font-size:20px;font-weight:700;color:var(--color-grey-800);}
 .med-check-stat-label{font-size:13px;color:var(--color-grey-600);margin-top:4px;}
 .med-check-list{display:flex;flex-direction:column;gap:10px;}
@@ -1122,7 +1125,7 @@ function buildPolyFootnotes(drugs){
     }
     if(!overlapping.length) return;
     var dates = overlapping.map(function(d){ return d.date; });
-    footnotes.push({ type: 'duplicate', drugNames: [name], desc: name + ' — 복약 기간이 겹치는 처방 ' + overlapping.length + '건 중복 처방됨(' + dates.join(', ') + ')' });
+    footnotes.push({ type: 'duplicate', drugNames: overlapping.map(function(){ return name; }), desc: '복약 기간이 겹치는 처방 ' + overlapping.length + '건 중복 처방됨(' + dates.join(', ') + ')' });
   });
   DRUG_INTERACTIONS.forEach(function(it){
     if(it.drugs.every(function(d){ return names.indexOf(d) > -1; })){
@@ -1140,30 +1143,49 @@ var MED_CHECK_STAT_LABEL = { duplicate: '동일 성분', interaction: '상호작
 var MED_CHECK_TAG_LABEL = { duplicate: '동일성분', interaction: '상호작용', caution: '금기·주의' };
 /* 복약 점검 항목 — 다제약물관리사업 대상 추정 근거(getPolyQualifyingDrugs)에서 나온 약물들의
    동일 성분/상호작용/금기·주의 각주를 유형별 개수 요약(상단 3칸)과 카드 목록으로 보여줌.
-   예전엔 표 + 필터 칩 형태였으나, 필터링 없이 전체 항목을 카드로 나열하는 형태로 교체 */
-function renderPolyDrugTableHtml(patient){
-  var drugs = getPolyQualifyingDrugs(patient);
-  if(drugs.length < 10) return '';
-  var footnotes = buildPolyFootnotes(drugs);
-  if(!footnotes.length) return '';
-  var counts = { duplicate:0, interaction:0, caution:0 };
-  footnotes.forEach(function(f){ counts[f.type]++; });
-  var statsHtml = ['duplicate', 'interaction', 'caution'].map(function(t){
-    return '<div class="med-check-stat"><div class="med-check-stat-num">' + counts[t] + '</div>' +
+   상단 3칸이 곧 필터 버튼 — 항상 하나만 선택되어 그 유형 카드만 아래 목록에 보이고,
+   기본값은 "동일 성분"(디폴트) */
+var medCheckActiveType = 'duplicate';
+function medCheckStatsHtml(counts){
+  return ['duplicate', 'interaction', 'caution'].map(function(t){
+    var active = medCheckActiveType === t;
+    return '<div class="med-check-stat' + (active ? ' active' : '') + '" onclick="setMedCheckFilter(\'' + t + '\')">' +
+      '<div class="med-check-stat-num">' + counts[t] + '</div>' +
       '<div class="med-check-stat-label">' + MED_CHECK_STAT_LABEL[t] + '</div></div>';
   }).join('');
-  var cardsHtml = footnotes.map(function(f){
+}
+function medCheckCardsHtml(footnotes){
+  var filtered = footnotes.filter(function(f){ return f.type === medCheckActiveType; });
+  if(!filtered.length) return '<div class="med-check-empty">해당하는 항목이 없습니다.</div>';
+  return filtered.map(function(f){
     return '<div class="med-check-card ' + f.type + '">' +
       '<span class="med-check-tag ' + f.type + '">' + MED_CHECK_TAG_LABEL[f.type] + '</span>' +
       '<div class="med-check-card-title">' + f.drugNames.join(', ') + '</div>' +
       '<div class="med-check-card-desc">' + f.desc + '</div>' +
     '</div>';
   }).join('');
+}
+function setMedCheckFilter(type){
+  medCheckActiveType = type;
+  var footnotes = buildPolyFootnotes(getPolyQualifyingDrugs(selectedPatient));
+  var counts = { duplicate:0, interaction:0, caution:0 };
+  footnotes.forEach(function(f){ counts[f.type]++; });
+  document.getElementById('medCheckStats').innerHTML = medCheckStatsHtml(counts);
+  document.getElementById('medCheckList').innerHTML = medCheckCardsHtml(footnotes);
+}
+function renderPolyDrugTableHtml(patient){
+  var drugs = getPolyQualifyingDrugs(patient);
+  if(drugs.length < 10) return '';
+  var footnotes = buildPolyFootnotes(drugs);
+  if(!footnotes.length) return '';
+  medCheckActiveType = 'duplicate';
+  var counts = { duplicate:0, interaction:0, caution:0 };
+  footnotes.forEach(function(f){ counts[f.type]++; });
   return '<!-- component: new/med-check --><div class="med-check-section" data-figma="new/med-check">' +
     '<div class="med-check-hd"><div class="med-check-title">복약 점검 항목</div>' +
       '<span class="med-check-basis">오늘 기준 동일 복약 기간</span></div>' +
-    '<div class="med-check-stats">' + statsHtml + '</div>' +
-    '<div class="med-check-list">' + cardsHtml + '</div>' +
+    '<div class="med-check-stats" id="medCheckStats">' + medCheckStatsHtml(counts) + '</div>' +
+    '<div class="med-check-list" id="medCheckList">' + medCheckCardsHtml(footnotes) + '</div>' +
   '</div>';
 }
 function ensureEditingDrugs(rx){
@@ -1382,7 +1404,8 @@ function renderMainRecordingContent(){
       '<textarea class="memo-textarea" id="pharmacistMemo" maxlength="1000" oninput="saveMemo()" placeholder="상담 중 참고할 내용을 자유롭게 메모해 보세요.&#10;예) 고객 특이사항, 다음 상담 시 확인할 점 등"></textarea>' +
       '<div class="memo-count" id="memoCount">0 / 1,000</div>' +
     '</div>' +
-    renderPolyDrugTableHtml(selectedPatient);
+    renderPolyDrugTableHtml(selectedPatient) +
+    '<div class="rec-hint" style="max-width:none;margin-top:16px;">상담이 끝나면 우측 패널의 상담 종료 버튼을 눌러 주세요.</div>';
   var savedMemo = localStorage.getItem(getMemoKey());
   if(savedMemo !== null) document.getElementById('pharmacistMemo').value = savedMemo;
   updateMemoCount();

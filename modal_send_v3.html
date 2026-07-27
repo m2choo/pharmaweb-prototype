@@ -777,7 +777,38 @@ function applyQaState(v){
     onNameEditSearch('이수진');
   }
 }
+/* 모달을 닫을 땐 확인 절차 없이 그냥 닫되, 진행 중이던 세션이 있으면 항상 "복약 상담함"에 임시저장 기록으로 남김
+   (cl_note_v3.html이 사용하는 wcCLNotes localStorage와 동일한 스키마) */
+function saveTempNoteOnClose(){
+  if(!selectedPatient) return;
+  var ta = document.getElementById('draftText');
+  var message = ta ? ta.value : (currentDraft || '');
+  var name = selectedPatient.name || (selectedPatient.isNew ? generateNickname() : '고객');
+  var now = new Date();
+  var pad = function(n){ return String(n).padStart(2, '0'); };
+  var ts = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+  var rec = {
+    id: 'note_' + now.getTime() + '_' + Math.floor(Math.random() * 1000),
+    name: name,
+    phone: selectedPatient.phone || '',
+    birth: selectedPatient.birth || null,
+    gender: '-',
+    age: null,
+    isNew: !!selectedPatient.isNew,
+    status: '임시저장',
+    appJoined: false,
+    message: message,
+    createdAt: ts,
+    updatedAt: ts
+  };
+  var CL_NOTES_KEY = 'wcCLNotes';
+  var list;
+  try { list = JSON.parse(localStorage.getItem(CL_NOTES_KEY) || '[]'); } catch(e){ list = []; }
+  list.push(rec);
+  localStorage.setItem(CL_NOTES_KEY, JSON.stringify(list));
+}
 function closeModal(){
+  saveTempNoteOnClose();
   document.getElementById('overlay').classList.remove('on');
   clearInterval(timerId);
   clearInterval(sttTimer);

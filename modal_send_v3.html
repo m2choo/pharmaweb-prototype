@@ -117,16 +117,23 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .recent-rx-card.open .recent-rx-chevron{transform:rotate(180deg);}
 .recent-rx-expand{max-height:0;overflow:hidden;}
 .recent-rx-card.open .recent-rx-expand{max-height:640px;overflow-y:auto;margin-top:12px;padding-top:12px;border-top:1px solid var(--color-grey-200);}
-/* 처방 내역/6개월 이력 탭 */
-.recent-rx-tabs{display:flex;gap:4px;margin-bottom:12px;}
-.recent-rx-tab{flex:1;text-align:center;padding:7px 0;font-size:13px;font-weight:500;color:var(--color-grey-500);background:var(--color-grey-100);border-radius:6px;cursor:pointer;}
-.recent-rx-tab.active{background:var(--color-blue-100);color:var(--color-primary);}
-.rx-history-list{display:flex;flex-direction:column;gap:8px;}
+/* component: new/rx-history-panel — 최근 처방전 카드 밖의 별도 처방전 이력 패널, 월 단위 내비게이션 */
+.rx-history-panel{border:1px solid var(--color-grey-250);border-radius:10px;padding:14px 16px;margin-bottom:14px;}
+.rx-history-panel-hd{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:10px;}
+.rx-month-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:12px;}
+.rx-month-arrow{width:28px;height:28px;border:1px solid var(--color-grey-250);background:var(--color-white);border-radius:50%;color:var(--color-grey-600);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
+.rx-month-arrow:hover{border-color:var(--color-primary);color:var(--color-primary);}
+.rx-month-label{font-size:15px;font-weight:500;color:var(--color-grey-900);min-width:96px;text-align:center;}
+.rx-month-list{display:flex;flex-direction:column;gap:8px;}
 .rx-history-item{border:1px solid var(--color-grey-250);border-radius:8px;padding:10px 12px;cursor:pointer;}
 .rx-history-item:hover{border-color:var(--color-primary);}
 .rx-history-item.active{border-color:var(--color-primary);background:var(--color-blue-100);}
 .rx-history-hospital{font-size:14px;font-weight:500;color:var(--color-grey-800);}
-.rx-history-meta{font-size:12px;color:var(--color-grey-600);margin-top:2px;}
+.rx-history-hospital .rx-history-date{font-size:12px;font-weight:400;color:var(--color-grey-500);margin-left:8px;}
+.rx-history-meta{font-size:12px;color:var(--color-grey-600);margin-top:2px;display:flex;align-items:center;gap:6px;}
+.rx-history-status{font-size:11px;font-weight:500;padding:1px 7px;border-radius:10px;}
+.rx-history-status.sent{background:var(--color-grey-150);color:var(--color-grey-600);}
+.rx-history-status.unsent{background:#FFFAE9;color:#FF8A00;}
 /* 처방 약품 편집 테이블 (v2 s2-drug-table 포팅) */
 .s2-rx-box{border:none;}
 .s2-drug-table{width:100%;border-collapse:collapse;table-layout:fixed;}

@@ -795,7 +795,9 @@ function openModal(){
 }
 /* 접수 처방전 목록(prescription_list_v3.html)에서 "전송하기"를 누르면 호출 — 이미 그 화면에서
    고객·처방전이 확정된 상태이므로 검색/인라인 처방전 확인 단계를 건너뛰고 처방전이 선택된 단골처럼
-   곧바로 "복약 상담"(녹음)부터 시작함. PATIENTS mock에 이름이 매칭되면 처방 이력까지 그대로 사용 */
+   곧바로 "복약 상담"(녹음)부터 시작함. PATIENTS mock에 이름이 매칭되면 처방 이력까지 그대로 사용하되,
+   목록에서 클릭한 행의 날짜(customerData.rxDate)와 일치하는 처방전을 우선 선택 — "가장 최근" 처방전이
+   아니라 실제로 클릭해서 들어온 그 처방전부터 보여줘야 하기 때문 */
 function openModalAtStep2(customerData){
   document.getElementById('overlay').classList.add('on');
   resetFlow();
@@ -804,7 +806,15 @@ function openModalAtStep2(customerData){
     ? Object.assign({}, match, { isNew: false })
     : { name: customerData.name, phone: customerData.phone || null, birth: customerData.birth || null, isNew: false, rxHistory: [] };
   hadInlineRxCheck = true;
-  var recentRxs = getMostRecentDateRxs(selectedPatient);
+  var targetRxs = customerData.rxDate
+    ? (selectedPatient.rxHistory || []).filter(function(rx){ return rx.date === customerData.rxDate; })
+    : [];
+  if(!targetRxs.length && customerData.rxDate){
+    var synthRx = { id: 'listRx_' + customerData.rxDate, hospital: customerData.rxHospital || '', date: customerData.rxDate, guidanceSent: false, drugs: [] };
+    selectedPatient.rxHistory = (selectedPatient.rxHistory || []).concat([synthRx]);
+    targetRxs = [synthRx];
+  }
+  var recentRxs = targetRxs.length ? targetRxs : getMostRecentDateRxs(selectedPatient);
   selectedRxIds = recentRxs.length === 1
     ? [recentRxs[0].id]
     : recentRxs.filter(function(rx){ return !rx.guidanceSent; }).map(function(rx){ return rx.id; });
@@ -947,10 +957,10 @@ function confirmRxCheckNone(){
   applyPostRxCheckStepLabels();
   renderMainRecordingContent();
 }
-/* 처방전 선택을 거친 단골은 확인 후에도 3단계를 유지 — ①에는 완료를 나타내는 체크 표시,
+/* 처방전 선택을 거친 단골은 확인 후에도 3단계를 유지 — ①는 숫자 그대로 유지,
    ②(복약 상담)가 현재 단계가 됨 */
 function applyPostRxCheckStepLabels(){
-  document.getElementById('st1').innerHTML = '<span class="step-num step-done">✓</span> 처방전 선택';
+  document.getElementById('st1').innerHTML = '<span class="step-num step-done">1</span> 처방전 선택';
   document.getElementById('st2').innerHTML = '<span class="step-num">2</span> 복약 상담';
   document.getElementById('st3').style.display = '';
   document.getElementById('st3').innerHTML = '<span class="step-num">3</span> 복약지도문 작성';

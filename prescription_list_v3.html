@@ -442,6 +442,8 @@ function openModalFrameStep2(i) {
     birth: r.birth,
     phone: r.phone,
     visitInfo: '처방전 접수 · ' + r.hospital,
+    rxDate: r.date.split(' ')[0],
+    rxHospital: r.hospital,
   };
   var f = document.getElementById('modalFrame');
   f.style.display = 'block';

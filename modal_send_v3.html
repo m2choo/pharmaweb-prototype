@@ -106,18 +106,9 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 
 /* 고객 확정 후, 녹음 전 — 참고 정보 노출 (v2 카드 톤) */
 .ready-note{font-size:16px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);line-height:1.7;}
-/* component: new/recent-rx-card */
-.recent-rx-card{border:1px solid var(--color-grey-250);border-radius:10px;padding:14px 16px;margin-bottom:14px;}
-.recent-rx-label{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:6px;}
-.recent-rx-hospital{font-size:17px;font-weight:500;letter-spacing:-0.64px;color:var(--color-grey-900);}
-.recent-rx-meta{font-size:14px;color:var(--color-grey-600);margin-top:2px;}
-.recent-rx-card.empty{color:var(--color-grey-500);font-size:14px;text-align:center;}
-.recent-rx-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;}
-.recent-rx-chevron{color:var(--color-grey-400);flex-shrink:0;transition:transform .15s;}
-.recent-rx-card.open .recent-rx-chevron{transform:rotate(180deg);}
-.recent-rx-expand{max-height:0;overflow:hidden;}
-.recent-rx-card.open .recent-rx-expand{max-height:640px;overflow-y:auto;margin-top:12px;padding-top:12px;border-top:1px solid var(--color-grey-200);}
-/* component: new/rx-history-panel — 최근 처방전 카드 밖의 별도 처방전 이력 패널, 월 단위 내비게이션 */
+/* component: new/recent-rx-card — 처방전 이력 자체가 없는 고객에게만 노출되는 안내 문구 */
+.recent-rx-card.empty{border:1px solid var(--color-grey-250);border-radius:10px;padding:14px 16px;margin-bottom:14px;color:var(--color-grey-500);font-size:14px;text-align:center;}
+/* component: new/rx-history-panel — 월 단위 날짜 내비게이션 + 행별 펼치기/처방전 원본 보기 */
 .rx-history-panel{border:1px solid var(--color-grey-250);border-radius:10px;padding:14px 16px;margin-bottom:14px;}
 .rx-history-panel-hd{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:10px;}
 .rx-month-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:12px;}
@@ -125,15 +116,19 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .rx-month-arrow:hover{border-color:var(--color-primary);color:var(--color-primary);}
 .rx-month-label{font-size:15px;font-weight:500;color:var(--color-grey-900);min-width:96px;text-align:center;}
 .rx-month-list{display:flex;flex-direction:column;gap:8px;}
-.rx-history-item{border:1px solid var(--color-grey-250);border-radius:8px;padding:10px 12px;cursor:pointer;}
-.rx-history-item:hover{border-color:var(--color-primary);}
-.rx-history-item.active{border-color:var(--color-primary);background:var(--color-blue-100);}
-.rx-history-hospital{font-size:14px;font-weight:500;color:var(--color-grey-800);}
-.rx-history-hospital .rx-history-date{font-size:12px;font-weight:400;color:var(--color-grey-500);margin-left:8px;}
-.rx-history-meta{font-size:12px;color:var(--color-grey-600);margin-top:2px;display:flex;align-items:center;gap:6px;}
-.rx-history-status{font-size:11px;font-weight:500;padding:1px 7px;border-radius:10px;}
-.rx-history-status.sent{background:var(--color-grey-150);color:var(--color-grey-600);}
-.rx-history-status.unsent{background:#FFFAE9;color:#FF8A00;}
+.rx-history-item{border:1px solid var(--color-grey-250);border-radius:8px;padding:10px 12px;}
+.rx-history-item.active{border-color:var(--color-primary);}
+.rx-history-row{display:flex;align-items:center;gap:10px;}
+.rx-history-main{display:flex;align-items:baseline;gap:8px;flex:1;min-width:0;cursor:pointer;}
+.rx-history-hospital{font-size:14px;font-weight:500;color:var(--color-grey-800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rx-history-day{font-size:13px;color:var(--color-grey-500);flex-shrink:0;}
+.rx-history-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.rx-history-action-btn{height:28px;padding:0 10px;border:1px solid var(--color-grey-250);border-radius:6px;background:var(--color-white);color:var(--color-grey-600);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;}
+.rx-history-action-btn:hover{border-color:var(--color-primary);color:var(--color-primary);}
+.rx-history-toggle-btn svg{transition:transform .15s;}
+.rx-history-item.open .rx-history-toggle-btn svg{transform:rotate(180deg);}
+.rx-history-item-expand{max-height:0;overflow:hidden;}
+.rx-history-item.open .rx-history-item-expand{max-height:640px;overflow-y:auto;margin-top:10px;padding-top:10px;border-top:1px solid var(--color-grey-200);}
 /* 처방 약품 편집 테이블 (v2 s2-drug-table 포팅) */
 .s2-rx-box{border:none;}
 .s2-drug-table{width:100%;border-collapse:collapse;table-layout:fixed;}
@@ -295,6 +290,19 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 @media (max-width: 960px){
   .overlay-wrap{flex-direction:column;align-items:center;}
 }
+
+/* 처방전 원본 이미지 뷰어 (v2 rx-viewer 포팅) */
+.rx-viewer-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;align-items:center;justify-content:center;}
+.rx-viewer-bd.on{display:flex;}
+.rx-viewer-box{background:var(--color-white);border-radius:12px;width:480px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.4);}
+.rx-viewer-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--color-grey-300);flex-shrink:0;}
+.rx-viewer-title{font-size:20px;font-weight:350;letter-spacing:-0.8px;color:var(--color-grey-900);}
+.rx-viewer-x{width:30px;height:30px;background:none;border:none;cursor:pointer;color:var(--color-grey-500);font-size:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+.rx-viewer-x:hover{background:var(--color-grey-150);}
+.rx-viewer-img{flex:1;overflow-y:auto;padding:16px;display:flex;align-items:center;justify-content:center;background:var(--color-grey-150);}
+.rx-viewer-placeholder{text-align:center;padding:40px 20px;color:var(--color-grey-500);}
+.rx-viewer-placeholder .rx-icon{font-size:48px;margin-bottom:12px;}
+.rx-viewer-placeholder p{font-size:14px;font-weight:400;letter-spacing:-0.6px;line-height:1.7;}
 </style>
 </head>
 <body>
@@ -334,6 +342,24 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
         <div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 고객을 먼저 확인해 주세요.</div>
       </div>
       <div class="pz-footer" id="pzFooter"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 처방전 원본 이미지 뷰어 레이어 (v2 rx-viewer 그대로 포팅) -->
+<div class="rx-viewer-bd" id="rxViewerBd">
+  <!-- component: popup -->
+  <div class="rx-viewer-box" data-figma="popup">
+    <div class="rx-viewer-hd">
+      <span class="rx-viewer-title" id="rxViewerTitle">처방전 원본</span>
+      <!-- component: button/ghost -->
+      <button class="rx-viewer-x" data-figma="button/ghost" onclick="closeRxViewer()">✕</button>
+    </div>
+    <div class="rx-viewer-img">
+      <div class="rx-viewer-placeholder">
+        <div class="rx-icon">📋</div>
+        <p>처방전 원본 이미지<br>준비 중입니다.</p>
+      </div>
     </div>
   </div>
 </div>
@@ -660,11 +686,19 @@ function closeModal(){
     window.parent.closeModalFrame();
   }
 }
+function openRxViewer(title){
+  document.getElementById('rxViewerTitle').textContent = title + ' 처방전';
+  document.getElementById('rxViewerBd').classList.add('on');
+}
+function closeRxViewer(){
+  document.getElementById('rxViewerBd').classList.remove('on');
+}
 function resetFlow(){
   selectedPatient = null;
   seconds = 0;
   currentDraft = null;
   currentRxId = null;
+  expandedRxId = null;
   editingDrugsMap = {};
   clearInterval(timerId);
   clearInterval(sttTimer);
@@ -771,16 +805,9 @@ function removePatient(){
   resetFlow();
 }
 
-/* ── 최근 처방전 카드: 현재 활성 처방전(기본값 = 복약지도 미발송 중 최신 건)의 편집 가능한 약품 테이블 ── */
-function toggleRecentRx(){
-  var card = document.getElementById('recentRxCard');
-  if(card.classList.contains('open')){
-    card.classList.remove('open');
-    return;
-  }
-  renderRxCardBody();
-  card.classList.add('open');
-}
+/* ── 처방전 이력 패널: 월 단위 날짜 내비게이션 + 행별 펼치기(편집 가능한 약품 테이블)/처방전 원본 보기 ── */
+var rxHistoryMonthCursor = null;
+var expandedRxId = null;
 function getCurrentRx(){
   return (selectedPatient.rxHistory || []).find(function(r){ return r.id === currentRxId; });
 }
@@ -795,28 +822,6 @@ function ensureEditingDrugs(rx){
   if(!editingDrugsMap[rx.id]) editingDrugsMap[rx.id] = rx.drugs.map(function(d){ return Object.assign({}, d); });
   return editingDrugsMap[rx.id];
 }
-function selectHistoryRx(id){
-  currentRxId = id;
-  updateRecentRxHeader();
-  var card = document.getElementById('recentRxCard');
-  if(card && card.classList.contains('open')) renderRxCardBody();
-  renderRxHistoryPanel();
-}
-function updateRecentRxHeader(){
-  var rx = getCurrentRx();
-  if(!rx) return;
-  var card = document.getElementById('recentRxCard');
-  card.querySelector('.recent-rx-hospital').textContent = rx.hospital;
-  card.querySelector('.recent-rx-meta').textContent = rx.date + ' · 약품 ' + rx.drugs.length + '종';
-}
-function renderRxCardBody(){
-  var expand = document.getElementById('recentRxExpand');
-  var rx = getCurrentRx();
-  expand.innerHTML = rx ? renderDrugTableHTML(rx) : '<div class="s1-empty">처방전이 없습니다.</div>';
-}
-
-/* ── 처방전 이력 (최근 처방전 카드 밖의 별도 패널) — 월 단위 날짜 내비게이션으로 탐색 ── */
-var rxHistoryMonthCursor = null;
 function parseYM(dateStr){
   var p = dateStr.split('-');
   return { y: parseInt(p[0], 10), m: parseInt(p[1], 10) };
@@ -824,16 +829,23 @@ function parseYM(dateStr){
 function ymLabel(ym){
   return ym.y + '년 ' + String(ym.m).padStart(2, '0') + '월';
 }
+function dayLabel(dateStr){
+  return parseInt(dateStr.split('-')[2], 10) + '일';
+}
 function shiftYM(ym, delta){
   var idx = ym.y * 12 + (ym.m - 1) + delta;
   return { y: Math.floor(idx / 12), m: (idx % 12) + 1 };
 }
 function initRxHistoryMonth(){
-  var rx = getCurrentRx() || (selectedPatient.rxHistory || [])[0];
-  rxHistoryMonthCursor = rx ? parseYM(rx.date) : parseYM(todayISODate());
+  rxHistoryMonthCursor = parseYM(todayISODate());
 }
 function rxHistoryMonthShift(delta){
   rxHistoryMonthCursor = shiftYM(rxHistoryMonthCursor, delta);
+  renderRxHistoryPanel();
+}
+function toggleRxHistoryItem(id){
+  expandedRxId = (expandedRxId === id) ? null : id;
+  currentRxId = id;
   renderRxHistoryPanel();
 }
 function renderRxHistoryPanel(){
@@ -848,15 +860,31 @@ function renderRxHistoryPanel(){
   var listEl = document.getElementById('rxMonthList');
   listEl.innerHTML = itemsInMonth.length
     ? itemsInMonth.map(function(rx){
-        var statusBadge = rx.guidanceSent
-          ? '<span class="rx-history-status sent">복약지도 완료</span>'
-          : '<span class="rx-history-status unsent">미발송</span>';
-        return '<div class="rx-history-item' + (rx.id === currentRxId ? ' active' : '') + '" onclick="selectHistoryRx(\'' + rx.id + '\')">' +
-          '<div class="rx-history-hospital">' + rx.hospital + '<span class="rx-history-date">' + rx.date + '</span></div>' +
-          '<div class="rx-history-meta">약품 ' + rx.drugs.length + '종 ' + statusBadge + '</div>' +
+        var isOpen = rx.id === expandedRxId;
+        var expandHtml = isOpen ? renderDrugTableHTML(rx) : '';
+        return '<div class="rx-history-item' + (rx.id === currentRxId ? ' active' : '') + (isOpen ? ' open' : '') + '">' +
+          '<div class="rx-history-row">' +
+            '<div class="rx-history-main" onclick="toggleRxHistoryItem(\'' + rx.id + '\')">' +
+              '<span class="rx-history-hospital">' + rx.hospital + '</span>' +
+              '<span class="rx-history-day">' + dayLabel(rx.date) + ' 수령</span>' +
+            '</div>' +
+            '<div class="rx-history-actions">' +
+              '<button type="button" class="rx-history-action-btn rx-history-toggle-btn" onclick="toggleRxHistoryItem(\'' + rx.id + '\')">' +
+                '펼치기<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              '</button>' +
+              '<button type="button" class="rx-history-action-btn" onclick="event.stopPropagation();openRxViewer(\'' + rx.date + ' ' + rx.hospital + '\')">처방전 원본</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="rx-history-item-expand">' + expandHtml + '</div>' +
         '</div>';
       }).join('')
     : '<div class="s1-empty">이 달의 처방전이 없습니다.</div>';
+}
+function refreshExpandedRxItem(){
+  if(!expandedRxId) return;
+  var rx = getCurrentRx();
+  if(!rx) return;
+  renderRxHistoryPanel();
 }
 
 /* ── 약품 테이블 렌더링 + 편집/추가/삭제 + 대체조제 확인 (v2 modal_send_v2.html 로직 그대로 포팅) ── */
@@ -958,12 +986,12 @@ function saveEditRow(rxId, i){
     days: days,
     sub: prev.sub
   };
-  renderRxCardBody();
+  refreshExpandedRxItem();
 }
 function deleteDrug(rxId, i){
   if(!confirm('"' + editingDrugsMap[rxId][i].name + '" 을(를) 목록에서 삭제할까요?')) return;
   editingDrugsMap[rxId].splice(i, 1);
-  renderRxCardBody();
+  refreshExpandedRxItem();
 }
 function openAddRow(rxId){
   var formId = 'addFormRow_' + rxId;
@@ -996,7 +1024,7 @@ function saveAddRow(rxId){
   var days = parseInt(document.getElementById(p + '_days').value) || 30;
   if(!name){ alert('약품명을 입력해 주세요.'); return; }
   editingDrugsMap[rxId].push({ name: name, dosage: dNum + '정', freq: '1일 ' + fNum + '회', days: days, sub: false });
-  renderRxCardBody();
+  refreshExpandedRxItem();
 }
 
 /* ── 고객 선택 즉시 녹음 시작 (검색/신규 선택 → 바로 녹음) ── */
@@ -1011,24 +1039,11 @@ function beginRecording(){
   } else {
     st3.style.display = 'none';
   }
-  var refHtml = '';
   var histHtml = '';
   if(!selectedPatient.isNew){
     var rx = getDefaultActiveRx(selectedPatient);
     if(rx) currentRxId = rx.id;
-    refHtml = rx
-      ? '<!-- component: new/recent-rx-card --><div class="recent-rx-card" id="recentRxCard" data-figma="new/recent-rx-card">' +
-          '<div class="recent-rx-hd" onclick="toggleRecentRx()">' +
-            '<div>' +
-              '<div class="recent-rx-label">최근 처방전</div>' +
-              '<div class="recent-rx-hospital">'+rx.hospital+'</div>' +
-              '<div class="recent-rx-meta">'+rx.date+' · 약품 '+rx.drugs.length+'종</div>' +
-            '</div>' +
-            '<span class="recent-rx-chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
-          '</div>' +
-          '<div class="recent-rx-expand" id="recentRxExpand"></div>' +
-        '</div>'
-      : '<div class="recent-rx-card empty">최근 처방전 정보가 없습니다.</div>';
+    expandedRxId = null;
     if((selectedPatient.rxHistory || []).length){
       histHtml =
         '<!-- component: new/rx-history-panel --><div class="rx-history-panel" id="rxHistoryPanel" data-figma="new/rx-history-panel">' +
@@ -1044,10 +1059,11 @@ function beginRecording(){
           '</div>' +
           '<div class="rx-month-list" id="rxMonthList"></div>' +
         '</div>';
+    } else {
+      histHtml = '<div class="recent-rx-card empty">처방전 정보가 없습니다.</div>';
     }
   }
   document.getElementById('mbody').innerHTML =
-    refHtml +
     histHtml +
     '<div class="wait-stage">' +
       '<div class="wait-title">상담이 진행 중입니다</div>' +
@@ -1063,10 +1079,7 @@ function beginRecording(){
   }
 
   document.getElementById('pzSub').textContent = '녹음이 시작되었습니다';
-  var pzNameEl = document.getElementById('pzPatientName');
-  var ptName = selectedPatient.name || '신규 고객';
-  pzNameEl.innerHTML = '<span class="pz-patient-name-avatar">' + ptName[0] + '</span><span>' + ptName + '</span>';
-  pzNameEl.classList.add('on');
+  document.getElementById('pzName').textContent = selectedPatient.name || '신규 고객';
   var pzBody = document.getElementById('pzBody');
   pzBody.style.alignItems = 'stretch';
   pzBody.style.justifyContent = 'flex-start';

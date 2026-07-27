@@ -59,7 +59,14 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .modal-pt-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);}
 .modal-pt-name-edit{width:22px;height:22px;padding:0;margin-left:2px;background:none;border:none;border-radius:5px;color:var(--color-grey-400);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;}
 .modal-pt-name-edit:hover{background:var(--color-blue-100);color:var(--color-primary);}
-.modal-pt-name-input{width:110px;height:26px;padding:0 6px;border:1.5px solid var(--color-primary);border-radius:5px;font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);font-family:inherit;outline:none;vertical-align:middle;}
+.modal-pt-name-input{width:160px;height:26px;padding:0 6px;border:1.5px solid var(--color-primary);border-radius:5px;font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);font-family:inherit;outline:none;vertical-align:middle;}
+.name-edit-wrap{position:relative;display:inline-flex;align-items:center;gap:2px;}
+.name-edit-dropdown{position:absolute;top:32px;left:0;z-index:50;width:260px;max-height:240px;overflow-y:auto;background:var(--color-white);border:1px solid var(--color-grey-250);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);}
+.name-edit-option{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;}
+.name-edit-option:hover{background:var(--color-blue-100);}
+.name-edit-option-avatar{width:28px;height:28px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-500);font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.name-edit-option-name{font-size:14px;font-weight:500;color:var(--color-grey-800);}
+.name-edit-option-sub{font-size:12px;color:var(--color-grey-500);margin-top:1px;}
 .modal-pt-info{font-size:14px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);margin-left:4px;}
 .modal-pt-remove{margin-left:auto;width:28px;height:28px;padding:0;background:none;border:none;border-radius:6px;color:var(--color-grey-500);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-pt-remove:hover{background:#FFF4F5;color:var(--color-red);}
@@ -94,38 +101,25 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .poly-drug-table th{position:sticky;top:0;padding:8px 10px;font-size:12px;font-weight:400;color:#5F6E7D;text-align:left;background:#EEF0F3;border-bottom:1px solid var(--color-grey-250);}
 .poly-drug-table td{padding:10px;font-size:14px;color:var(--color-grey-800);border-bottom:1px solid var(--color-grey-200);}
 .poly-drug-table tbody tr:last-child td{border-bottom:none;}
-.interaction-chip{display:inline-block;background:#FFF4F5;color:var(--color-red);font-size:12px;font-weight:500;padding:2px 8px;border-radius:10px;margin-right:4px;}
 .interaction-none{color:var(--color-grey-400);}
+.poly-ref-chip{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:700;margin-right:3px;flex-shrink:0;}
+.poly-ref-chip.interaction{background:#FFF4F5;color:var(--color-red);}
+.poly-ref-chip.caution{background:#FFF7E6;color:#F5AC1F;}
+.poly-ref-chip.duplicate{background:var(--color-blue-100);color:var(--color-primary);}
+.poly-footnotes{display:flex;flex-direction:column;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--color-grey-200);}
+.poly-footnote-item{display:flex;align-items:flex-start;gap:6px;font-size:12.5px;color:var(--color-grey-600);line-height:1.6;}
+.poly-footnote-item b{color:var(--color-grey-800);}
 
 .btn-next{height:40px;padding:0 28px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
 .btn-next:disabled{opacity:.4;cursor:not-allowed;}
 .btn-next.send{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-weight:700;}
 .btn-back{height:40px;padding:0 20px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-800);cursor:pointer;font-family:inherit;}
 
-/* 고객 검색 (v2 search/default 패턴) */
-.field-col{display:flex;flex-direction:column;gap:14px;flex:1;}
 .field{display:flex;flex-direction:column;gap:6px;}
 .field label{font-size:14px;font-weight:500;color:var(--color-grey-600);}
 .field label .req{color:var(--color-red);}
 .field input{height:42px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 12px;font-size:16px;font-family:inherit;outline:none;color:var(--color-grey-800);}
 .field input:focus{border-color:var(--color-primary);}
-/* component: search/default */
-.s1-search-wrap{position:relative;}
-.s1-search-wrap input{width:100%;height:44px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 36px 0 12px;font-size:16px;font-family:inherit;outline:none;color:var(--color-grey-800);}
-.s1-search-wrap input::placeholder{color:var(--color-grey-400);}
-.s1-search-wrap input:focus{border-color:var(--color-primary);}
-.s1-search-icon{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--color-grey-400);pointer-events:none;}
-.s1-results{display:flex;flex-direction:column;gap:8px;}
-.s1-result-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--color-grey-250);border-radius:8px;cursor:pointer;transition:background .1s,border-color .1s;}
-.s1-result-item:hover{background:var(--color-blue-100);border-color:var(--color-primary);}
-.s1-result-avatar{width:36px;height:36px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-500);font-size:15px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.s1-result-name{font-size:16px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-700);}
-.s1-result-phone{font-size:13px;font-weight:400;color:var(--color-grey-600);margin-top:2px;font-family:'Poppins','Noto Sans KR',sans-serif;}
-.s1-empty{font-size:14px;color:var(--color-grey-500);}
-.s1-divider{display:flex;align-items:center;gap:10px;color:var(--color-grey-400);font-size:12px;}
-.s1-divider::before,.s1-divider::after{content:"";flex:1;height:1px;background:var(--color-grey-200);}
-.s1-new-btn{height:46px;border:1.5px dashed var(--color-grey-250);border-radius:8px;background:var(--color-grey-100);color:var(--color-grey-600);font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;}
-.s1-new-btn:hover{background:var(--color-blue-100);border-color:var(--color-primary);color:var(--color-primary);}
 
 /* 고객 확정 후, 녹음 전 — 참고 정보 노출 (v2 카드 톤) */
 .ready-note{font-size:16px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);line-height:1.7;}
@@ -770,13 +764,15 @@ function setStep(n){
 function openModal(){
   document.getElementById('overlay').classList.add('on');
   resetFlow();
+  startAsNew();
 }
-/* QA 전용: 리뷰 시 특정 케이스를 빠르게 찾아 검색해 주는 단축 기능 — 실제 진입(검색→선택) 과정은 그대로 보여줌 (실서비스 반영 대상 아님) */
+/* QA 전용: 리뷰 시 특정 케이스를 빠르게 찾아 검색해 주는 단축 기능 — 실제 진입(신규 시작 → 이름 검색으로 단골 전환) 과정은 그대로 보여줌 (실서비스 반영 대상 아님) */
 function applyQaState(v){
   openModal();
   if(v === 'rx-empty'){
-    document.getElementById('s1input').value = '이수진';
-    onSearch('이수진');
+    startEditName();
+    document.getElementById('ptNameInput').value = '이수진';
+    onNameEditSearch('이수진');
   }
 }
 function closeModal(){
@@ -801,9 +797,17 @@ function resetFlow(){
   selectedRxIds = [];
   expandedRxId = null;
   editingDrugsMap = {};
+  currentMatches = [];
   clearInterval(timerId);
   clearInterval(sttTimer);
-  document.getElementById('modalPt').innerHTML = '<span class="modal-pt-placeholder">고객 정보를 검색해 주세요</span>';
+}
+/* 상담 시작 시 모두 신규로 진입 — 이름 부분을 검색으로 바꿔 기존 고객을 찾으면 단골로 전환됨(convertToExistingPatient) */
+function startAsNew(){
+  selectedPatient = {name:generateNickname(), phone:null, isNew:true};
+  beginRecording();
+}
+/* 신규로 진행하다가 이름 옆 검색 결과에서 기존 고객을 선택하면 단골로 전환 — 진행 중이던 녹음은 중단하고 처방전 확인부터 다시 시작 */
+function resetPuzzlePanelIdle(){
   document.getElementById('pzSub').textContent = '고객 확인 후 녹음이 시작됩니다';
   document.getElementById('pzName').textContent = '고객 선택 대기 중';
   var pzBodyReset = document.getElementById('pzBody');
@@ -811,70 +815,18 @@ function resetFlow(){
   pzBodyReset.style.justifyContent = '';
   pzBodyReset.innerHTML = '<div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 고객을 먼저 확인해 주세요.</div>';
   document.getElementById('pzFooter').innerHTML = '';
-  document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
-  document.getElementById('st2').innerHTML = '<span class="step-num">2</span> 복약지도문 작성';
-  var st3reset = document.getElementById('st3');
-  st3reset.style.display = '';
-  st3reset.innerHTML = '<span class="step-num">3</span> 메시지 확인';
-  renderSearch();
 }
-
-/* ── 고객 검색 ── */
-function renderSearch(){
-  setStep(1);
-  document.getElementById('stepTabs').style.display = 'none';
-  var B = document.getElementById('mbody');
-  var F = document.getElementById('mfoot');
-  B.innerHTML =
-    '<div class="field-col">' +
-      '<div class="field">' +
-        '<!-- component: search/default -->' +
-        '<div class="s1-search-wrap">' +
-          '<input id="s1input" data-figma="search/default" type="text" placeholder="이름, 초성(ㄱㅁㅇ), 전화번호, 생년월일" oninput="onSearch(this.value)" autocomplete="off">' +
-          '<span class="s1-search-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>' +
-        '</div>' +
-      '</div>' +
-      '<div id="searchResults"></div>' +
-      '<div class="s1-divider">또는</div>' +
-      '<!-- component: button/outlined-secondary -->' +
-      '<button class="s1-new-btn" data-figma="button/outlined-secondary" onclick="startAsNew()">나중에 입력하기</button>' +
-    '</div>';
-  F.innerHTML = '';
-}
-function onSearch(q){
-  q = q.trim();
-  var box = document.getElementById('searchResults');
-  if(!q){ box.innerHTML=''; currentMatches = []; return; }
-  var qDigits = q.replace(/-/g,'');
-  var qIsChosung = isChosungQuery(q);
-  currentMatches = PATIENTS.filter(function(p){
-    if(p.name.indexOf(q) > -1) return true;
-    if(p.phone.replace(/-/g,'').indexOf(qDigits) > -1) return true;
-    if(p.birth.replace(/-/g,'').indexOf(qDigits) > -1) return true;
-    if(qIsChosung && getChosung(p.name).indexOf(q) > -1) return true;
-    return false;
-  });
-  box.innerHTML = currentMatches.length
-    ? '<div class="s1-results">' + currentMatches.map(function(p,i){
-        return '<!-- component: new/patient-search-result --><div class="s1-result-item" data-figma="new/patient-search-result" onclick="confirmPatient('+i+')">' +
-          '<div class="s1-result-avatar">'+p.name[0]+'</div>' +
-          '<div><div class="s1-result-name">'+p.name+'</div><div class="s1-result-phone">'+p.phone+' · '+p.birth+'</div></div>' +
-        '</div>';
-      }).join('') + '</div>'
-    : '<div class="s1-empty">일치하는 고객이 없습니다. 나중에 입력하기로 진행해 주세요.</div>';
-}
-function confirmPatient(i){
+function convertToExistingPatient(i){
+  clearInterval(timerId);
+  clearInterval(sttTimer);
   selectedPatient = Object.assign({}, currentMatches[i], {isNew:false});
   if((selectedPatient.rxHistory || []).length){
+    resetPuzzlePanelIdle();
     showRxSelectionStep();
   } else {
     selectedRxIds = [];
     beginRecording();
   }
-}
-function startAsNew(){
-  selectedPatient = {name:generateNickname(), phone:null, isNew:true};
-  beginRecording();
 }
 
 /* ── Step1 "처방전 선택" — 단골 고객 전용, 녹음 시작 전에 참고할 처방전을 먼저 고르는 화면 ── */
@@ -931,12 +883,39 @@ function renderModalPtBar(showRemove){
       '<button class="modal-pt-name-edit" onclick="startEditName()" title="이름 입력">'+EDIT_ICON+'</button></div>' + removeBtn;
   }
 }
+/* 이름 수정을 검색처럼 동작하게 함 — 입력하면 기존 고객 목록에서 매칭되는 결과를 드롭다운으로 보여주고,
+   그 중 하나를 고르면 단골로 전환(convertToExistingPatient), 매칭 없이 그냥 입력해 확인하면 신규 고객의 이름만 바뀜 */
 function startEditName(){
   var pt = document.getElementById('modalPt');
   pt.innerHTML =
-    '<input id="ptNameInput" class="modal-pt-name-input" value="'+(selectedPatient.name||'')+'" placeholder="이름 입력" onkeydown="if(event.key===\'Enter\')commitEditName()">' +
-    '<button class="modal-pt-name-edit" onclick="commitEditName()" title="확인"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2"/></svg></button>';
+    '<div class="name-edit-wrap">' +
+      '<input id="ptNameInput" class="modal-pt-name-input" value="'+(selectedPatient.name||'')+'" placeholder="이름 검색 또는 입력" oninput="onNameEditSearch(this.value)" onkeydown="if(event.key===\'Enter\')commitEditName()" autocomplete="off">' +
+      '<button class="modal-pt-name-edit" onclick="commitEditName()" title="확인"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2"/></svg></button>' +
+      '<div class="name-edit-dropdown" id="nameEditDropdown" style="display:none"></div>' +
+    '</div>';
   document.getElementById('ptNameInput').focus();
+}
+function onNameEditSearch(q){
+  q = q.trim();
+  var dd = document.getElementById('nameEditDropdown');
+  if(!q){ dd.style.display = 'none'; dd.innerHTML = ''; currentMatches = []; return; }
+  var qDigits = q.replace(/-/g,'');
+  var qIsChosung = isChosungQuery(q);
+  currentMatches = PATIENTS.filter(function(p){
+    if(p.name.indexOf(q) > -1) return true;
+    if(p.phone.replace(/-/g,'').indexOf(qDigits) > -1) return true;
+    if(p.birth.replace(/-/g,'').indexOf(qDigits) > -1) return true;
+    if(qIsChosung && getChosung(p.name).indexOf(q) > -1) return true;
+    return false;
+  });
+  if(!currentMatches.length){ dd.style.display = 'none'; dd.innerHTML = ''; return; }
+  dd.style.display = '';
+  dd.innerHTML = currentMatches.map(function(p, i){
+    return '<div class="name-edit-option" onclick="convertToExistingPatient('+i+')">' +
+      '<span class="name-edit-option-avatar">'+p.name[0]+'</span>' +
+      '<div><div class="name-edit-option-name">'+p.name+'</div><div class="name-edit-option-sub">'+p.phone+' · '+p.birth+'</div></div>' +
+    '</div>';
+  }).join('');
 }
 function commitEditName(){
   var v = document.getElementById('ptNameInput').value.trim();
@@ -946,6 +925,7 @@ function commitEditName(){
 }
 function removePatient(){
   resetFlow();
+  startAsNew();
 }
 
 /* ── 처방전 이력 패널: 가장 최근 방문(날짜)에 발급된 처방전만 노출, 같은 날 여러 건이면 체크박스로 다건 선택 ── */
@@ -984,38 +964,68 @@ function renderPolyAlertHtml(patient){
     '<span class="s2-poly-alert-txt">다제약물관리사업 대상자로 추정됩니다. (10종 이상의 약물을 6개월 이상 지속 복용)</span>' +
   '</div>';
 }
-/* 약물 상호작용 mock 데이터 — 실제 서비스에서는 DUR(의약품 안전사용서비스) 연동 대상 */
+/* 약물 상호작용/병용주의 mock 데이터 — 실제 서비스에서는 DUR(의약품 안전사용서비스) 연동 대상 */
 var DRUG_INTERACTIONS = [
-  { pair: ['아스피린', '실로스타졸'], label: '출혈 위험 증가' }
+  { drugs: ['아스피린', '실로스타졸'], desc: '출혈 위험 증가' }
 ];
-function findDrugInteractionLabels(drugName, allNames){
-  var labels = [];
-  DRUG_INTERACTIONS.forEach(function(it){
-    if(it.pair.indexOf(drugName) === -1) return;
-    var other = it.pair.find(function(n){ return n !== drugName; });
-    if(allNames.indexOf(other) > -1) labels.push(it.label);
+var DRUG_CAUTIONS = [
+  { drugs: ['아스피린', '오메프라졸'], desc: 'PPI 병용 시 아스피린 흡수 감소 가능' }
+];
+var POLY_REF_TYPE_LABEL = { interaction: '상호작용', caution: '금기·주의', duplicate: '중복 성분' };
+/* 각주 목록 생성 — 상호작용/금기·주의는 mock 페어에서, 중복 성분은 같은 약품명이 목록에 2번 이상 나오면 자동 판정 */
+function buildPolyFootnotes(drugs){
+  var names = drugs.map(function(d){ return d.name; });
+  var footnotes = [];
+  var countByName = {};
+  drugs.forEach(function(d){ countByName[d.name] = (countByName[d.name] || 0) + 1; });
+  Object.keys(countByName).forEach(function(name){
+    if(countByName[name] < 2) return;
+    var dates = drugs.filter(function(d){ return d.name === name; }).map(function(d){ return d.date; });
+    footnotes.push({ type: 'duplicate', drugNames: [name], desc: name + ' — 서로 다른 처방 ' + countByName[name] + '건에 중복 처방됨(' + dates.join(', ') + ')' });
   });
-  return labels;
+  DRUG_INTERACTIONS.forEach(function(it){
+    if(it.drugs.every(function(d){ return names.indexOf(d) > -1; })){
+      footnotes.push({ type: 'interaction', drugNames: it.drugs, desc: it.drugs.join(' + ') + ': ' + it.desc });
+    }
+  });
+  DRUG_CAUTIONS.forEach(function(it){
+    if(it.drugs.every(function(d){ return names.indexOf(d) > -1; })){
+      footnotes.push({ type: 'caution', drugNames: it.drugs, desc: it.drugs.join(' + ') + ': ' + it.desc });
+    }
+  });
+  return footnotes;
 }
-/* 다제약물관리사업 대상 추정 근거 — 해당 약품 목록 + 상호작용 칩 */
+function getRefNumsForDrug(name, footnotes){
+  var nums = [];
+  footnotes.forEach(function(f, i){ if(f.drugNames.indexOf(name) > -1) nums.push(i + 1); });
+  return nums;
+}
+/* 다제약물관리사업 대상 추정 근거 — 해당 약품 목록 + 상호작용/금기·주의/중복성분을 각주 번호로 표시 */
 function renderPolyDrugTableHtml(patient){
   var drugs = getPolyQualifyingDrugs(patient);
   if(drugs.length < 10) return '';
-  var allNames = drugs.map(function(d){ return d.name; });
+  var footnotes = buildPolyFootnotes(drugs);
   var rows = drugs.map(function(d){
-    var labels = findDrugInteractionLabels(d.name, allNames);
-    var chips = labels.length
-      ? labels.map(function(l){ return '<span class="interaction-chip">' + l + '</span>'; }).join('')
+    var refs = getRefNumsForDrug(d.name, footnotes);
+    var chips = refs.length
+      ? refs.map(function(n){ return '<span class="poly-ref-chip ' + footnotes[n - 1].type + '">' + n + '</span>'; }).join('')
       : '<span class="interaction-none">-</span>';
     return '<tr><td>' + d.name + '</td><td>' + d.hospital + '</td><td>' + d.date + '</td><td>' + chips + '</td></tr>';
   }).join('');
+  var footnoteHtml = footnotes.length
+    ? '<div class="poly-footnotes">' + footnotes.map(function(f, i){
+        return '<div class="poly-footnote-item"><span class="poly-ref-chip ' + f.type + '">' + (i + 1) + '</span>' +
+          '<span><b>' + POLY_REF_TYPE_LABEL[f.type] + '</b> — ' + f.desc + '</span></div>';
+      }).join('') + '</div>'
+    : '';
   return '<!-- component: new/poly-drug-table --><div class="poly-drug-section" data-figma="new/poly-drug-table">' +
     '<div class="poly-drug-title">다제약물관리사업 대상 추정 근거</div>' +
-    '<div class="poly-drug-sub">최근 6개월간 180일 이상 처방된 약품 ' + drugs.length + '종입니다.</div>' +
+    '<div class="poly-drug-sub">최근 6개월간 180일 이상 처방된 약품입니다.</div>' +
     '<div class="poly-drug-scroll">' +
-      '<table class="poly-drug-table"><thead><tr><th>약품명</th><th>처방 병원</th><th>처방일</th><th>상호작용</th></tr></thead>' +
+      '<table class="poly-drug-table"><thead><tr><th>약품명</th><th>처방 병원</th><th>처방일</th><th>확인 필요</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table>' +
     '</div>' +
+    footnoteHtml +
   '</div>';
 }
 function ensureEditingDrugs(rx){
@@ -1385,7 +1395,6 @@ function renderComplete(cplSub){
     '<button class="btn-close-cpl" onclick="closeModal()">확인</button>';
 }
 
-renderSearch();
 if(window.parent && window.parent !== window){
   var standaloneFab = document.getElementById('standaloneFab');
   if(standaloneFab) standaloneFab.style.display = 'none';

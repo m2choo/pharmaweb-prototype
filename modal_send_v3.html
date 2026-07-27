@@ -869,7 +869,12 @@ function onSearch(q){
 }
 function confirmPatient(i){
   selectedPatient = Object.assign({}, currentMatches[i], {isNew:false});
-  showRxSelectionStep();
+  if((selectedPatient.rxHistory || []).length){
+    showRxSelectionStep();
+  } else {
+    selectedRxIds = [];
+    beginRecording();
+  }
 }
 function startAsNew(){
   selectedPatient = {name:generateNickname(), phone:null, isNew:true};
@@ -887,7 +892,9 @@ function showRxSelectionStep(){
   document.getElementById('st3').innerHTML = '<span class="step-num">3</span> 복약지도문 작성';
 
   var recentRxs = getMostRecentDateRxs(selectedPatient);
-  selectedRxIds = recentRxs.filter(function(rx){ return !rx.guidanceSent; }).map(function(rx){ return rx.id; });
+  selectedRxIds = recentRxs.length === 1
+    ? [recentRxs[0].id]
+    : recentRxs.filter(function(rx){ return !rx.guidanceSent; }).map(function(rx){ return rx.id; });
   expandedRxId = recentRxs.length === 1 ? recentRxs[0].id : null;
 
   var histHtml = recentRxs.length
@@ -902,7 +909,7 @@ function showRxSelectionStep(){
 
   document.getElementById('mbody').innerHTML = renderPolyAlertHtml(selectedPatient) + histHtml;
   document.getElementById('mfoot').innerHTML =
-    '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="beginRecording()">상담 시작</button>';
+    '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="beginRecording(true)">상담 시작</button>';
 
   if(recentRxs.length){
     renderRxHistoryPanel();
@@ -1000,7 +1007,9 @@ function renderRxHistoryPanel(){
         var isOpen = items.length === 1 ? true : rx.id === expandedRxId;
         var expandHtml = isOpen ? renderDrugTableHTML(rx) : '';
         var isChecked = selectedRxIds.indexOf(rx.id) > -1;
-        var checkboxHtml = '<input type="checkbox" class="rx-history-check" onclick="event.stopPropagation()" onchange="selectRxHistoryItem(\'' + rx.id + '\')"' + (isChecked ? ' checked' : '') + '>';
+        var checkboxHtml = items.length === 1
+          ? ''
+          : '<input type="checkbox" class="rx-history-check" onclick="event.stopPropagation()" onchange="selectRxHistoryItem(\'' + rx.id + '\')"' + (isChecked ? ' checked' : '') + '>';
         return '<div class="rx-history-item' + (isChecked ? ' active' : '') + (isOpen ? ' open' : '') + '">' +
           '<div class="rx-history-row">' +
             '<div class="rx-history-main" onclick="toggleRxHistoryItem(\'' + rx.id + '\')">' +
@@ -1163,8 +1172,8 @@ function saveAddRow(rxId){
   refreshExpandedRxItem();
 }
 
-/* ── 고객 선택 즉시 녹음 시작 (검색/신규 선택 → 바로 녹음) ── */
-function beginRecording(){
+/* ── 고객 선택 즉시 녹음 시작 (검색/신규 선택 또는 처방전 선택 화면의 "상담 시작" → 녹음) ── */
+function beginRecording(fromSelectionStep){
   document.getElementById('stepTabs').style.display = '';
   renderModalPtBar(false);
   var st3 = document.getElementById('st3');
@@ -1173,8 +1182,13 @@ function beginRecording(){
     document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
     st3.style.display = '';
     st3.innerHTML = '<span class="step-num">3</span> 전화번호 입력';
-  } else {
+  } else if(fromSelectionStep){
     setStep(2);
+  } else {
+    /* 단골이지만 처방전 이력이 없어 "처방전 선택" 화면 없이 바로 진입한 경우 — 신규처럼 곧장 상담으로 */
+    setStep(1);
+    document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
+    st3.style.display = 'none';
   }
   document.getElementById('mbody').innerHTML =
     '<div class="wait-stage">' +

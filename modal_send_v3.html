@@ -112,6 +112,71 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .recent-rx-hospital{font-size:17px;font-weight:500;letter-spacing:-0.64px;color:var(--color-grey-900);}
 .recent-rx-meta{font-size:14px;color:var(--color-grey-600);margin-top:2px;}
 .recent-rx-card.empty{color:var(--color-grey-500);font-size:14px;text-align:center;}
+.recent-rx-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;}
+.recent-rx-chevron{color:var(--color-grey-400);flex-shrink:0;transition:transform .15s;}
+.recent-rx-card.open .recent-rx-chevron{transform:rotate(180deg);}
+.recent-rx-expand{max-height:0;overflow:hidden;}
+.recent-rx-card.open .recent-rx-expand{max-height:640px;overflow-y:auto;margin-top:12px;padding-top:12px;border-top:1px solid var(--color-grey-200);}
+/* 처방 내역/6개월 이력 탭 */
+.recent-rx-tabs{display:flex;gap:4px;margin-bottom:12px;}
+.recent-rx-tab{flex:1;text-align:center;padding:7px 0;font-size:13px;font-weight:500;color:var(--color-grey-500);background:var(--color-grey-100);border-radius:6px;cursor:pointer;}
+.recent-rx-tab.active{background:var(--color-blue-100);color:var(--color-primary);}
+.rx-history-list{display:flex;flex-direction:column;gap:8px;}
+.rx-history-item{border:1px solid var(--color-grey-250);border-radius:8px;padding:10px 12px;cursor:pointer;}
+.rx-history-item:hover{border-color:var(--color-primary);}
+.rx-history-item.active{border-color:var(--color-primary);background:var(--color-blue-100);}
+.rx-history-hospital{font-size:14px;font-weight:500;color:var(--color-grey-800);}
+.rx-history-meta{font-size:12px;color:var(--color-grey-600);margin-top:2px;}
+/* 처방 약품 편집 테이블 (v2 s2-drug-table 포팅) */
+.s2-rx-box{border:none;}
+.s2-drug-table{width:100%;border-collapse:collapse;table-layout:fixed;}
+.s2-drug-table thead tr{background:#EEF0F3;}
+.s2-drug-table th{padding:8px 10px;font-size:12px;font-weight:400;letter-spacing:-0.48px;color:#5F6E7D;text-align:center;border-top:1px solid var(--color-grey-250);border-bottom:1px solid var(--color-grey-250);}
+.s2-drug-table th:nth-child(2){text-align:left;}
+.s2-drug-table td{padding:0 10px;height:52px;font-size:14px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-800);border-bottom:1px solid var(--color-grey-200);word-break:keep-all;overflow-wrap:break-word;}
+.s2-drug-table tbody tr:last-child td{border-bottom:none;}
+.s2-drug-table th:nth-child(1),.s2-drug-table td:nth-child(1){width:25px;text-align:center;color:var(--color-grey-400);font-family:'Poppins',sans-serif;}
+.s2-drug-table th:nth-child(2),.s2-drug-table td:nth-child(2){width:auto;}
+.s2-drug-table th:nth-child(3),.s2-drug-table td:nth-child(3){width:64px;text-align:center;}
+.s2-drug-table th:last-child,.s2-drug-table td:last-child{text-align:center;width:60px;}
+.s2-drug-table th.th-action{width:60px;}
+.s2-drug-table td.td-action{text-align:center;padding:6px 4px;display:flex;align-items:center;justify-content:center;gap:2px;}
+.s2-drug-name{font-size:14px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-800);}
+.s2-drug-sub{font-size:12px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);margin-top:1px;}
+.s2-changed-badge{display:inline-block;background:var(--color-blue-200);color:var(--color-primary);font-size:12px;font-weight:500;letter-spacing:-0.26px;padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+.s2-row-edit-btn{width:22px;height:22px;border:none;background:none;cursor:pointer;color:var(--color-grey-400);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;}
+.s2-row-edit-btn:hover{background:var(--color-grey-150);color:var(--color-grey-600);}
+.s2-row-del-btn{width:22px;height:22px;border:none;background:none;cursor:pointer;color:var(--color-grey-400);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;}
+.s2-row-del-btn:hover{background:#FFF4F5;color:var(--color-red);}
+.s2-add-drug-row{display:flex;align-items:center;justify-content:center;padding:10px 12px;border-top:1px dashed var(--color-grey-200);}
+.s2-add-drug-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border:1.5px dashed var(--color-primary);border-radius:8px;background:var(--color-blue-100);color:var(--color-primary);font-size:14px;font-weight:500;letter-spacing:-0.6px;cursor:pointer;font-family:inherit;}
+.s2-add-drug-btn:hover{background:var(--color-blue-200);}
+.s2-edit-row td{background:var(--color-blue-100);padding:10px 12px;}
+.s2-add-form-row td{background:var(--color-blue-100);padding:10px 12px;}
+.s2-edit-form{display:flex;flex-direction:column;gap:14px;padding:12px 14px;}
+.s2-edit-label{font-size:11px;font-weight:500;letter-spacing:-0.44px;color:var(--color-grey-550);margin-bottom:8px;display:block;}
+.s2-edit-search{position:relative;}
+.s2-edit-search input{width:100%;height:38px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 34px 0 12px;font-size:14px;font-family:inherit;outline:none;}
+.s2-edit-search input:focus{border-color:var(--color-primary);}
+.s2-edit-search .clear-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--color-grey-400);display:flex;padding:0;}
+.s2-edit-qty-row{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
+.s2-edit-qty-group{display:flex;flex-direction:column;gap:6px;}
+.s2-edit-qty-value{display:flex;gap:6px;align-items:center;font-size:14px;color:var(--color-grey-800);font-family:inherit;}
+.s2-edit-qty-input{width:56px;height:26px;border:1px solid #CBCDD0;border-radius:5px;font-family:'Poppins',sans-serif;font-size:14px;color:var(--color-grey-800);text-align:center;outline:none;}
+.s2-edit-qty-input:focus{border-color:var(--color-primary);}
+.s2-edit-actions{display:flex;gap:8px;justify-content:flex-end;}
+.s2-edit-save{height:32px;width:72px;background:var(--color-primary);border:none;border-radius:6px;font-size:13px;font-weight:500;color:var(--color-white);cursor:pointer;font-family:inherit;}
+.s2-edit-cancel{height:32px;width:72px;background:var(--color-white);border:1px solid var(--color-primary);border-radius:6px;font-size:13px;font-weight:500;color:var(--color-primary);cursor:pointer;font-family:inherit;}
+/* 대체조제 확인 패널 */
+.s2-consent-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 14px 14px;margin-top:8px;background:rgba(238,73,81,.1);border-radius:8px;}
+.s2-consent-left{display:flex;align-items:center;gap:8px;}
+.s2-consent-icon{width:20px;height:20px;border-radius:50%;background:var(--color-red);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s2-consent-icon span{font-size:13px;font-weight:900;color:var(--color-white);line-height:1;}
+.s2-consent-title{font-size:14px;font-weight:500;letter-spacing:-0.6px;color:var(--color-red);}
+.s2-consent-sub{font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-red);margin-top:4px;}
+.s2-consent-radios{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.s2-consent-radio{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;}
+.s2-consent-radio input[type="radio"]{width:14px;height:14px;accent-color:var(--color-primary);cursor:pointer;}
 
 /* 대기/진행 문구 화면 (녹음 중) */
 .wait-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;flex:1;text-align:center;padding:20px;}
@@ -130,26 +195,45 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .msg-reset:hover{color:var(--color-primary);}
 .msg-cnt{text-align:right;font-size:13px;font-weight:400;letter-spacing:-0.48px;margin-top:6px;color:var(--color-grey-500);}
 
-/* 단골 전용 — 복약 알림 접이식 토글 카드 (기본 접힘) */
-.rm-card{border:1px solid var(--color-grey-250);border-radius:10px;margin-bottom:16px;}
-.rm-row{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;}
-.rm-row-title{font-size:16px;font-weight:500;color:var(--color-grey-800);}
-.rm-chevron{margin-left:auto;color:var(--color-grey-400);transition:transform .15s;flex-shrink:0;}
-.rm-chevron.open{transform:rotate(180deg);}
-.rm-panel{display:none;padding:4px 16px 20px;border-top:1px solid var(--color-grey-150);}
+/* 복약 알림 (v2 reminder.css 그대로 포팅) */
+.rm-item{width:100%;margin-bottom:16px;}
+.rm-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid var(--color-grey-250);border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none;width:100%;box-sizing:border-box;}
+.rm-row:hover{border-color:#A0B4FF;background:#FAFBFF;}
+.rm-row.open{border-color:var(--color-primary);background:var(--color-blue-100);border-bottom-left-radius:0;border-bottom-right-radius:0;}
+.rm-row-body{flex:1;min-width:0;overflow:hidden;}
+.rm-row-top{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
+.rm-row-hospital{font-size:15px;font-weight:700;color:var(--color-grey-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rm-row-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.rm-chevron{transition:transform .15s;color:var(--color-grey-500);flex-shrink:0;}
+.rm-row.open .rm-chevron{transform:rotate(180deg);color:var(--color-primary);}
+.rm-panel{display:none;width:100%;box-sizing:border-box;border:1.5px solid var(--color-primary);border-top:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;padding:16px 14px;}
 .rm-panel.open{display:block;}
-.rm-field{margin-top:14px;}
-.rm-field label{font-size:13px;color:var(--color-grey-600);display:block;margin-bottom:6px;}
-.rm-pills{display:flex;gap:8px;}
-.rm-pill{height:36px;padding:0 16px;border:1px solid var(--color-grey-300);border-radius:8px;background:var(--color-white);font-size:14px;color:var(--color-grey-700);cursor:pointer;font-family:inherit;}
-.rm-pill.sel{border-color:var(--color-primary);color:var(--color-primary);background:var(--color-blue-100);}
-.rm-days-input{width:80px;height:36px;border:1px solid var(--color-grey-300);border-radius:8px;padding:0 10px;font-size:14px;font-family:inherit;}
-.rm-toggle{position:relative;display:inline-block;width:36px;height:20px;flex-shrink:0;}
-.rm-toggle input{opacity:0;width:0;height:0;position:absolute;}
-.rm-toggle-track{position:absolute;inset:0;background:var(--color-grey-400);border-radius:20px;transition:background .15s;cursor:pointer;}
-.rm-toggle-track::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--color-white);border-radius:50%;transition:transform .15s;}
-.rm-toggle input:checked + .rm-toggle-track{background:var(--color-primary);}
-.rm-toggle input:checked + .rm-toggle-track::after{transform:translateX(16px);}
+.rm-panel.disabled{opacity:.45;pointer-events:none;}
+.rm-field{margin-bottom:14px;}
+.rm-field:last-child{margin-bottom:0;}
+.rm-field-label{font-size:13px;color:var(--color-grey-600);font-weight:600;margin-bottom:8px;}
+.rm-slot-group{display:flex;gap:8px;height:36px;}
+.rm-slotchip{flex:1;min-width:0;height:36px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:1.5px solid var(--color-grey-300);border-radius:8px;font-size:13px;color:var(--color-grey-600);cursor:pointer;user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:border-color .12s,background .12s,color .12s;background:var(--color-white);}
+.rm-slotchip:hover{border-color:#A0B4FF;}
+.rm-slotchip.active{border-color:var(--color-primary);background:var(--color-blue-100);color:var(--color-primary);font-weight:600;}
+.rm-slot-error{font-size:11.5px;color:var(--color-red);font-weight:400;margin-left:8px;}
+.rm-select{width:100%;height:36px;border:1.5px solid var(--color-grey-300);border-radius:8px;padding:0 10px;font-size:14px;color:var(--color-grey-800);font-family:inherit;background:var(--color-white);cursor:pointer;}
+.rm-select:focus{border-color:var(--color-primary);outline:none;}
+.rm-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.rm-3col{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:16px;align-items:start;}
+.rm-date-input,.rm-days-input{border:1.5px solid var(--color-grey-300);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
+.rm-date-input{width:100%;height:36px;padding:0 10px;}
+.rm-date-input:focus{border-color:var(--color-primary);}
+.rm-days-ctrl{display:flex;align-items:center;gap:8px;}
+.rm-days-btn{width:32px;height:32px;border:1.5px solid var(--color-grey-300);border-radius:8px;background:var(--color-white);cursor:pointer;font-size:14px;color:var(--color-grey-800);font-family:inherit;}
+.rm-days-btn:hover{border-color:#A5BCEC;}
+.rm-days-input{width:56px;height:32px;text-align:center;}
+.rm-switch{position:relative;width:38px;height:21px;flex-shrink:0;}
+.rm-switch input{opacity:0;width:0;height:0;position:absolute;}
+.rm-switch .rm-slider{position:absolute;inset:0;background:var(--color-grey-300);border-radius:22px;cursor:pointer;transition:.15s;}
+.rm-switch .rm-slider::before{content:'';position:absolute;width:15px;height:15px;left:3px;top:3px;background:var(--color-white);border-radius:50%;transition:.15s;}
+.rm-switch input:checked + .rm-slider{background:var(--color-primary);}
+.rm-switch input:checked + .rm-slider::before{transform:translateX(17px);}
 
 /* 전송 (v2 sum-tbl 패턴) */
 .send-summary-label{font-size:20px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);margin-bottom:12px;}
@@ -172,11 +256,14 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .btn-close-cpl{height:44px;padding:0 48px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
 
 /* ── 퍼즐 AI 패널 (우측, v3 신규 컴포넌트) ── */
-.puzzle-panel{width:360px;flex-shrink:0;background:var(--color-white);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--color-grey-200);}
+.puzzle-panel{width:360px;height:723px;max-height:90vh;flex-shrink:0;background:var(--color-white);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--color-grey-200);}
 .pz-header{padding:16px 16px 10px;border-bottom:1px solid var(--color-grey-150);flex-shrink:0;}
 .pz-name{font-size:24px;font-weight:350;letter-spacing:-0.96px;color:var(--color-grey-900);}
 .pz-sub{font-size:14px;color:var(--color-grey-500);margin-top:4px;}
-.pz-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;}
+.pz-patient-name{display:none;align-items:center;gap:6px;font-size:15px;font-weight:500;color:var(--color-grey-800);margin-top:8px;}
+.pz-patient-name.on{display:flex;}
+.pz-patient-name-avatar{width:22px;height:22px;border-radius:50%;background:var(--color-blue-100);color:var(--color-primary);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pz-body{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;}
 .pz-idle{color:var(--color-grey-500);font-size:14px;text-align:center;line-height:1.7;max-width:240px;}
 .rec-wave-row{display:flex;align-items:center;justify-content:center;gap:6px;height:60px;}
 .rec-wave-row span{width:6px;border-radius:3px;background:var(--color-primary);animation:pzWave 1.1s ease-in-out infinite;}
@@ -191,17 +278,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .rec-label{font-size:14px;font-weight:500;color:var(--color-grey-600);}
 
 /* Puzzle AI 패널 — 녹음 중엔 STT로 대화가 실시간 인식되는 모습을 보여줌 */
-.pz-wave-mini{display:flex;align-items:center;gap:3px;height:18px;flex-shrink:0;}
-.pz-wave-mini span{width:3px;border-radius:2px;background:var(--color-primary);animation:pzWave 1.1s ease-in-out infinite;}
-.pz-wave-mini span:nth-child(1){height:6px;animation-delay:0s;}
-.pz-wave-mini span:nth-child(2){height:12px;animation-delay:.15s;}
-.pz-wave-mini span:nth-child(3){height:18px;animation-delay:.3s;}
-.pz-wave-mini span:nth-child(4){height:11px;animation-delay:.45s;}
-.pz-wave-mini span:nth-child(5){height:7px;animation-delay:.6s;}
 @keyframes pzWave{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
-.pz-stt-hd{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-bottom:12px;}
-.pz-stt-hd-label{font-size:13px;font-weight:500;color:var(--color-grey-500);}
-.pz-stt-box{flex:1;width:100%;overflow-y:auto;text-align:left;font-size:14px;line-height:1.7;color:var(--color-grey-700);}
+.pz-stt-box{flex:1;min-height:0;width:100%;overflow-y:auto;text-align:left;font-size:14px;line-height:1.7;color:var(--color-grey-700);}
 .pz-stt-line{margin-bottom:10px;opacity:0;animation:sttFadeIn .3s ease forwards;}
 .pz-stt-line b{color:var(--color-primary);font-weight:700;}
 @keyframes sttFadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
@@ -217,8 +295,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 </head>
 <body>
 
-<!-- component: new/floating-ai-button -->
-<button class="ai-fab" data-figma="new/floating-ai-button" onclick="openModal()">
+<!-- component: new/floating-ai-button — iframe로 임베드될 땐 호스트 페이지가 자체 트리거 버튼을 가지고 있으므로 숨김(단독 실행 시에만 노출) -->
+<button class="ai-fab" id="standaloneFab" data-figma="new/floating-ai-button" onclick="openModal()">
   <span class="ai-fab-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 003-3V6a3 3 0 10-6 0v6a3 3 0 003 3z" stroke="#FFFFFF" stroke-width="2"/><path d="M19 11a7 7 0 01-14 0M12 18v3" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg></span>
   <span class="ai-fab-text">상담 시작</span>
 </button>
@@ -247,6 +325,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
       <div class="pz-header">
         <div class="pz-name">Puzzle AI</div>
         <div class="pz-sub" id="pzSub">고객 확인 후 녹음이 시작됩니다</div>
+        <div class="pz-patient-name" id="pzPatientName"></div>
       </div>
       <div class="pz-body" id="pzBody">
         <div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 고객을 먼저 확인해 주세요.</div>
@@ -257,13 +336,45 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 </div>
 
 <script>
-/* 이름/전화번호/생년월일 어느 것으로든 매칭되는 mock 고객 */
+/* 이름/전화번호/생년월일 어느 것으로든 매칭되는 mock 고객 — 처방전은 6개월치 이력(rxHistory)으로 관리, recentRx는 그 중 최신 1건 */
 var PATIENTS = [
-  {name:'김미영', phone:'010-2233-4455', birth:'1985-03-12', recentRx:{hospital:'웰케어내과의원', date:'2026-07-20', drugCount:3, drugs:['아모잘탄정','아토르바스타틴','메트포르민']}},
-  {name:'홍재원', phone:'010-7788-9900', birth:'1972-11-05', recentRx:{hospital:'서울정형외과', date:'2026-07-18', drugCount:2, drugs:['낙센정','메코발라민']}},
-  {name:'이수진', phone:'010-4321-8765', birth:'1990-07-21', recentRx:null},
-  {name:'박정호', phone:'010-9012-3456', birth:'1968-01-30', recentRx:{hospital:'미래이비인후과', date:'2026-07-22', drugCount:4, drugs:['지르텍정','뮤코펙트시럽','아세트아미노펜','용각산']}}
+  {name:'김미영', phone:'010-2233-4455', birth:'1985-03-12', rxHistory:[
+    {id:'kmy1', hospital:'웰케어내과의원', date:'2026-07-20', drugs:[
+      {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:30, sub:false},
+      {name:'아토르바스타틴', dosage:'1정', freq:'1일 1회', days:30, sub:true},
+      {name:'메트포르민', dosage:'1정', freq:'1일 2회', days:30, sub:false}
+    ]},
+    {id:'kmy2', hospital:'웰케어내과의원', date:'2026-05-18', drugs:[
+      {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:30, sub:false},
+      {name:'메트포르민', dosage:'1정', freq:'1일 2회', days:30, sub:false}
+    ]},
+    {id:'kmy3', hospital:'서울정형외과', date:'2026-02-10', drugs:[
+      {name:'낙센정', dosage:'1정', freq:'1일 2회', days:14, sub:false}
+    ]}
+  ]},
+  {name:'홍재원', phone:'010-7788-9900', birth:'1972-11-05', rxHistory:[
+    {id:'hjw1', hospital:'서울정형외과', date:'2026-07-18', drugs:[
+      {name:'낙센정', dosage:'1정', freq:'1일 2회', days:10, sub:false},
+      {name:'메코발라민', dosage:'1정', freq:'1일 3회', days:10, sub:false}
+    ]},
+    {id:'hjw2', hospital:'참튼튼정형외과', date:'2026-04-10', drugs:[
+      {name:'낙센정', dosage:'1정', freq:'1일 2회', days:7, sub:true}
+    ]}
+  ]},
+  {name:'이수진', phone:'010-4321-8765', birth:'1990-07-21', rxHistory:[]},
+  {name:'박정호', phone:'010-9012-3456', birth:'1968-01-30', rxHistory:[
+    {id:'pjh1', hospital:'미래이비인후과', date:'2026-07-22', drugs:[
+      {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:5, sub:false},
+      {name:'뮤코펙트시럽', dosage:'10ml', freq:'1일 3회', days:5, sub:false},
+      {name:'아세트아미노펜', dosage:'1정', freq:'1일 3회', days:5, sub:true},
+      {name:'용각산', dosage:'1포', freq:'1일 3회', days:5, sub:false}
+    ]},
+    {id:'pjh2', hospital:'미래이비인후과', date:'2026-03-02', drugs:[
+      {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:5, sub:false}
+    ]}
+  ]}
 ];
+PATIENTS.forEach(function(p){ p.recentRx = p.rxHistory.length ? p.rxHistory[0] : null; });
 
 /* 한글 초성 검색 지원 */
 var CHOSUNG_LIST = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
@@ -282,18 +393,185 @@ function getChosung(str){
 function isChosungQuery(q){
   return q.length > 0 && q.split('').every(function(ch){ return CHOSUNG_LIST.indexOf(ch) > -1; });
 }
-var AI_DRAFT_FALLBACK = '오늘 처방받으신 약은 감기약으로 하루 3번, 아침·점심·저녁 식사 후 바로 드시면 됩니다. 먹으면 졸릴 수 있어 운전은 삼가주세요. 목 아프실 때는 용각산을 수시로 드셔도 됩니다.';
-/* 신규 고객 메시지엔 웰체크 앱 초대 링크를 이어붙임 — 모객 채널 */
-var INVITE_LINK = 'https://wellcheck.app/invite/a1b2c3';
-var INVITE_BLOCK = '\n\n웰체크 앱을 설치하시면 복약 알림과 상담 기록을 편하게 받아보실 수 있어요.\n' + INVITE_LINK;
-/* 단골이고 최근 처방전이 있으면 그 처방전 약품을 실제로 반영한 초안 생성, 신규는 초대 링크까지 포함 */
+/* 신규 고객 메시지엔 웰체크 앱 가입 안내를 이어붙임 — 모객 채널 (v2 appendJoinNoteIfNew 그대로) */
+var INVITE_LINK = 'https://wellcheck.co.kr/join?ref=pharmacy';
+
+/* ── 복약지도문 생성 규칙 (v2 modal_send_v2.html의 buildMsgDefault 그대로 포팅, 다건 selectedRxIds 대신 v3의 활성 처방전 1건 기준) ── */
+function buildMsgDefault(){
+  var name = (selectedPatient && selectedPatient.name) || '고객';
+  var rx = selectedPatient && !selectedPatient.isNew ? getCurrentRx() : null;
+  if(!rx){
+    return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + name + ' 고객님, 지속적인 복약 관리를 위해 안내드립니다.\n';
+  }
+  var drugs = editingDrugsMap[rx.id] || rx.drugs;
+  var drugLines = drugs.map(function(d, i){
+    return (i + 1) + '. ' + d.name + ' - 1회 ' + d.dosage + ', ' + d.freq + ', ' + d.days + '일분';
+  });
+  var rs = reminderSettings[rx.id];
+  var hasReminder = !!(rs && rs.enabled);
+  var allSlots = hasReminder ? Array.from(rs.slots) : [];
+  var allTiming = hasReminder ? rs.timing : '';
+
+  var freqSlotMap = { '1일 1회': ['아침'], '1일 2회': ['아침', '저녁'], '1일 3회': ['아침', '점심', '저녁'], '1일 4회': ['아침', '점심', '저녁', '취침 전'] };
+  var ocrSlots = [];
+  drugs.forEach(function(d){
+    (freqSlotMap[d.freq] || []).forEach(function(s){ if(ocrSlots.indexOf(s) === -1) ocrSlots.push(s); });
+  });
+
+  var methodSection;
+  if(hasReminder){
+    var scheduleCount = allSlots.length || ocrSlots.length || 1;
+    var scheduleTimeStr = allSlots.length ? allSlots.join(' · ') : (ocrSlots.length ? ocrSlots.join(' · ') : '약사님이 등록한 시간');
+    var scheduleTiming = allTiming || '식후 30분';
+    methodSection = '담당 약사가 고객님의 처방전을 살펴보고 맞춤 복약 알림을 등록했어요.\n하루 ' + scheduleCount + '번, ' + scheduleTimeStr + ' ' + scheduleTiming + '에\n웰체크 앱에서 알림이 울리면 복약하세요.';
+  } else {
+    var scheduleCount2 = ocrSlots.length || 1;
+    var scheduleTimeStr2 = ocrSlots.length ? ocrSlots.join(' · ') : '';
+    methodSection = ocrSlots.length ? '하루 ' + scheduleCount2 + '번, ' + scheduleTimeStr2 + ' 식후 30분에 복약하세요.' : '';
+  }
+  var methodBlock = methodSection ? '\n\n[복약 방법]\n' + methodSection : '';
+  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + methodBlock + '\n';
+}
+function appendJoinNoteIfNew(text){
+  if(!(selectedPatient && selectedPatient.isNew)) return text;
+  if(text.indexOf('웰체크 앱 가입 안내') > -1) return text;
+  return text + '\n\n[웰체크 앱 가입 안내]\n지속적인 건강 관리의 시작, 웰체크 앱과 함께하세요.\n우리 약국을 단골 약국으로 연결하시면 더 편리해집니다.\n' + INVITE_LINK;
+}
 function buildAiDraft(){
-  var rx = selectedPatient && !selectedPatient.isNew ? selectedPatient.recentRx : null;
-  var base = rx
-    ? rx.hospital+'에서 '+rx.date+'에 처방받으신 '+rx.drugs.join(', ')+' 관련해서 상담 드린 내용입니다. 말씀드린 대로 정해진 시간에 거르지 않고 복용해 주시고, 복용 중 어지럽거나 속이 불편하시면 임의로 중단하지 마시고 약국으로 먼저 연락 주세요.'
-    : AI_DRAFT_FALLBACK;
-  if(selectedPatient && selectedPatient.isNew) base += INVITE_BLOCK;
-  return base;
+  return appendJoinNoteIfNew(buildMsgDefault());
+}
+
+/* ── 복약 알림 (v2 reminder.js 그대로 포팅, selectedRxIds 목록 대신 v3의 활성 처방전 1건 기준) ── */
+var reminderSettings = {};
+function parseFreqCount(freq){
+  var m = /([0-9]+)\s*회/.exec(freq || '');
+  return m ? parseInt(m[1], 10) : 1;
+}
+function defaultSlotsForTimes(n){
+  if(n <= 1) return ['아침'];
+  if(n === 2) return ['아침', '점심'];
+  if(n === 3) return ['아침', '점심', '저녁'];
+  return ['아침', '점심', '저녁', '취침전'];
+}
+function todayISODate(){
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function initReminderSettingsFor(rx){
+  if(reminderSettings[rx.id]) return;
+  var drugs = editingDrugsMap[rx.id] || rx.drugs;
+  var times = Math.min(4, Math.max.apply(null, drugs.map(function(d){ return parseFreqCount(d.freq); })));
+  reminderSettings[rx.id] = {
+    enabled: true,
+    times: times,
+    slots: new Set(defaultSlotsForTimes(times)),
+    timing: '식후 30분',
+    startDate: todayISODate(),
+    days: Math.max.apply(null, drugs.map(function(d){ return d.days || 7; })),
+    uiOpen: false
+  };
+}
+function renderReminderCardWrap(){
+  var wrap = document.getElementById('reminderCardWrap');
+  if(!wrap) return;
+  var rx = getCurrentRx();
+  wrap.innerHTML = rx ? buildReminderCard(rx) : '';
+}
+function buildReminderCard(rx){
+  initReminderSettingsFor(rx);
+  var s = reminderSettings[rx.id];
+  var isOpen = !!s.uiOpen;
+  var chevronSVG = '<svg class="rm-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  var timesSelect = '<select class="rm-select" onclick="event.stopPropagation();" onchange="rmSetTimes(\'' + rx.id + '\',parseInt(this.value,10))">'
+    + [1, 2, 3, 4].map(function(n){ return '<option value="' + n + '"' + (s.times === n ? ' selected' : '') + '>' + n + '회</option>'; }).join('') + '</select>';
+  var slotChecks = ['아침', '점심', '저녁', '취침전'].map(function(t){
+    return '<div class="rm-slotchip' + (s.slots.has(t) ? ' active' : '') + '" onclick="event.stopPropagation();rmToggleSlot(\'' + rx.id + '\',\'' + t + '\')">' + t + '</div>';
+  }).join('');
+  var timingSelect = '<select class="rm-select" onclick="event.stopPropagation();" onchange="rmSetTiming(\'' + rx.id + '\',this.value)">'
+    + ['식전', '식후', '식후 30분'].map(function(t){ return '<option value="' + t + '"' + (s.timing === t ? ' selected' : '') + '>' + t + '</option>'; }).join('') + '</select>';
+
+  var row = '<div class="rm-row' + (isOpen ? ' open' : '') + '" onclick="rmToggleExpand(\'' + rx.id + '\')">'
+    + '<div class="rm-row-body"><div class="rm-row-top"><span class="rm-row-hospital">' + rx.hospital + ' 복약 알림</span></div></div>'
+    + '<div class="rm-row-right">'
+    + '<label class="rm-switch" onclick="event.stopPropagation();"><input type="checkbox" ' + (s.enabled ? 'checked' : '') + ' onchange="rmToggleEnabled(\'' + rx.id + '\')"><span class="rm-slider"></span></label>'
+    + chevronSVG
+    + '</div></div>';
+
+  var panel = '<div class="rm-panel' + (isOpen ? ' open' : '') + (s.enabled ? '' : ' disabled') + '">'
+    + '<div class="rm-3col">'
+    + '<div class="rm-field"><div class="rm-field-label">복약 횟수</div>' + timesSelect + '</div>'
+    + '<div class="rm-field"><div class="rm-field-label">복약 시간<span class="rm-slot-error" id="rmSlotError_' + rx.id + '" style="display:none;">설정된 복약 횟수 이상으로 선택할 수 없습니다.</span></div><div class="rm-slot-group">' + slotChecks + '</div></div>'
+    + '<div class="rm-field"><div class="rm-field-label">복약 시점</div>' + timingSelect + '</div>'
+    + '</div>'
+    + '<div class="rm-2col">'
+    + '<div class="rm-field"><div class="rm-field-label">복약 시작일</div><input class="rm-date-input" type="date" value="' + s.startDate + '" onclick="event.stopPropagation();" onchange="rmSetStartDate(\'' + rx.id + '\',this.value)"></div>'
+    + '<div class="rm-field"><div class="rm-field-label">복약 기간</div><div class="rm-days-ctrl">'
+    + '<button class="rm-days-btn" onclick="event.stopPropagation();rmChangeDays(\'' + rx.id + '\',-1)">−</button>'
+    + '<input class="rm-days-input" type="number" min="1" value="' + s.days + '" onclick="event.stopPropagation();" onchange="rmSetDays(\'' + rx.id + '\',this.value)">'
+    + '<span style="font-size:12px;color:#888;">일</span>'
+    + '<button class="rm-days-btn" onclick="event.stopPropagation();rmChangeDays(\'' + rx.id + '\',1)">+</button>'
+    + '</div></div>'
+    + '</div></div>';
+
+  return '<!-- component: new/reminder-toggle-card --><div class="rm-item" data-figma="new/reminder-toggle-card">' + row + panel + '</div>';
+}
+function rmToggleExpand(id){
+  reminderSettings[id].uiOpen = !reminderSettings[id].uiOpen;
+  renderReminderCardWrap();
+}
+function rmToggleEnabled(id){
+  reminderSettings[id].enabled = !reminderSettings[id].enabled;
+  renderReminderCardWrap();
+  refreshDraftIfUntouched();
+}
+function rmSetTimes(id, n){
+  var s = reminderSettings[id];
+  s.times = n;
+  s.slots = new Set(defaultSlotsForTimes(n));
+  renderReminderCardWrap();
+  refreshDraftIfUntouched();
+}
+function rmToggleSlot(id, slot){
+  var s = reminderSettings[id];
+  var errEl = document.getElementById('rmSlotError_' + id);
+  if(s.slots.has(slot)){
+    s.slots.delete(slot);
+  } else {
+    if(s.slots.size >= s.times){
+      if(errEl) errEl.style.display = 'inline';
+      return;
+    }
+    s.slots.add(slot);
+  }
+  if(errEl) errEl.style.display = 'none';
+  renderReminderCardWrap();
+  refreshDraftIfUntouched();
+}
+function rmSetTiming(id, val){
+  reminderSettings[id].timing = val;
+  renderReminderCardWrap();
+  refreshDraftIfUntouched();
+}
+function rmSetStartDate(id, val){
+  reminderSettings[id].startDate = val;
+}
+function rmChangeDays(id, delta){
+  var s = reminderSettings[id];
+  s.days = Math.max(1, (s.days || 1) + delta);
+  renderReminderCardWrap();
+}
+function rmSetDays(id, val){
+  var s = reminderSettings[id];
+  s.days = Math.max(1, parseInt(val, 10) || 1);
+  renderReminderCardWrap();
+}
+/* 약사가 아직 초안을 직접 수정하지 않았다면, 복약 알림 설정이 바뀔 때 초안 문구도 같이 갱신 */
+function refreshDraftIfUntouched(){
+  if(currentDraft !== null) return;
+  var ta = document.getElementById('draftText');
+  if(!ta) return;
+  ta.value = buildAiDraft();
+  updateMsgCount();
 }
 /* 신규 고객 기본 표시명 — 당근마켓 닉네임처럼 형용사+명사 랜덤 조합 */
 var NICK_ADJ = ['용감한','씩씩한','행복한','부지런한','느긋한','상냥한','반짝이는','포근한','든든한','차분한'];
@@ -305,6 +583,8 @@ function generateNickname(){
 }
 var EDIT_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
 var REMOVE_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var CLEAR_ICON = '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+var ADD_ICON = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 
 var selectedPatient = null;
 var seconds = 0;
@@ -313,33 +593,44 @@ var sttTimer = null;
 var currentDraft = null;
 var ptShowRemove = false;
 var currentMatches = [];
+var currentRxId = null;
+var rxCardTab = 'current';
+var editingDrugsMap = {};
 
 /* ── Puzzle AI 패널 — 녹음 중 STT 실시간 인식 mock ── */
 var STT_LINES = [
-  '<b>약사</b> 안녕하세요, 오늘 처방받으신 약 안내해 드릴게요.',
-  '<b>고객</b> 네, 부탁드려요.',
-  '<b>약사</b> 이 약은 하루 세 번, 식후 30분에 드시면 됩니다.',
-  '<b>고객</b> 식전에 먹어도 괜찮나요?',
-  '<b>약사</b> 가능하면 식후가 흡수에 더 좋습니다.',
-  '<b>고객</b> 네, 알겠습니다.',
-  '<b>약사</b> 복용 중 졸릴 수 있어서 운전이나 기계 조작은 피해주세요.',
-  '<b>고객</b> 술은 같이 마셔도 되나요?',
-  '<b>약사</b> 음주는 삼가시는 게 좋습니다.',
-  '<b>고객</b> 알겠습니다, 감사합니다.'
+  '요즘 속이 더부룩하고 밥 먹고 나면 소화가 잘 안되는 느낌이 있는데요.',
+  '어떤 걸 먹으면 좋을까요?',
+  '언제부터 그런 느낌이 드셨어요?',
+  '한 두 달 정도 된 거 같아요.',
+  '일도 좀 바빠지고 요즘 잠을 잘 못 잤거든요.',
+  '혹시 드시고 계신 약 있으실까요?',
+  '콜레스테롤이랑 당뇨약 먹고 있어요.',
+  '다른 질병이나 알레르기 있으실까요?',
+  '고혈압이 있고 페니실린 알레르기가 있어요.',
+  '흡연이나 음주는 하실까요?',
+  '담배는 가끔 피우고 술은 일주일에 한두 번 정도는 마시는 것 같아요.',
+  '말씀하신 증상이라면 비타민 B군이랑 철분 같은 건강기능식품이 도움될 수 있어요.',
+  '헤모큐라는 철분제랑 임팩타민 영양제 같이 드릴 테니까',
+  '한번 드셔보세요.',
+  '식후에 드시는 게 좋고 공복에 드시면 속이 불편할 수 있어요.',
+  '또 수면이 부족하거나 카페인 많이 드시면 효과가 떨어질 수 있으니 생활습관도 같이 관리하시면 좋을 것 같아요.',
+  '네.',
+  '혹시 추가로 밀크시슬 좋은 걸로 같이 주실래요?',
+  '밀크시슬은 재고 확인해보니 품절돼서 내일 오전에 입고 예정이라 12시 이후에 방문 가능하실까요?',
+  '네.',
+  '내일 오후에 방문할게요.'
 ];
 function startStt(){
   clearInterval(sttTimer);
   var box = document.getElementById('sttBox');
-  box.innerHTML = '';
+  box.innerHTML = '<span id="sttText"></span><span class="pz-stt-cursor"></span>';
+  var textEl = document.getElementById('sttText');
   var i = 0;
   function appendLine(){
     if(!document.getElementById('sttBox')) { clearInterval(sttTimer); return; }
-    var prevCursor = box.querySelector('.pz-stt-cursor');
-    if(prevCursor) prevCursor.remove();
-    var line = document.createElement('div');
-    line.className = 'pz-stt-line';
-    line.innerHTML = STT_LINES[i % STT_LINES.length] + ' <span class="pz-stt-cursor"></span>';
-    box.appendChild(line);
+    if(i >= STT_LINES.length) { clearInterval(sttTimer); return; }
+    textEl.textContent += (i>0 ? ' ' : '') + STT_LINES[i];
     box.scrollTop = box.scrollHeight;
     i++;
   }
@@ -363,15 +654,24 @@ function closeModal(){
   document.getElementById('overlay').classList.remove('on');
   clearInterval(timerId);
   clearInterval(sttTimer);
+  if(window.parent && window.parent !== window && window.parent.closeModalFrame){
+    window.parent.closeModalFrame();
+  }
 }
 function resetFlow(){
   selectedPatient = null;
   seconds = 0;
   currentDraft = null;
+  currentRxId = null;
+  rxCardTab = 'current';
+  editingDrugsMap = {};
   clearInterval(timerId);
   clearInterval(sttTimer);
   document.getElementById('modalPt').innerHTML = '<span class="modal-pt-placeholder">고객을 먼저 확인해 주세요</span>';
   document.getElementById('pzSub').textContent = '고객 확인 후 녹음이 시작됩니다';
+  var pzNameEl = document.getElementById('pzPatientName');
+  pzNameEl.classList.remove('on');
+  pzNameEl.innerHTML = '';
   var pzBodyReset = document.getElementById('pzBody');
   pzBodyReset.style.alignItems = '';
   pzBodyReset.style.justifyContent = '';
@@ -465,9 +765,214 @@ function commitEditName(){
   var v = document.getElementById('ptNameInput').value.trim();
   selectedPatient.name = v || null;
   renderModalPtBar(ptShowRemove);
+  var pzNameEl = document.getElementById('pzPatientName');
+  if(pzNameEl.classList.contains('on')){
+    var ptName = selectedPatient.name || '신규 고객';
+    pzNameEl.innerHTML = '<span class="pz-patient-name-avatar">' + ptName[0] + '</span><span>' + ptName + '</span>';
+  }
 }
 function removePatient(){
   resetFlow();
+}
+
+/* ── 최근 처방전 카드: "처방 내역"(편집 가능한 약품 테이블) / "6개월 처방전 이력"(과거 처방전 목록) 탭 ── */
+function toggleRecentRx(){
+  var card = document.getElementById('recentRxCard');
+  if(card.classList.contains('open')){
+    card.classList.remove('open');
+    return;
+  }
+  if(!currentRxId && selectedPatient.recentRx) currentRxId = selectedPatient.recentRx.id;
+  renderRxCardBody();
+  card.classList.add('open');
+}
+function getCurrentRx(){
+  return (selectedPatient.rxHistory || []).find(function(r){ return r.id === currentRxId; });
+}
+function ensureEditingDrugs(rx){
+  if(!editingDrugsMap[rx.id]) editingDrugsMap[rx.id] = rx.drugs.map(function(d){ return Object.assign({}, d); });
+  return editingDrugsMap[rx.id];
+}
+function switchRxTab(tab){
+  rxCardTab = tab;
+  renderRxCardBody();
+}
+function selectHistoryRx(id){
+  currentRxId = id;
+  rxCardTab = 'current';
+  renderRxCardBody();
+  updateRecentRxHeader();
+}
+function updateRecentRxHeader(){
+  var rx = getCurrentRx();
+  if(!rx) return;
+  var card = document.getElementById('recentRxCard');
+  card.querySelector('.recent-rx-hospital').textContent = rx.hospital;
+  card.querySelector('.recent-rx-meta').textContent = rx.date + ' · 약품 ' + rx.drugs.length + '종';
+}
+function renderRxCardBody(){
+  var expand = document.getElementById('recentRxExpand');
+  var tabsHtml = '<div class="recent-rx-tabs">' +
+    '<div class="recent-rx-tab' + (rxCardTab === 'current' ? ' active' : '') + '" onclick="switchRxTab(\'current\')">처방 내역</div>' +
+    '<div class="recent-rx-tab' + (rxCardTab === 'history' ? ' active' : '') + '" onclick="switchRxTab(\'history\')">6개월 처방전 이력</div>' +
+  '</div>';
+  var body = rxCardTab === 'history' ? renderRxHistoryListHTML() : renderCurrentRxTableHTML();
+  expand.innerHTML = tabsHtml + body;
+}
+function renderRxHistoryListHTML(){
+  var hist = selectedPatient.rxHistory || [];
+  if(!hist.length) return '<div class="s1-empty">처방전 이력이 없습니다.</div>';
+  return '<div class="rx-history-list">' + hist.map(function(rx){
+    return '<div class="rx-history-item' + (rx.id === currentRxId ? ' active' : '') + '" onclick="selectHistoryRx(\'' + rx.id + '\')">' +
+      '<div class="rx-history-hospital">' + rx.hospital + '</div>' +
+      '<div class="rx-history-meta">' + rx.date + ' · 약품 ' + rx.drugs.length + '종</div>' +
+    '</div>';
+  }).join('') + '</div>';
+}
+function renderCurrentRxTableHTML(){
+  var rx = getCurrentRx();
+  if(!rx) return '<div class="s1-empty">처방전이 없습니다.</div>';
+  return renderDrugTableHTML(rx);
+}
+
+/* ── 약품 테이블 렌더링 + 편집/추가/삭제 + 대체조제 확인 (v2 modal_send_v2.html 로직 그대로 포팅) ── */
+function renderDrugTableHTML(rx){
+  var drugs = ensureEditingDrugs(rx);
+  var origDrugs = rx.drugs;
+  var hasSub = drugs.some(function(d){ return d.sub; });
+  var rows = drugs.map(function(d, i){
+    var changed = JSON.stringify(d) !== JSON.stringify(origDrugs[i]);
+    var isNew = i >= origDrugs.length;
+    var badge = (changed || isNew) ? '<span class="s2-changed-badge">' + (isNew ? '추가' : '변경') + '</span>' : '';
+    var usageLine = '1회 ' + d.dosage + ', ' + d.freq.replace('1일', '하루');
+    return '<tr id="drow_' + rx.id + '_' + i + '">' +
+      '<td>' + (i + 1) + '</td>' +
+      '<td><div class="s2-drug-name">' + d.name + badge + '</div><div class="s2-drug-sub">' + usageLine + '</div></td>' +
+      '<td>' + d.days + '일분</td>' +
+      '<td class="td-action">' +
+        '<button class="s2-row-edit-btn" onclick="openEditRow(\'' + rx.id + '\',' + i + ')" title="편집">' + EDIT_ICON + '</button>' +
+        '<button class="s2-row-del-btn" onclick="deleteDrug(\'' + rx.id + '\',' + i + ')" title="삭제">' + REMOVE_ICON + '</button>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+  var consentBlock = hasSub
+    ? '<div class="s2-consent-row">' +
+        '<div class="s2-consent-left">' +
+          '<div class="s2-consent-icon"><span>!</span></div>' +
+          '<div><div class="s2-consent-title">대체 조제인가요?</div><div class="s2-consent-sub">고객에게 대체조제 사실을 알려야 합니다.</div></div>' +
+        '</div>' +
+        '<div class="s2-consent-radios">' +
+          '<label class="s2-consent-radio"><input type="radio" name="subConsent_' + rx.id + '" value="yes"> 네</label>' +
+          '<label class="s2-consent-radio"><input type="radio" name="subConsent_' + rx.id + '" value="no"> 아니오</label>' +
+        '</div>' +
+      '</div>'
+    : '';
+  return '<div class="s2-rx-box">' +
+    '<table class="s2-drug-table"><thead><tr><th>NO</th><th>약명</th><th>복용일</th><th class="th-action"></th></tr></thead>' +
+    '<tbody id="drugTbody_' + rx.id + '">' + rows + '</tbody></table>' +
+    '<div class="s2-add-drug-row"><button class="s2-add-drug-btn" onclick="openAddRow(\'' + rx.id + '\')">' + ADD_ICON + ' 약품 추가</button></div>' +
+    consentBlock +
+  '</div>';
+}
+function parseLeadingQty(str){
+  var m = /^(\d+)\s*(.*)$/.exec((str || '').trim());
+  return m ? { num: m[1], unit: m[2] || '정' } : { num: '1', unit: str || '정' };
+}
+function parseLeadingFreq(str){
+  var m = /([0-9]+)\s*회/.exec(str || '');
+  return m ? m[1] : '1';
+}
+function qtyFieldsHTML(prefix, dosage, freq, days){
+  var d = parseLeadingQty(dosage);
+  var freqNum = parseLeadingFreq(freq);
+  return '<div class="s2-edit-qty-row">' +
+    '<div class="s2-edit-qty-group"><label class="s2-edit-label">용량</label><div class="s2-edit-qty-value">1회 <input class="s2-edit-qty-input" id="' + prefix + '_dnum" type="number" min="1" value="' + d.num + '"> ' + d.unit + '</div></div>' +
+    '<div class="s2-edit-qty-group"><label class="s2-edit-label">횟수</label><div class="s2-edit-qty-value">하루 <input class="s2-edit-qty-input" id="' + prefix + '_fnum" type="number" min="1" value="' + freqNum + '"> 회</div></div>' +
+    '<div class="s2-edit-qty-group"><label class="s2-edit-label">일수</label><div class="s2-edit-qty-value"><input class="s2-edit-qty-input" id="' + prefix + '_days" type="number" min="1" value="' + days + '"> 일</div></div>' +
+  '</div>';
+}
+function openEditRow(rxId, i){
+  var key = rxId + '_' + i;
+  var existing = document.getElementById('editForm_' + key);
+  if(existing){ closeEditRow(key); return; }
+  document.querySelectorAll('[id^="editForm_"]').forEach(function(el){ el.remove(); });
+  var d = editingDrugsMap[rxId][i];
+  var row = document.getElementById('drow_' + key);
+  var formRow = document.createElement('tr');
+  formRow.id = 'editForm_' + key;
+  formRow.className = 's2-edit-row';
+  formRow.innerHTML = '<td colspan="4"><div class="s2-edit-form">' +
+    '<div><label class="s2-edit-label">약품 검색</label><div class="s2-edit-search">' +
+      '<input id="ef_name_' + key + '" value="' + d.name + '">' +
+      '<button class="clear-btn" onclick="document.getElementById(\'ef_name_' + key + '\').value=\'\'">' + CLEAR_ICON + '</button>' +
+    '</div></div>' +
+    qtyFieldsHTML('ef_' + key, d.dosage, d.freq, d.days) +
+    '<div class="s2-edit-actions">' +
+      '<button class="s2-edit-cancel" onclick="document.getElementById(\'editForm_' + key + '\').remove()">취소</button>' +
+      '<button class="s2-edit-save" onclick="saveEditRow(\'' + rxId + '\',' + i + ')">저장</button>' +
+    '</div>' +
+  '</div></td>';
+  row.after(formRow);
+  document.getElementById('ef_name_' + key).focus();
+}
+function closeEditRow(key){
+  var el = document.getElementById('editForm_' + key);
+  if(el) el.remove();
+}
+function saveEditRow(rxId, i){
+  var key = rxId + '_' + i;
+  var prev = editingDrugsMap[rxId][i];
+  var p = 'ef_' + key;
+  var dNum = document.getElementById(p + '_dnum').value.trim();
+  var dUnit = parseLeadingQty(prev.dosage).unit;
+  var fNum = document.getElementById(p + '_fnum').value.trim();
+  var days = parseInt(document.getElementById(p + '_days').value) || prev.days;
+  editingDrugsMap[rxId][i] = {
+    name: document.getElementById('ef_name_' + key).value.trim() || prev.name,
+    dosage: (dNum || '1') + dUnit,
+    freq: '1일 ' + (fNum || '1') + '회',
+    days: days,
+    sub: prev.sub
+  };
+  renderRxCardBody();
+}
+function deleteDrug(rxId, i){
+  if(!confirm('"' + editingDrugsMap[rxId][i].name + '" 을(를) 목록에서 삭제할까요?')) return;
+  editingDrugsMap[rxId].splice(i, 1);
+  renderRxCardBody();
+}
+function openAddRow(rxId){
+  var formId = 'addFormRow_' + rxId;
+  if(document.getElementById(formId)) return;
+  document.querySelectorAll('[id^="editForm_"]').forEach(function(el){ el.remove(); });
+  var addRow = document.createElement('tr');
+  addRow.id = formId;
+  addRow.className = 's2-add-form-row';
+  addRow.innerHTML = '<td colspan="4"><div class="s2-edit-form">' +
+    '<div><label class="s2-edit-label">약품 검색</label><div class="s2-edit-search">' +
+      '<input id="af_name_' + rxId + '" placeholder="약품명을 검색하세요.">' +
+      '<button class="clear-btn" onclick="document.getElementById(\'af_name_' + rxId + '\').value=\'\'">' + CLEAR_ICON + '</button>' +
+    '</div></div>' +
+    qtyFieldsHTML('af_' + rxId, '1정', '1일 1회', 30) +
+    '<div class="s2-edit-actions">' +
+      '<button class="s2-edit-cancel" onclick="document.getElementById(\'' + formId + '\').remove()">취소</button>' +
+      '<button class="s2-edit-save" onclick="saveAddRow(\'' + rxId + '\')">저장</button>' +
+    '</div>' +
+  '</div></td>';
+  var table = document.getElementById('drugTbody_' + rxId).closest('table');
+  var addBtnRow = table.nextElementSibling;
+  addBtnRow.before(addRow);
+  document.getElementById('af_name_' + rxId).focus();
+}
+function saveAddRow(rxId){
+  var name = document.getElementById('af_name_' + rxId).value.trim();
+  var p = 'af_' + rxId;
+  var dNum = document.getElementById(p + '_dnum').value.trim() || '1';
+  var fNum = document.getElementById(p + '_fnum').value.trim() || '1';
+  var days = parseInt(document.getElementById(p + '_days').value) || 30;
+  if(!name){ alert('약품명을 입력해 주세요.'); return; }
+  editingDrugsMap[rxId].push({ name: name, dosage: dNum + '정', freq: '1일 ' + fNum + '회', days: days, sub: false });
+  renderRxCardBody();
 }
 
 /* ── 고객 선택 즉시 녹음 시작 (검색/신규 선택 → 바로 녹음) ── */
@@ -484,11 +989,18 @@ function beginRecording(){
   var refHtml = '';
   if(!selectedPatient.isNew){
     var rx = selectedPatient.recentRx;
+    if(rx) currentRxId = rx.id;
     refHtml = rx
-      ? '<!-- component: new/recent-rx-card --><div class="recent-rx-card" data-figma="new/recent-rx-card">' +
-          '<div class="recent-rx-label">최근 처방전</div>' +
-          '<div class="recent-rx-hospital">'+rx.hospital+'</div>' +
-          '<div class="recent-rx-meta">'+rx.date+' · 약품 '+rx.drugCount+'종</div>' +
+      ? '<!-- component: new/recent-rx-card --><div class="recent-rx-card" id="recentRxCard" data-figma="new/recent-rx-card">' +
+          '<div class="recent-rx-hd" onclick="toggleRecentRx()">' +
+            '<div>' +
+              '<div class="recent-rx-label">최근 처방전</div>' +
+              '<div class="recent-rx-hospital">'+rx.hospital+'</div>' +
+              '<div class="recent-rx-meta">'+rx.date+' · 약품 '+rx.drugs.length+'종</div>' +
+            '</div>' +
+            '<span class="recent-rx-chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
+          '</div>' +
+          '<div class="recent-rx-expand" id="recentRxExpand"></div>' +
         '</div>'
       : '<div class="recent-rx-card empty">최근 처방전 정보가 없습니다.</div>';
   }
@@ -499,21 +1011,19 @@ function beginRecording(){
       '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
       '<div class="rec-timer" id="recTimer">00:00</div>' +
       '<div class="rec-label" id="recLabel">녹음 중</div>' +
-      '<div class="wait-sub">고객이 확정되어 바로 녹음이 시작되었습니다.</div>' +
       '<div class="rec-hint">👉 상담이 끝나면 오른쪽 <b>AI 패널</b>의 <b>"상담 종료"</b> 버튼을 눌러 주세요. AI가 복약 상담 내용을 생성합니다.</div>' +
     '</div>';
   document.getElementById('mfoot').innerHTML = '';
 
   document.getElementById('pzSub').textContent = '녹음이 시작되었습니다';
+  var pzNameEl = document.getElementById('pzPatientName');
+  var ptName = selectedPatient.name || '신규 고객';
+  pzNameEl.innerHTML = '<span class="pz-patient-name-avatar">' + ptName[0] + '</span><span>' + ptName + '</span>';
+  pzNameEl.classList.add('on');
   var pzBody = document.getElementById('pzBody');
   pzBody.style.alignItems = 'stretch';
   pzBody.style.justifyContent = 'flex-start';
-  pzBody.innerHTML =
-    '<div class="pz-stt-hd">' +
-      '<div class="pz-wave-mini"><span></span><span></span><span></span><span></span><span></span></div>' +
-      '<span class="pz-stt-hd-label">STT로 대화를 인식하고 있습니다</span>' +
-    '</div>' +
-    '<div class="pz-stt-box" id="sttBox"></div>';
+  pzBody.innerHTML = '<div class="pz-stt-box" id="sttBox"></div>';
   startStt();
   document.getElementById('pzFooter').innerHTML =
     '<!-- component: button/solid --><button class="btn-stop" data-figma="button/solid" id="btnStop" onclick="endRecording()">' +
@@ -540,42 +1050,18 @@ function endRecording(){
   document.getElementById('pzSub').textContent = '상담 내용을 요약했습니다';
   goSummary();
 }
-/* 단골 전용 — 복약 알림 접이식 토글 카드(기본 접힘), 처방전이 있을 때만 노출 */
-function toggleReminderPanel(){
-  document.getElementById('rmPanel').classList.toggle('open');
-  document.getElementById('rmChevron').classList.toggle('open');
-}
-function selectRmPill(el){
-  var siblings = el.parentElement.querySelectorAll('.rm-pill');
-  siblings.forEach(function(s){ s.classList.remove('sel'); });
-  el.classList.add('sel');
-}
-function buildReminderCard(rx){
-  var freqPills = ['1회','2회','3회'].map(function(t,i){
-    return '<button type="button" class="rm-pill'+(i===2?' sel':'')+'" onclick="selectRmPill(this)">'+t+'</button>';
-  }).join('');
-  return '<!-- component: new/reminder-toggle-card --><div class="rm-card" data-figma="new/reminder-toggle-card">' +
-      '<div class="rm-row" onclick="toggleReminderPanel()">' +
-        '<span class="rm-row-title">복약 알림</span>' +
-        '<label class="rm-toggle" onclick="event.stopPropagation()"><input type="checkbox" id="rmEnabled" checked><span class="rm-toggle-track"></span></label>' +
-        '<svg class="rm-chevron" id="rmChevron" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-      '</div>' +
-      '<div class="rm-panel" id="rmPanel">' +
-        '<div class="rm-field"><label>복용 횟수</label><div class="rm-pills">'+freqPills+'</div></div>' +
-        '<div class="rm-field"><label>복용 기간(일)</label><input type="number" class="rm-days-input" id="rmDays" value="7" min="1"></div>' +
-      '</div>' +
-    '</div>';
-}
 function goSummary(){
   setStep(2);
   var isKnown = selectedPatient.phone && !selectedPatient.isNew;
+  var activeRx = selectedPatient.isNew ? null : getCurrentRx();
+  if(activeRx) initReminderSettingsFor(activeRx);
   var draft = currentDraft !== null ? currentDraft : buildAiDraft();
   var taBlock =
     '<!-- component: new/message-draft --><textarea class="msg-ta" id="draftText" data-figma="new/message-draft" oninput="updateMsgCount()">' + draft + '</textarea>' +
     '<div class="msg-cnt" id="msgCnt"></div>';
   var bodyContent;
-  if(isKnown && selectedPatient.recentRx){
-    bodyContent = buildReminderCard(selectedPatient.recentRx) + taBlock;
+  if(isKnown && activeRx){
+    bodyContent = '<div id="reminderCardWrap"></div>' + taBlock;
   } else {
     bodyContent = taBlock;
   }
@@ -586,6 +1072,7 @@ function goSummary(){
     '</div>' +
     '<div class="ai-caption">AI가 요약한 초안입니다 — 자유롭게 수정하세요.</div>' +
     bodyContent;
+  if(isKnown && activeRx) renderReminderCardWrap();
   updateMsgCount();
   document.getElementById('mfoot').innerHTML = isKnown
     ? '<!-- component: button/solid --><button class="btn-next send" data-figma="button/solid" onclick="sendKnownDirect()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>앱으로 보내기</button>'
@@ -656,6 +1143,10 @@ function renderComplete(cplSub){
 }
 
 renderSearch();
+if(window.parent && window.parent !== window){
+  var standaloneFab = document.getElementById('standaloneFab');
+  if(standaloneFab) standaloneFab.style.display = 'none';
+}
 </script>
 
 </body>

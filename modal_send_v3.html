@@ -290,7 +290,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .rec-timer.compact{font-size:18px;}
 .rec-label{font-size:14px;font-weight:500;color:var(--color-grey-600);}
 .rec-label.compact{font-size:13px;}
-.rec-label.compact::before{content:'·';margin-right:10px;color:var(--color-grey-300);}
+.rec-label.compact:not(:empty)::before{content:'·';margin-right:10px;color:var(--color-grey-300);}
 
 /* Puzzle AI 패널 — 녹음 중엔 STT로 대화가 실시간 인식되는 모습을 보여줌 */
 @keyframes pzWave{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
@@ -770,6 +770,7 @@ function resetFlow(){
   pzBodyReset.style.justifyContent = '';
   pzBodyReset.innerHTML = '<div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 고객을 먼저 확인해 주세요.</div>';
   document.getElementById('pzFooter').innerHTML = '';
+  document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 고객 확인';
   var st3reset = document.getElementById('st3');
   st3reset.style.display = '';
   st3reset.innerHTML = '<span class="step-num">3</span> 메시지 확인';
@@ -1089,11 +1090,14 @@ function beginRecording(){
   setStep(1);
   document.getElementById('stepTabs').style.display = '';
   renderModalPtBar(false);
+  var st1 = document.getElementById('st1');
   var st3 = document.getElementById('st3');
   if(selectedPatient.isNew){
+    st1.innerHTML = '<span class="step-num">1</span> 상담 진행';
     st3.style.display = '';
     st3.innerHTML = '<span class="step-num">3</span> 전화번호 입력';
   } else {
+    st1.innerHTML = '<span class="step-num">1</span> 고객 확인';
     st3.style.display = 'none';
   }
   var histHtml = '';
@@ -1125,14 +1129,14 @@ function beginRecording(){
         '<div class="wait-title">상담이 진행 중입니다</div>' +
         '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
         '<div class="rec-timer" id="recTimer">00:00</div>' +
-        '<div class="rec-label" id="recLabel">녹음 중</div>' +
+        '<div class="rec-label" id="recLabel"></div>' +
         '<div class="rec-hint">👉 상담이 끝나면 오른쪽 <b>AI 패널</b>의 <b>"상담 종료"</b> 버튼을 눌러 주세요. AI가 복약 상담 내용을 생성합니다.</div>' +
       '</div>'
     : '<div class="wait-stage compact">' +
         '<div class="rec-status-row compact-line">' +
           '<div class="rec-wave-row compact" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
           '<span class="rec-timer compact" id="recTimer">00:00</span>' +
-          '<span class="rec-label compact" id="recLabel">녹음 중</span>' +
+          '<span class="rec-label compact" id="recLabel"></span>' +
           '<span class="rec-hint compact">👉 종료 시 오른쪽 <b>"상담 종료"</b> 버튼을 눌러 주세요.</span>' +
         '</div>' +
       '</div>';

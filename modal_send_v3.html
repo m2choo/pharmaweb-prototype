@@ -57,18 +57,19 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .modal-pt-placeholder{font-size:16px;color:var(--color-grey-500);}
 .modal-pt-avatar{width:40px;height:40px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-500);font-size:18px;font-weight:500;letter-spacing:-0.72px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-pt-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);}
-.modal-pt-search-box{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1.5px solid var(--color-grey-300);border-radius:18px;cursor:pointer;background:var(--color-white);transition:border-color .15s,background .15s;}
+.modal-pt-search-box{display:inline-flex;align-items:center;justify-content:space-between;gap:8px;width:400px;height:48px;box-sizing:border-box;padding:0 18px;border:1.5px solid var(--color-grey-300);border-radius:12px;cursor:pointer;background:var(--color-white);transition:border-color .15s,background .15s;}
 .modal-pt-search-box:hover{border-color:var(--color-primary);background:var(--color-blue-100);}
-.modal-pt-search-box .modal-pt-name{font-size:16px;}
+.modal-pt-search-box .modal-pt-name{font-size:17px;}
 .modal-pt-search-icon{display:flex;color:var(--color-grey-400);flex-shrink:0;}
 .modal-pt-search-box:hover .modal-pt-search-icon{color:var(--color-primary);}
-.modal-pt-name-edit{width:22px;height:22px;padding:0;margin-left:2px;background:none;border:none;border-radius:5px;color:var(--color-grey-400);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;}
+.modal-pt-name-edit{width:30px;height:30px;padding:0;margin-left:2px;background:none;border:none;border-radius:8px;color:var(--color-grey-400);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;}
 .modal-pt-name-edit:hover{background:var(--color-blue-100);color:var(--color-primary);}
-.modal-pt-name-input{width:220px;height:32px;padding:0 10px 0 30px;border:1.5px solid var(--color-grey-300);border-radius:16px;font-size:15px;font-weight:500;letter-spacing:-0.4px;color:var(--color-grey-800);font-family:inherit;outline:none;vertical-align:middle;background:var(--color-white);}
+.modal-pt-name-input{flex:1;min-width:0;height:48px;padding:0 10px 0 34px;border:1.5px solid var(--color-grey-300);border-radius:12px;font-size:15px;font-weight:500;letter-spacing:-0.3px;color:var(--color-grey-800);font-family:inherit;outline:none;vertical-align:middle;background:var(--color-white);}
+.modal-pt-name-input::placeholder{font-weight:400;color:var(--color-grey-400);}
 .modal-pt-name-input:focus{border-color:var(--color-primary);}
-.name-edit-wrap{position:relative;display:inline-flex;align-items:center;gap:6px;}
-.name-edit-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--color-grey-400);pointer-events:none;display:flex;}
-.name-edit-dropdown{position:absolute;top:32px;left:0;z-index:50;width:260px;max-height:240px;overflow-y:auto;background:var(--color-white);border:1px solid var(--color-grey-250);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);}
+.name-edit-wrap{position:relative;display:inline-flex;align-items:center;gap:6px;width:400px;box-sizing:border-box;}
+.name-edit-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--color-grey-400);pointer-events:none;display:flex;}
+.name-edit-dropdown{position:absolute;top:48px;left:0;z-index:50;width:100%;max-height:240px;overflow-y:auto;background:var(--color-white);border:1px solid var(--color-grey-250);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);}
 .name-edit-option{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;}
 .name-edit-option:hover{background:var(--color-blue-100);}
 .name-edit-option-avatar{width:28px;height:28px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-500);font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -94,7 +95,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .memo-hd-title{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:500;color:var(--color-grey-800);}
 .memo-icon{width:22px;height:22px;border-radius:50%;background:#FDEDD5;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .memo-autosave{font-size:12px;font-weight:500;color:var(--color-grey-500);background:var(--color-grey-100);padding:3px 10px;border-radius:10px;}
-.memo-textarea{flex:1;min-height:200px;width:100%;border:none;outline:none;resize:none;font-family:inherit;font-size:15px;line-height:1.7;color:var(--color-grey-800);}
+.memo-textarea{flex:1;min-height:70px;max-height:70px;width:100%;border:none;outline:none;resize:none;font-family:inherit;font-size:15px;line-height:1.7;color:var(--color-grey-800);}
 .memo-textarea::placeholder{color:var(--color-grey-400);}
 .memo-count{align-self:flex-end;font-size:12px;color:var(--color-grey-400);margin-top:8px;flex-shrink:0;}
 
@@ -102,6 +103,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .poly-drug-section{flex-shrink:0;}
 .poly-drug-title{font-size:15px;font-weight:500;color:var(--color-grey-800);margin-bottom:4px;}
 .poly-drug-sub{font-size:13px;color:var(--color-grey-500);margin-bottom:10px;}
+.poly-drug-empty{text-align:center;color:var(--color-grey-400);padding:16px;}
 .poly-drug-scroll{max-height:180px;overflow-y:auto;border:1px solid var(--color-grey-200);border-radius:8px;}
 .poly-drug-table{width:100%;border-collapse:collapse;}
 .poly-drug-table thead tr{background:#EEF0F3;}
@@ -114,8 +116,14 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .poly-ref-chip.caution{background:#FFF7E6;color:#F5AC1F;}
 .poly-ref-chip.duplicate{background:var(--color-blue-100);color:var(--color-primary);}
 .poly-footnotes{display:flex;flex-direction:column;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--color-grey-200);}
+.poly-footnotes:empty{display:none;margin:0;padding:0;border:none;}
 .poly-footnote-item{display:flex;align-items:flex-start;gap:6px;font-size:12.5px;color:var(--color-grey-600);line-height:1.6;}
 .poly-footnote-item b{color:var(--color-grey-800);}
+.poly-filter-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.poly-filter-chip{height:34px;padding:0 16px;border:1px solid var(--color-grey-250);border-radius:17px;background:var(--color-white);font-size:14px;font-weight:500;color:var(--color-grey-600);cursor:pointer;font-family:inherit;}
+.poly-filter-chip:hover{border-color:var(--color-primary);color:var(--color-primary);}
+.poly-filter-chip.active{background:var(--color-primary);border-color:var(--color-primary);color:var(--color-white);}
+.poly-footnote-empty{font-size:12.5px;color:var(--color-grey-400);padding:6px 0 0;}
 
 .btn-next{height:40px;padding:0 28px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
 .btn-next:disabled{opacity:.4;cursor:not-allowed;}
@@ -139,6 +147,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 /* 신규 고객 녹음 화면 — 왼쪽 본문에 웨이브/타이머를 그대로 두는 원래 레이아웃 */
 .wait-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:40px 20px;}
 .wait-title{font-size:18px;font-weight:600;color:var(--color-grey-800);}
+.wait-search-hint{font-size:15px;color:var(--color-grey-500);line-height:1.6;max-width:320px;}
 .rec-timer{font-family:'Poppins','Noto Sans KR',sans-serif;font-size:24px;font-weight:600;color:var(--color-grey-800);font-variant-numeric:tabular-nums;}
 /* component: new/rx-history-panel — 행별 펼치기/처방전 원본 보기 */
 .rx-history-panel{padding:14px 0;margin-bottom:14px;}
@@ -710,7 +719,7 @@ function generateNickname(){
   return adj+' '+noun;
 }
 var EDIT_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10.5-10.5a2.83 2.83 0 00-4-4L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
-var SEARCH_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+var SEARCH_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 var REMOVE_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var CLEAR_ICON = '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
 var ADD_ICON = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
@@ -845,10 +854,11 @@ function resetFlow(){
   clearInterval(timerId);
   clearInterval(sttTimer);
 }
-/* 상담 시작 시 모두 신규로 진입, 이름은 아직 확정하지 않음(null) — 이름 자리를 검색으로 바꿔 기존 고객을 찾으면
-   단골로 전환되고(convertToExistingPatient), 끝까지 못 찾으면 "상담 종료" 시점에 닉네임을 생성함(endRecording) */
+/* 상담 시작 시 모두 신규로 진입 — 화면엔 바로 랜덤 닉네임을 표시하지만, 이는 표시용일 뿐 실제 사용자
+   생성(백엔드)은 "상담 종료" 시점에 확정됨. 이름 자리를 검색으로 바꿔 기존 고객을 찾으면 언제든
+   단골로 전환됨(convertToExistingPatient) */
 function startAsNew(){
-  selectedPatient = {name:null, phone:null, isNew:true};
+  selectedPatient = {name:generateNickname(), phone:null, isNew:true};
   beginRecording();
 }
 /* 녹음 중 이름 옆 검색 결과에서 기존 고객을 선택하면 단골로 전환 — 이미 진행 중인 녹음/타이머는 그대로 두고
@@ -915,13 +925,9 @@ function renderModalPtBar(showRemove){
   var removeBtn = showRemove ? '<button class="modal-pt-remove" onclick="removePatient()" title="선택 취소">'+REMOVE_ICON+'</button>' : '';
   if(selectedPatient.name){
     if(selectedPatient.isNew){
-      var info2 = '';
       pt.innerHTML =
         '<div class="modal-pt-avatar">'+selectedPatient.name[0]+'</div>' +
-        '<div class="modal-pt-search-box" onclick="startEditName()" title="고객 검색">' +
-          '<span class="modal-pt-name">'+selectedPatient.name+'</span>' +
-          '<span class="modal-pt-search-icon">'+SEARCH_ICON+'</span>' +
-        '</div>' + removeBtn;
+        '<div id="modalPtSearchSlot">' + patientSearchBoxHtml(selectedPatient.name) + '</div>' + removeBtn;
     } else {
       pt.innerHTML =
         '<div class="modal-pt-avatar">'+selectedPatient.name[0]+'</div>' +
@@ -930,20 +936,23 @@ function renderModalPtBar(showRemove){
   } else {
     pt.innerHTML =
       '<div class="modal-pt-avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#8B95A1" stroke-width="1.8"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7" stroke="#8B95A1" stroke-width="1.8" stroke-linecap="round"/></svg></div>' +
-      '<div class="modal-pt-search-box" onclick="startEditName()" title="고객 검색">' +
-        '<span class="modal-pt-name">신규 고객</span>' +
-        '<span class="modal-pt-search-icon">'+SEARCH_ICON+'</span>' +
-      '</div>' + removeBtn;
+      '<div id="modalPtSearchSlot">' + patientSearchBoxHtml('신규 고객') + '</div>' + removeBtn;
   }
 }
+function patientSearchBoxHtml(label){
+  return '<div class="modal-pt-search-box" onclick="startEditName()" title="고객 검색">' +
+    '<span class="modal-pt-name">'+label+'</span>' +
+    '<span class="modal-pt-search-icon">'+SEARCH_ICON+'</span>' +
+  '</div>';
+}
 /* 이름 수정을 검색처럼 동작하게 함 — 입력하면 기존 고객 목록에서 매칭되는 결과를 드롭다운으로 보여주고,
-   그 중 하나를 고르면 단골로 전환(convertToExistingPatient), 매칭 없이 그냥 입력해 확인하면 신규 고객의 이름만 바뀜 */
+   그 중 하나를 고르면 단골로 전환(convertToExistingPatient), 매칭 없이 그냥 입력해 확인하면 신규 고객의 이름만 바뀜.
+   #modalPtSearchSlot만 바꿔치기해서 아바타/삭제 버튼은 그대로 유지(전에는 modalPt 전체를 지워서 아바타가 사라졌었음) */
 function startEditName(){
-  var pt = document.getElementById('modalPt');
-  pt.innerHTML =
+  document.getElementById('modalPtSearchSlot').innerHTML =
     '<div class="name-edit-wrap">' +
       '<span class="name-edit-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>' +
-      '<input id="ptNameInput" class="modal-pt-name-input" value="'+(selectedPatient.name||'')+'" placeholder="이름, 전화번호로 고객 검색" oninput="onNameEditSearch(this.value)" onkeydown="if(event.key===\'Enter\')commitEditName()" autocomplete="off">' +
+      '<input id="ptNameInput" class="modal-pt-name-input" value="" placeholder="이름, 초성, 전화번호, 생년월일로 검색할 수 있습니다" oninput="onNameEditSearch(this.value)" onkeydown="if(event.key===\'Enter\')commitEditName()" autocomplete="off">' +
       '<button class="modal-pt-name-edit" onclick="commitEditName()" title="확인"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2"/></svg></button>' +
       '<div class="name-edit-dropdown" id="nameEditDropdown" style="display:none"></div>' +
     '</div>';
@@ -971,9 +980,11 @@ function onNameEditSearch(q){
     '</div>';
   }).join('');
 }
+/* 확정된 이름을 지우고 새로 타이핑하게 하는 대신, 검색 모드로 들어가면 입력칸을 비워두고 검색
+   방법을 placeholder로 안내 — 아무것도 입력하지 않고 확인/엔터하면 기존 이름(닉네임 등)을 그대로 유지 */
 function commitEditName(){
   var v = document.getElementById('ptNameInput').value.trim();
-  selectedPatient.name = v || null;
+  selectedPatient.name = v || selectedPatient.name;
   renderModalPtBar(ptShowRemove);
   document.getElementById('pzName').textContent = selectedPatient.name || '신규 고객';
 }
@@ -1054,33 +1065,95 @@ function getRefNumsForDrug(name, footnotes){
   footnotes.forEach(function(f, i){ if(f.drugNames.indexOf(name) > -1) nums.push(i + 1); });
   return nums;
 }
-/* 다제약물관리사업 대상 추정 근거 — 해당 약품 목록 + 상호작용/금기·주의/중복성분을 각주 번호로 표시 */
+/* 필터 칩: "전체(10)"은 항상 있고 다제약물관리사업 판정 근거가 된 원본 리스트 전체를 보여줌.
+   중복 성분/상호작용/금기·주의는 중복 선택 가능한 토글 — 하나라도 선택되면 표/각주 모두 선택된
+   유형에 해당하는 약물만 남도록 걸러짐. 하나도 선택 안 하면 "전체"로 간주 */
+var polySelectedTypes = [];
+function polyFilterChipsHtml(totalCount, footnotes){
+  var counts = { duplicate:0, interaction:0, caution:0 };
+  footnotes.forEach(function(f){ counts[f.type]++; });
+  var allActive = polySelectedTypes.length === 0;
+  var chips = ['<button type="button" class="poly-filter-chip' + (allActive ? ' active' : '') + '" onclick="setPolyFilterAll()">전체 (' + totalCount + ')</button>'];
+  ['duplicate', 'interaction', 'caution'].forEach(function(t){
+    if(counts[t] === 0) return;
+    var active = polySelectedTypes.indexOf(t) > -1;
+    chips.push('<button type="button" class="poly-filter-chip' + (active ? ' active' : '') + '" onclick="togglePolyFilterType(\'' + t + '\')">' + POLY_REF_TYPE_LABEL[t] + ' ' + counts[t] + '</button>');
+  });
+  return chips.join('');
+}
+/* "전체" 상태(카테고리 미선택)에서는 각주 설명을 안 보여줌 — 카테고리를 하나라도 골랐을 때만
+   그 항목들의 설명이 표 아래에 나타남. 카테고리를 하나만 선택했으면 이미 어떤 유형인지 칩으로
+   골라놓은 상태라 "중복 성분 — ..."처럼 유형 이름을 반복할 필요가 없어 생략하고, 2개 이상
+   동시 선택했을 때만 각 항목이 어느 유형인지 구분되게 유형 이름을 남겨둠 */
+function polyFootnoteListHtml(footnotes){
+  if(polySelectedTypes.length === 0) return '';
+  var filtered = footnotes.filter(function(f){ return polySelectedTypes.indexOf(f.type) > -1; });
+  if(!filtered.length) return '<div class="poly-footnote-empty">해당 유형의 항목이 없습니다.</div>';
+  var showLabel = polySelectedTypes.length > 1;
+  return filtered.map(function(f){
+    var num = footnotes.indexOf(f) + 1;
+    var text = showLabel ? '<b>' + POLY_REF_TYPE_LABEL[f.type] + '</b> — ' + f.desc : f.desc;
+    return '<div class="poly-footnote-item"><span class="poly-ref-chip ' + f.type + '">' + num + '</span>' +
+      '<span>' + text + '</span></div>';
+  }).join('');
+}
+function setPolyFilterAll(){
+  polySelectedTypes = [];
+  refreshPolySection();
+}
+function togglePolyFilterType(type){
+  var idx = polySelectedTypes.indexOf(type);
+  if(idx > -1) polySelectedTypes.splice(idx, 1); else polySelectedTypes.push(type);
+  refreshPolySection();
+}
+function refreshPolySection(){
+  var drugs = getPolyQualifyingDrugs(selectedPatient);
+  var footnotes = buildPolyFootnotes(drugs);
+  document.getElementById('polyFilterRow').innerHTML = polyFilterChipsHtml(drugs.length, footnotes);
+  document.getElementById('polyFootnotes').innerHTML = polyFootnoteListHtml(footnotes);
+  document.getElementById('polyDrugRows').innerHTML = polyRowsHtml(drugs, footnotes);
+  document.getElementById('polyDrugSub').textContent = polySubText();
+}
+/* 다제약물관리사업 대상 추정 근거 — 해당 약품 목록 + 상호작용/금기·주의/중복성분을 각주 번호로 표시.
+   필터 칩을 표 위에 두고 누르면 표 자체가 선택된 카테고리 약물만 남도록 걸러지고, 설명(각주)도
+   표 아래에 같은 카테고리만 남아 보임 */
 function renderPolyDrugTableHtml(patient){
   var drugs = getPolyQualifyingDrugs(patient);
   if(drugs.length < 10) return '';
+  polySelectedTypes = [];
   var footnotes = buildPolyFootnotes(drugs);
-  var rows = drugs.map(function(d){
+  var filterRowHtml = '<div class="poly-filter-row" id="polyFilterRow">' + polyFilterChipsHtml(drugs.length, footnotes) + '</div>';
+  var footnoteHtml = footnotes.length
+    ? '<div class="poly-footnotes" id="polyFootnotes">' + polyFootnoteListHtml(footnotes) + '</div>'
+    : '';
+  return '<!-- component: new/poly-drug-table --><div class="poly-drug-section" data-figma="new/poly-drug-table">' +
+    '<div class="poly-drug-title">다제약물관리사업 대상 추정 근거</div>' +
+    '<div class="poly-drug-sub" id="polyDrugSub">' + polySubText() + '</div>' +
+    filterRowHtml +
+    '<div class="poly-drug-scroll">' +
+      '<table class="poly-drug-table"><thead><tr><th>약품명</th><th>처방 병원</th><th>처방일</th><th>확인 필요</th></tr></thead>' +
+      '<tbody id="polyDrugRows">' + polyRowsHtml(drugs, footnotes) + '</tbody></table>' +
+    '</div>' +
+    footnoteHtml +
+  '</div>';
+}
+function polyRowsHtml(drugs, footnotes){
+  var list = polySelectedTypes.length === 0 ? drugs : drugs.filter(function(d){
+    return getRefNumsForDrug(d.name, footnotes).some(function(n){ return polySelectedTypes.indexOf(footnotes[n - 1].type) > -1; });
+  });
+  if(!list.length) return '<tr><td colspan="4" class="poly-drug-empty">해당하는 약물이 없습니다.</td></tr>';
+  return list.map(function(d){
     var refs = getRefNumsForDrug(d.name, footnotes);
     var chips = refs.length
       ? refs.map(function(n){ return '<span class="poly-ref-chip ' + footnotes[n - 1].type + '">' + n + '</span>'; }).join('')
       : '<span class="interaction-none">-</span>';
     return '<tr><td>' + d.name + '</td><td>' + d.hospital + '</td><td>' + d.date + '</td><td>' + chips + '</td></tr>';
   }).join('');
-  var footnoteHtml = footnotes.length
-    ? '<div class="poly-footnotes">' + footnotes.map(function(f, i){
-        return '<div class="poly-footnote-item"><span class="poly-ref-chip ' + f.type + '">' + (i + 1) + '</span>' +
-          '<span><b>' + POLY_REF_TYPE_LABEL[f.type] + '</b> — ' + f.desc + '</span></div>';
-      }).join('') + '</div>'
-    : '';
-  return '<!-- component: new/poly-drug-table --><div class="poly-drug-section" data-figma="new/poly-drug-table">' +
-    '<div class="poly-drug-title">다제약물관리사업 대상 추정 근거</div>' +
-    '<div class="poly-drug-sub">최근 6개월간 180일 이상 처방된 약품입니다.</div>' +
-    '<div class="poly-drug-scroll">' +
-      '<table class="poly-drug-table"><thead><tr><th>약품명</th><th>처방 병원</th><th>처방일</th><th>확인 필요</th></tr></thead>' +
-      '<tbody>' + rows + '</tbody></table>' +
-    '</div>' +
-    footnoteHtml +
-  '</div>';
+}
+function polySubText(){
+  return polySelectedTypes.length === 0
+    ? '최근 6개월간 180일 이상 처방된 전체 약품입니다.'
+    : polySelectedTypes.map(function(t){ return POLY_REF_TYPE_LABEL[t]; }).join(', ') + ' 유형에 해당하는 약물입니다.';
 }
 function ensureEditingDrugs(rx){
   if(!editingDrugsMap[rx.id]) editingDrugsMap[rx.id] = rx.drugs.map(function(d){ return Object.assign({}, d); });
@@ -1280,6 +1353,7 @@ function renderMainRecordingContent(){
     document.getElementById('mbody').innerHTML =
       '<div class="wait-stage">' +
         '<div class="wait-title">상담이 진행 중입니다</div>' +
+        '<div class="wait-search-hint">단골 고객은 검색 후 선택해 상담할 수 있습니다.</div>' +
         '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
         '<div class="rec-timer" id="recTimer">00:00</div>' +
       '</div>';
@@ -1379,12 +1453,8 @@ function endRecording(){
   var cursor = document.querySelector('.pz-stt-cursor');
   if(cursor) cursor.remove();
   document.getElementById('btnStop').disabled = true;
-  document.getElementById('recCircle').classList.add('done');
-  /* 끝까지 기존 고객으로 전환되지 않았다면 이 시점에 비로소 신규 고객의 표시용 이름(닉네임)을 생성 */
-  if(selectedPatient.isNew && !selectedPatient.name){
-    selectedPatient.name = generateNickname();
-    renderModalPtBar(ptShowRemove);
-  }
+  var recCircleEl = document.getElementById('recCircle');
+  if(recCircleEl) recCircleEl.classList.add('done');
   document.getElementById('pzName').textContent = selectedPatient.name;
   document.getElementById('pzSub').textContent = '상담 내용을 요약했습니다';
   goSummary();

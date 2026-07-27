@@ -928,15 +928,12 @@ function renderRxHistoryPanel(){
     var ym = parseYM(rx.date);
     return ym.y === rxHistoryMonthCursor.y && ym.m === rxHistoryMonthCursor.m;
   });
-  var showCheckbox = hist.length > 1;
   var listEl = document.getElementById('rxMonthList');
   listEl.innerHTML = itemsInMonth.length
     ? itemsInMonth.map(function(rx){
         var isOpen = rx.id === expandedRxId;
         var expandHtml = isOpen ? renderDrugTableHTML(rx) : '';
-        var checkboxHtml = showCheckbox
-          ? '<input type="checkbox" class="rx-history-check" onclick="event.stopPropagation()" onchange="selectRxHistoryItem(\'' + rx.id + '\')"' + (rx.id === currentRxId ? ' checked' : '') + '>'
-          : '';
+        var checkboxHtml = '<input type="checkbox" class="rx-history-check" onclick="event.stopPropagation()" onchange="selectRxHistoryItem(\'' + rx.id + '\')"' + (rx.id === currentRxId ? ' checked' : '') + '>';
         return '<div class="rx-history-item' + (rx.id === currentRxId ? ' active' : '') + (isOpen ? ' open' : '') + '">' +
           '<div class="rx-history-row">' +
             '<div class="rx-history-main" onclick="toggleRxHistoryItem(\'' + rx.id + '\')">' +
@@ -1124,7 +1121,7 @@ function beginRecording(){
         '<!-- component: new/rx-history-panel --><div class="rx-history-panel" id="rxHistoryPanel" data-figma="new/rx-history-panel">' +
           '<div class="rx-history-panel-hdrow">' +
             '<span class="rx-history-panel-hd">처방전 이력</span>' +
-            '<span class="rx-history-panel-sub">복약 상담할 처방 이력을 골라 주세요. (처방전을 선택하지 않아도 상담이 가능합니다.)</span>' +
+            '<span class="rx-history-panel-sub">복약 상담할 처방전을 골라 주세요.</span>' +
           '</div>' +
           '<div class="rx-month-nav">' +
             '<button type="button" class="rx-month-arrow" onclick="rxHistoryMonthShift(-1)">' +

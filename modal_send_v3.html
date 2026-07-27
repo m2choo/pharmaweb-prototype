@@ -110,7 +110,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .recent-rx-card.empty{border-radius:10px;padding:14px 16px;margin-bottom:14px;color:var(--color-grey-500);font-size:14px;text-align:center;}
 /* component: new/rx-history-panel — 월 단위 날짜 내비게이션 + 행별 펼치기/처방전 원본 보기 */
 .rx-history-panel{padding:14px 0;margin-bottom:14px;}
-.rx-history-panel-hd{font-size:13px;font-weight:500;color:var(--color-grey-500);margin-bottom:10px;}
+.rx-history-panel-hd{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-800);margin-bottom:4px;}
+.rx-history-panel-sub{font-size:13px;font-weight:400;color:var(--color-grey-500);margin-bottom:12px;}
 .rx-month-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:12px;}
 .rx-month-arrow{width:28px;height:28px;border:1px solid var(--color-grey-250);background:var(--color-white);border-radius:50%;color:var(--color-grey-600);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
 .rx-month-arrow:hover{border-color:var(--color-primary);color:var(--color-primary);}
@@ -1106,11 +1107,13 @@ function beginRecording(){
   if(!selectedPatient.isNew){
     var rx = getDefaultActiveRx(selectedPatient);
     if(rx) currentRxId = rx.id;
-    expandedRxId = null;
-    if((selectedPatient.rxHistory || []).length){
+    var rxHist = selectedPatient.rxHistory || [];
+    expandedRxId = rxHist.length === 1 ? rxHist[0].id : null;
+    if(rxHist.length){
       histHtml =
         '<!-- component: new/rx-history-panel --><div class="rx-history-panel" id="rxHistoryPanel" data-figma="new/rx-history-panel">' +
           '<div class="rx-history-panel-hd">처방전 이력</div>' +
+          '<div class="rx-history-panel-sub">복약 상담할 처방 이력을 골라 주세요. (처방전을 선택하지 않아도 상담이 가능합니다.)</div>' +
           '<div class="rx-month-nav">' +
             '<button type="button" class="rx-month-arrow" onclick="rxHistoryMonthShift(-1)">' +
               '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +

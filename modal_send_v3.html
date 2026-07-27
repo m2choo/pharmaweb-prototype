@@ -387,7 +387,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
   <select onchange="applyQaState(this.value)">
     <option value="normal">정상</option>
     <option value="rx-empty">처방전 없음 케이스 검색(이수진)</option>
-    <option value="rx-same-day">동일 날짜 2건 케이스 검색(최이중)</option>
   </select>
 </div>
 
@@ -470,15 +469,6 @@ var PATIENTS = [
     {id:'pjh6', hospital:'다정이비인후과', date:'2026-02-14', guidanceSent:true, drugs:[
       {name:'뮤코펙트시럽', dosage:'10ml', freq:'1일 3회', days:5, sub:false},
       {name:'아세트아미노펜', dosage:'1정', freq:'1일 3회', days:5, sub:false}
-    ]}
-  ]},
-  {name:'최이중', phone:'010-5555-6666', birth:'1978-09-09', rxHistory:[
-    {id:'cij1', hospital:'다정이비인후과', date:'2026-07-15', guidanceSent:false, drugs:[
-      {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:5, sub:false},
-      {name:'용각산', dosage:'1포', freq:'1일 3회', days:5, sub:false}
-    ]},
-    {id:'cij2', hospital:'웰케어내과의원', date:'2026-07-15', guidanceSent:false, drugs:[
-      {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:30, sub:false}
     ]}
   ]}
 ];
@@ -776,9 +766,6 @@ function applyQaState(v){
   if(v === 'rx-empty'){
     document.getElementById('s1input').value = '이수진';
     onSearch('이수진');
-  } else if(v === 'rx-same-day'){
-    document.getElementById('s1input').value = '최이중';
-    onSearch('최이중');
   }
 }
 function closeModal(){
@@ -907,7 +894,8 @@ function showRxSelectionStep(){
 
   document.getElementById('mbody').innerHTML = renderPolyAlertHtml(selectedPatient) + histHtml;
   document.getElementById('mfoot').innerHTML =
-    '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="beginRecording(true)">상담 시작</button>';
+    '<button class="btn-back" onclick="beginConsultWithoutRx()">처방전 없이 상담하기</button>' +
+    '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="beginConsultWithRx()">이 처방전으로 상담하기</button>';
 
   if(recentRxs.length){
     renderRxHistoryPanel();
@@ -1170,7 +1158,16 @@ function saveAddRow(rxId){
   refreshExpandedRxItem();
 }
 
-/* ── 고객 선택 즉시 녹음 시작 (검색/신규 선택 또는 처방전 선택 화면의 "상담 시작" → 녹음) ── */
+/* ── 처방전 선택 화면의 두 버튼 ── */
+function beginConsultWithRx(){
+  beginRecording(true);
+}
+function beginConsultWithoutRx(){
+  selectedRxIds = [];
+  beginRecording(true);
+}
+
+/* ── 고객 선택 즉시 녹음 시작 (검색/신규 선택 또는 처방전 선택 화면 → 녹음) ── */
 function beginRecording(fromSelectionStep){
   document.getElementById('stepTabs').style.display = '';
   renderModalPtBar(false);

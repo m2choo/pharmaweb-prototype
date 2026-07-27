@@ -74,6 +74,16 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .modal-body{display:flex;flex-direction:column;padding:24px;overflow-y:auto;flex:1;min-height:0;}
 .modal-ft{padding:15px 24px 20px;display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;}
 
+/* component: new/pharmacist-memo — 상담 중 약사가 직접 남기는 메모(가로로 넓은 카드, 즉시 수정 가능) */
+.pharmacist-memo{display:flex;flex-direction:column;flex:1;min-height:0;border:1px solid var(--color-grey-250);border-radius:10px;padding:16px;}
+.memo-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0;}
+.memo-hd-title{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:500;color:var(--color-grey-800);}
+.memo-icon{width:22px;height:22px;border-radius:50%;background:#FDEDD5;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.memo-autosave{font-size:12px;font-weight:500;color:var(--color-grey-500);background:var(--color-grey-100);padding:3px 10px;border-radius:10px;}
+.memo-textarea{flex:1;min-height:200px;width:100%;border:none;outline:none;resize:none;font-family:inherit;font-size:15px;line-height:1.7;color:var(--color-grey-800);}
+.memo-textarea::placeholder{color:var(--color-grey-400);}
+.memo-count{align-self:flex-end;font-size:12px;color:var(--color-grey-400);margin-top:8px;flex-shrink:0;}
+
 .btn-next{height:40px;padding:0 28px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
 .btn-next:disabled{opacity:.4;cursor:not-allowed;}
 .btn-next.send{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-weight:700;}
@@ -1186,7 +1196,18 @@ function beginRecording(fromSelectionStep){
     document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
     st3.style.display = 'none';
   }
-  document.getElementById('mbody').innerHTML = '';
+  document.getElementById('mbody').innerHTML =
+    '<!-- component: new/pharmacist-memo --><div class="pharmacist-memo" data-figma="new/pharmacist-memo">' +
+      '<div class="memo-hd">' +
+        '<span class="memo-hd-title">' +
+          '<span class="memo-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M6 3h9l5 5v13a1 1 0 01-1 1H6a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="#F5AC1F" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12h6M9 16h6" stroke="#F5AC1F" stroke-width="1.8" stroke-linecap="round"/></svg></span>' +
+          '약사 메모' +
+        '</span>' +
+        '<span class="memo-autosave">자동 저장됨</span>' +
+      '</div>' +
+      '<textarea class="memo-textarea" id="pharmacistMemo" maxlength="1000" oninput="updateMemoCount()" placeholder="상담 중 참고할 내용을 자유롭게 메모해 보세요.&#10;예) 고객 특이사항, 다음 상담 시 확인할 점 등"></textarea>' +
+      '<div class="memo-count" id="memoCount">0 / 1,000</div>' +
+    '</div>';
   document.getElementById('mfoot').innerHTML = '';
 
   document.getElementById('pzSub').textContent = '녹음이 시작되었습니다';
@@ -1215,6 +1236,10 @@ function beginRecording(fromSelectionStep){
     var s = String(seconds%60).padStart(2,'0');
     document.getElementById('recTimer').textContent = m + ':' + s;
   }, 1000);
+}
+function updateMemoCount(){
+  var el = document.getElementById('pharmacistMemo');
+  document.getElementById('memoCount').textContent = el.value.length + ' / 1,000';
 }
 
 function endRecording(){

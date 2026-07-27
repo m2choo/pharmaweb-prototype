@@ -507,27 +507,33 @@ function isChosungQuery(q){
 var INVITE_LINK = 'https://wellcheck.co.kr/join?ref=pharmacy';
 var PHARMACY_NAME = '웰체크약국';
 
-/* ── 복약지도문 생성 규칙 (v2 modal_send_v2.html의 buildMsgDefault 그대로 포팅, 다건 selectedRxIds 대신 v3의 활성 처방전 1건 기준) ── */
+/* ── 복약지도문 생성 규칙 (v2 modal_send_v2.html의 buildMsgDefault 그대로 포팅, 선택된 처방전 여러 건을 모두 반영) ── */
 function buildMsgDefault(){
   var name = (selectedPatient && selectedPatient.name) || '고객';
-  var rx = selectedPatient && !selectedPatient.isNew ? getCurrentRx() : null;
-  if(!rx){
+  var rxs = selectedPatient && !selectedPatient.isNew ? getSelectedRxs() : [];
+  if(!rxs.length){
     return '안녕하세요, 웰체크약국입니다.\n' + name + ' 고객님, 지속적인 복약 관리를 위해 안내드립니다.' +
       '\n\n[약사 메모]\n' + AI_SUMMARY_TEXT + '\n';
   }
-  var drugs = editingDrugsMap[rx.id] || rx.drugs;
-  var drugLines = drugs.map(function(d, i){
-    return (i + 1) + '. ' + d.name + ' - 1회 ' + d.dosage + ', ' + d.freq + ', ' + d.days + '일분';
-  });
-  var rs = reminderSettings[rx.id];
-  var hasReminder = !!(rs && rs.enabled);
-  var allSlots = hasReminder ? Array.from(rs.slots) : [];
-  var allTiming = hasReminder ? rs.timing : '';
-
   var freqSlotMap = { '1일 1회': ['아침'], '1일 2회': ['아침', '저녁'], '1일 3회': ['아침', '점심', '저녁'], '1일 4회': ['아침', '점심', '저녁', '취침 전'] };
+  var drugLines = [];
+  var allSlots = [];
+  var allTiming = '';
+  var hasReminder = false;
   var ocrSlots = [];
-  drugs.forEach(function(d){
-    (freqSlotMap[d.freq] || []).forEach(function(s){ if(ocrSlots.indexOf(s) === -1) ocrSlots.push(s); });
+  var idx = 1;
+  rxs.forEach(function(rx){
+    var drugs = editingDrugsMap[rx.id] || rx.drugs;
+    drugs.forEach(function(d){
+      drugLines.push(idx++ + '. ' + d.name + ' - 1회 ' + d.dosage + ', ' + d.freq + ', ' + d.days + '일분');
+      (freqSlotMap[d.freq] || []).forEach(function(s){ if(ocrSlots.indexOf(s) === -1) ocrSlots.push(s); });
+    });
+    var rs = reminderSettings[rx.id];
+    if(rs && rs.enabled){
+      hasReminder = true;
+      Array.from(rs.slots).forEach(function(s){ if(allSlots.indexOf(s) === -1) allSlots.push(s); });
+      if(rs.timing && !allTiming) allTiming = rs.timing;
+    }
   });
 
   var methodSection;
@@ -592,8 +598,7 @@ function initReminderSettingsFor(rx){
 function renderReminderCardWrap(){
   var wrap = document.getElementById('reminderCardWrap');
   if(!wrap) return;
-  var rx = getCurrentRx();
-  wrap.innerHTML = rx ? buildReminderCard(rx) : '';
+  wrap.innerHTML = getSelectedRxs().map(buildReminderCard).join('');
 }
 function buildReminderCard(rx){
   initReminderSettingsFor(rx);
@@ -711,7 +716,7 @@ var sttTimer = null;
 var currentDraft = null;
 var ptShowRemove = false;
 var currentMatches = [];
-var currentRxId = null;
+var selectedRxIds = [];
 var editingDrugsMap = {};
 
 /* ── Puzzle AI 패널 — 녹음 중 STT 실시간 인식 mock ── */
@@ -797,7 +802,7 @@ function resetFlow(){
   selectedPatient = null;
   seconds = 0;
   currentDraft = null;
-  currentRxId = null;
+  selectedRxIds = [];
   expandedRxId = null;
   editingDrugsMap = {};
   clearInterval(timerId);
@@ -881,12 +886,11 @@ function showRxSelectionStep(){
   document.getElementById('st3').style.display = '';
   document.getElementById('st3').innerHTML = '<span class="step-num">3</span> 복약지도문 작성';
 
-  var rx = getDefaultActiveRx(selectedPatient);
-  if(rx) currentRxId = rx.id;
-  var rxHist = selectedPatient.rxHistory || [];
-  expandedRxId = rxHist.length === 1 ? rxHist[0].id : null;
+  var recentRxs = getMostRecentDateRxs(selectedPatient);
+  selectedRxIds = recentRxs.filter(function(rx){ return !rx.guidanceSent; }).map(function(rx){ return rx.id; });
+  expandedRxId = recentRxs.length === 1 ? recentRxs[0].id : null;
 
-  var histHtml = rxHist.length
+  var histHtml = recentRxs.length
     ? '<!-- component: new/rx-history-panel --><div class="rx-history-panel" id="rxHistoryPanel" data-figma="new/rx-history-panel">' +
         '<div class="rx-history-list" id="rxHistoryList"></div>' +
       '</div>'
@@ -900,7 +904,7 @@ function showRxSelectionStep(){
   document.getElementById('mfoot').innerHTML =
     '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="beginRecording()">상담 시작</button>';
 
-  if(rxHist.length){
+  if(recentRxs.length){
     renderRxHistoryPanel();
   }
 }
@@ -940,17 +944,17 @@ function removePatient(){
   resetFlow();
 }
 
-/* ── 처방전 이력 패널: 행별 펼치기(편집 가능한 약품 테이블)/처방전 원본 보기 ── */
+/* ── 처방전 이력 패널: 가장 최근 방문(날짜)에 발급된 처방전만 노출, 같은 날 여러 건이면 체크박스로 다건 선택 ── */
 var expandedRxId = null;
-function getCurrentRx(){
-  return (selectedPatient.rxHistory || []).find(function(r){ return r.id === currentRxId; });
+function getSelectedRxs(){
+  var hist = (selectedPatient && selectedPatient.rxHistory) || [];
+  return selectedRxIds.map(function(id){ return hist.find(function(r){ return r.id === id; }); }).filter(Boolean);
 }
-function getDefaultActiveRx(patient){
-  var hist = patient.rxHistory || [];
-  for(var i = 0; i < hist.length; i++){
-    if(!hist[i].guidanceSent) return hist[i];
-  }
-  return hist[0] || null;
+function getMostRecentDateRxs(patient){
+  var hist = (patient && patient.rxHistory) || [];
+  if(!hist.length) return [];
+  var maxDate = hist.reduce(function(max, rx){ return rx.date > max ? rx.date : max; }, hist[0].date);
+  return hist.filter(function(rx){ return rx.date === maxDate; });
 }
 /* 다제약물관리사업 대상자 배너 — 약사가 처방전을 따로 선택하지 않아도 최근 6개월 처방 이력을 시스템이 자동 계산해서 노출 (10종 이상 약물을 180일 이상 처방) */
 function computePolyQualifyingCount(patient){
@@ -979,22 +983,25 @@ function toggleRxHistoryItem(id){
   expandedRxId = (expandedRxId === id) ? null : id;
   renderRxHistoryPanel();
 }
-/* 처방전이 여러 건일 때만 노출되는 선택 체크박스 — 상담에 참고할 처방전을 고르는 용도(선택 안 해도 상담 가능) */
+/* 처방전이 여러 건일 때 다건 선택 가능한 체크박스 — 상담에 참고할 처방전을 고르는 용도(선택 안 해도 상담 가능) */
 function selectRxHistoryItem(id){
-  currentRxId = (currentRxId === id) ? null : id;
+  var idx = selectedRxIds.indexOf(id);
+  if(idx > -1) selectedRxIds.splice(idx, 1);
+  else selectedRxIds.push(id);
   renderRxHistoryPanel();
 }
 function renderRxHistoryPanel(){
   var panel = document.getElementById('rxHistoryPanel');
   if(!panel) return;
-  var hist = selectedPatient.rxHistory || [];
+  var items = getMostRecentDateRxs(selectedPatient);
   var listEl = document.getElementById('rxHistoryList');
-  listEl.innerHTML = hist.length
-    ? hist.map(function(rx){
-        var isOpen = hist.length === 1 ? true : rx.id === expandedRxId;
+  listEl.innerHTML = items.length
+    ? items.map(function(rx){
+        var isOpen = items.length === 1 ? true : rx.id === expandedRxId;
         var expandHtml = isOpen ? renderDrugTableHTML(rx) : '';
-        var checkboxHtml = '<input type="checkbox" class="rx-history-check" onclick="event.stopPropagation()" onchange="selectRxHistoryItem(\'' + rx.id + '\')"' + (rx.id === currentRxId ? ' checked' : '') + '>';
-        return '<div class="rx-history-item' + (rx.id === currentRxId ? ' active' : '') + (isOpen ? ' open' : '') + '">' +
+        var isChecked = selectedRxIds.indexOf(rx.id) > -1;
+        var checkboxHtml = '<input type="checkbox" class="rx-history-check" onclick="event.stopPropagation()" onchange="selectRxHistoryItem(\'' + rx.id + '\')"' + (isChecked ? ' checked' : '') + '>';
+        return '<div class="rx-history-item' + (isChecked ? ' active' : '') + (isOpen ? ' open' : '') + '">' +
           '<div class="rx-history-row">' +
             '<div class="rx-history-main" onclick="toggleRxHistoryItem(\'' + rx.id + '\')">' +
               checkboxHtml +
@@ -1013,8 +1020,6 @@ function renderRxHistoryPanel(){
 }
 function refreshExpandedRxItem(){
   if(!expandedRxId) return;
-  var rx = getCurrentRx();
-  if(!rx) return;
   renderRxHistoryPanel();
 }
 
@@ -1216,14 +1221,14 @@ function endRecording(){
 function goSummary(){
   setStep(selectedPatient.isNew ? 2 : 3);
   var isKnown = selectedPatient.phone && !selectedPatient.isNew;
-  var activeRx = selectedPatient.isNew ? null : getCurrentRx();
-  if(activeRx) initReminderSettingsFor(activeRx);
+  var activeRxs = selectedPatient.isNew ? [] : getSelectedRxs();
+  activeRxs.forEach(initReminderSettingsFor);
   var draft = currentDraft !== null ? currentDraft : buildAiDraft();
   var taBlock =
     '<!-- component: new/message-draft --><textarea class="msg-ta" id="draftText" data-figma="new/message-draft" oninput="updateMsgCount()">' + draft + '</textarea>' +
     '<div class="msg-cnt" id="msgCnt"></div>';
   var bodyContent;
-  if(isKnown && activeRx){
+  if(isKnown && activeRxs.length){
     bodyContent = '<div id="reminderCardWrap"></div>' + taBlock;
   } else {
     bodyContent = taBlock;
@@ -1235,7 +1240,7 @@ function goSummary(){
     '</div>' +
     '<div class="ai-caption">AI가 요약한 초안입니다 — 자유롭게 수정하세요.</div>' +
     bodyContent;
-  if(isKnown && activeRx) renderReminderCardWrap();
+  if(isKnown && activeRxs.length) renderReminderCardWrap();
   updateMsgCount();
   document.getElementById('mfoot').innerHTML = isKnown
     ? '<!-- component: button/solid --><button class="btn-next send" data-figma="button/solid" onclick="sendKnownDirect()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>앱으로 보내기</button>'

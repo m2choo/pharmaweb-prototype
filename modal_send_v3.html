@@ -88,9 +88,10 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .poly-drug-section{flex-shrink:0;}
 .poly-drug-title{font-size:15px;font-weight:500;color:var(--color-grey-800);margin-bottom:4px;}
 .poly-drug-sub{font-size:13px;color:var(--color-grey-500);margin-bottom:10px;}
+.poly-drug-scroll{max-height:180px;overflow-y:auto;border:1px solid var(--color-grey-200);border-radius:8px;}
 .poly-drug-table{width:100%;border-collapse:collapse;}
 .poly-drug-table thead tr{background:#EEF0F3;}
-.poly-drug-table th{padding:8px 10px;font-size:12px;font-weight:400;color:#5F6E7D;text-align:left;border-top:1px solid var(--color-grey-250);border-bottom:1px solid var(--color-grey-250);}
+.poly-drug-table th{position:sticky;top:0;padding:8px 10px;font-size:12px;font-weight:400;color:#5F6E7D;text-align:left;background:#EEF0F3;border-bottom:1px solid var(--color-grey-250);}
 .poly-drug-table td{padding:10px;font-size:14px;color:var(--color-grey-800);border-bottom:1px solid var(--color-grey-200);}
 .poly-drug-table tbody tr:last-child td{border-bottom:none;}
 .interaction-chip{display:inline-block;background:#FFF4F5;color:var(--color-red);font-size:12px;font-weight:500;padding:2px 8px;border-radius:10px;margin-right:4px;}
@@ -1011,8 +1012,10 @@ function renderPolyDrugTableHtml(patient){
   return '<!-- component: new/poly-drug-table --><div class="poly-drug-section" data-figma="new/poly-drug-table">' +
     '<div class="poly-drug-title">다제약물관리사업 대상 추정 근거</div>' +
     '<div class="poly-drug-sub">최근 6개월간 180일 이상 처방된 약품 ' + drugs.length + '종입니다.</div>' +
-    '<table class="poly-drug-table"><thead><tr><th>약품명</th><th>처방 병원</th><th>처방일</th><th>상호작용</th></tr></thead>' +
-    '<tbody>' + rows + '</tbody></table>' +
+    '<div class="poly-drug-scroll">' +
+      '<table class="poly-drug-table"><thead><tr><th>약품명</th><th>처방 병원</th><th>처방일</th><th>상호작용</th></tr></thead>' +
+      '<tbody>' + rows + '</tbody></table>' +
+    '</div>' +
   '</div>';
 }
 function ensureEditingDrugs(rx){

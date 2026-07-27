@@ -341,7 +341,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
       </div>
       <div class="modal-pt" id="modalPt" data-figma="new/patient-identity-bar"><span class="modal-pt-placeholder">고객 정보를 검색해 주세요</span></div>
       <div class="step-tabs" id="stepTabs">
-        <div class="step-tab" id="st1"><span class="step-num">1</span> 고객 확인</div>
+        <div class="step-tab" id="st1"><span class="step-num">1</span> 복약 상담</div>
         <div class="step-tab" id="st2"><span class="step-num">2</span> 복약지도문 작성</div>
         <div class="step-tab" id="st3"><span class="step-num">3</span> 메시지 확인</div>
       </div>
@@ -518,7 +518,9 @@ function buildMsgDefault(){
     methodSection = ocrSlots.length ? '하루 ' + scheduleCount2 + '번, ' + scheduleTimeStr2 + ' 식후 30분에 복약하세요.' : '';
   }
   var methodBlock = methodSection ? '\n\n[복약 방법]\n' + methodSection : '';
-  return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + methodBlock + '\n';
+  return '안녕하세요, 웰체크약국입니다.\n' + name + ' 고객님, 처방받으신 약품을 안내드립니다.' +
+    '\n\n[약사 메모]\n' + AI_SUMMARY_TEXT +
+    '\n\n[조제 약품]\n' + drugLines.join('\n') + methodBlock + '\n';
 }
 /* 상담(녹음) 중 대화를 AI가 요약한 내용 — 약사가 직접 쓴 게 아니라는 걸 명확히 하기 위해 [약사 메모]로 초안 하단에 덧붙임 (v2 SUMMARY_TEXT 그대로 포팅) */
 var AI_SUMMARY_TEXT = '오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편 가능함. 수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요. 밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능함.';
@@ -773,7 +775,7 @@ function resetFlow(){
   pzBodyReset.style.justifyContent = '';
   pzBodyReset.innerHTML = '<div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 고객을 먼저 확인해 주세요.</div>';
   document.getElementById('pzFooter').innerHTML = '';
-  document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 고객 확인';
+  document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
   var st3reset = document.getElementById('st3');
   st3reset.style.display = '';
   st3reset.innerHTML = '<span class="step-num">3</span> 메시지 확인';
@@ -1093,14 +1095,11 @@ function beginRecording(){
   setStep(1);
   document.getElementById('stepTabs').style.display = '';
   renderModalPtBar(false);
-  var st1 = document.getElementById('st1');
   var st3 = document.getElementById('st3');
   if(selectedPatient.isNew){
-    st1.innerHTML = '<span class="step-num">1</span> 상담 진행';
     st3.style.display = '';
     st3.innerHTML = '<span class="step-num">3</span> 전화번호 입력';
   } else {
-    st1.innerHTML = '<span class="step-num">1</span> 고객 확인';
     st3.style.display = 'none';
   }
   var histHtml = '';

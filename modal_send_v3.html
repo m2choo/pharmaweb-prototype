@@ -183,17 +183,16 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .s2-consent-radios{display:flex;align-items:center;gap:14px;flex-shrink:0;}
 .s2-consent-radio{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;}
 .s2-consent-radio input[type="radio"]{width:14px;height:14px;accent-color:var(--color-primary);cursor:pointer;}
+/* 다제약물관리사업 대상자 배너 (v2 s2-poly-alert 그대로 포팅) */
+.s2-poly-alert{display:flex;align-items:center;gap:8px;padding:12px 16px;background:rgba(238,73,81,.1);border-radius:8px;margin-bottom:16px;}
+.s2-poly-alert-icon{width:20px;height:20px;border-radius:50%;background:var(--color-red);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s2-poly-alert-icon span{font-size:13px;font-weight:900;color:var(--color-white);line-height:1;}
+.s2-poly-alert-txt{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-red);}
 
-/* 대기/진행 문구 화면 (녹음 중) — 웨이브/타이머/라벨을 한 줄로 압축 */
+/* 대기/진행 문구 화면 (녹음 중) */
 .wait-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;flex:1;text-align:center;padding:20px;}
-.wait-stage.compact{flex:0 0 auto;gap:10px;padding:0;margin-bottom:14px;}
-.rec-status-row{display:flex;align-items:center;justify-content:center;gap:10px;}
-.rec-status-row.compact-line{flex-wrap:nowrap;gap:8px;width:100%;background:var(--color-blue-100);border:1px solid var(--color-blue-200);border-radius:8px;padding:8px 14px;line-height:1;}
 .rec-hint{background:var(--color-blue-100);border:1px solid var(--color-blue-200);border-radius:8px;padding:12px 16px;font-size:14.5px;font-weight:500;color:var(--color-primary);max-width:380px;line-height:1.6;text-align:left;}
 .rec-hint b{font-weight:700;}
-.rec-hint.compact{background:none;border:none;padding:0;margin:0;max-width:none;font-size:12.5px;font-weight:500;color:var(--color-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;}
-.rec-hint.compact::before{content:'·';margin-right:8px;color:var(--color-blue-200);}
-.rec-hint.compact b{font-weight:700;}
 
 /* 복약지도문 작성 (v2 msg-* 패턴) */
 .msg-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
@@ -388,17 +387,20 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 var PATIENTS = [
   {name:'김미영', phone:'010-2233-4455', birth:'1985-03-12', rxHistory:[
     {id:'kmy1', hospital:'웰케어내과의원', date:'2026-07-20', guidanceSent:true, drugs:[
-      {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:30, sub:false},
-      {name:'아토르바스타틴', dosage:'1정', freq:'1일 1회', days:30, sub:true},
-      {name:'메트포르민', dosage:'1정', freq:'1일 2회', days:30, sub:false}
+      {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:180, sub:false},
+      {name:'아토르바스타틴', dosage:'1정', freq:'1일 1회', days:180, sub:true},
+      {name:'메트포르민', dosage:'1정', freq:'1일 2회', days:180, sub:false}
     ]},
     {id:'kmy2', hospital:'웰케어내과의원', date:'2026-06-19', guidanceSent:true, drugs:[
-      {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:30, sub:false},
-      {name:'아토르바스타틴', dosage:'1정', freq:'1일 1회', days:30, sub:false},
-      {name:'메트포르민', dosage:'1정', freq:'1일 2회', days:30, sub:false}
+      {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:180, sub:false},
+      {name:'아토르바스타틴', dosage:'1정', freq:'1일 1회', days:180, sub:false},
+      {name:'메트포르민', dosage:'1정', freq:'1일 2회', days:180, sub:false}
     ]},
     {id:'kmy2b', hospital:'다정이비인후과', date:'2026-06-05', guidanceSent:true, drugs:[
-      {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:5, sub:false}
+      {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:180, sub:false},
+      {name:'오메프라졸', dosage:'1정', freq:'1일 1회', days:180, sub:false},
+      {name:'아스피린', dosage:'1정', freq:'1일 1회', days:180, sub:false},
+      {name:'실로스타졸', dosage:'1정', freq:'1일 2회', days:180, sub:false}
     ]},
     {id:'kmy4', hospital:'다정이비인후과', date:'2026-04-07', guidanceSent:true, drugs:[
       {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:5, sub:false},
@@ -830,10 +832,58 @@ function onSearch(q){
 }
 function confirmPatient(i){
   selectedPatient = Object.assign({}, currentMatches[i], {isNew:false});
-  beginRecording();
+  showRxSelectionStep();
 }
 function startAsNew(){
   selectedPatient = {name:generateNickname(), phone:null, isNew:true};
+  beginRecording();
+}
+
+/* ── Step1 "처방전 선택" — 단골 고객 전용, 녹음 시작 전에 참고할 처방전을 먼저 고르는 화면 ── */
+function showRxSelectionStep(){
+  setStep(1);
+  document.getElementById('stepTabs').style.display = '';
+  renderModalPtBar(false);
+  document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 처방전 선택';
+  document.getElementById('st3').style.display = 'none';
+
+  var rx = getDefaultActiveRx(selectedPatient);
+  if(rx) currentRxId = rx.id;
+  var rxHist = selectedPatient.rxHistory || [];
+  expandedRxId = rxHist.length === 1 ? rxHist[0].id : null;
+
+  var histHtml = rxHist.length
+    ? '<!-- component: new/rx-history-panel --><div class="rx-history-panel" id="rxHistoryPanel" data-figma="new/rx-history-panel">' +
+        '<div class="rx-history-panel-hdrow">' +
+          '<span class="rx-history-panel-hd">처방전 이력</span>' +
+          '<span class="rx-history-panel-sub">복약 상담할 처방 이력을 골라 주세요. 처방전을 선택하지 않아도 상담이 가능합니다.</span>' +
+        '</div>' +
+        '<div class="rx-month-nav">' +
+          '<button type="button" class="rx-month-arrow" onclick="rxHistoryMonthShift(-1)">' +
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '</button>' +
+          '<span class="rx-month-label" id="rxMonthLabel"></span>' +
+          '<button type="button" class="rx-month-arrow" id="rxMonthNextBtn" onclick="rxHistoryMonthShift(1)">' +
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '</button>' +
+        '</div>' +
+        '<div class="rx-month-list" id="rxMonthList"></div>' +
+      '</div>'
+    : '<div class="recent-rx-card empty">처방전 정보가 없습니다.</div>';
+
+  document.getElementById('mbody').innerHTML = renderPolyAlertHtml(selectedPatient) + histHtml;
+  document.getElementById('mfoot').innerHTML =
+    '<button class="btn-back" onclick="startWithoutRx()">처방전 없이 상담</button>' +
+    '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="beginRecording()">상담 시작</button>';
+
+  if(rxHist.length){
+    initRxHistoryMonth();
+    renderRxHistoryPanel();
+  }
+}
+/* v2의 "처방전 없이 상담" 그대로 — 처방전을 참고하지 않고 바로 녹음 시작 */
+function startWithoutRx(){
+  currentRxId = null;
   beginRecording();
 }
 
@@ -884,6 +934,25 @@ function getDefaultActiveRx(patient){
     if(!hist[i].guidanceSent) return hist[i];
   }
   return hist[0] || null;
+}
+/* 다제약물관리사업 대상자 배너 — 약사가 처방전을 따로 선택하지 않아도 최근 6개월 처방 이력을 시스템이 자동 계산해서 노출 (10종 이상 약물을 180일 이상 처방) */
+function computePolyQualifyingCount(patient){
+  var hist = patient.rxHistory || [];
+  var cutoff = new Date(todayISODate());
+  cutoff.setMonth(cutoff.getMonth() - 6);
+  var count = 0;
+  hist.forEach(function(rx){
+    if(new Date(rx.date) < cutoff) return;
+    rx.drugs.forEach(function(d){ if(d.days >= 180) count++; });
+  });
+  return count;
+}
+function renderPolyAlertHtml(patient){
+  if(computePolyQualifyingCount(patient) < 10) return '';
+  return '<div class="s2-poly-alert">' +
+    '<div class="s2-poly-alert-icon"><span>!</span></div>' +
+    '<span class="s2-poly-alert-txt">다제약물관리사업 대상자 확인이 필요합니다(10종 이상의 약물을 6개월 이상 지속 복용)</span>' +
+  '</div>';
 }
 function ensureEditingDrugs(rx){
   if(!editingDrugsMap[rx.id]) editingDrugsMap[rx.id] = rx.drugs.map(function(d){ return Object.assign({}, d); });
@@ -1105,61 +1174,21 @@ function beginRecording(){
   renderModalPtBar(false);
   var st3 = document.getElementById('st3');
   if(selectedPatient.isNew){
+    document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
     st3.style.display = '';
     st3.innerHTML = '<span class="step-num">3</span> 전화번호 입력';
   } else {
     st3.style.display = 'none';
   }
-  var histHtml = '';
-  if(!selectedPatient.isNew){
-    var rx = getDefaultActiveRx(selectedPatient);
-    if(rx) currentRxId = rx.id;
-    var rxHist = selectedPatient.rxHistory || [];
-    expandedRxId = rxHist.length === 1 ? rxHist[0].id : null;
-    if(rxHist.length){
-      histHtml =
-        '<!-- component: new/rx-history-panel --><div class="rx-history-panel" id="rxHistoryPanel" data-figma="new/rx-history-panel">' +
-          '<div class="rx-history-panel-hdrow">' +
-            '<span class="rx-history-panel-hd">처방전 이력</span>' +
-            '<span class="rx-history-panel-sub">복약 상담할 처방 이력을 골라 주세요. 처방전을 선택하지 않아도 상담이 가능합니다.</span>' +
-          '</div>' +
-          '<div class="rx-month-nav">' +
-            '<button type="button" class="rx-month-arrow" onclick="rxHistoryMonthShift(-1)">' +
-              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-            '</button>' +
-            '<span class="rx-month-label" id="rxMonthLabel"></span>' +
-            '<button type="button" class="rx-month-arrow" id="rxMonthNextBtn" onclick="rxHistoryMonthShift(1)">' +
-              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-            '</button>' +
-          '</div>' +
-          '<div class="rx-month-list" id="rxMonthList"></div>' +
-        '</div>';
-    } else {
-      histHtml = '<div class="recent-rx-card empty">처방전 정보가 없습니다.</div>';
-    }
-  }
-  var waitStageHtml = selectedPatient.isNew
-    ? '<div class="wait-stage">' +
-        '<div class="wait-title">상담이 진행 중입니다</div>' +
-        '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
-        '<div class="rec-timer" id="recTimer">00:00</div>' +
-        '<div class="rec-label" id="recLabel"></div>' +
-        '<div class="rec-hint">👉 상담이 끝나면 오른쪽 <b>AI 패널</b>의 <b>"상담 종료"</b> 버튼을 눌러 주세요. AI가 복약 상담 내용을 생성합니다.</div>' +
-      '</div>'
-    : '<div class="wait-stage compact">' +
-        '<div class="rec-status-row compact-line">' +
-          '<div class="rec-wave-row compact" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
-          '<span class="rec-timer compact" id="recTimer">00:00</span>' +
-          '<span class="rec-label compact" id="recLabel"></span>' +
-          '<span class="rec-hint compact">👉 상담이 끝나면 오른쪽 <b>상담 종료</b> 버튼을 눌러 주세요. AI가 상담 내용을 요약합니다.</span>' +
-        '</div>' +
-      '</div>';
-  document.getElementById('mbody').innerHTML = waitStageHtml + histHtml;
+  document.getElementById('mbody').innerHTML =
+    '<div class="wait-stage">' +
+      '<div class="wait-title">상담이 진행 중입니다</div>' +
+      '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
+      '<div class="rec-timer" id="recTimer">00:00</div>' +
+      '<div class="rec-label" id="recLabel"></div>' +
+      '<div class="rec-hint">👉 상담이 끝나면 오른쪽 <b>AI 패널</b>의 <b>"상담 종료"</b> 버튼을 눌러 주세요. AI가 복약 상담 내용을 생성합니다.</div>' +
+    '</div>';
   document.getElementById('mfoot').innerHTML = '';
-  if(histHtml){
-    initRxHistoryMonth();
-    renderRxHistoryPanel();
-  }
 
   document.getElementById('pzSub').textContent = '녹음이 시작되었습니다';
   document.getElementById('pzName').textContent = selectedPatient.name || '신규 고객';

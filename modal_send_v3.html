@@ -602,7 +602,7 @@ function buildReminderCard(rx){
     + ['식전', '식후', '식후 30분'].map(function(t){ return '<option value="' + t + '"' + (s.timing === t ? ' selected' : '') + '>' + t + '</option>'; }).join('') + '</select>';
 
   var row = '<div class="rm-row' + (isOpen ? ' open' : '') + '" onclick="rmToggleExpand(\'' + rx.id + '\')">'
-    + '<div class="rm-row-body"><div class="rm-row-top"><span class="rm-row-hospital">' + rx.hospital + ' 복약 알림</span></div></div>'
+    + '<div class="rm-row-body"><div class="rm-row-top"><span class="rm-row-hospital">복약 알림 같이 보내기</span></div></div>'
     + '<div class="rm-row-right">'
     + '<label class="rm-switch" onclick="event.stopPropagation();"><input type="checkbox" ' + (s.enabled ? 'checked' : '') + ' onchange="rmToggleEnabled(\'' + rx.id + '\')"><span class="rm-slider"></span></label>'
     + chevronSVG

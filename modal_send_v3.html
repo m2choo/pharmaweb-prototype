@@ -57,6 +57,11 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .modal-pt-placeholder{font-size:16px;color:var(--color-grey-500);}
 .modal-pt-avatar{width:40px;height:40px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-500);font-size:18px;font-weight:500;letter-spacing:-0.72px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-pt-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);}
+.modal-pt-search-box{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1.5px solid var(--color-grey-300);border-radius:18px;cursor:pointer;background:var(--color-white);transition:border-color .15s,background .15s;}
+.modal-pt-search-box:hover{border-color:var(--color-primary);background:var(--color-blue-100);}
+.modal-pt-search-box .modal-pt-name{font-size:16px;}
+.modal-pt-search-icon{display:flex;color:var(--color-grey-400);flex-shrink:0;}
+.modal-pt-search-box:hover .modal-pt-search-icon{color:var(--color-primary);}
 .modal-pt-name-edit{width:22px;height:22px;padding:0;margin-left:2px;background:none;border:none;border-radius:5px;color:var(--color-grey-400);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;}
 .modal-pt-name-edit:hover{background:var(--color-blue-100);color:var(--color-primary);}
 .modal-pt-name-input{width:220px;height:32px;padding:0 10px 0 30px;border:1.5px solid var(--color-grey-300);border-radius:16px;font-size:15px;font-weight:500;letter-spacing:-0.4px;color:var(--color-grey-800);font-family:inherit;outline:none;vertical-align:middle;background:var(--color-white);}
@@ -909,16 +914,26 @@ function renderModalPtBar(showRemove){
   var pt = document.getElementById('modalPt');
   var removeBtn = showRemove ? '<button class="modal-pt-remove" onclick="removePatient()" title="선택 취소">'+REMOVE_ICON+'</button>' : '';
   if(selectedPatient.name){
-    var editBtn = selectedPatient.isNew ? '<button class="modal-pt-name-edit" onclick="startEditName()" title="고객 검색">'+SEARCH_ICON+'</button>' : '';
-    var info = selectedPatient.isNew ? '' : '<span class="modal-pt-info">'+selectedPatient.phone+'</span>';
-    pt.innerHTML =
-      '<div class="modal-pt-avatar">'+selectedPatient.name[0]+'</div>' +
-      '<div><span class="modal-pt-name">'+selectedPatient.name+'</span>'+editBtn+info+'</div>' + removeBtn;
+    if(selectedPatient.isNew){
+      var info2 = '';
+      pt.innerHTML =
+        '<div class="modal-pt-avatar">'+selectedPatient.name[0]+'</div>' +
+        '<div class="modal-pt-search-box" onclick="startEditName()" title="고객 검색">' +
+          '<span class="modal-pt-name">'+selectedPatient.name+'</span>' +
+          '<span class="modal-pt-search-icon">'+SEARCH_ICON+'</span>' +
+        '</div>' + removeBtn;
+    } else {
+      pt.innerHTML =
+        '<div class="modal-pt-avatar">'+selectedPatient.name[0]+'</div>' +
+        '<div><span class="modal-pt-name">'+selectedPatient.name+'</span><span class="modal-pt-info">'+selectedPatient.phone+'</span></div>' + removeBtn;
+    }
   } else {
     pt.innerHTML =
       '<div class="modal-pt-avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#8B95A1" stroke-width="1.8"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7" stroke="#8B95A1" stroke-width="1.8" stroke-linecap="round"/></svg></div>' +
-      '<div><span class="modal-pt-name">신규 고객</span>' +
-      '<button class="modal-pt-name-edit" onclick="startEditName()" title="고객 검색">'+SEARCH_ICON+'</button></div>' + removeBtn;
+      '<div class="modal-pt-search-box" onclick="startEditName()" title="고객 검색">' +
+        '<span class="modal-pt-name">신규 고객</span>' +
+        '<span class="modal-pt-search-icon">'+SEARCH_ICON+'</span>' +
+      '</div>' + removeBtn;
   }
 }
 /* 이름 수정을 검색처럼 동작하게 함 — 입력하면 기존 고객 목록에서 매칭되는 결과를 드롭다운으로 보여주고,

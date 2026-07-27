@@ -183,6 +183,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 
 /* 대기/진행 문구 화면 (녹음 중) — 웨이브/타이머/라벨을 한 줄로 압축 */
 .wait-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;flex:1;text-align:center;padding:20px;}
+.wait-stage.compact{flex:0 0 auto;gap:10px;padding:14px 0;margin-bottom:14px;border-bottom:1px solid var(--color-grey-200);}
 .rec-status-row{display:flex;align-items:center;justify-content:center;gap:10px;}
 .rec-hint{background:var(--color-blue-100);border:1px solid var(--color-blue-200);border-radius:8px;padding:12px 16px;font-size:14.5px;font-weight:500;color:var(--color-primary);max-width:380px;line-height:1.6;text-align:left;}
 .rec-hint b{font-weight:700;}
@@ -1080,7 +1081,7 @@ function beginRecording(){
         '<div class="rec-label" id="recLabel">녹음 중</div>' +
         '<div class="rec-hint">👉 상담이 끝나면 오른쪽 <b>AI 패널</b>의 <b>"상담 종료"</b> 버튼을 눌러 주세요. AI가 복약 상담 내용을 생성합니다.</div>' +
       '</div>'
-    : '<div class="wait-stage">' +
+    : '<div class="wait-stage compact">' +
         '<div class="rec-status-row">' +
           '<div class="rec-wave-row compact" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
           '<span class="rec-timer compact" id="recTimer">00:00</span>' +
@@ -1088,7 +1089,7 @@ function beginRecording(){
         '</div>' +
         '<div class="rec-hint">👉 상담이 끝나면 오른쪽 <b>AI 패널</b>의 <b>"상담 종료"</b> 버튼을 눌러 주세요. AI가 복약 상담 내용을 생성합니다.</div>' +
       '</div>';
-  document.getElementById('mbody').innerHTML = histHtml + waitStageHtml;
+  document.getElementById('mbody').innerHTML = waitStageHtml + histHtml;
   document.getElementById('mfoot').innerHTML = '';
   if(histHtml){
     initRxHistoryMonth();

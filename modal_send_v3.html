@@ -979,7 +979,7 @@ function renderPolyAlertHtml(patient){
   if(computePolyQualifyingCount(patient) < 10) return '';
   return '<div class="s2-poly-alert">' +
     '<div class="s2-poly-alert-icon"><span>!</span></div>' +
-    '<span class="s2-poly-alert-txt">다제약물관리사업 대상자 확인이 필요합니다(10종 이상의 약물을 6개월 이상 지속 복용)</span>' +
+    '<span class="s2-poly-alert-txt">다제약물관리사업 대상자로 추정됩니다. 약사님의 확인이 필요합니다(10종 이상의 약물을 6개월 이상 지속 복용)</span>' +
   '</div>';
 }
 function ensureEditingDrugs(rx){

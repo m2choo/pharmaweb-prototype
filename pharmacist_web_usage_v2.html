@@ -48,7 +48,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#fff;min-hei
 
 /* 테이블 */
 .table-scroll{overflow-x:auto;}
-table{width:100%;min-width:1180px;border-collapse:collapse;}
+table{width:100%;min-width:1490px;border-collapse:collapse;}
 thead th{background:#e7eaf3;height:52px;font-size:13px;font-weight:700;color:#333d48;letter-spacing:-.5px;padding:0 14px;text-align:left;white-space:nowrap;}
 thead th.num{text-align:center;}
 tbody td{height:48px;border-bottom:1px solid #eef0f3;font-size:14px;color:#333d48;padding:0 14px;letter-spacing:-.5px;}
@@ -200,6 +200,18 @@ footer{margin-left:0;border-top:1px solid #e8e8e8;padding:14px 0;font-size:12.5p
               <span class="sort-btn" data-key="revisit"><span class="tri tri-up">▲</span><span class="tri tri-down">▼</span></span>
             </span>
           </th>
+          <th class="num" style="width:150px;">
+            <span class="th-label">복약 상담 발송건수
+              <span class="th-tip" data-tip="선택한 월 기준, CL note 복약 상담 메시지가 환자에게 실제로 발송 완료된 건수입니다. 임시저장 상태로 남아있는 건은 포함하지 않습니다.">ⓘ</span>
+              <span class="sort-btn" data-key="clSent"><span class="tri tri-up">▲</span><span class="tri tri-down">▼</span></span>
+            </span>
+          </th>
+          <th class="num" style="width:160px;">
+            <span class="th-label">AI 복약지도 요약 횟수
+              <span class="th-tip" data-tip="선택한 월 기준, 퍼즐 AI 상담 중 '복약지도 요약하기'를 눌러 실제로 AI 요약을 생성한 횟수입니다. 녹음만 하고 요약을 생성하지 않은 세션은 집계하지 않습니다.">ⓘ</span>
+              <span class="sort-btn" data-key="aiSessions"><span class="tri tri-up">▲</span><span class="tri tri-down">▼</span></span>
+            </span>
+          </th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
@@ -228,16 +240,16 @@ footer{margin-left:0;border-top:1px solid #e8e8e8;padding:14px 0;font-size:12.5p
 
 <script>
 const rows = [
-  { name:'○○약국',   biz:'4029052613', addr:'○○도 ○○시 ○○구 ○○로 ***',   lastAccess:'2026.07.13 09:21', customers:412, polyTarget:96,  revisit:72 },
-  { name:'△△약국',   biz:'8672300800', addr:'○○시 ○○구 ○○로 ***',       lastAccess:'2026.07.11 14:05', customers:88,  polyTarget:14,  revisit:50 },
-  { name:'□□약국',   biz:'6121715401', addr:'○○도 ○○시 ○○면 ○○로 ***', lastAccess:'2026.02.03 10:47', customers:0,   polyTarget:0,   revisit:0 },
-  { name:'☆☆약국',   biz:'8659401934', addr:'○○도 ○○시 ○○로 *** (○○빌딩)', lastAccess:'2026.07.12 18:30', customers:265, polyTarget:58,  revisit:81 },
-  { name:'◇◇약국',   biz:'1349141433', addr:'○○도 ○○시 ○○로 ***',       lastAccess:'2025.11.20 08:12', customers:0,   polyTarget:0,   revisit:0 },
-  { name:'♤♤약국',   biz:'1921302710', addr:'○○시 ○○구 ○○로 *** (○○타워)', lastAccess:'2026.07.13 11:52', customers:530, polyTarget:121, revisit:78 },
-  { name:'●●약국',   biz:'8859401957', addr:'○○시 ○○구 ○○동 ***',       lastAccess:'2026.06.28 16:40', customers:24,  polyTarget:3,   revisit:40 },
-  { name:'▲▲약국',   biz:'6219042109', addr:'○○시 ○○구 ○○로 ***',       lastAccess:'2025.09.15 13:08', customers:0,   polyTarget:0,   revisit:0 },
-  { name:'◆◆약국',   biz:'7619002405', addr:'○○시 ○○구 ○○로 *** (○○프라자)', lastAccess:'2026.07.10 09:44', customers:151, polyTarget:32,  revisit:56 },
-  { name:'▽▽약국',   biz:'4189601009', addr:'○○도 ○○시 ○○구 ○○로 ***', lastAccess:'2025.12.01 17:26', customers:0,   polyTarget:0,   revisit:0 },
+  { name:'○○약국',   biz:'4029052613', addr:'○○도 ○○시 ○○구 ○○로 ***',   lastAccess:'2026.07.13 09:21', customers:412, polyTarget:96,  revisit:72, clSent:186, aiSessions:241 },
+  { name:'△△약국',   biz:'8672300800', addr:'○○시 ○○구 ○○로 ***',       lastAccess:'2026.07.11 14:05', customers:88,  polyTarget:14,  revisit:50, clSent:31,  aiSessions:45  },
+  { name:'□□약국',   biz:'6121715401', addr:'○○도 ○○시 ○○면 ○○로 ***', lastAccess:'2026.02.03 10:47', customers:0,   polyTarget:0,   revisit:0,  clSent:0,   aiSessions:0   },
+  { name:'☆☆약국',   biz:'8659401934', addr:'○○도 ○○시 ○○로 *** (○○빌딩)', lastAccess:'2026.07.12 18:30', customers:265, polyTarget:58,  revisit:81, clSent:142, aiSessions:168 },
+  { name:'◇◇약국',   biz:'1349141433', addr:'○○도 ○○시 ○○로 ***',       lastAccess:'2025.11.20 08:12', customers:0,   polyTarget:0,   revisit:0,  clSent:0,   aiSessions:0   },
+  { name:'♤♤약국',   biz:'1921302710', addr:'○○시 ○○구 ○○로 *** (○○타워)', lastAccess:'2026.07.13 11:52', customers:530, polyTarget:121, revisit:78, clSent:298, aiSessions:355 },
+  { name:'●●약국',   biz:'8859401957', addr:'○○시 ○○구 ○○동 ***',       lastAccess:'2026.06.28 16:40', customers:24,  polyTarget:3,   revisit:40, clSent:6,   aiSessions:11  },
+  { name:'▲▲약국',   biz:'6219042109', addr:'○○시 ○○구 ○○로 ***',       lastAccess:'2025.09.15 13:08', customers:0,   polyTarget:0,   revisit:0,  clSent:0,   aiSessions:0   },
+  { name:'◆◆약국',   biz:'7619002405', addr:'○○시 ○○구 ○○로 *** (○○프라자)', lastAccess:'2026.07.10 09:44', customers:151, polyTarget:32,  revisit:56, clSent:79,  aiSessions:97  },
+  { name:'▽▽약국',   biz:'4189601009', addr:'○○도 ○○시 ○○구 ○○로 ***', lastAccess:'2025.12.01 17:26', customers:0,   polyTarget:0,   revisit:0,  clSent:0,   aiSessions:0   },
 ];
 
 function render() {
@@ -252,6 +264,8 @@ function render() {
       <td class="num">${r.customers}</td>
       <td class="num">${r.polyTarget || '—'}</td>
       <td class="num ${r.revisit ? 'revisit-good' : 'revisit-none'}">${r.revisit ? r.revisit + '%' : '—'}</td>
+      <td class="num">${r.clSent || '—'}</td>
+      <td class="num">${r.aiSessions || '—'}</td>
     </tr>
   `).join('');
 }
@@ -284,6 +298,8 @@ const sortGetters = {
   customers: r => r.customers,
   polyTarget: r => r.polyTarget,
   revisit: r => r.revisit,
+  clSent: r => r.clSent,
+  aiSessions: r => r.aiSessions,
 };
 let sortKey = null, sortDir = 1;
 

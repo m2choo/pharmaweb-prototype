@@ -34,10 +34,10 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-grey-100);min-height:100vh;}
 
-.ai-fab{position:fixed;bottom:32px;right:32px;background:var(--color-primary);border:none;border-radius:44px;padding:14px 24px 14px 16px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(62,113,240,.35);cursor:pointer;transition:transform .15s,box-shadow .15s;z-index:50;font-family:inherit;}
+.ai-fab{position:fixed;bottom:32px;right:32px;background:var(--color-primary);border:none;border-radius:52px;padding:18px 30px 18px 20px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(62,113,240,.35);cursor:pointer;transition:transform .15s,box-shadow .15s;z-index:50;font-family:inherit;}
 .ai-fab:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(62,113,240,.5);}
-.ai-fab-icon{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ai-fab-text{font-size:15px;font-weight:700;color:var(--color-white);letter-spacing:-0.6px;}
+.ai-fab-icon{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ai-fab-text{font-size:18px;font-weight:700;color:var(--color-white);letter-spacing:-0.6px;}
 
 /* ── BACKDROP (v2 원본 패턴 그대로) ── */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 0;}
@@ -57,7 +57,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .modal-pt-placeholder{font-size:16px;color:var(--color-grey-500);}
 .modal-pt-avatar{width:40px;height:40px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-500);font-size:18px;font-weight:500;letter-spacing:-0.72px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-pt-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);}
-.modal-pt-search-box{display:inline-flex;align-items:center;justify-content:space-between;gap:8px;width:400px;height:48px;box-sizing:border-box;padding:0 18px;border:1.5px solid var(--color-grey-300);border-radius:12px;cursor:pointer;background:var(--color-white);transition:border-color .15s,background .15s;}
+.modal-pt-search-box{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;height:48px;box-sizing:border-box;padding:0 18px;border:1.5px solid var(--color-grey-300);border-radius:12px;cursor:pointer;background:var(--color-white);transition:border-color .15s,background .15s;}
 .modal-pt-search-box:hover{border-color:var(--color-primary);background:var(--color-blue-100);}
 .modal-pt-search-box .modal-pt-name{font-size:17px;}
 .modal-pt-search-icon{display:flex;color:var(--color-grey-400);flex-shrink:0;}
@@ -67,7 +67,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .modal-pt-name-input{flex:1;min-width:0;height:48px;padding:0 10px 0 34px;border:1.5px solid var(--color-grey-300);border-radius:12px;font-size:15px;font-weight:500;letter-spacing:-0.3px;color:var(--color-grey-800);font-family:inherit;outline:none;vertical-align:middle;background:var(--color-white);}
 .modal-pt-name-input::placeholder{font-weight:400;color:var(--color-grey-400);}
 .modal-pt-name-input:focus{border-color:var(--color-primary);}
-.name-edit-wrap{position:relative;display:inline-flex;align-items:center;gap:6px;width:400px;box-sizing:border-box;}
+.name-edit-wrap{position:relative;display:flex;align-items:center;gap:6px;width:100%;box-sizing:border-box;}
 .name-edit-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--color-grey-400);pointer-events:none;display:flex;}
 .name-edit-dropdown{position:absolute;top:48px;left:0;z-index:50;width:100%;max-height:240px;overflow-y:auto;background:var(--color-white);border:1px solid var(--color-grey-250);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);}
 .name-edit-option{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;}
@@ -78,6 +78,12 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .modal-pt-info{font-size:14px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);margin-left:4px;}
 .modal-pt-remove{margin-left:auto;width:28px;height:28px;padding:0;background:none;border:none;border-radius:6px;color:var(--color-grey-500);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-pt-remove:hover{background:#FFF4F5;color:var(--color-red);}
+/* 검색창 아래 항상 보이는 짧은 안내 — 호버해야만 보이던 툴팁이 눈에 잘 안 띈다는 피드백으로 교체 */
+.modal-pt-search-stack{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;}
+.modal-pt-search-row{display:flex;align-items:center;gap:12px;}
+.modal-pt-search-row .modal-pt-avatar{flex-shrink:0;}
+.modal-pt-search-row #modalPtSearchSlot{flex:1;min-width:0;}
+.modal-pt-search-label{font-size:13px;color:var(--color-grey-600);padding-left:2px;}
 
 /* v2 step-tabs 패턴 */
 .step-tabs{display:flex;margin:16px 24px 0;border-bottom:1px solid var(--color-grey-300);flex-shrink:0;}
@@ -85,6 +91,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .step-tab.on{font-weight:700;color:var(--color-primary);border-bottom-color:var(--color-primary);}
 .step-num{width:20px;height:20px;border-radius:50%;background:var(--color-grey-200);color:var(--color-grey-500);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .step-tab.on .step-num{background:var(--color-primary);color:var(--color-white);}
+.step-num.step-done{background:var(--color-primary);color:var(--color-white);font-size:11px;}
 
 .modal-body{display:flex;flex-direction:column;padding:24px;overflow-y:auto;flex:1;min-height:0;}
 .modal-ft{padding:15px 24px 20px;display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;}
@@ -101,8 +108,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 
 /* component: new/poly-drug-table — 다제약물관리사업 대상 추정 근거 */
 .poly-drug-section{flex-shrink:0;}
-.poly-drug-title{font-size:15px;font-weight:500;color:var(--color-grey-800);margin-bottom:4px;}
-.poly-drug-sub{font-size:13px;color:var(--color-grey-500);margin-bottom:10px;}
+.poly-drug-title{font-size:15px;font-weight:500;color:var(--color-grey-800);margin-bottom:10px;}
 .poly-drug-empty{text-align:center;color:var(--color-grey-400);padding:16px;}
 .poly-drug-scroll{max-height:180px;overflow-y:auto;border:1px solid var(--color-grey-200);border-radius:8px;}
 .poly-drug-table{width:100%;border-collapse:collapse;}
@@ -147,7 +153,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 /* 신규 고객 녹음 화면 — 왼쪽 본문에 웨이브/타이머를 그대로 두는 원래 레이아웃 */
 .wait-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:40px 20px;}
 .wait-title{font-size:18px;font-weight:600;color:var(--color-grey-800);}
-.wait-search-hint{font-size:15px;color:var(--color-grey-500);line-height:1.6;max-width:320px;}
 .rec-timer{font-family:'Poppins','Noto Sans KR',sans-serif;font-size:24px;font-weight:600;color:var(--color-grey-800);font-variant-numeric:tabular-nums;}
 /* component: new/rx-history-panel — 행별 펼치기/처방전 원본 보기 */
 .rx-history-panel{padding:14px 0;margin-bottom:14px;}
@@ -788,6 +793,24 @@ function openModal(){
   resetFlow();
   startAsNew();
 }
+/* 접수 처방전 목록(prescription_list_v3.html)에서 "전송하기"를 누르면 호출 — 이미 그 화면에서
+   고객·처방전이 확정된 상태이므로 검색/인라인 처방전 확인 단계를 건너뛰고 처방전이 선택된 단골처럼
+   곧바로 "복약 상담"(녹음)부터 시작함. PATIENTS mock에 이름이 매칭되면 처방 이력까지 그대로 사용 */
+function openModalAtStep2(customerData){
+  document.getElementById('overlay').classList.add('on');
+  resetFlow();
+  var match = PATIENTS.find(function(p){ return p.name === customerData.name; });
+  selectedPatient = match
+    ? Object.assign({}, match, { isNew: false })
+    : { name: customerData.name, phone: customerData.phone || null, birth: customerData.birth || null, isNew: false, rxHistory: [] };
+  hadInlineRxCheck = true;
+  var recentRxs = getMostRecentDateRxs(selectedPatient);
+  selectedRxIds = recentRxs.length === 1
+    ? [recentRxs[0].id]
+    : recentRxs.filter(function(rx){ return !rx.guidanceSent; }).map(function(rx){ return rx.id; });
+  beginRecording();
+  applyPostRxCheckStepLabels();
+}
 /* QA 전용: 리뷰 시 특정 케이스를 빠르게 찾아 검색해 주는 단축 기능 — 실제 진입(신규 시작 → 이름 검색으로 단골 전환) 과정은 그대로 보여줌 (실서비스 반영 대상 아님) */
 function applyQaState(v){
   openModal();
@@ -851,9 +874,14 @@ function resetFlow(){
   expandedRxId = null;
   editingDrugsMap = {};
   currentMatches = [];
+  hadInlineRxCheck = false;
   clearInterval(timerId);
   clearInterval(sttTimer);
 }
+/* 단골 전환 시 처방전이 있어 인라인 확인(showInlineRxCheck)을 거쳤는지 — 거쳤다면 확인 후에도
+   Step 탭을 2단계로 축소하지 않고 "① 처방전 선택(완료) ② 복약 상담 ③ 복약지도문 작성" 3단계를
+   끝까지 유지함(예전엔 확인 후 2단계로 줄어들어 단계 수가 바뀌는 게 혼란스러웠음) */
+var hadInlineRxCheck = false;
 /* 상담 시작 시 모두 신규로 진입 — 화면엔 바로 랜덤 닉네임을 표시하지만, 이는 표시용일 뿐 실제 사용자
    생성(백엔드)은 "상담 종료" 시점에 확정됨. 이름 자리를 검색으로 바꿔 기존 고객을 찾으면 언제든
    단골로 전환됨(convertToExistingPatient) */
@@ -878,10 +906,12 @@ function convertToExistingPatient(i){
 
 /* ── 녹음 중 인라인 처방전 확인 — 단골 전환 시에만 잠깐 보여주고, 확인하면 다시 메모 화면으로 복귀(녹음은 계속 진행) ── */
 function showInlineRxCheck(){
+  hadInlineRxCheck = true;
   document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 처방전 선택';
   document.getElementById('st2').innerHTML = '<span class="step-num">2</span> 복약 상담';
   document.getElementById('st3').style.display = '';
   document.getElementById('st3').innerHTML = '<span class="step-num">3</span> 복약지도문 작성';
+  setStep(1);
 
   var recentRxs = getMostRecentDateRxs(selectedPatient);
   selectedRxIds = recentRxs.length === 1
@@ -909,13 +939,22 @@ function showInlineRxCheck(){
   }
 }
 function confirmRxCheckWithRx(){
-  applyRecordingStepLabels();
+  applyPostRxCheckStepLabels();
   renderMainRecordingContent();
 }
 function confirmRxCheckNone(){
   selectedRxIds = [];
-  applyRecordingStepLabels();
+  applyPostRxCheckStepLabels();
   renderMainRecordingContent();
+}
+/* 처방전 선택을 거친 단골은 확인 후에도 3단계를 유지 — ①에는 완료를 나타내는 체크 표시,
+   ②(복약 상담)가 현재 단계가 됨 */
+function applyPostRxCheckStepLabels(){
+  document.getElementById('st1').innerHTML = '<span class="step-num step-done">✓</span> 처방전 선택';
+  document.getElementById('st2').innerHTML = '<span class="step-num">2</span> 복약 상담';
+  document.getElementById('st3').style.display = '';
+  document.getElementById('st3').innerHTML = '<span class="step-num">3</span> 복약지도문 작성';
+  setStep(2);
 }
 
 /* ── 고객 정보 바 (v2 modal-pt 패턴: 아바타 + 이름(+수정, 신규만) + 정보 + 삭제(녹음 전까지)) ── */
@@ -926,8 +965,13 @@ function renderModalPtBar(showRemove){
   if(selectedPatient.name){
     if(selectedPatient.isNew){
       pt.innerHTML =
-        '<div class="modal-pt-avatar">'+selectedPatient.name[0]+'</div>' +
-        '<div id="modalPtSearchSlot">' + patientSearchBoxHtml(selectedPatient.name) + '</div>' + removeBtn;
+        '<div class="modal-pt-search-stack">' +
+          '<div class="modal-pt-search-label">단골 고객을 검색할 수 있습니다</div>' +
+          '<div class="modal-pt-search-row">' +
+            '<div class="modal-pt-avatar">'+selectedPatient.name[0]+'</div>' +
+            '<div id="modalPtSearchSlot">' + patientSearchBoxHtml(selectedPatient.name) + '</div>' +
+          '</div>' +
+        '</div>' + removeBtn;
     } else {
       pt.innerHTML =
         '<div class="modal-pt-avatar">'+selectedPatient.name[0]+'</div>' +
@@ -935,8 +979,13 @@ function renderModalPtBar(showRemove){
     }
   } else {
     pt.innerHTML =
-      '<div class="modal-pt-avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#8B95A1" stroke-width="1.8"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7" stroke="#8B95A1" stroke-width="1.8" stroke-linecap="round"/></svg></div>' +
-      '<div id="modalPtSearchSlot">' + patientSearchBoxHtml('신규 고객') + '</div>' + removeBtn;
+      '<div class="modal-pt-search-stack">' +
+        '<div class="modal-pt-search-label">단골 고객을 검색할 수 있습니다</div>' +
+        '<div class="modal-pt-search-row">' +
+          '<div class="modal-pt-avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#8B95A1" stroke-width="1.8"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7" stroke="#8B95A1" stroke-width="1.8" stroke-linecap="round"/></svg></div>' +
+          '<div id="modalPtSearchSlot">' + patientSearchBoxHtml('신규 고객') + '</div>' +
+        '</div>' +
+      '</div>' + removeBtn;
   }
 }
 function patientSearchBoxHtml(label){
@@ -1014,7 +1063,7 @@ function getPolyQualifyingDrugs(patient){
   hist.forEach(function(rx){
     if(new Date(rx.date) < cutoff) return;
     rx.drugs.forEach(function(d){
-      if(d.days >= 180) list.push({ name: d.name, hospital: rx.hospital, date: rx.date });
+      if(d.days >= 180) list.push({ name: d.name, hospital: rx.hospital, date: rx.date, days: d.days });
     });
   });
   return list;
@@ -1037,7 +1086,18 @@ var DRUG_CAUTIONS = [
   { drugs: ['아스피린', '오메프라졸'], desc: 'PPI 병용 시 아스피린 흡수 감소 가능' }
 ];
 var POLY_REF_TYPE_LABEL = { interaction: '상호작용', caution: '금기·주의', duplicate: '중복 성분' };
-/* 각주 목록 생성 — 상호작용/금기·주의는 mock 페어에서, 중복 성분은 같은 약품명이 목록에 2번 이상 나오면 자동 판정 */
+/* 같은 약품명이 처방된 두 건의 실제 복약 기간(처방일 ~ 처방일+일수)이 겹칠 때만 "중복 성분"으로
+   판정 — 단순히 같은 약을 여러 번 처방받은 것(예: 순차적인 재처방/리필)은 겹치는 기간이 없으면
+   중복 복용이 아니므로 제외해야 함 */
+function medPeriodsOverlap(a, b){
+  var aStart = new Date(a.date);
+  var aEnd = new Date(a.date); aEnd.setDate(aEnd.getDate() + a.days);
+  var bStart = new Date(b.date);
+  var bEnd = new Date(b.date); bEnd.setDate(bEnd.getDate() + b.days);
+  return aStart < bEnd && bStart < aEnd;
+}
+/* 각주 목록 생성 — 상호작용/금기·주의는 mock 페어에서, 중복 성분은 같은 약품명의 복약 기간이
+   겹치는 경우에만 자동 판정 */
 function buildPolyFootnotes(drugs){
   var names = drugs.map(function(d){ return d.name; });
   var footnotes = [];
@@ -1045,8 +1105,19 @@ function buildPolyFootnotes(drugs){
   drugs.forEach(function(d){ countByName[d.name] = (countByName[d.name] || 0) + 1; });
   Object.keys(countByName).forEach(function(name){
     if(countByName[name] < 2) return;
-    var dates = drugs.filter(function(d){ return d.name === name; }).map(function(d){ return d.date; });
-    footnotes.push({ type: 'duplicate', drugNames: [name], desc: name + ' — 서로 다른 처방 ' + countByName[name] + '건에 중복 처방됨(' + dates.join(', ') + ')' });
+    var entries = drugs.filter(function(d){ return d.name === name; });
+    var overlapping = [];
+    for(var i = 0; i < entries.length; i++){
+      for(var j = i + 1; j < entries.length; j++){
+        if(medPeriodsOverlap(entries[i], entries[j])){
+          if(overlapping.indexOf(entries[i]) === -1) overlapping.push(entries[i]);
+          if(overlapping.indexOf(entries[j]) === -1) overlapping.push(entries[j]);
+        }
+      }
+    }
+    if(!overlapping.length) return;
+    var dates = overlapping.map(function(d){ return d.date; });
+    footnotes.push({ type: 'duplicate', drugNames: [name], desc: name + ' — 복약 기간이 겹치는 처방 ' + overlapping.length + '건 중복 처방됨(' + dates.join(', ') + ')' });
   });
   DRUG_INTERACTIONS.forEach(function(it){
     if(it.drugs.every(function(d){ return names.indexOf(d) > -1; })){
@@ -1112,7 +1183,6 @@ function refreshPolySection(){
   document.getElementById('polyFilterRow').innerHTML = polyFilterChipsHtml(drugs.length, footnotes);
   document.getElementById('polyFootnotes').innerHTML = polyFootnoteListHtml(footnotes);
   document.getElementById('polyDrugRows').innerHTML = polyRowsHtml(drugs, footnotes);
-  document.getElementById('polyDrugSub').textContent = polySubText();
 }
 /* 다제약물관리사업 대상 추정 근거 — 해당 약품 목록 + 상호작용/금기·주의/중복성분을 각주 번호로 표시.
    필터 칩을 표 위에 두고 누르면 표 자체가 선택된 카테고리 약물만 남도록 걸러지고, 설명(각주)도
@@ -1128,7 +1198,6 @@ function renderPolyDrugTableHtml(patient){
     : '';
   return '<!-- component: new/poly-drug-table --><div class="poly-drug-section" data-figma="new/poly-drug-table">' +
     '<div class="poly-drug-title">다제약물관리사업 대상 추정 근거</div>' +
-    '<div class="poly-drug-sub" id="polyDrugSub">' + polySubText() + '</div>' +
     filterRowHtml +
     '<div class="poly-drug-scroll">' +
       '<table class="poly-drug-table"><thead><tr><th>약품명</th><th>처방 병원</th><th>처방일</th><th>확인 필요</th></tr></thead>' +
@@ -1137,23 +1206,30 @@ function renderPolyDrugTableHtml(patient){
     footnoteHtml +
   '</div>';
 }
+/* 같은 약품명이 여러 방문에 걸쳐 반복 처방된 경우(중복 성분 판정 대상) 약품명 기준으로 한 줄로
+   합쳐서 보여줌 — 처방 병원/처방일은 겹치는 방문 건들을 모아 표시 */
 function polyRowsHtml(drugs, footnotes){
   var list = polySelectedTypes.length === 0 ? drugs : drugs.filter(function(d){
     return getRefNumsForDrug(d.name, footnotes).some(function(n){ return polySelectedTypes.indexOf(footnotes[n - 1].type) > -1; });
   });
   if(!list.length) return '<tr><td colspan="4" class="poly-drug-empty">해당하는 약물이 없습니다.</td></tr>';
-  return list.map(function(d){
-    var refs = getRefNumsForDrug(d.name, footnotes);
+  var byName = {};
+  var grouped = [];
+  list.forEach(function(d){
+    if(!byName[d.name]){
+      byName[d.name] = { name: d.name, hospitals: [], dates: [] };
+      grouped.push(byName[d.name]);
+    }
+    if(byName[d.name].hospitals.indexOf(d.hospital) === -1) byName[d.name].hospitals.push(d.hospital);
+    if(byName[d.name].dates.indexOf(d.date) === -1) byName[d.name].dates.push(d.date);
+  });
+  return grouped.map(function(g){
+    var refs = getRefNumsForDrug(g.name, footnotes);
     var chips = refs.length
       ? refs.map(function(n){ return '<span class="poly-ref-chip ' + footnotes[n - 1].type + '">' + n + '</span>'; }).join('')
       : '<span class="interaction-none">-</span>';
-    return '<tr><td>' + d.name + '</td><td>' + d.hospital + '</td><td>' + d.date + '</td><td>' + chips + '</td></tr>';
+    return '<tr><td>' + g.name + '</td><td>' + g.hospitals.join(', ') + '</td><td>' + g.dates.join(', ') + '</td><td>' + chips + '</td></tr>';
   }).join('');
-}
-function polySubText(){
-  return polySelectedTypes.length === 0
-    ? '최근 6개월간 180일 이상 처방된 전체 약품입니다.'
-    : polySelectedTypes.map(function(t){ return POLY_REF_TYPE_LABEL[t]; }).join(', ') + ' 유형에 해당하는 약물입니다.';
 }
 function ensureEditingDrugs(rx){
   if(!editingDrugsMap[rx.id]) editingDrugsMap[rx.id] = rx.drugs.map(function(d){ return Object.assign({}, d); });
@@ -1353,7 +1429,6 @@ function renderMainRecordingContent(){
     document.getElementById('mbody').innerHTML =
       '<div class="wait-stage">' +
         '<div class="wait-title">상담이 진행 중입니다</div>' +
-        '<div class="wait-search-hint">단골 고객은 검색 후 선택해 상담할 수 있습니다.</div>' +
         '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
         '<div class="rec-timer" id="recTimer">00:00</div>' +
       '</div>';
@@ -1457,10 +1532,18 @@ function endRecording(){
   if(recCircleEl) recCircleEl.classList.add('done');
   document.getElementById('pzName').textContent = selectedPatient.name;
   document.getElementById('pzSub').textContent = '상담 내용을 요약했습니다';
+  /* 끝까지 단골로 전환되지 않았다면 이 시점부터 검색 UI는 의미가 없음(이미 이 신규 고객 기준으로
+     상담이 진행됐으므로 바꾸면 내용이 안 맞음) — 단골처럼 이름만 있는 정적 표시로 잠금 */
+  if(selectedPatient.isNew) lockPatientBar();
   goSummary();
 }
+function lockPatientBar(){
+  document.getElementById('modalPt').innerHTML =
+    '<div class="modal-pt-avatar">'+selectedPatient.name[0]+'</div>' +
+    '<div><span class="modal-pt-name">'+selectedPatient.name+'</span></div>';
+}
 function goSummary(){
-  setStep(2);
+  setStep(hadInlineRxCheck ? 3 : 2);
   var isKnown = selectedPatient.phone && !selectedPatient.isNew;
   var activeRxs = selectedPatient.isNew ? [] : getSelectedRxs();
   activeRxs.forEach(initReminderSettingsFor);

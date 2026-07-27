@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>CL note 복약 상담 — 시나리오 A/B/C 프로토타입</title>
+<link rel="stylesheet" href="reminder.css">
+<style>
+:root{
+  --color-primary:#3E71F0;
+  --color-white:#FFFFFF;
+  --color-grey-900:#212529;
+  --color-grey-800:#333D48;
+  --color-grey-700:#252525;
+  --color-grey-600:#666666;
+  --color-grey-550:#7888AC;
+  --color-grey-500:#8B95A1;
+  --color-grey-400:#A9ADB9;
+  --color-grey-300:#D9D9D9;
+  --color-grey-250:#D1D7E0;
+  --color-grey-200:#EBEBEB;
+  --color-grey-150:#EEF0F3;
+  --color-grey-100:#F6F6F6;
+  --color-blue-200:#E3EBFF;
+  --color-blue-100:#ECF1FF;
+  --color-red:#EE4951;
+  --color-success:#33AF2E;
+  --color-warning:#FF8A00;
+}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-grey-100);margin:0;padding:0;}
+
+/* ── 프로토타입 안내 배너 (TEMP-DEV-ONLY 컨벤션 재사용) ── */
+.proto-banner{max-width:1176px;margin:20px auto 0;padding:10px 16px;border:1.5px dashed #F5AC1F;border-radius:8px;background:#FFFAE9;color:#8A6D1F;font-size:13px;font-weight:600;font-family:'Noto Sans KR',sans-serif;}
+
+/* ── BACKDROP (real 배경 없이 페이지 안에 바로 배치) ── */
+.backdrop{position:static;display:flex;justify-content:center;padding:24px 0 60px;}
+.overlay-wrap{display:flex;gap:14px;align-items:flex-start;}
+
+/* 왼쪽: 모달 패널 (modal_send_v2.html과 동일 토큰) */
+.modal-panel{width:800px;flex-shrink:0;background:var(--color-white);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.18);display:flex;flex-direction:column;min-height:500px;max-height:90vh;}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 24px 15px;border-bottom:1px solid var(--color-grey-300);flex-shrink:0;}
+.modal-title{font-size:24px;font-weight:350;letter-spacing:-0.96px;color:var(--color-grey-900);}
+.modal-x{width:30px;height:30px;background:none;border:none;cursor:pointer;color:var(--color-grey-500);font-size:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+.modal-x:hover{background:var(--color-grey-150);}
+
+.modal-pt{display:flex;align-items:center;gap:12px;padding:16px 24px 10px;flex-shrink:0;min-height:24px;}
+.modal-pt-placeholder{font-size:14px;color:var(--color-grey-500);}
+.modal-pt-avatar{width:40px;height:40px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-500);font-size:18px;font-weight:500;letter-spacing:-0.72px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.modal-pt-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);}
+.modal-pt-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:700;background:#EBF2FF;color:#2563EB;white-space:nowrap;margin-left:8px;}
+.modal-pt-badge.new{background:var(--color-grey-100);color:var(--color-grey-550);}
+.modal-pt-risk{margin-left:auto;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;color:#fff;background:#2BB5B0;white-space:nowrap;}
+.modal-pt-risk.na{background:var(--color-grey-200);color:var(--color-grey-500);}
+.modal-pt-sub{font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);display:block;margin-top:2px;}
+
+.step-tabs{display:flex;margin:16px 24px 0;border-bottom:1px solid var(--color-grey-300);flex-shrink:0;}
+.step-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 16px;font-size:14px;font-weight:500;letter-spacing:-0.6px;color:#414B5E;border-bottom:2px solid transparent;white-space:nowrap;cursor:default;}
+.step-tab.on{font-weight:700;color:var(--color-primary);border-bottom-color:var(--color-primary);}
+.step-num{width:20px;height:20px;border-radius:50%;background:var(--color-grey-200);color:var(--color-grey-500);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-tab.on .step-num{background:var(--color-primary);color:var(--color-white);}
+
+.modal-body{padding:20px 24px;overflow-y:auto;flex:1;min-height:0;}
+.modal-body::-webkit-scrollbar{width:3px;}
+.modal-body::-webkit-scrollbar-thumb{background:var(--color-grey-300);border-radius:2px;}
+.modal-ft{padding:15px 24px 20px;display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;}
+
+/* 실제 modal_send_v2.html 버튼 토큰 그대로 재사용 */
+.btn-next{height:40px;padding:0 28px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
+.btn-next:disabled{opacity:.4;cursor:not-allowed;}
+.btn-next.send{display:inline-flex;align-items:center;gap:4px;font-weight:700;}
+.btn-cancel{height:40px;padding:0 20px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;font-family:inherit;}
+.btn-cancel.is-back{color:var(--color-grey-800);}
+.btn-no-rx{height:40px;padding:0 16px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);cursor:pointer;font-family:inherit;}
+.btn-no-rx:hover{background:var(--color-grey-150);}
+
+/* 처방전 출처 칩 (reminder.js가 참조) */
+.s2-rx-src-chip{flex-shrink:0;height:24px;padding:0 10px;border-radius:999px;background:var(--color-blue-200);color:var(--color-primary);font-size:13px;font-weight:500;letter-spacing:-0.26px;display:flex;align-items:center;justify-content:center;white-space:nowrap;}
+.s2-rx-src-chip.other{background:var(--color-grey-150);color:var(--color-grey-600);}
+.s2-rx-src-chip.patient{background:#FFFAE9;color:#FF8A00;}
+
+/* Step1 — 고객 검색 */
+.s1-search-wrap{position:relative;margin-bottom:14px;}
+.s1-search{width:100%;height:40px;box-sizing:border-box;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 36px 0 12px;font-size:14px;font-weight:500;font-family:inherit;outline:none;}
+.s1-search:focus{border-color:var(--color-primary);}
+.s1-result-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--color-grey-250);border-radius:8px;cursor:pointer;transition:background .1s;margin-bottom:6px;}
+.s1-result-item:hover{background:var(--color-blue-100);border-color:var(--color-primary);}
+.s1-result-avatar{width:36px;height:36px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-500);font-size:15px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s1-result-name{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-700);}
+.s1-result-info{font-size:12px;font-weight:400;letter-spacing:-0.48px;color:var(--color-grey-600);margin-top:2px;}
+.s1-new-note{display:flex;flex-direction:column;align-items:center;gap:5px;padding:16px 16px 14px;border:1px dashed var(--color-grey-250);border-radius:8px;text-align:center;}
+.s1-new-note-msg{font-size:13.5px;font-weight:500;color:var(--color-grey-800);}
+.s1-new-note-sub{font-size:12px;font-weight:350;color:var(--color-grey-500);}
+
+.field-grid{display:flex;flex-direction:column;gap:14px;margin:16px 0;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:13px;font-weight:500;color:var(--color-grey-600);}
+.field label .req{color:var(--color-red);}
+.field label .opt{color:var(--color-grey-500);font-weight:400;}
+.field input{height:40px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 12px;font-size:15px;font-family:inherit;outline:none;color:var(--color-grey-800);}
+.field input:focus{border-color:var(--color-primary);}
+.field .age-hint{font-size:12px;color:var(--color-grey-500);margin-top:2px;}
+
+.consent-row{display:flex;align-items:flex-start;gap:8px;margin:16px 0;}
+.consent-row input[type="checkbox"]{width:16px;height:16px;margin-top:5px;accent-color:var(--color-primary);cursor:pointer;flex-shrink:0;}
+.consent-row label{font-size:14px;color:var(--color-grey-600);line-height:1.6;cursor:pointer;}
+
+.ad-note{margin:14px 0;font-size:12px;color:#9A5B00;background:rgba(255,138,0,.1);border-radius:8px;padding:10px 12px;line-height:1.6;}
+
+/* Step1 — 처방전 확인 */
+.rx-pick-label{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-600);margin-bottom:10px;}
+.rx-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--color-grey-250);border-radius:10px;cursor:pointer;margin-bottom:10px;transition:border-color .12s,background .12s;}
+.rx-card:hover{border-color:var(--color-primary);}
+.rx-card.selected{border-color:var(--color-primary);background:var(--color-blue-200);}
+.rx-card-radio{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--color-grey-300);flex-shrink:0;position:relative;background:#fff;}
+.rx-card.selected .rx-card-radio{border-color:var(--color-primary);}
+.rx-card.selected .rx-card-radio::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--color-primary);}
+.rx-card-body{flex:1;min-width:0;}
+.rx-card-top{font-size:16px;font-weight:500;letter-spacing:-0.64px;color:var(--color-grey-900);}
+.rx-card-date{font-size:13px;font-weight:400;color:var(--color-grey-500);margin-left:6px;}
+.rx-card-sub{font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);margin-top:2px;}
+
+/* Step1 — 상담 안내 */
+.consult-hint{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:24px 20px;color:var(--color-grey-500);border-top:1px dashed var(--color-grey-200);margin-top:6px;}
+.consult-hint-icon{width:36px;height:36px;border-radius:50%;background:var(--color-grey-150);display:flex;align-items:center;justify-content:center;}
+.consult-hint-title{font-size:14px;font-weight:500;color:var(--color-grey-800);}
+.consult-hint-sub{font-size:12.5px;color:var(--color-grey-500);max-width:340px;line-height:1.6;}
+
+/* Step3 복약지도문 작성 */
+.summary-header{margin-bottom:16px;}
+.summary-title{font-size:18px;font-weight:600;letter-spacing:-0.72px;color:var(--color-grey-800);margin-bottom:4px;}
+.summary-meta{font-size:12.5px;color:var(--color-grey-500);}
+
+.transcript-toggle{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--color-primary);font-size:12.5px;font-weight:600;cursor:pointer;padding:0;margin-bottom:12px;font-family:inherit;}
+.transcript-box{background:var(--color-grey-100);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--color-grey-600);line-height:1.9;font-style:italic;}
+
+.draft-arrow{display:flex;align-items:center;gap:8px;margin:4px 0 10px;font-size:12px;color:var(--color-grey-500);}
+.draft-arrow .ai-tag{margin:0;}
+
+.msg-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+.msg-ttl{font-size:15px;font-weight:600;letter-spacing:-0.6px;color:var(--color-grey-700);}
+.msg-reset{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:400;color:var(--color-grey-600);cursor:pointer;background:none;border:none;font-family:inherit;}
+.msg-textarea{width:100%;min-height:140px;border:1px solid var(--color-primary);border-radius:8px;padding:14px;font-size:15px;font-family:inherit;color:var(--color-grey-700);line-height:1.7;resize:vertical;outline:none;}
+.msg-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.msg-tag{height:32px;padding:0 12px;border:1px solid var(--color-grey-300);border-radius:20px;font-size:12.5px;color:var(--color-grey-700);background:var(--color-white);cursor:pointer;font-family:inherit;}
+.msg-tag:hover{background:var(--color-blue-100);border-color:var(--color-primary);}
+
+.ai-tag{display:inline-block;font-size:10.5px;font-weight:700;color:var(--color-primary);background:var(--color-blue-100);padding:2px 9px;border-radius:999px;}
+
+/* Step4 발송 */
+.send-summary-label{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);margin-bottom:12px;}
+.sum-tbl{width:100%;border-collapse:collapse;margin-bottom:20px;}
+.sum-tbl td{height:52px;padding:0 16px;font-size:15px;border-bottom:1px solid var(--color-grey-250);border-left:1px solid var(--color-grey-250);}
+.sum-tbl td.lbl{background:var(--color-grey-100);text-align:center;width:100px;color:var(--color-grey-600);border-left:none;}
+.sum-tbl td.val{color:#252525;}
+.send-success{display:none;align-items:center;gap:10px;padding:14px 16px;background:#EEFAF0;border:1px solid #CFF4CE;border-radius:8px;color:var(--color-success);font-size:14px;font-weight:600;}
+.send-success.on{display:flex;}
+
+/* ── 오른쪽: 퍼즐 AI 패널 (modal_send_v2.html 실제 컴포넌트 재사용) ── */
+.puzzle-panel{width:360px;flex-shrink:0;background:var(--color-white);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.18);display:flex;flex-direction:column;height:640px;overflow:hidden;border:1px solid var(--color-grey-200);}
+.pz-header{padding:16px 16px 10px;border-bottom:1px solid var(--color-grey-150);flex-shrink:0;}
+.pz-name-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.pz-name{font-size:22px;font-weight:350;letter-spacing:-0.9px;color:var(--color-grey-900);}
+.pz-name-sub{font-size:14px;font-weight:400;color:var(--color-grey-600);margin-left:4px;}
+.pz-visit-bar{display:inline-flex;align-items:center;gap:6px;background:var(--color-grey-150);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:350;color:var(--color-grey-600);}
+.pz-visit-dot{width:6px;height:6px;border-radius:50%;background:var(--color-primary);flex-shrink:0;}
+
+.pz-body{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;min-height:0;}
+.pz-chat{flex:1;overflow-y:auto;padding:20px 18px;font-size:14px;color:var(--color-grey-500);display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.7;}
+.pz-sparkle-btn{position:absolute;right:14px;bottom:8px;background:var(--color-white);border:1.5px solid var(--color-grey-200);border-radius:20px;padding:7px 14px;color:var(--color-grey-600);font-size:14px;font-weight:500;letter-spacing:-0.56px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.pz-sparkle-btn:hover:not(:disabled){background:var(--color-blue-100);border-color:var(--color-primary);}
+.pz-sparkle-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+.pz-rec-bar{display:flex;align-items:center;gap:8px;padding:8px 16px;flex-shrink:0;border-top:1px solid var(--color-grey-150);}
+.pz-rec-dot{width:7px;height:7px;border-radius:50%;background:var(--color-grey-300);}
+.pz-rec-dot.live{background:var(--color-red);animation:blink 1s ease-in-out infinite;}
+.pz-rec-dot.done{background:var(--color-success);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.pz-rec-label{font-size:12px;color:var(--color-grey-500);}
+.pz-rec-time{margin-left:auto;font-size:12px;color:var(--color-grey-500);font-variant-numeric:tabular-nums;}
+
+@media (max-width: 1200px){
+  .overlay-wrap{flex-direction:column;align-items:center;}
+  .modal-panel{width:min(800px,92vw);}
+  .puzzle-panel{width:min(360px,92vw);height:420px;}
+}
+</style>
+</head>
+<body>
+
+<div class="proto-banner">PROTOTYPE — 시나리오 A/B/C 통합 (기획 검토용, 실서비스 코드 아님) · A: 단골×처방전 있음 / B: 단골×처방전 없음 / C: 신규 고객 — 고객 검색 결과에 따라 자동으로 갈라짐</div>
+
+<div class="backdrop">
+  <div class="overlay-wrap">
+
+    <!-- component: popup -->
+    <div class="modal-panel" data-figma="popup">
+      <div class="modal-hd">
+        <span class="modal-title">CL note 복약 상담</span>
+        <!-- component: button/ghost -->
+        <button class="modal-x" data-figma="button/ghost" title="닫기">✕</button>
+      </div>
+
+      <div class="modal-pt" id="modalPt">
+        <span class="modal-pt-placeholder">고객을 검색해 주세요</span>
+      </div>
+
+      <div class="step-tabs" id="stepTabsBar" style="display:none;">
+        <div class="step-tab on" id="tab1"><span class="step-num">1</span>고객·처방전</div>
+        <div class="step-tab" id="tab2"><span class="step-num">2</span>복약 알림</div>
+        <div class="step-tab" id="tab3"><span class="step-num">3</span>복약지도문</div>
+        <div class="step-tab" id="tab4"><span class="step-num">4</span>발송</div>
+      </div>
+
+      <div class="modal-body" id="mbody"></div>
+      <div class="modal-ft" id="mfoot"></div>
+    </div>
+
+    <!-- component: new/puzzle-panel (기존 modal_send_v2.html 컴포넌트 재사용) -->
+    <div class="puzzle-panel">
+      <div class="pz-header">
+        <div class="pz-name-row">
+          <div class="pz-name" id="pzName">고객 선택 대기 중</div>
+        </div>
+        <div class="pz-visit-bar"><span class="pz-visit-dot"></span><span id="pzVisit">고객을 선택하면 방문 정보가 표시됩니다</span></div>
+      </div>
+      <div class="pz-body">
+        <div style="flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;">
+          <div class="pz-chat" id="pzChat">고객을 확인하면 상담 기록이 여기에 표시됩니다</div>
+          <!-- component: button/outlined-secondary -->
+          <button class="pz-sparkle-btn" id="sparkleBtn" data-figma="button/outlined-secondary" onclick="endRecording()" disabled>✦ 복약지도 요약하기</button>
+        </div>
+        <div class="pz-rec-bar">
+          <span class="pz-rec-dot" id="recDot"></span>
+          <span class="pz-rec-label" id="recLabel">대기 중</span>
+          <span class="pz-rec-time" id="recTimer">00:00</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="reminder.js"></script>
+<script>
+/* ── mock 데이터 & reminder.js가 참조하는 전역 ── */
+var CUSTOMERS = [
+  {name:'김미영', regular:true, info:'2019.03.12 등록 · 최근 방문 12일 전', visit:'최근 방문 12일 전', risk:'낮음'},
+  {name:'홍재원', regular:true, info:'2021.05.02 등록 · 최근 방문 3일 전', visit:'최근 방문 3일 전', risk:'낮음'}
+];
+var RX_SOURCE_LABEL = {here:'우리 약국', other:'타 약국', patient:'고객 기록'};
+var PRESCRIPTIONS = [
+  {id:'rx1', hospital:'웰케어내과의원', source:'here', days:30, drugs:[{name:'암로디핀 5mg', freq:'1일 1회', days:30}]}
+];
+var selectedCustomer = null;
+var selectedRxIds = [];
+var reminderSettings = {};
+var rmExpandedIds = new Set(['rx1']);
+var editingDrugsMap = {};
+
+var seconds = 0;
+var timerId = null;
+var recordingStarted = false;
+
+function setTab(n){
+  ['1','2','3','4'].forEach(function(i){
+    document.getElementById('tab'+i).classList.toggle('on', i===String(n));
+  });
+}
+
+/* 고객유형(단골/신규)이 확정되기 전엔 스텝 수 자체가 정해지지 않으므로 탭바를 숨겨둠.
+   신규는 처방전·복약알림 개념 자체가 없는 별도 분기라, 탭도 4개가 아니라 3개로 줄임 */
+function updateTabBar(isNew){
+  document.getElementById('stepTabsBar').style.display = 'flex';
+  var tab1 = document.getElementById('tab1');
+  var tab2 = document.getElementById('tab2');
+  var tab3 = document.getElementById('tab3');
+  var tab4 = document.getElementById('tab4');
+  if(isNew){
+    tab1.innerHTML = '<span class="step-num">1</span>상담';
+    tab2.style.display = 'none';
+    tab3.innerHTML = '<span class="step-num">2</span>복약지도문';
+    tab4.innerHTML = '<span class="step-num">3</span>발송';
+  } else {
+    tab1.innerHTML = '<span class="step-num">1</span>고객·처방전';
+    tab2.style.display = '';
+    tab3.innerHTML = '<span class="step-num">3</span>복약지도문';
+    tab4.innerHTML = '<span class="step-num">4</span>발송';
+  }
+}
+
+/* ── Step 1: 고객 검색 → 처방전 확인 ── */
+function renderStep1(){
+  setTab(1);
+  var B = document.getElementById('mbody');
+  var F = document.getElementById('mfoot');
+
+  if(!selectedCustomer){
+    B.innerHTML =
+      '<div class="s1-search-wrap">' +
+        '<input class="s1-search" id="s1input" data-figma="search/default" type="text" placeholder="고객 이름을 검색해 주세요." oninput="onSearch(this.value)" autocomplete="off">' +
+      '</div>' +
+      '<div id="searchResults"></div>';
+    F.innerHTML = '';
+    return;
+  }
+
+  if(!selectedCustomer.regular){
+    B.innerHTML =
+      '<div class="consult-hint" style="border-top:none;margin-top:0;">' +
+        '<div class="consult-hint-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 003-3V6a3 3 0 10-6 0v6a3 3 0 003 3z" stroke="#8B95A1" stroke-width="1.8"/><path d="M19 11a7 7 0 01-14 0M12 18v3" stroke="#8B95A1" stroke-width="1.8" stroke-linecap="round"/></svg></div>' +
+        '<div class="consult-hint-title">상담 녹음이 진행 중입니다</div>' +
+        '<div class="consult-hint-sub">신규 고객은 처방 이력을 조회할 수 없어 처방전 확인·복약 알림 단계 없이 바로 상담으로 진행됩니다. 상담이 끝나면 ✦ 복약지도 요약하기 버튼을 눌러주세요.</div>' +
+      '</div>';
+    F.innerHTML = '<button class="btn-next" data-figma="button/solid" onclick="goStep2Local()">다음</button>';
+    return;
+  }
+
+  var rxChecked = selectedRxIds.indexOf('rx1') > -1;
+  B.innerHTML =
+    '<div class="rx-pick-label">이번 상담 관련 처방전 (우리 약국)</div>' +
+    '<!-- component: new/rx-pick-single -->' +
+    '<div class="rx-card' + (rxChecked?' selected':'') + '" id="rxCard" data-figma="new/rx-pick-single" onclick="toggleRx()">' +
+      '<div class="rx-card-radio"></div>' +
+      '<div class="rx-card-body"><div class="rx-card-top">웰케어내과의원<span class="rx-card-date">2026.07.10</span></div>' +
+      '<div class="rx-card-sub">암로디핀 외 1건</div></div>' +
+    '</div>' +
+    '<!-- component: button/outlined-secondary -->' +
+    '<button class="btn-no-rx" data-figma="button/outlined-secondary" type="button" onclick="noRx()">처방전 없이 상담</button>' +
+    '<div class="consult-hint">' +
+      '<div class="consult-hint-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 003-3V6a3 3 0 10-6 0v6a3 3 0 003 3z" stroke="#8B95A1" stroke-width="1.8"/><path d="M19 11a7 7 0 01-14 0M12 18v3" stroke="#8B95A1" stroke-width="1.8" stroke-linecap="round"/></svg></div>' +
+      '<div class="consult-hint-title">상담 녹음이 진행 중입니다</div>' +
+      '<div class="consult-hint-sub">고객 이름이 확인되어 녹음이 자동으로 시작되었습니다. 우측 패널에서 실시간으로 기록되며, 상담이 끝나면 ✦ 복약지도 요약하기 버튼을 눌러주세요.</div>' +
+    '</div>';
+
+  F.innerHTML = '<button class="btn-next" data-figma="button/solid" onclick="goStep2Local()">다음</button>';
+}
+
+function onSearch(q){
+  q = q.trim();
+  var box = document.getElementById('searchResults');
+  if(!q){ box.innerHTML=''; return; }
+  var matched = CUSTOMERS.filter(function(c){ return c.name.indexOf(q) > -1; });
+  if(matched.length){
+    box.innerHTML = matched.map(function(c, i){
+      return '<div class="s1-result-item" onclick="selectCustomer('+i+')">' +
+        '<div class="s1-result-avatar">'+c.name[0]+'</div>' +
+        '<div><div class="s1-result-name">'+c.name+' <span class="modal-pt-badge" style="margin-left:6px;">단골</span></div>' +
+        '<div class="s1-result-info">'+c.info+'</div></div></div>';
+    }).join('');
+  } else {
+    box.innerHTML = '<div class="s1-new-note">' +
+      '<div class="s1-new-note-msg">일치하는 단골 고객이 없습니다</div>' +
+      '<div class="s1-new-note-sub" onclick="registerNewCustomer(\''+q.replace(/'/g,"\\'")+'\')" style="cursor:pointer;color:var(--color-primary);">＋ "'+q+'"님으로 신규 고객 추가</div></div>';
+  }
+}
+
+function registerNewCustomer(name){
+  name = (name||'').trim();
+  var valid = name.length >= 2 && /^[가-힣a-zA-Z\s]+$/.test(name);
+  if(!valid){
+    document.getElementById('searchResults').innerHTML = '<div class="s1-new-note">' +
+      '<div class="s1-new-note-msg" style="color:var(--color-red);">이름은 2자 이상, 특수문자 없이 입력해 주세요.</div>' +
+      '<div class="s1-new-note-sub">검색창에 이름을 다시 입력해 주세요.</div></div>';
+    return;
+  }
+
+  selectedCustomer = { name: name, regular: false, info: '신규 등록', visit: '신규 등록' };
+  selectedRxIds = [];
+
+  document.getElementById('modalPt').innerHTML =
+    '<div class="modal-pt-avatar">'+name[0]+'</div>' +
+    '<div><span class="modal-pt-name">'+name+'</span>' +
+    '<!-- component: new/badge-customer-type --><span class="modal-pt-badge new" data-figma="new/badge-customer-type">신규</span>' +
+    '<span class="modal-pt-sub">신규 등록 · 처방 이력 없음</span></div>' +
+    '<!-- component: tag/risk-na --><span class="modal-pt-risk na" data-figma="tag/risk-na">위험도 —</span>';
+
+  document.getElementById('pzName').textContent = name;
+  var sub = document.createElement('span');
+  sub.className = 'pz-name-sub';
+  sub.textContent = '신규';
+  document.getElementById('pzName').appendChild(sub);
+  document.getElementById('pzVisit').textContent = '신규 등록';
+  document.getElementById('pzChat').textContent = '녹음이 시작되었습니다.';
+
+  updateTabBar(true);
+  startRecording();
+  renderStep1();
+}
+
+function selectCustomer(i){
+  var c = CUSTOMERS[i];
+  selectedCustomer = c;
+  selectedRxIds = ['rx1'];
+
+  document.getElementById('modalPt').innerHTML =
+    '<div class="modal-pt-avatar">'+c.name[0]+'</div>' +
+    '<div><span class="modal-pt-name">'+c.name+'</span>' +
+    '<!-- component: new/badge-customer-type --><span class="modal-pt-badge" data-figma="new/badge-customer-type">단골</span>' +
+    '<span class="modal-pt-sub">'+c.info+'</span></div>' +
+    '<!-- component: tag/risk-저 --><span class="modal-pt-risk" data-figma="tag/risk-저">위험도 '+c.risk+'</span>';
+
+  document.getElementById('pzName').textContent = c.name;
+  var sub = document.createElement('span');
+  sub.className = 'pz-name-sub';
+  sub.textContent = '단골';
+  document.getElementById('pzName').appendChild(sub);
+  document.getElementById('pzVisit').textContent = c.visit;
+  document.getElementById('pzChat').textContent = '녹음이 시작되었습니다.';
+
+  updateTabBar(false);
+  startRecording();
+  renderStep1();
+}
+
+function toggleRx(){
+  var checked = selectedRxIds.indexOf('rx1') > -1;
+  selectedRxIds = checked ? [] : ['rx1'];
+  document.getElementById('rxCard').classList.toggle('selected', !checked);
+}
+function noRx(){
+  selectedRxIds = [];
+  var card = document.getElementById('rxCard');
+  if(card) card.classList.remove('selected');
+}
+
+/* ── 녹음 (우측 퍼즐 AI 패널) ── */
+function startRecording(){
+  if(recordingStarted) return;
+  recordingStarted = true;
+  seconds = 0;
+  document.getElementById('sparkleBtn').disabled = false;
+  document.getElementById('recDot').classList.add('live');
+  document.getElementById('recLabel').textContent = '녹음 중';
+  timerId = setInterval(function(){
+    seconds++;
+    var m = String(Math.floor(seconds/60)).padStart(2,'0');
+    var s = String(seconds%60).padStart(2,'0');
+    document.getElementById('recTimer').textContent = m + ':' + s;
+  }, 1000);
+}
+
+function endRecording(){
+  clearInterval(timerId);
+  document.getElementById('recDot').classList.remove('live');
+  document.getElementById('recDot').classList.add('done');
+  document.getElementById('recLabel').textContent = '녹음 종료';
+  document.getElementById('sparkleBtn').disabled = true;
+  goStep3();
+}
+
+/* ── Step 2: 복약 알림 (reminder.js 실제 로직 그대로 사용) ── */
+function goStep2Local(){
+  if(!selectedRxIds.length){ goStep3(); return; }
+  initReminderSettings();
+  setTab(2);
+  renderReminderBody();
+}
+/* reminder.js의 renderReminderBody()가 만드는 footer 버튼이 호출하는 함수들 */
+function goBackToStep1(){ renderStep1(); }
+function goStep2Skip(){
+  selectedRxIds.forEach(function(id){ reminderSettings[id].enabled = false; });
+  goStep3();
+}
+function goStep3(){
+  setTab(3);
+  renderStep3Summary();
+}
+
+/* ── Step 3: 요약 ── */
+function toggleTranscript(){
+  var box = document.getElementById('transcriptBox');
+  var btn = document.getElementById('transcriptBtn');
+  var open = box.style.display !== 'none';
+  box.style.display = open ? 'none' : 'block';
+  btn.textContent = (open ? '▸' : '▾') + ' 원본 대화 내용 보기';
+}
+
+var AI_DRAFT = '혈압약 복용 시간을 확인했고, 특이 부작용은 없는 것으로 확인되었습니다. 앞으로도 아침 식후에 꾸준히 복용해 주세요.';
+var currentDraft = null;
+
+function renderStep3Summary(){
+  var m = String(Math.floor(seconds/60)).padStart(2,'0');
+  var s = String(seconds%60).padStart(2,'0');
+  document.getElementById('mbody').innerHTML =
+    '<div class="summary-header">' +
+      '<div class="summary-title">복약지도문 작성</div>' +
+      '<div class="summary-meta">녹음 종료 · 상담시간 '+m+':'+s+'</div>' +
+    '</div>' +
+
+    '<button class="transcript-toggle" id="transcriptBtn" type="button" onclick="toggleTranscript()">▸ 원본 대화 내용 보기</button>' +
+    '<div class="transcript-box" id="transcriptBox" style="display:none;">' +
+      '"오늘은 별다른 증상 없으신가요?"<br>' +
+      '"네, 혈압약은 아침마다 잘 챙겨 먹고 있어요."<br>' +
+      '"어지럼증이나 붓기 같은 건 없으셨고요?"<br>' +
+      '"네, 특별히 불편한 건 없었습니다."' +
+    '</div>' +
+
+    '<div class="draft-arrow"><span class="ai-tag">✦ AI 요약</span> → 아래 복약지도문 초안으로 자동 반영됨, 자유롭게 수정 가능</div>' +
+
+    '<!-- component: new/message-draft -->' +
+    '<div class="msg-hdr">' +
+      '<span class="msg-ttl">복약지도문</span>' +
+      '<button class="msg-reset" type="button" onclick="resetDraft()">' +
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 1 3 6.7" stroke="#666" stroke-width="2" stroke-linecap="round"/><path d="M3 8v5h5" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '초기화</button>' +
+    '</div>' +
+    '<textarea class="msg-textarea" id="draftText" data-figma="new/message-draft">' + (currentDraft !== null ? currentDraft : AI_DRAFT) + '</textarea>' +
+    '<div class="msg-tags">' +
+      '<button class="msg-tag" type="button" onclick="appendTag(\'복용을 잊으셨다면 생각난 즉시 복용해 주세요.\')">복용 누락 시 안내</button>' +
+      '<button class="msg-tag" type="button" onclick="appendTag(\'다음 방문 시 혈압 수치를 함께 확인해 드릴게요.\')">재방문 안내</button>' +
+    '</div>';
+  document.getElementById('mfoot').innerHTML =
+    '<button class="btn-cancel is-back" onclick="renderStep2Back()">이전</button>' +
+    '<button class="btn-next" data-figma="button/solid" onclick="goStep4()">다음</button>';
+}
+function resetDraft(){ document.getElementById('draftText').value = AI_DRAFT; }
+function appendTag(text){
+  var ta = document.getElementById('draftText');
+  ta.value = ta.value.replace(/\s+$/,'') + '\n' + text;
+}
+function saveDraft(){
+  var ta = document.getElementById('draftText');
+  if(ta) currentDraft = ta.value;
+}
+function renderStep2Back(){
+  if(!selectedRxIds.length){ renderStep1(); return; }
+  setTab(2);
+  renderReminderBody();
+}
+
+/* ── Step 4: 발송 ── */
+function goStep4(){
+  saveDraft();
+  setTab(4);
+  if(selectedCustomer.regular){ renderStep4Regular(); }
+  else { renderStep4New(); }
+}
+
+function renderStep4Regular(){
+  document.getElementById('mbody').innerHTML =
+    '<div class="send-summary-label">전송 요약</div>' +
+    '<table class="sum-tbl">' +
+      '<tr><td class="lbl">고객</td><td class="val">'+selectedCustomer.name+' (단골)</td></tr>' +
+      '<tr><td class="lbl">발송 채널</td><td class="val">웰체크 메시지</td></tr>' +
+      '<tr><td class="lbl">복약지도문</td><td class="val" style="white-space:pre-wrap;">'+currentDraft.replace(/</g,'&lt;')+'</td></tr>' +
+    '</table>' +
+    '<div class="send-success" id="sendSuccess"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="#33AF2E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>웰체크 메시지로 발송 완료되었습니다.</div>';
+  document.getElementById('mfoot').innerHTML =
+    '<button class="btn-cancel is-back" onclick="renderStep3Summary();setTab(3);">이전</button>' +
+    '<button class="btn-next send" id="btnSend" data-figma="button/solid" onclick="doSend(\'웰체크 메시지로 발송 완료되었습니다.\')">' +
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>웰체크 메시지로 보내기</button>';
+}
+
+function renderStep4New(){
+  document.getElementById('mbody').innerHTML =
+    '<div class="send-summary-label">전송 요약</div>' +
+    '<table class="sum-tbl">' +
+      '<tr><td class="lbl">고객</td><td class="val">'+selectedCustomer.name+' (신규)</td></tr>' +
+      '<tr><td class="lbl">발송 채널</td><td class="val">문자(SMS) + 웰체크 초대링크</td></tr>' +
+      '<tr><td class="lbl">복약지도문</td><td class="val" style="white-space:pre-wrap;">'+currentDraft.replace(/</g,'&lt;')+'</td></tr>' +
+    '</table>' +
+    '<div class="field-grid">' +
+      '<div class="field"><label>휴대폰 번호 <span class="req">(필수)</span></label>' +
+        '<input id="newPhone" type="text" value="'+savedPhone+'" placeholder="010-0000-0000" maxlength="13" oninput="formatPhoneInput(this);checkNewSendEnabled();"></div>' +
+      '<div class="field"><label>생년월일 <span class="opt">(선택)</span></label>' +
+        '<input id="newBirth" type="text" value="'+savedBirth+'" placeholder="0000-00-00" maxlength="10" oninput="formatBirthInput(this);">' +
+        '<span class="age-hint" id="ageHint"></span></div>' +
+    '</div>' +
+    '<div class="consent-row">' +
+      '<input type="checkbox" id="newConsent" '+(savedConsent?'checked':'')+' onchange="saveConsent();checkNewSendEnabled();">' +
+      '<label for="newConsent">개인정보(휴대폰 번호, 생년월일) 수집 및 이용에 동의합니다.</label>' +
+    '</div>' +
+    '<div class="ad-note">(광고) 문자 발송 시 발신자 표시 및 "무료수신거부 080-870-0486" 문구가 자동으로 포함됩니다.</div>' +
+    '<div class="send-success" id="sendSuccess"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="#33AF2E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>문자로 발송 완료되었습니다.</div>';
+  document.getElementById('mfoot').innerHTML =
+    '<button class="btn-cancel is-back" onclick="renderStep3Summary();setTab(3);">이전</button>' +
+    '<button class="btn-next send" id="btnSend" data-figma="button/solid" disabled onclick="doSend(\'문자로 발송 완료되었습니다.\')">' +
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>복약지도문 + 초대링크 보내기</button>';
+  var birthDigits = savedBirth.replace(/\D/g,'');
+  if(birthDigits.length === 8){
+    document.getElementById('ageHint').textContent = '만 ' + (2026 - parseInt(birthDigits.slice(0,4),10)) + '세';
+  }
+  checkNewSendEnabled();
+}
+
+var savedPhone = '';
+var savedBirth = '';
+var savedConsent = false;
+
+function formatPhoneInput(el){
+  var d = el.value.replace(/\D/g,'').slice(0,11);
+  var out = d;
+  if(d.length > 3 && d.length <= 7) out = d.slice(0,3) + '-' + d.slice(3);
+  else if(d.length > 7) out = d.slice(0,3) + '-' + d.slice(3,7) + '-' + d.slice(7);
+  el.value = out;
+  savedPhone = out;
+}
+function formatBirthInput(el){
+  var d = el.value.replace(/\D/g,'').slice(0,8);
+  var out = d;
+  if(d.length > 4 && d.length <= 6) out = d.slice(0,4) + '-' + d.slice(4);
+  else if(d.length > 6) out = d.slice(0,4) + '-' + d.slice(4,6) + '-' + d.slice(6);
+  el.value = out;
+  savedBirth = out;
+  var hint = document.getElementById('ageHint');
+  if(d.length === 8){
+    var age = 2026 - parseInt(d.slice(0,4), 10);
+    hint.textContent = '만 ' + age + '세';
+  } else {
+    hint.textContent = '';
+  }
+}
+function saveConsent(){ savedConsent = document.getElementById('newConsent').checked; }
+function checkNewSendEnabled(){
+  var phone = document.getElementById('newPhone').value.replace(/\D/g,'');
+  var consent = document.getElementById('newConsent').checked;
+  document.getElementById('btnSend').disabled = !(phone.length === 11 && consent);
+}
+
+function doSend(msg){
+  document.getElementById('btnSend').disabled = true;
+  document.getElementById('sendSuccess').textContent = '';
+  document.getElementById('sendSuccess').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="#33AF2E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' + msg;
+  document.getElementById('sendSuccess').classList.add('on');
+}
+
+renderStep1();
+</script>
+
+</body>
+</html>

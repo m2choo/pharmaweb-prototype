@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>CL note 복약 상담 — 시나리오 B (전방 연결: 환자 먼저, 녹음 나중에)</title>
+<style>
+:root{
+  --color-primary:#3E71F0;
+  --color-white:#FFFFFF;
+  --color-grey-900:#212529;
+  --color-grey-800:#333D48;
+  --color-grey-700:#252525;
+  --color-grey-600:#666666;
+  --color-grey-550:#7888AC;
+  --color-grey-500:#8B95A1;
+  --color-grey-400:#A9ADB9;
+  --color-grey-300:#D9D9D9;
+  --color-grey-250:#D1D7E0;
+  --color-grey-200:#EBEBEB;
+  --color-grey-150:#EEF0F3;
+  --color-grey-100:#F6F6F6;
+  --color-blue-200:#E3EBFF;
+  --color-blue-100:#ECF1FF;
+  --color-red:#EE4951;
+  --color-success:#33AF2E;
+  --color-warning:#FF8A00;
+}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@350;400;500;700&family=Poppins:wght@400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-grey-100);min-height:100vh;}
+
+.proto-banner{max-width:1000px;margin:20px auto 0;padding:14px 18px;border:1.5px dashed #F5AC1F;border-radius:8px;background:#FFFAE9;color:#8A6D1F;font-size:13px;font-weight:600;line-height:1.7;}
+.proto-banner b{color:#1a56db;}
+.page-placeholder{max-width:1000px;margin:20px auto;padding:60px 24px;text-align:center;color:var(--color-grey-500);font-size:14px;background:var(--color-white);border-radius:12px;border:1px dashed var(--color-grey-250);}
+
+.ai-fab{position:fixed;bottom:32px;right:32px;background:var(--color-primary);border:none;border-radius:44px;padding:14px 24px 14px 16px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(62,113,240,.35);cursor:pointer;transition:transform .15s,box-shadow .15s;z-index:50;font-family:inherit;}
+.ai-fab:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(62,113,240,.5);}
+.ai-fab-icon{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ai-fab-text{font-size:15px;font-weight:700;color:var(--color-white);letter-spacing:-0.6px;}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(33,37,41,.45);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.on{display:flex;}
+.overlay-wrap{display:flex;gap:14px;align-items:flex-start;}
+
+/* component: popup */
+.modal-panel{width:480px;background:var(--color-white);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.22);display:flex;flex-direction:column;min-height:420px;max-height:90vh;flex-shrink:0;}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 24px 15px;border-bottom:1px solid var(--color-grey-300);flex-shrink:0;}
+.modal-title{font-size:24px;font-weight:350;letter-spacing:-0.96px;color:var(--color-grey-900);}
+.modal-x{width:30px;height:30px;background:none;border:none;cursor:pointer;color:var(--color-grey-500);font-size:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+.modal-x:hover{background:var(--color-grey-150);}
+
+.modal-pt{display:flex;align-items:center;gap:12px;padding:16px 24px 10px;flex-shrink:0;min-height:24px;}
+.modal-pt-placeholder{font-size:14px;color:var(--color-grey-500);}
+.modal-pt-avatar{width:40px;height:40px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-500);font-size:18px;font-weight:500;letter-spacing:-0.72px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.modal-pt-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);}
+.modal-pt-sub{font-size:13px;font-weight:500;letter-spacing:-0.26px;color:var(--color-grey-600);display:block;margin-top:2px;}
+
+.modal-body{display:flex;flex-direction:column;padding:24px;overflow-y:auto;flex:1;min-height:0;}
+.modal-ft{padding:15px 24px 20px;display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;}
+
+.btn-next{height:40px;padding:0 28px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
+.btn-next:disabled{opacity:.4;cursor:not-allowed;}
+.btn-next.send{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-weight:700;}
+.btn-back{height:40px;padding:0 20px;background:var(--color-white);border:1px solid var(--color-grey-300);border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-800);cursor:pointer;font-family:inherit;}
+
+/* Step1 — 환자 검색(전방 연결의 핵심: 녹음 전에 확정) */
+.field-col{display:flex;flex-direction:column;gap:14px;flex:1;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:13px;font-weight:500;color:var(--color-grey-600);}
+.field label .req{color:var(--color-red);}
+.field input{height:40px;border:1px solid var(--color-grey-300);border-radius:5px;padding:0 12px;font-size:15px;font-family:inherit;outline:none;color:var(--color-grey-800);}
+.field input:focus{border-color:var(--color-primary);}
+.s1-results{display:flex;flex-direction:column;gap:8px;}
+.s1-result-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--color-grey-250);border-radius:8px;cursor:pointer;transition:background .1s,border-color .1s;}
+.s1-result-item:hover{background:var(--color-blue-100);border-color:var(--color-primary);}
+.s1-result-avatar{width:36px;height:36px;border-radius:50%;background:var(--color-grey-150);color:var(--color-grey-500);font-size:15px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s1-result-name{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-grey-700);}
+.s1-result-phone{font-size:12px;font-weight:400;color:var(--color-grey-600);margin-top:2px;font-family:'Poppins','Noto Sans KR',sans-serif;}
+.s1-divider{display:flex;align-items:center;gap:10px;color:var(--color-grey-400);font-size:12px;}
+.s1-divider::before,.s1-divider::after{content:"";flex:1;height:1px;background:var(--color-grey-200);}
+.s1-new-btn{height:44px;border:1.5px dashed var(--color-grey-250);border-radius:8px;background:var(--color-grey-100);color:var(--color-grey-600);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;}
+.s1-new-btn:hover{background:var(--color-blue-100);border-color:var(--color-primary);color:var(--color-primary);}
+.s1-confirm{display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;flex:1;text-align:center;padding:10px;}
+
+/* 대기/진행 문구 화면 */
+.wait-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;flex:1;text-align:center;padding:20px;}
+.wait-icon{width:56px;height:56px;border-radius:50%;background:var(--color-blue-100);display:flex;align-items:center;justify-content:center;}
+.wait-title{font-size:16px;font-weight:600;color:var(--color-grey-800);}
+.wait-sub{font-size:13px;color:var(--color-grey-500);max-width:320px;line-height:1.7;}
+
+/* 요약 */
+.summary-title{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);margin-bottom:4px;}
+.summary-meta{font-size:12.5px;color:var(--color-grey-500);margin-bottom:14px;font-family:'Poppins','Noto Sans KR',sans-serif;}
+.ai-caption{font-size:12.5px;color:var(--color-grey-500);margin-bottom:8px;}
+.msg-textarea{width:100%;min-height:150px;border:1px solid var(--color-primary);border-radius:8px;padding:14px;font-size:15px;font-family:inherit;color:var(--color-grey-700);line-height:1.7;resize:vertical;outline:none;}
+
+/* 전송 */
+.send-summary-label{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);margin-bottom:12px;}
+.sum-tbl{width:100%;border-collapse:collapse;margin-bottom:20px;}
+.sum-tbl td{height:52px;padding:0 16px;font-size:15px;border-bottom:1px solid var(--color-grey-250);border-left:1px solid var(--color-grey-250);}
+.sum-tbl td.lbl{background:var(--color-grey-100);text-align:center;width:100px;color:var(--color-grey-600);border-left:none;}
+.sum-tbl td.val{color:#252525;}
+.phone-input-big{height:52px;border:1.5px solid var(--color-grey-300);border-radius:8px;padding:0 16px;font-size:20px;font-family:'Poppins','Noto Sans KR',sans-serif;font-weight:500;letter-spacing:1px;outline:none;color:var(--color-grey-800);}
+.phone-input-big:focus{border-color:var(--color-primary);}
+.send-success{display:none;align-items:center;gap:10px;padding:14px 16px;background:#EEFAF0;border:1px solid #CFF4CE;border-radius:8px;color:var(--color-success);font-size:14px;font-weight:600;margin-top:16px;}
+.send-success.on{display:flex;}
+.on-file-note{font-size:12.5px;color:var(--color-grey-500);margin-top:6px;}
+
+/* ── 퍼즐 AI 패널 (우측) ── */
+.puzzle-panel{width:320px;flex-shrink:0;background:var(--color-white);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.22);display:flex;flex-direction:column;height:420px;overflow:hidden;border:1px solid var(--color-grey-200);}
+.pz-header{padding:16px 16px 10px;border-bottom:1px solid var(--color-grey-150);flex-shrink:0;}
+.pz-name{font-size:20px;font-weight:350;letter-spacing:-0.8px;color:var(--color-grey-900);}
+.pz-sub{font-size:13px;color:var(--color-grey-500);margin-top:4px;}
+.pz-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;}
+.pz-idle{color:var(--color-grey-500);font-size:13px;text-align:center;line-height:1.7;max-width:220px;}
+.rec-circle{width:76px;height:76px;border-radius:50%;background:var(--color-grey-150);display:flex;align-items:center;justify-content:center;}
+.rec-circle.live{background:rgba(238,73,81,.08);}
+.rec-circle.done{background:var(--color-grey-150);}
+.rec-dot-live{width:9px;height:9px;border-radius:50%;background:var(--color-red);position:absolute;animation:blink 1.1s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.rec-timer{font-family:'Poppins','Noto Sans KR',sans-serif;font-size:24px;font-weight:600;color:var(--color-grey-800);font-variant-numeric:tabular-nums;}
+.rec-label{font-size:13px;font-weight:500;color:var(--color-grey-600);}
+.pz-footer{padding:14px 16px 18px;flex-shrink:0;}
+.btn-stop{width:100%;height:40px;padding:0 20px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:700;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:7px;}
+.btn-stop:disabled{opacity:.4;cursor:not-allowed;}
+
+@media (max-width: 900px){
+  .overlay-wrap{flex-direction:column;align-items:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="proto-banner">
+  <b>Scenario B — 전방 연결(환자 먼저, 녹음 나중에)</b><br>
+  상황: 40대 직장인 김씨, 처음 처방 받고 조제 완료 후 약국 방문. 웰체크 앱 없음.<br>
+  플로팅 버튼을 누르면 <b>먼저 환자 검색/신규 시작을 확정</b>하고, "녹음 시작" 버튼을 눌러야 녹음이 시작됩니다. 기존 환자는 보유 연락처로 재입력 없이 바로 전송됩니다.<br>
+  👍 미연결 기록 없음, 요약 화면 조작 최소화 &nbsp;|&nbsp; 👎 녹음 전 검색 단계로 진입 마찰 증가, 신규 환자는 연락처를 두 번(신규 시작 → 전송 화면) 다루게 됨
+</div>
+<div class="page-placeholder">호스트 화면(고객 상세 등)을 흉내낸 자리입니다. 조제 완료 후 플로팅 버튼을 눌러보세요.</div>
+
+<button class="ai-fab" onclick="openModal()">
+  <span class="ai-fab-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 003-3V6a3 3 0 10-6 0v6a3 3 0 003 3z" stroke="#FFFFFF" stroke-width="2"/><path d="M19 11a7 7 0 01-14 0M12 18v3" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg></span>
+  <span class="ai-fab-text">AI 상담 시작</span>
+</button>
+
+<div class="modal-overlay" id="overlay" onclick="if(event.target===this) closeModal();">
+  <div class="overlay-wrap">
+    <div class="modal-panel" data-figma="popup">
+      <div class="modal-hd">
+        <span class="modal-title">CL note 복약 상담</span>
+        <button class="modal-x" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-pt" id="modalPt"><span class="modal-pt-placeholder">환자를 먼저 확인해 주세요</span></div>
+      <div class="modal-body" id="mbody"></div>
+      <div class="modal-ft" id="mfoot"></div>
+    </div>
+
+    <div class="puzzle-panel">
+      <div class="pz-header">
+        <div class="pz-name">Puzzle AI</div>
+        <div class="pz-sub" id="pzSub">환자 확인 후 녹음이 시작됩니다</div>
+      </div>
+      <div class="pz-body" id="pzBody">
+        <div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 환자를 먼저 확인해 주세요.</div>
+      </div>
+      <div class="pz-footer" id="pzFooter"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var PATIENTS = [
+  {name:'김미영', phone:'010-2233-4455'},
+  {name:'홍재원', phone:'010-7788-9900'}
+];
+var AI_DRAFT = '오늘 처방받으신 약은 감기약으로 하루 3번, 아침·점심·저녁 식사 후 바로 드시면 됩니다. 먹으면 졸릴 수 있어 운전은 삼가주세요. 목 아프실 때는 용각산을 수시로 드셔도 됩니다.';
+
+var selectedPatient = null;
+var seconds = 0;
+var timerId = null;
+var currentDraft = null;
+
+function openModal(){
+  document.getElementById('overlay').classList.add('on');
+  resetFlow();
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('on');
+  clearInterval(timerId);
+}
+function resetFlow(){
+  selectedPatient = null;
+  seconds = 0;
+  currentDraft = null;
+  clearInterval(timerId);
+  document.getElementById('modalPt').innerHTML = '<span class="modal-pt-placeholder">환자를 먼저 확인해 주세요</span>';
+  document.getElementById('pzSub').textContent = '환자 확인 후 녹음이 시작됩니다';
+  document.getElementById('pzBody').innerHTML = '<div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 환자를 먼저 확인해 주세요.</div>';
+  document.getElementById('pzFooter').innerHTML = '';
+  renderSearch();
+}
+
+/* ── Step 1: 환자 검색(녹음 전 확정) ── */
+function renderSearch(){
+  var B = document.getElementById('mbody');
+  var F = document.getElementById('mfoot');
+  B.innerHTML =
+    '<div class="field-col">' +
+      '<div class="field">' +
+        '<label>환자 이름 또는 전화번호</label>' +
+        '<input id="s1input" type="text" placeholder="이름 또는 전화번호로 검색" oninput="onSearch(this.value)" autocomplete="off">' +
+      '</div>' +
+      '<div id="searchResults"></div>' +
+      '<div class="s1-divider">또는</div>' +
+      '<button class="s1-new-btn" onclick="startAsNew()">＋ 신규로 시작</button>' +
+    '</div>';
+  F.innerHTML = '';
+}
+function onSearch(q){
+  q = q.trim();
+  var box = document.getElementById('searchResults');
+  if(!q){ box.innerHTML=''; return; }
+  var matched = PATIENTS.filter(function(p){ return p.name.indexOf(q) > -1 || p.phone.replace(/-/g,'').indexOf(q.replace(/-/g,'')) > -1; });
+  box.innerHTML = matched.length
+    ? '<div class="s1-results">' + matched.map(function(p,i){
+        return '<div class="s1-result-item" onclick="confirmPatient('+i+')">' +
+          '<div class="s1-result-avatar">'+p.name[0]+'</div>' +
+          '<div><div class="s1-result-name">'+p.name+'</div><div class="s1-result-phone">'+p.phone+'</div></div>' +
+        '</div>';
+      }).join('') + '</div>'
+    : '<div style="font-size:13px;color:var(--color-grey-500);">일치하는 환자가 없습니다. 신규로 시작해 주세요.</div>';
+}
+function confirmPatient(i){
+  selectedPatient = Object.assign({}, PATIENTS[i], {isNew:false});
+  renderConfirm();
+}
+function startAsNew(){
+  selectedPatient = {name:null, phone:null, isNew:true};
+  renderConfirm();
+}
+function renderConfirm(){
+  var B = document.getElementById('mbody');
+  var F = document.getElementById('mfoot');
+  var label = selectedPatient.isNew ? '신규 환자로 진행합니다' : (selectedPatient.name + '님 확인되었습니다');
+  var sub = selectedPatient.isNew ? '이름 없이 진행되며, 연락처는 전송 화면에서 받습니다.' : selectedPatient.phone + ' · 상담 종료 후 이 번호로 바로 전송됩니다.';
+  B.innerHTML =
+    '<div class="s1-confirm">' +
+      '<div class="wait-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="#3E71F0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+      '<div class="wait-title">'+label+'</div>' +
+      '<div class="wait-sub">'+sub+'</div>' +
+    '</div>';
+  F.innerHTML =
+    '<button class="btn-back" onclick="renderSearch()">다시 검색</button>' +
+    '<button class="btn-next" onclick="beginRecording()">녹음 시작</button>';
+}
+
+/* ── Step 2: 녹음 시작(명시적 버튼) ── */
+function beginRecording(){
+  if(selectedPatient.name){
+    document.getElementById('modalPt').innerHTML =
+      '<div class="modal-pt-avatar">'+selectedPatient.name[0]+'</div>' +
+      '<div><span class="modal-pt-name">'+selectedPatient.name+'</span>' +
+      '<span class="modal-pt-sub">상담 진행 중</span></div>';
+  } else {
+    document.getElementById('modalPt').innerHTML = '<span class="modal-pt-placeholder">신규 환자 · 상담 진행 중</span>';
+  }
+  document.getElementById('mbody').innerHTML =
+    '<div class="wait-stage">' +
+      '<div class="wait-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 003-3V6a3 3 0 10-6 0v6a3 3 0 003 3z" stroke="#3E71F0" stroke-width="1.8"/><path d="M19 11a7 7 0 01-14 0M12 18v3" stroke="#3E71F0" stroke-width="1.8" stroke-linecap="round"/></svg></div>' +
+      '<div class="wait-title">상담이 진행 중입니다</div>' +
+      '<div class="wait-sub">환자가 확정된 상태로 녹음이 시작되었습니다. 우측 패널에서 녹음 상태를 확인하고, 끝나면 "상담 종료" 버튼을 눌러 요약을 생성해 주세요.</div>' +
+    '</div>';
+  document.getElementById('mfoot').innerHTML = '';
+
+  document.getElementById('pzSub').textContent = '녹음이 시작되었습니다';
+  document.getElementById('pzBody').innerHTML =
+    '<div class="rec-circle live" id="recCircle"><span class="rec-dot-live"></span></div>' +
+    '<div class="rec-timer" id="recTimer">00:00</div>' +
+    '<div class="rec-label" id="recLabel">녹음 중</div>';
+  document.getElementById('pzFooter').innerHTML =
+    '<button class="btn-stop" id="btnStop" onclick="endRecording()">' +
+      '<svg width="13" height="13" viewBox="0 0 24 24" fill="#FFFFFF"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>' +
+      '상담 종료</button>';
+  seconds = 0;
+  clearInterval(timerId);
+  timerId = setInterval(function(){
+    seconds++;
+    var m = String(Math.floor(seconds/60)).padStart(2,'0');
+    var s = String(seconds%60).padStart(2,'0');
+    document.getElementById('recTimer').textContent = m + ':' + s;
+  }, 1000);
+}
+
+function endRecording(){
+  clearInterval(timerId);
+  document.getElementById('btnStop').disabled = true;
+  document.getElementById('recCircle').classList.remove('live');
+  document.getElementById('recCircle').classList.add('done');
+  document.getElementById('recLabel').textContent = '녹음 종료';
+  document.getElementById('pzSub').textContent = '상담 내용을 요약했습니다';
+  goSummary();
+}
+function goSummary(){
+  var m = String(Math.floor(seconds/60)).padStart(2,'0');
+  var s = String(seconds%60).padStart(2,'0');
+  document.getElementById('mbody').innerHTML =
+    '<div class="summary-title">복약지도문 작성</div>' +
+    '<div class="summary-meta">녹음 종료 · 상담시간 '+m+':'+s+'</div>' +
+    '<div class="ai-caption">AI가 요약한 초안입니다 — 자유롭게 수정하세요.</div>' +
+    '<textarea class="msg-textarea" id="draftText">' + (currentDraft !== null ? currentDraft : AI_DRAFT) + '</textarea>';
+  document.getElementById('mfoot').innerHTML =
+    '<button class="btn-next" onclick="goSend()">다음</button>';
+}
+
+/* ── Step 4: 전송 — 기존 환자는 보유 연락처로 바로, 신규는 여기서 처음 입력 ── */
+function goSend(){
+  currentDraft = document.getElementById('draftText').value;
+  var isKnown = selectedPatient.phone && !selectedPatient.isNew;
+  var nameVal = selectedPatient.name || '미입력(신규)';
+  var body =
+    '<div class="send-summary-label">전송 요약</div>' +
+    '<table class="sum-tbl">' +
+      '<tr><td class="lbl">환자</td><td class="val">'+nameVal+'</td></tr>' +
+      '<tr><td class="lbl">발송 채널</td><td class="val">문자(SMS)</td></tr>' +
+      '<tr><td class="lbl">복약지도문</td><td class="val" style="white-space:pre-wrap;">'+currentDraft.replace(/</g,'&lt;')+'</td></tr>' +
+    '</table>';
+  if(isKnown){
+    body += '<div class="field"><label>연락처</label>' +
+      '<div class="phone-input-big" style="background:var(--color-grey-100);display:flex;align-items:center;">'+selectedPatient.phone+'</div>' +
+      '<div class="on-file-note">보유 연락처로 바로 전송됩니다 — 다시 입력할 필요 없음.</div></div>';
+  } else {
+    body += '<div class="field"><label>연락처 <span class="req">(필수)</span></label>' +
+      '<input id="sendPhone" class="phone-input-big" type="tel" inputmode="numeric" placeholder="010-0000-0000" maxlength="13" oninput="formatPhoneInput(this);checkSendEnabled();">' +
+      '<div class="on-file-note">신규 환자라 연락처를 여기서 처음 입력합니다.</div></div>';
+  }
+  body += '<div class="send-success" id="sendSuccess"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="#33AF2E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>문자로 발송 완료되었습니다.</div>';
+  document.getElementById('mbody').innerHTML = body;
+  document.getElementById('mfoot').innerHTML =
+    '<button class="btn-back" onclick="goSummary()">이전</button>' +
+    '<button class="btn-next send" id="btnSend" '+(isKnown?'':'disabled')+' onclick="doSend()">' +
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>문자로 보내기</button>';
+  if(!isKnown) document.getElementById('sendPhone').focus();
+}
+function formatPhoneInput(el){
+  var d = el.value.replace(/\D/g,'').slice(0,11);
+  var out = d;
+  if(d.length > 3 && d.length <= 7) out = d.slice(0,3) + '-' + d.slice(3);
+  else if(d.length > 7) out = d.slice(0,3) + '-' + d.slice(3,7) + '-' + d.slice(7);
+  el.value = out;
+}
+function checkSendEnabled(){
+  var phone = document.getElementById('sendPhone').value.replace(/\D/g,'');
+  document.getElementById('btnSend').disabled = phone.length !== 11;
+}
+function doSend(){
+  document.getElementById('sendSuccess').classList.add('on');
+  document.getElementById('mfoot').innerHTML = '<button class="btn-next" onclick="closeModal()">완료</button>';
+}
+</script>
+
+</body>
+</html>

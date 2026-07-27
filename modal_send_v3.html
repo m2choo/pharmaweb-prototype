@@ -131,10 +131,10 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .rx-empty-title{font-size:16px;font-weight:500;color:var(--color-grey-800);}
 .rx-empty-sub{font-size:13.5px;color:var(--color-grey-500);line-height:1.6;}
 /* 신규 고객 녹음 중 — 왼쪽 본문에 참고할 이력이 없어 비어 보이지 않도록 하는 안내 */
-.rec-mbody-idle{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:40px 20px;}
-.rec-mbody-idle-icon{font-size:32px;}
-.rec-mbody-idle-title{font-size:16px;font-weight:500;color:var(--color-grey-800);}
-.rec-mbody-idle-sub{font-size:13.5px;color:var(--color-grey-500);line-height:1.6;max-width:340px;}
+/* 신규 고객 녹음 화면 — 왼쪽 본문에 웨이브/타이머를 그대로 두는 원래 레이아웃 */
+.wait-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:40px 20px;}
+.wait-title{font-size:18px;font-weight:600;color:var(--color-grey-800);}
+.rec-timer{font-family:'Poppins','Noto Sans KR',sans-serif;font-size:24px;font-weight:600;color:var(--color-grey-800);font-variant-numeric:tabular-nums;}
 /* component: new/rx-history-panel — 행별 펼치기/처방전 원본 보기 */
 .rx-history-panel{padding:14px 0;margin-bottom:14px;}
 .rx-history-list{display:flex;flex-direction:column;gap:8px;}
@@ -1261,11 +1261,12 @@ function saveAddRow(rxId){
 function renderMainRecordingContent(){
   document.getElementById('mfoot').innerHTML = '';
   if(selectedPatient.isNew){
+    /* 신규는 참고할 처방 이력이 없으므로 원래대로 왼쪽 본문에 녹음 표시(웨이브+타이머)를 그대로 둠 */
     document.getElementById('mbody').innerHTML =
-      '<div class="rec-mbody-idle">' +
-        '<div class="rec-mbody-idle-icon">🎙️</div>' +
-        '<div class="rec-mbody-idle-title">녹음이 진행 중입니다</div>' +
-        '<div class="rec-mbody-idle-sub">참고할 처방 이력이 없는 신규 고객입니다. 위쪽 이름 옆 검색으로 단골 고객을 찾을 수 있습니다.</div>' +
+      '<div class="wait-stage">' +
+        '<div class="wait-title">상담이 진행 중입니다</div>' +
+        '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
+        '<div class="rec-timer" id="recTimer">00:00</div>' +
       '</div>';
     return;
   }
@@ -1308,16 +1309,22 @@ function beginRecording(){
   applyRecordingStepLabels();
   renderMainRecordingContent();
 
-  document.getElementById('pzSub').textContent = '상담이 진행 중입니다 00:00';
   document.getElementById('pzName').textContent = selectedPatient.name || '신규 고객';
   var pzBody = document.getElementById('pzBody');
   pzBody.style.alignItems = 'stretch';
   pzBody.style.justifyContent = 'flex-start';
-  pzBody.innerHTML =
-    '<div class="pz-rec-indicator">' +
-      '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
-    '</div>' +
-    '<div class="pz-stt-box" id="sttBox"></div>';
+  if(selectedPatient.isNew){
+    /* 신규는 웨이브/타이머가 왼쪽 본문에 있으므로 패널엔 STT만 */
+    document.getElementById('pzSub').textContent = '녹음이 시작되었습니다';
+    pzBody.innerHTML = '<div class="pz-stt-box" id="sttBox"></div>';
+  } else {
+    document.getElementById('pzSub').textContent = '상담이 진행 중입니다 00:00';
+    pzBody.innerHTML =
+      '<div class="pz-rec-indicator">' +
+        '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
+      '</div>' +
+      '<div class="pz-stt-box" id="sttBox"></div>';
+  }
   startStt();
   document.getElementById('pzFooter').innerHTML =
     '<div class="rec-hint">👉 상담이 끝나면 아래 <b>"상담 종료"</b> 버튼을 눌러 주세요. AI가 복약 상담 내용을 생성합니다.</div>' +
@@ -1330,7 +1337,12 @@ function beginRecording(){
     seconds++;
     var m = String(Math.floor(seconds/60)).padStart(2,'0');
     var s = String(seconds%60).padStart(2,'0');
-    document.getElementById('pzSub').textContent = '상담이 진행 중입니다 ' + m + ':' + s;
+    if(selectedPatient.isNew){
+      var recTimerEl = document.getElementById('recTimer');
+      if(recTimerEl) recTimerEl.textContent = m + ':' + s;
+    } else {
+      document.getElementById('pzSub').textContent = '상담이 진행 중입니다 ' + m + ':' + s;
+    }
   }, 1000);
 }
 function updateMemoCount(){

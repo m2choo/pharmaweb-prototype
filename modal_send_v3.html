@@ -111,13 +111,9 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .rx-empty-icon{font-size:36px;}
 .rx-empty-title{font-size:16px;font-weight:500;color:var(--color-grey-800);}
 .rx-empty-sub{font-size:13.5px;color:var(--color-grey-500);line-height:1.6;}
-/* component: new/rx-history-panel — 월 단위 날짜 내비게이션 + 행별 펼치기/처방전 원본 보기 */
+/* component: new/rx-history-panel — 행별 펼치기/처방전 원본 보기 */
 .rx-history-panel{padding:14px 0;margin-bottom:14px;}
-.rx-month-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:12px;}
-.rx-month-arrow{width:28px;height:28px;border:1px solid var(--color-grey-250);background:var(--color-white);border-radius:50%;color:var(--color-grey-600);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
-.rx-month-arrow:hover{border-color:var(--color-primary);color:var(--color-primary);}
-.rx-month-label{font-size:15px;font-weight:500;color:var(--color-grey-900);min-width:96px;text-align:center;}
-.rx-month-list{display:flex;flex-direction:column;gap:8px;}
+.rx-history-list{display:flex;flex-direction:column;gap:8px;}
 .rx-history-item{border:1px solid var(--color-grey-250);border-radius:8px;padding:10px 12px;}
 .rx-history-item.active{border-color:var(--color-primary);}
 .rx-history-row{display:flex;align-items:center;gap:10px;}
@@ -393,6 +389,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
   <select onchange="applyQaState(this.value)">
     <option value="normal">정상</option>
     <option value="rx-empty">처방전 없음 케이스 검색(이수진)</option>
+    <option value="rx-same-day">동일 날짜 2건 케이스 검색(최이중)</option>
   </select>
 </div>
 
@@ -475,6 +472,15 @@ var PATIENTS = [
     {id:'pjh6', hospital:'다정이비인후과', date:'2026-02-14', guidanceSent:true, drugs:[
       {name:'뮤코펙트시럽', dosage:'10ml', freq:'1일 3회', days:5, sub:false},
       {name:'아세트아미노펜', dosage:'1정', freq:'1일 3회', days:5, sub:false}
+    ]}
+  ]},
+  {name:'최이중', phone:'010-5555-6666', birth:'1978-09-09', rxHistory:[
+    {id:'cij1', hospital:'다정이비인후과', date:'2026-07-15', guidanceSent:false, drugs:[
+      {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:5, sub:false},
+      {name:'용각산', dosage:'1포', freq:'1일 3회', days:5, sub:false}
+    ]},
+    {id:'cij2', hospital:'웰케어내과의원', date:'2026-07-15', guidanceSent:false, drugs:[
+      {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:30, sub:false}
     ]}
   ]}
 ];
@@ -767,6 +773,9 @@ function applyQaState(v){
   if(v === 'rx-empty'){
     document.getElementById('s1input').value = '이수진';
     onSearch('이수진');
+  } else if(v === 'rx-same-day'){
+    document.getElementById('s1input').value = '최이중';
+    onSearch('최이중');
   }
 }
 function closeModal(){
@@ -879,16 +888,7 @@ function showRxSelectionStep(){
 
   var histHtml = rxHist.length
     ? '<!-- component: new/rx-history-panel --><div class="rx-history-panel" id="rxHistoryPanel" data-figma="new/rx-history-panel">' +
-        '<div class="rx-month-nav">' +
-          '<button type="button" class="rx-month-arrow" onclick="rxHistoryMonthShift(-1)">' +
-            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-          '</button>' +
-          '<span class="rx-month-label" id="rxMonthLabel"></span>' +
-          '<button type="button" class="rx-month-arrow" id="rxMonthNextBtn" onclick="rxHistoryMonthShift(1)">' +
-            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-          '</button>' +
-        '</div>' +
-        '<div class="rx-month-list" id="rxMonthList"></div>' +
+        '<div class="rx-history-list" id="rxHistoryList"></div>' +
       '</div>'
     : '<div class="rx-empty-state">' +
         '<div class="rx-empty-icon">📋</div>' +
@@ -901,7 +901,6 @@ function showRxSelectionStep(){
     '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="beginRecording()">상담 시작</button>';
 
   if(rxHist.length){
-    initRxHistoryMonth();
     renderRxHistoryPanel();
   }
 }
@@ -941,8 +940,7 @@ function removePatient(){
   resetFlow();
 }
 
-/* ── 처방전 이력 패널: 월 단위 날짜 내비게이션 + 행별 펼치기(편집 가능한 약품 테이블)/처방전 원본 보기 ── */
-var rxHistoryMonthCursor = null;
+/* ── 처방전 이력 패널: 행별 펼치기(편집 가능한 약품 테이블)/처방전 원본 보기 ── */
 var expandedRxId = null;
 function getCurrentRx(){
   return (selectedPatient.rxHistory || []).find(function(r){ return r.id === currentRxId; });
@@ -977,24 +975,6 @@ function ensureEditingDrugs(rx){
   if(!editingDrugsMap[rx.id]) editingDrugsMap[rx.id] = rx.drugs.map(function(d){ return Object.assign({}, d); });
   return editingDrugsMap[rx.id];
 }
-function parseYM(dateStr){
-  var p = dateStr.split('-');
-  return { y: parseInt(p[0], 10), m: parseInt(p[1], 10) };
-}
-function ymLabel(ym){
-  return ym.y + '년 ' + String(ym.m).padStart(2, '0') + '월';
-}
-function shiftYM(ym, delta){
-  var idx = ym.y * 12 + (ym.m - 1) + delta;
-  return { y: Math.floor(idx / 12), m: (idx % 12) + 1 };
-}
-function initRxHistoryMonth(){
-  rxHistoryMonthCursor = parseYM(todayISODate());
-}
-function rxHistoryMonthShift(delta){
-  rxHistoryMonthCursor = shiftYM(rxHistoryMonthCursor, delta);
-  renderRxHistoryPanel();
-}
 function toggleRxHistoryItem(id){
   expandedRxId = (expandedRxId === id) ? null : id;
   renderRxHistoryPanel();
@@ -1007,19 +987,11 @@ function selectRxHistoryItem(id){
 function renderRxHistoryPanel(){
   var panel = document.getElementById('rxHistoryPanel');
   if(!panel) return;
-  document.getElementById('rxMonthLabel').textContent = ymLabel(rxHistoryMonthCursor);
-  var curYM = parseYM(todayISODate());
-  var isCurrentMonth = rxHistoryMonthCursor.y === curYM.y && rxHistoryMonthCursor.m === curYM.m;
-  document.getElementById('rxMonthNextBtn').style.visibility = isCurrentMonth ? 'hidden' : 'visible';
   var hist = selectedPatient.rxHistory || [];
-  var itemsInMonth = hist.filter(function(rx){
-    var ym = parseYM(rx.date);
-    return ym.y === rxHistoryMonthCursor.y && ym.m === rxHistoryMonthCursor.m;
-  });
-  var listEl = document.getElementById('rxMonthList');
-  listEl.innerHTML = itemsInMonth.length
-    ? itemsInMonth.map(function(rx){
-        var isOpen = itemsInMonth.length === 1 ? true : rx.id === expandedRxId;
+  var listEl = document.getElementById('rxHistoryList');
+  listEl.innerHTML = hist.length
+    ? hist.map(function(rx){
+        var isOpen = hist.length === 1 ? true : rx.id === expandedRxId;
         var expandHtml = isOpen ? renderDrugTableHTML(rx) : '';
         var checkboxHtml = '<input type="checkbox" class="rx-history-check" onclick="event.stopPropagation()" onchange="selectRxHistoryItem(\'' + rx.id + '\')"' + (rx.id === currentRxId ? ' checked' : '') + '>';
         return '<div class="rx-history-item' + (rx.id === currentRxId ? ' active' : '') + (isOpen ? ' open' : '') + '">' +
@@ -1037,7 +1009,7 @@ function renderRxHistoryPanel(){
           '<div class="rx-history-item-expand">' + expandHtml + '</div>' +
         '</div>';
       }).join('')
-    : '<div class="s1-empty">이 달의 처방전이 없습니다.</div>';
+    : '';
 }
 function refreshExpandedRxItem(){
   if(!expandedRxId) return;

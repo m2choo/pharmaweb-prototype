@@ -91,7 +91,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .step-tab.on{font-weight:700;color:var(--color-primary);border-bottom-color:var(--color-primary);}
 .step-num{width:20px;height:20px;border-radius:50%;background:var(--color-grey-200);color:var(--color-grey-500);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .step-tab.on .step-num{background:var(--color-primary);color:var(--color-white);}
-.step-num.step-done{background:var(--color-primary);color:var(--color-white);font-size:11px;}
+.step-num.step-done{background:var(--color-grey-500);color:var(--color-white);font-size:11px;}
 
 .modal-body{display:flex;flex-direction:column;padding:24px;overflow-y:auto;flex:1;min-height:0;}
 .modal-ft{padding:15px 24px 20px;display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;}
@@ -107,27 +107,19 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .memo-count{align-self:flex-end;font-size:12px;color:var(--color-grey-400);margin-top:8px;flex-shrink:0;}
 
 /* component: new/med-check — 복약 점검 항목(동일 성분/상호작용/금기·주의 요약 카드) */
-.med-check-section{flex-shrink:0;}
+.med-check-section{flex-shrink:0;margin-top:10px;margin-bottom:16px;}
 .med-check-hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
-.med-check-title{font-size:15px;font-weight:500;color:var(--color-grey-800);}
+.med-check-title{font-size:18px;font-weight:600;color:var(--color-grey-800);}
 .med-check-basis{font-size:13px;color:var(--color-primary);}
-.med-check-stats{display:flex;gap:10px;margin-bottom:14px;}
-.med-check-stat{flex:1;border:1px solid var(--color-grey-200);border-radius:8px;padding:14px 0;text-align:center;cursor:pointer;}
-.med-check-stat:hover{border-color:var(--color-primary);}
-.med-check-stat.active{border-color:var(--color-primary);background:var(--color-blue-100);}
-.med-check-stat.active .med-check-stat-num,.med-check-stat.active .med-check-stat-label{color:var(--color-primary);}
-.med-check-stat-num{font-size:20px;font-weight:700;color:var(--color-grey-800);}
-.med-check-stat-label{font-size:13px;color:var(--color-grey-600);margin-top:4px;}
-.med-check-list{display:flex;flex-direction:column;gap:10px;}
+.med-check-stats{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.med-check-stat{padding:6px 14px;border:1px solid var(--color-grey-250);border-radius:17px;font-size:13px;font-weight:500;color:var(--color-grey-600);cursor:pointer;font-family:inherit;background:var(--color-white);}
+.med-check-stat:hover{border-color:var(--color-primary);color:var(--color-primary);}
+.med-check-stat.active{background:var(--color-primary);border-color:var(--color-primary);color:var(--color-white);}
+.med-check-list{display:flex;flex-direction:column;border:1px solid var(--color-grey-200);border-radius:8px;padding:0 14px;max-height:220px;overflow-y:auto;}
 .med-check-empty{text-align:center;color:var(--color-grey-400);padding:16px;}
-.med-check-card{border-radius:8px;padding:12px 14px;border:1px solid;}
-.med-check-card.duplicate{background:#FFFCF5;border-color:#FFD5A4;}
-.med-check-card.interaction,.med-check-card.caution{background:#FFF6F6;border-color:#FFC9CC;}
-.med-check-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;margin-bottom:6px;}
-.med-check-tag.duplicate{background:#FFF0DA;color:#F5AC1F;}
-.med-check-tag.interaction,.med-check-tag.caution{background:#FFE3E4;color:var(--color-red);}
-.med-check-card-title{font-size:14px;font-weight:600;color:var(--color-grey-800);margin-bottom:3px;}
-.med-check-card-desc{font-size:12.5px;color:var(--color-grey-600);}
+.med-check-card{padding:10px 0;border-bottom:1px solid var(--color-grey-150);font-size:15px;color:var(--color-grey-800);line-height:1.5;}
+.med-check-card:last-child{border-bottom:none;}
+.med-check-card b{font-weight:700;margin-right:5px;}
 
 .btn-next{height:40px;padding:0 28px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
 .btn-next:disabled{opacity:.4;cursor:not-allowed;}
@@ -430,8 +422,8 @@ var PATIENTS = [
     ]},
     {id:'kmy2', hospital:'웰케어내과의원', date:'2026-06-19', guidanceSent:true, drugs:[
       {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:180, sub:false},
-      {name:'아토르바스타틴', dosage:'1정', freq:'1일 1회', days:180, sub:false},
-      {name:'메트포르민', dosage:'1정', freq:'1일 2회', days:180, sub:false}
+      {name:'리피토정', dosage:'1정', freq:'1일 1회', days:180, sub:false},
+      {name:'글루코파지정', dosage:'1정', freq:'1일 2회', days:180, sub:false}
     ]},
     {id:'kmy2b', hospital:'다정이비인후과', date:'2026-06-05', guidanceSent:true, drugs:[
       {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:180, sub:false},
@@ -1083,7 +1075,7 @@ function renderPolyAlertHtml(patient){
   if(computePolyQualifyingCount(patient) < 10) return '';
   return '<div class="s2-poly-alert">' +
     '<div class="s2-poly-alert-icon"><span>!</span></div>' +
-    '<span class="s2-poly-alert-txt">다제약물관리사업 대상자로 추정됩니다. (10종 이상의 약물을 6개월 이상 지속 복용)</span>' +
+    '<span class="s2-poly-alert-txt">최근 6개월간 10종 이상의 약물을 지속 복용해 다제약물관리사업 대상자에 해당합니다.</span>' +
   '</div>';
 }
 /* 약물 상호작용/병용주의 mock 데이터 — 실제 서비스에서는 DUR(의약품 안전사용서비스) 연동 대상 */
@@ -1094,6 +1086,12 @@ var DRUG_CAUTIONS = [
   { drugs: ['아스피린', '오메프라졸'], desc: 'PPI 병용 시 아스피린 흡수 감소 가능' }
 ];
 var POLY_REF_TYPE_LABEL = { interaction: '상호작용', caution: '금기·주의', duplicate: '중복 성분' };
+/* 상품명은 달라도 주성분이 같은 약 — 동일 성분 중복 처방 판정에 사용(상품명이 같은 경우는
+   자기 자신이 곧 같은 성분이므로 별도 매핑 불필요) */
+var DRUG_INGREDIENT = {
+  '아토르바스타틴': '아토르바스타틴', '리피토정': '아토르바스타틴',
+  '메트포르민': '메트포르민', '글루코파지정': '메트포르민'
+};
 /* 같은 약품명이 처방된 두 건의 실제 복약 기간(처방일 ~ 처방일+일수)이 겹칠 때만 "중복 성분"으로
    판정 — 단순히 같은 약을 여러 번 처방받은 것(예: 순차적인 재처방/리필)은 겹치는 기간이 없으면
    중복 복용이 아니므로 제외해야 함 */
@@ -1104,16 +1102,19 @@ function medPeriodsOverlap(a, b){
   var bEnd = new Date(b.date); bEnd.setDate(bEnd.getDate() + b.days);
   return aStart < bEnd && bStart < aEnd;
 }
-/* 각주 목록 생성 — 상호작용/금기·주의는 mock 페어에서, 중복 성분은 같은 약품명의 복약 기간이
-   겹치는 경우에만 자동 판정 */
+/* 각주 목록 생성 — 상호작용/금기·주의는 mock 페어에서, 중복 성분은 같은 주성분(상품명이 달라도
+   DRUG_INGREDIENT로 매핑되는 성분 기준)의 복약 기간이 겹치는 경우에만 자동 판정 */
 function buildPolyFootnotes(drugs){
   var names = drugs.map(function(d){ return d.name; });
   var footnotes = [];
-  var countByName = {};
-  drugs.forEach(function(d){ countByName[d.name] = (countByName[d.name] || 0) + 1; });
-  Object.keys(countByName).forEach(function(name){
-    if(countByName[name] < 2) return;
-    var entries = drugs.filter(function(d){ return d.name === name; });
+  var byIngredient = {};
+  drugs.forEach(function(d){
+    var key = DRUG_INGREDIENT[d.name] || d.name;
+    (byIngredient[key] = byIngredient[key] || []).push(d);
+  });
+  Object.keys(byIngredient).forEach(function(key){
+    var entries = byIngredient[key];
+    if(entries.length < 2) return;
     var overlapping = [];
     for(var i = 0; i < entries.length; i++){
       for(var j = i + 1; j < entries.length; j++){
@@ -1124,23 +1125,25 @@ function buildPolyFootnotes(drugs){
       }
     }
     if(!overlapping.length) return;
-    var dates = overlapping.map(function(d){ return d.date; });
-    footnotes.push({ type: 'duplicate', drugNames: overlapping.map(function(){ return name; }), desc: '복약 기간이 겹치는 처방 ' + overlapping.length + '건 중복 처방됨(' + dates.join(', ') + ')' });
+    var drugNames = overlapping.map(function(d){ return d.name; }).filter(function(n, i, arr){ return arr.indexOf(n) === i; });
+    var dates = overlapping.map(function(d){ return d.date; }).filter(function(d, i, arr){ return arr.indexOf(d) === i; });
+    footnotes.push({ type: 'duplicate', html: '<b>' + drugNames.join(' + ') + '</b> 동일 성분 중복 처방 (' + dates.join(', ') + ')' });
   });
   DRUG_INTERACTIONS.forEach(function(it){
     if(it.drugs.every(function(d){ return names.indexOf(d) > -1; })){
-      footnotes.push({ type: 'interaction', drugNames: it.drugs, desc: it.drugs.join(' + ') + ': ' + it.desc });
+      var dates = drugs.filter(function(d){ return it.drugs.indexOf(d.name) > -1; }).map(function(d){ return d.date; }).filter(function(d, i, arr){ return arr.indexOf(d) === i; });
+      footnotes.push({ type: 'interaction', html: '<b>' + it.drugs.join(' + ') + '</b> ' + it.desc + ' (' + dates.join(', ') + ')' });
     }
   });
   DRUG_CAUTIONS.forEach(function(it){
     if(it.drugs.every(function(d){ return names.indexOf(d) > -1; })){
-      footnotes.push({ type: 'caution', drugNames: it.drugs, desc: it.drugs.join(' + ') + ': ' + it.desc });
+      var dates = drugs.filter(function(d){ return it.drugs.indexOf(d.name) > -1; }).map(function(d){ return d.date; }).filter(function(d, i, arr){ return arr.indexOf(d) === i; });
+      footnotes.push({ type: 'caution', html: '<b>' + it.drugs.join(' + ') + '</b> ' + it.desc + ' (' + dates.join(', ') + ')' });
     }
   });
   return footnotes;
 }
 var MED_CHECK_STAT_LABEL = { duplicate: '동일 성분', interaction: '상호작용', caution: '금기·주의' };
-var MED_CHECK_TAG_LABEL = { duplicate: '동일성분', interaction: '상호작용', caution: '금기·주의' };
 /* 복약 점검 항목 — 다제약물관리사업 대상 추정 근거(getPolyQualifyingDrugs)에서 나온 약물들의
    동일 성분/상호작용/금기·주의 각주를 유형별 개수 요약(상단 3칸)과 카드 목록으로 보여줌.
    상단 3칸이 곧 필터 버튼 — 항상 하나만 선택되어 그 유형 카드만 아래 목록에 보이고,
@@ -1149,20 +1152,15 @@ var medCheckActiveType = 'duplicate';
 function medCheckStatsHtml(counts){
   return ['duplicate', 'interaction', 'caution'].map(function(t){
     var active = medCheckActiveType === t;
-    return '<div class="med-check-stat' + (active ? ' active' : '') + '" onclick="setMedCheckFilter(\'' + t + '\')">' +
-      '<div class="med-check-stat-num">' + counts[t] + '</div>' +
-      '<div class="med-check-stat-label">' + MED_CHECK_STAT_LABEL[t] + '</div></div>';
+    return '<button type="button" class="med-check-stat' + (active ? ' active' : '') + '" onclick="setMedCheckFilter(\'' + t + '\')">' +
+      MED_CHECK_STAT_LABEL[t] + ' (' + counts[t] + ')</button>';
   }).join('');
 }
 function medCheckCardsHtml(footnotes){
   var filtered = footnotes.filter(function(f){ return f.type === medCheckActiveType; });
   if(!filtered.length) return '<div class="med-check-empty">해당하는 항목이 없습니다.</div>';
   return filtered.map(function(f){
-    return '<div class="med-check-card ' + f.type + '">' +
-      '<span class="med-check-tag ' + f.type + '">' + MED_CHECK_TAG_LABEL[f.type] + '</span>' +
-      '<div class="med-check-card-title">' + f.drugNames.join(', ') + '</div>' +
-      '<div class="med-check-card-desc">' + f.desc + '</div>' +
-    '</div>';
+    return '<div class="med-check-card">' + f.html + '</div>';
   }).join('');
 }
 function setMedCheckFilter(type){
@@ -1405,7 +1403,7 @@ function renderMainRecordingContent(){
       '<div class="memo-count" id="memoCount">0 / 1,000</div>' +
     '</div>' +
     renderPolyDrugTableHtml(selectedPatient) +
-    '<div class="rec-hint" style="max-width:none;margin-top:16px;">상담이 끝나면 우측 패널의 상담 종료 버튼을 눌러 주세요.</div>';
+    '<div style="margin-top:16px;font-size:15px;color:var(--color-primary);">상담이 끝나면 우측 패널의 <b>상담 종료</b> 버튼을 눌러 주세요.</div>';
   var savedMemo = localStorage.getItem(getMemoKey());
   if(savedMemo !== null) document.getElementById('pharmacistMemo').value = savedMemo;
   updateMemoCount();

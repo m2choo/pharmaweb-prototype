@@ -196,8 +196,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .ai-caption{font-size:13.5px;color:var(--color-grey-500);margin-bottom:10px;}
 .msg-ta{width:100%;height:240px;border:1.5px solid var(--color-grey-300);border-radius:10px;padding:14px;font-size:16px;font-weight:400;line-height:27px;letter-spacing:-0.6px;color:var(--color-grey-800);resize:none;font-family:inherit;transition:border-color .15s;}
 .msg-ta:focus{outline:none;border-color:var(--color-primary);}
-.msg-reset{display:inline-flex;align-items:center;gap:5px;font-size:15px;font-weight:400;letter-spacing:-0.56px;color:var(--color-grey-600);cursor:pointer;background:none;border:none;font-family:inherit;}
-.msg-reset:hover{color:var(--color-primary);}
 .msg-cnt{text-align:right;font-size:13px;font-weight:400;letter-spacing:-0.48px;margin-top:6px;color:var(--color-grey-500);}
 
 /* 복약 알림 (v2 reminder.css 그대로 포팅) */
@@ -512,7 +510,7 @@ function buildMsgDefault(){
   var name = (selectedPatient && selectedPatient.name) || '고객';
   var rxs = selectedPatient && !selectedPatient.isNew ? getSelectedRxs() : [];
   if(!rxs.length){
-    return '안녕하세요, 웰체크약국입니다.\n' + name + ' 고객님, 지속적인 복약 관리를 위해 안내드립니다.' +
+    return '안녕하세요, 웰체크약국입니다.\n' + name + ' 고객님, 오늘 상담하신 내용을 보내드립니다.' +
       '\n\n[약사 메모]\n' + AI_SUMMARY_TEXT + '\n';
   }
   var freqSlotMap = { '1일 1회': ['아침'], '1일 2회': ['아침', '저녁'], '1일 3회': ['아침', '점심', '저녁'], '1일 4회': ['아침', '점심', '저녁', '취침 전'] };
@@ -1248,10 +1246,7 @@ function goSummary(){
     bodyContent = taBlock;
   }
   document.getElementById('mbody').innerHTML =
-    '<div class="msg-hdr"><span class="msg-ttl">복약지도문 작성</span>' +
-      '<!-- component: button/ghost --><button class="msg-reset" data-figma="button/ghost" onclick="resetDraft()">' +
-        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 2.34 5.66M4 12v5M4 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>다시 생성</button>' +
-    '</div>' +
+    '<div class="msg-hdr"><span class="msg-ttl">복약지도문 작성</span></div>' +
     '<div class="ai-caption">AI가 요약한 초안입니다 — 자유롭게 수정하세요.</div>' +
     bodyContent;
   if(isKnown && activeRxs.length) renderReminderCardWrap();
@@ -1263,11 +1258,6 @@ function goSummary(){
 function updateMsgCount(){
   var len = document.getElementById('draftText').value.length;
   document.getElementById('msgCnt').textContent = len + '자';
-}
-function resetDraft(){
-  currentDraft = null;
-  document.getElementById('draftText').value = buildAiDraft();
-  updateMsgCount();
 }
 function sendKnownDirect(){
   currentDraft = document.getElementById('draftText').value;

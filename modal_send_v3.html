@@ -479,8 +479,9 @@ function getChosung(str){
 function isChosungQuery(q){
   return q.length > 0 && q.split('').every(function(ch){ return CHOSUNG_LIST.indexOf(ch) > -1; });
 }
-/* 신규 고객 메시지엔 웰체크 앱 가입 안내를 이어붙임 — 모객 채널 (v2 appendJoinNoteIfNew 그대로) */
+/* 신규 고객 메시지엔 웰체크 앱 가입 안내를 이어붙임 — 모객 채널 */
 var INVITE_LINK = 'https://wellcheck.co.kr/join?ref=pharmacy';
+var PHARMACY_NAME = '웰체크약국';
 
 /* ── 복약지도문 생성 규칙 (v2 modal_send_v2.html의 buildMsgDefault 그대로 포팅, 다건 selectedRxIds 대신 v3의 활성 처방전 1건 기준) ── */
 function buildMsgDefault(){
@@ -518,16 +519,17 @@ function buildMsgDefault(){
   var methodBlock = methodSection ? '\n\n[복약 방법]\n' + methodSection : '';
   return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + name + ' 고객님, 처방받으신 약품을 안내드립니다.\n\n[조제 약품]\n' + drugLines.join('\n') + methodBlock + '\n';
 }
-function appendJoinNoteIfNew(text){
-  if(!(selectedPatient && selectedPatient.isNew)) return text;
-  if(text.indexOf('웰체크 앱 가입 안내') > -1) return text;
-  return text + '\n\n[웰체크 앱 가입 안내]\n지속적인 건강 관리의 시작, 웰체크 앱과 함께하세요.\n우리 약국을 단골 약국으로 연결하시면 더 편리해집니다.\n' + INVITE_LINK;
-}
 /* 상담(녹음) 중 대화를 AI가 요약한 내용 — 약사가 직접 쓴 게 아니라는 걸 명확히 하기 위해 [약사 메모]로 초안 하단에 덧붙임 (v2 SUMMARY_TEXT 그대로 포팅) */
 var AI_SUMMARY_TEXT = '오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편 가능함. 수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요. 밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능함.';
+/* 신규 고객은 처방전이 없어 "조제 약품" 안내 자체가 성립하지 않으므로, 상담 요약 + 앱 가입 유도 중심의 전용 템플릿 사용 */
+function buildNewCustomerDraft(){
+  return '안녕하세요, 웰체크약국입니다.\n오늘 ' + PHARMACY_NAME + '에서 상담하신 내용을 보내드립니다.' +
+    '\n\n[약사 메모]\n' + AI_SUMMARY_TEXT +
+    '\n\n[웰체크 앱 가입 안내]\n약사님과의 상담 내용을 보관하고 싶으신가요? 웰체크 앱에서 확인해 보세요.\n' + INVITE_LINK;
+}
 function buildAiDraft(){
-  var msg = buildMsgDefault() + '\n\n[약사 메모]\n' + AI_SUMMARY_TEXT;
-  return appendJoinNoteIfNew(msg);
+  if(selectedPatient && selectedPatient.isNew) return buildNewCustomerDraft();
+  return buildMsgDefault() + '\n\n[약사 메모]\n' + AI_SUMMARY_TEXT;
 }
 
 /* ── 복약 알림 (v2 reminder.js 그대로 포팅, selectedRxIds 목록 대신 v3의 활성 처방전 1건 기준) ── */

@@ -1295,7 +1295,7 @@ function refreshExpandedRxItem(){
 function renderDrugTableHTML(rx){
   var drugs = ensureEditingDrugs(rx);
   var origDrugs = rx.drugs;
-  var hasSub = drugs.some(function(d){ return d.sub; });
+  var hasSub = drugs.some(function(d, i){ return i < origDrugs.length && JSON.stringify(d) !== JSON.stringify(origDrugs[i]); });
   var rows = drugs.map(function(d, i){
     var changed = JSON.stringify(d) !== JSON.stringify(origDrugs[i]);
     var isNew = i >= origDrugs.length;

@@ -185,8 +185,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .s2-poly-alert-icon span{font-size:13px;font-weight:900;color:var(--color-white);line-height:1;}
 .s2-poly-alert-txt{font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-red);}
 
-/* 대기/진행 문구 화면 (녹음 중) */
-.wait-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;flex:1;text-align:center;padding:20px;}
+/* 녹음 중 안내 문구 (Puzzle AI 패널 하단) */
 .rec-hint{background:var(--color-blue-100);border:1px solid var(--color-blue-200);border-radius:8px;padding:12px 16px;font-size:14.5px;font-weight:500;color:var(--color-primary);max-width:380px;line-height:1.6;text-align:left;}
 .rec-hint b{font-weight:700;}
 
@@ -265,7 +264,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .pz-sub{font-size:14px;color:var(--color-grey-500);margin-top:4px;}
 .pz-body{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;}
 .pz-idle{color:var(--color-grey-500);font-size:14px;text-align:center;line-height:1.7;max-width:240px;}
-.wait-title{font-size:18px;font-weight:600;color:var(--color-grey-800);}
+.pz-rec-indicator{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:10px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--color-grey-150);}
+.wait-title{font-size:16px;font-weight:600;color:var(--color-grey-800);}
 .rec-wave-row{display:flex;align-items:center;justify-content:center;gap:6px;height:60px;}
 .rec-wave-row span{width:6px;border-radius:3px;background:var(--color-primary);animation:pzWave 1.1s ease-in-out infinite;}
 .rec-wave-row span:nth-child(1){height:18px;animation-delay:0s;}
@@ -295,7 +295,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .pz-stt-line b{color:var(--color-primary);font-weight:700;}
 @keyframes sttFadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
 .pz-stt-cursor{display:inline-block;width:2px;height:14px;background:var(--color-primary);margin-left:2px;vertical-align:middle;animation:blink 1s step-start infinite;}
-.pz-footer{padding:14px 16px 18px;flex-shrink:0;}
+.pz-footer{padding:14px 16px 18px;flex-shrink:0;display:flex;flex-direction:column;gap:10px;}
+.pz-footer .rec-hint{max-width:none;font-size:13px;padding:10px 12px;}
 .btn-stop{width:100%;height:40px;padding:0 20px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:700;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:7px;}
 .btn-stop:disabled{opacity:.4;cursor:not-allowed;}
 
@@ -1185,14 +1186,7 @@ function beginRecording(fromSelectionStep){
     document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
     st3.style.display = 'none';
   }
-  document.getElementById('mbody').innerHTML =
-    '<div class="wait-stage">' +
-      '<div class="wait-title">상담이 진행 중입니다</div>' +
-      '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
-      '<div class="rec-timer" id="recTimer">00:00</div>' +
-      '<div class="rec-label" id="recLabel"></div>' +
-      '<div class="rec-hint">👉 상담이 끝나면 오른쪽 <b>AI 패널</b>의 <b>"상담 종료"</b> 버튼을 눌러 주세요. AI가 복약 상담 내용을 생성합니다.</div>' +
-    '</div>';
+  document.getElementById('mbody').innerHTML = '';
   document.getElementById('mfoot').innerHTML = '';
 
   document.getElementById('pzSub').textContent = '녹음이 시작되었습니다';
@@ -1200,9 +1194,16 @@ function beginRecording(fromSelectionStep){
   var pzBody = document.getElementById('pzBody');
   pzBody.style.alignItems = 'stretch';
   pzBody.style.justifyContent = 'flex-start';
-  pzBody.innerHTML = '<div class="pz-stt-box" id="sttBox"></div>';
+  pzBody.innerHTML =
+    '<div class="pz-rec-indicator">' +
+      '<div class="wait-title">상담이 진행 중입니다</div>' +
+      '<div class="rec-wave-row" id="recCircle"><span></span><span></span><span></span><span></span><span></span></div>' +
+      '<div class="rec-timer" id="recTimer">00:00</div>' +
+    '</div>' +
+    '<div class="pz-stt-box" id="sttBox"></div>';
   startStt();
   document.getElementById('pzFooter').innerHTML =
+    '<div class="rec-hint">👉 상담이 끝나면 아래 <b>"상담 종료"</b> 버튼을 눌러 주세요. AI가 복약 상담 내용을 생성합니다.</div>' +
     '<!-- component: button/solid --><button class="btn-stop" data-figma="button/solid" id="btnStop" onclick="endRecording()">' +
       '<svg width="13" height="13" viewBox="0 0 24 24" fill="#FFFFFF"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>' +
       '상담 종료</button>';
@@ -1223,7 +1224,6 @@ function endRecording(){
   if(cursor) cursor.remove();
   document.getElementById('btnStop').disabled = true;
   document.getElementById('recCircle').classList.add('done');
-  document.getElementById('recLabel').textContent = '녹음 종료';
   document.getElementById('pzSub').textContent = '상담 내용을 요약했습니다';
   goSummary();
 }

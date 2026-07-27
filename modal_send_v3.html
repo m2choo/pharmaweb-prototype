@@ -75,7 +75,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .modal-ft{padding:15px 24px 20px;display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;}
 
 /* component: new/pharmacist-memo — 상담 중 약사가 직접 남기는 메모(가로로 넓은 카드, 즉시 수정 가능) */
-.pharmacist-memo{display:flex;flex-direction:column;flex:1;min-height:0;border:1px solid var(--color-grey-250);border-radius:10px;padding:16px;}
+.pharmacist-memo{display:flex;flex-direction:column;flex-shrink:0;border:1px solid var(--color-grey-250);border-radius:10px;padding:16px;margin-bottom:16px;}
 .memo-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0;}
 .memo-hd-title{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:500;color:var(--color-grey-800);}
 .memo-icon{width:22px;height:22px;border-radius:50%;background:#FDEDD5;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -83,6 +83,18 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .memo-textarea{flex:1;min-height:200px;width:100%;border:none;outline:none;resize:none;font-family:inherit;font-size:15px;line-height:1.7;color:var(--color-grey-800);}
 .memo-textarea::placeholder{color:var(--color-grey-400);}
 .memo-count{align-self:flex-end;font-size:12px;color:var(--color-grey-400);margin-top:8px;flex-shrink:0;}
+
+/* component: new/poly-drug-table — 다제약물관리사업 대상 추정 근거 */
+.poly-drug-section{flex-shrink:0;}
+.poly-drug-title{font-size:15px;font-weight:500;color:var(--color-grey-800);margin-bottom:4px;}
+.poly-drug-sub{font-size:13px;color:var(--color-grey-500);margin-bottom:10px;}
+.poly-drug-table{width:100%;border-collapse:collapse;}
+.poly-drug-table thead tr{background:#EEF0F3;}
+.poly-drug-table th{padding:8px 10px;font-size:12px;font-weight:400;color:#5F6E7D;text-align:left;border-top:1px solid var(--color-grey-250);border-bottom:1px solid var(--color-grey-250);}
+.poly-drug-table td{padding:10px;font-size:14px;color:var(--color-grey-800);border-bottom:1px solid var(--color-grey-200);}
+.poly-drug-table tbody tr:last-child td{border-bottom:none;}
+.interaction-chip{display:inline-block;background:#FFF4F5;color:var(--color-red);font-size:12px;font-weight:500;padding:2px 8px;border-radius:10px;margin-right:4px;}
+.interaction-none{color:var(--color-grey-400);}
 
 .btn-next{height:40px;padding:0 28px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
 .btn-next:disabled{opacity:.4;cursor:not-allowed;}
@@ -961,22 +973,59 @@ function getMostRecentDateRxs(patient){
   return hist.filter(function(rx){ return rx.date === maxDate; });
 }
 /* 다제약물관리사업 대상자 배너 — 약사가 처방전을 따로 선택하지 않아도 최근 6개월 처방 이력을 시스템이 자동 계산해서 노출 (10종 이상 약물을 180일 이상 처방) */
-function computePolyQualifyingCount(patient){
-  var hist = patient.rxHistory || [];
+function getPolyQualifyingDrugs(patient){
+  var hist = (patient && patient.rxHistory) || [];
   var cutoff = new Date(todayISODate());
   cutoff.setMonth(cutoff.getMonth() - 6);
-  var count = 0;
+  var list = [];
   hist.forEach(function(rx){
     if(new Date(rx.date) < cutoff) return;
-    rx.drugs.forEach(function(d){ if(d.days >= 180) count++; });
+    rx.drugs.forEach(function(d){
+      if(d.days >= 180) list.push({ name: d.name, hospital: rx.hospital, date: rx.date });
+    });
   });
-  return count;
+  return list;
+}
+function computePolyQualifyingCount(patient){
+  return getPolyQualifyingDrugs(patient).length;
 }
 function renderPolyAlertHtml(patient){
   if(computePolyQualifyingCount(patient) < 10) return '';
   return '<div class="s2-poly-alert">' +
     '<div class="s2-poly-alert-icon"><span>!</span></div>' +
     '<span class="s2-poly-alert-txt">다제약물관리사업 대상자로 추정됩니다. (10종 이상의 약물을 6개월 이상 지속 복용)</span>' +
+  '</div>';
+}
+/* 약물 상호작용 mock 데이터 — 실제 서비스에서는 DUR(의약품 안전사용서비스) 연동 대상 */
+var DRUG_INTERACTIONS = [
+  { pair: ['아스피린', '실로스타졸'], label: '출혈 위험 증가' }
+];
+function findDrugInteractionLabels(drugName, allNames){
+  var labels = [];
+  DRUG_INTERACTIONS.forEach(function(it){
+    if(it.pair.indexOf(drugName) === -1) return;
+    var other = it.pair.find(function(n){ return n !== drugName; });
+    if(allNames.indexOf(other) > -1) labels.push(it.label);
+  });
+  return labels;
+}
+/* 다제약물관리사업 대상 추정 근거 — 해당 약품 목록 + 상호작용 칩 */
+function renderPolyDrugTableHtml(patient){
+  var drugs = getPolyQualifyingDrugs(patient);
+  if(drugs.length < 10) return '';
+  var allNames = drugs.map(function(d){ return d.name; });
+  var rows = drugs.map(function(d){
+    var labels = findDrugInteractionLabels(d.name, allNames);
+    var chips = labels.length
+      ? labels.map(function(l){ return '<span class="interaction-chip">' + l + '</span>'; }).join('')
+      : '<span class="interaction-none">-</span>';
+    return '<tr><td>' + d.name + '</td><td>' + d.hospital + '</td><td>' + d.date + '</td><td>' + chips + '</td></tr>';
+  }).join('');
+  return '<!-- component: new/poly-drug-table --><div class="poly-drug-section" data-figma="new/poly-drug-table">' +
+    '<div class="poly-drug-title">다제약물관리사업 대상 추정 근거</div>' +
+    '<div class="poly-drug-sub">최근 6개월간 180일 이상 처방된 약품 ' + drugs.length + '종입니다.</div>' +
+    '<table class="poly-drug-table"><thead><tr><th>약품명</th><th>처방 병원</th><th>처방일</th><th>상호작용</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table>' +
   '</div>';
 }
 function ensureEditingDrugs(rx){
@@ -1207,7 +1256,8 @@ function beginRecording(fromSelectionStep){
       '</div>' +
       '<textarea class="memo-textarea" id="pharmacistMemo" maxlength="1000" oninput="updateMemoCount()" placeholder="상담 중 참고할 내용을 자유롭게 메모해 보세요.&#10;예) 고객 특이사항, 다음 상담 시 확인할 점 등"></textarea>' +
       '<div class="memo-count" id="memoCount">0 / 1,000</div>' +
-    '</div>';
+    '</div>' +
+    renderPolyDrugTableHtml(selectedPatient);
   document.getElementById('mfoot').innerHTML = '';
 
   document.getElementById('pzSub').textContent = '녹음이 시작되었습니다';

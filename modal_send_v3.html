@@ -389,11 +389,23 @@ var PATIENTS = [
       {name:'아토르바스타틴', dosage:'1정', freq:'1일 1회', days:30, sub:true},
       {name:'메트포르민', dosage:'1정', freq:'1일 2회', days:30, sub:false}
     ]},
-    {id:'kmy2', hospital:'웰케어내과의원', date:'2026-05-18', guidanceSent:false, drugs:[
+    {id:'kmy2', hospital:'웰케어내과의원', date:'2026-06-19', guidanceSent:true, drugs:[
+      {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:30, sub:false},
+      {name:'아토르바스타틴', dosage:'1정', freq:'1일 1회', days:30, sub:false},
+      {name:'메트포르민', dosage:'1정', freq:'1일 2회', days:30, sub:false}
+    ]},
+    {id:'kmy3', hospital:'웰케어내과의원', date:'2026-05-18', guidanceSent:false, drugs:[
       {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:30, sub:false},
       {name:'메트포르민', dosage:'1정', freq:'1일 2회', days:30, sub:false}
     ]},
-    {id:'kmy3', hospital:'서울정형외과', date:'2026-02-10', guidanceSent:true, drugs:[
+    {id:'kmy4', hospital:'다정이비인후과', date:'2026-04-07', guidanceSent:true, drugs:[
+      {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:5, sub:false},
+      {name:'용각산', dosage:'1포', freq:'1일 3회', days:5, sub:false}
+    ]},
+    {id:'kmy5', hospital:'서울정형외과', date:'2026-03-25', guidanceSent:true, drugs:[
+      {name:'낙센정', dosage:'1정', freq:'1일 2회', days:10, sub:false}
+    ]},
+    {id:'kmy6', hospital:'서울정형외과', date:'2026-02-10', guidanceSent:true, drugs:[
       {name:'낙센정', dosage:'1정', freq:'1일 2회', days:14, sub:false}
     ]}
   ]},
@@ -402,8 +414,22 @@ var PATIENTS = [
       {name:'낙센정', dosage:'1정', freq:'1일 2회', days:10, sub:false},
       {name:'메코발라민', dosage:'1정', freq:'1일 3회', days:10, sub:false}
     ]},
-    {id:'hjw2', hospital:'참튼튼정형외과', date:'2026-04-10', guidanceSent:true, drugs:[
+    {id:'hjw2', hospital:'웰케어내과의원', date:'2026-06-21', guidanceSent:true, drugs:[
+      {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:30, sub:false}
+    ]},
+    {id:'hjw3', hospital:'서울정형외과', date:'2026-05-14', guidanceSent:true, drugs:[
+      {name:'낙센정', dosage:'1정', freq:'1일 2회', days:7, sub:false},
+      {name:'메코발라민', dosage:'1정', freq:'1일 3회', days:7, sub:false}
+    ]},
+    {id:'hjw4', hospital:'참튼튼정형외과', date:'2026-04-10', guidanceSent:true, drugs:[
       {name:'낙센정', dosage:'1정', freq:'1일 2회', days:7, sub:true}
+    ]},
+    {id:'hjw5', hospital:'다정이비인후과', date:'2026-03-08', guidanceSent:true, drugs:[
+      {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:5, sub:false},
+      {name:'뮤코펙트시럽', dosage:'10ml', freq:'1일 3회', days:5, sub:false}
+    ]},
+    {id:'hjw6', hospital:'서울정형외과', date:'2026-02-19', guidanceSent:true, drugs:[
+      {name:'낙센정', dosage:'1정', freq:'1일 2회', days:10, sub:false}
     ]}
   ]},
   {name:'이수진', phone:'010-4321-8765', birth:'1990-07-21', rxHistory:[]},
@@ -414,8 +440,23 @@ var PATIENTS = [
       {name:'아세트아미노펜', dosage:'1정', freq:'1일 3회', days:5, sub:true},
       {name:'용각산', dosage:'1포', freq:'1일 3회', days:5, sub:false}
     ]},
-    {id:'pjh2', hospital:'미래이비인후과', date:'2026-03-02', guidanceSent:true, drugs:[
+    {id:'pjh2', hospital:'웰케어내과의원', date:'2026-06-13', guidanceSent:true, drugs:[
+      {name:'아모잘탄정', dosage:'1정', freq:'1일 1회', days:30, sub:false},
+      {name:'메트포르민', dosage:'1정', freq:'1일 2회', days:30, sub:false}
+    ]},
+    {id:'pjh3', hospital:'미래이비인후과', date:'2026-05-09', guidanceSent:true, drugs:[
+      {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:5, sub:false},
+      {name:'용각산', dosage:'1포', freq:'1일 3회', days:5, sub:false}
+    ]},
+    {id:'pjh4', hospital:'서울정형외과', date:'2026-04-16', guidanceSent:true, drugs:[
+      {name:'낙센정', dosage:'1정', freq:'1일 2회', days:7, sub:false}
+    ]},
+    {id:'pjh5', hospital:'미래이비인후과', date:'2026-03-02', guidanceSent:true, drugs:[
       {name:'지르텍정', dosage:'1정', freq:'1일 1회', days:5, sub:false}
+    ]},
+    {id:'pjh6', hospital:'다정이비인후과', date:'2026-02-14', guidanceSent:true, drugs:[
+      {name:'뮤코펙트시럽', dosage:'10ml', freq:'1일 3회', days:5, sub:false},
+      {name:'아세트아미노펜', dosage:'1정', freq:'1일 3회', days:5, sub:false}
     ]}
   ]}
 ];
@@ -868,6 +909,9 @@ function renderRxHistoryPanel(){
   var panel = document.getElementById('rxHistoryPanel');
   if(!panel) return;
   document.getElementById('rxMonthLabel').textContent = ymLabel(rxHistoryMonthCursor);
+  var curYM = parseYM(todayISODate());
+  var isCurrentMonth = rxHistoryMonthCursor.y === curYM.y && rxHistoryMonthCursor.m === curYM.m;
+  document.getElementById('rxMonthNextBtn').style.visibility = isCurrentMonth ? 'hidden' : 'visible';
   var hist = selectedPatient.rxHistory || [];
   var itemsInMonth = hist.filter(function(rx){
     var ym = parseYM(rx.date);
@@ -1067,7 +1111,7 @@ function beginRecording(){
               '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
             '</button>' +
             '<span class="rx-month-label" id="rxMonthLabel"></span>' +
-            '<button type="button" class="rx-month-arrow" onclick="rxHistoryMonthShift(1)">' +
+            '<button type="button" class="rx-month-arrow" id="rxMonthNextBtn" onclick="rxHistoryMonthShift(1)">' +
               '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
             '</button>' +
           '</div>' +

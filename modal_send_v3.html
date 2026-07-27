@@ -392,7 +392,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
   <span>QA 상태</span>
   <select onchange="applyQaState(this.value)">
     <option value="normal">정상</option>
-    <option value="rx-empty">처방전 없음(단골, 조제 불가)</option>
+    <option value="rx-empty">처방전 없음 케이스 검색(이수진)</option>
   </select>
 </div>
 
@@ -761,13 +761,12 @@ function openModal(){
   document.getElementById('overlay').classList.add('on');
   resetFlow();
 }
-/* QA 전용: 리뷰 시 특정 화면을 검색 없이 바로 확인하기 위한 케이스 전환 (실서비스 반영 대상 아님) */
+/* QA 전용: 리뷰 시 특정 케이스를 빠르게 찾아 검색해 주는 단축 기능 — 실제 진입(검색→선택) 과정은 그대로 보여줌 (실서비스 반영 대상 아님) */
 function applyQaState(v){
-  document.getElementById('overlay').classList.add('on');
-  resetFlow();
+  openModal();
   if(v === 'rx-empty'){
-    selectedPatient = {name:'테스트 고객', phone:'010-0000-0000', birth:'1990-01-01', isNew:false, rxHistory:[], recentRx:null};
-    showRxSelectionStep();
+    document.getElementById('s1input').value = '이수진';
+    onSearch('이수진');
   }
 }
 function closeModal(){

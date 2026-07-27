@@ -106,8 +106,11 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 
 /* 고객 확정 후, 녹음 전 — 참고 정보 노출 (v2 카드 톤) */
 .ready-note{font-size:16px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);line-height:1.7;}
-/* component: new/recent-rx-card — 처방전 이력 자체가 없는 고객에게만 노출되는 안내 문구 */
-.recent-rx-card.empty{border-radius:10px;padding:14px 16px;margin-bottom:14px;color:var(--color-grey-500);font-size:14px;text-align:center;}
+/* component: new/rx-empty-state — 조제 가능한 처방전이 없는 상태에서 상담을 시작하는 화면 */
+.rx-empty-state{display:flex;flex-direction:column;align-items:center;gap:8px;padding:40px 20px;text-align:center;}
+.rx-empty-icon{font-size:36px;}
+.rx-empty-title{font-size:16px;font-weight:500;color:var(--color-grey-800);}
+.rx-empty-sub{font-size:13.5px;color:var(--color-grey-500);line-height:1.6;}
 /* component: new/rx-history-panel — 월 단위 날짜 내비게이션 + 행별 펼치기/처방전 원본 보기 */
 .rx-history-panel{padding:14px 0;margin-bottom:14px;}
 .rx-month-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:12px;}
@@ -306,6 +309,11 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
   .overlay-wrap{flex-direction:column;align-items:center;}
 }
 
+/* QA 전용: 케이스 전환 패널 (v2 qa-panel 포팅, 실서비스 반영 대상 아님) */
+.qa-panel{position:fixed;top:14px;left:14px;z-index:9999;background:var(--color-grey-900);color:#fff;padding:10px 12px;border-radius:10px;font-size:12px;font-family:inherit;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.3);}
+.qa-panel select{font-size:12px;padding:4px 6px;border-radius:6px;border:none;}
+.qa-panel span{opacity:.7;white-space:nowrap;}
+
 /* 처방전 원본 이미지 뷰어 (v2 rx-viewer 포팅) */
 .rx-viewer-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;align-items:center;justify-content:center;}
 .rx-viewer-bd.on{display:flex;}
@@ -377,6 +385,15 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
       </div>
     </div>
   </div>
+</div>
+
+<!-- QA 전용: 케이스 전환 패널 (실서비스 반영 대상 아님 — 리뷰용) -->
+<div class="qa-panel">
+  <span>QA 상태</span>
+  <select onchange="applyQaState(this.value)">
+    <option value="normal">정상</option>
+    <option value="rx-empty">처방전 없음(단골, 조제 불가)</option>
+  </select>
 </div>
 
 <script>
@@ -744,6 +761,15 @@ function openModal(){
   document.getElementById('overlay').classList.add('on');
   resetFlow();
 }
+/* QA 전용: 리뷰 시 특정 화면을 검색 없이 바로 확인하기 위한 케이스 전환 (실서비스 반영 대상 아님) */
+function applyQaState(v){
+  document.getElementById('overlay').classList.add('on');
+  resetFlow();
+  if(v === 'rx-empty'){
+    selectedPatient = {name:'테스트 고객', phone:'010-0000-0000', birth:'1990-01-01', isNew:false, rxHistory:[], recentRx:null};
+    showRxSelectionStep();
+  }
+}
 function closeModal(){
   document.getElementById('overlay').classList.remove('on');
   clearInterval(timerId);
@@ -865,22 +891,20 @@ function showRxSelectionStep(){
         '</div>' +
         '<div class="rx-month-list" id="rxMonthList"></div>' +
       '</div>'
-    : '<div class="recent-rx-card empty">처방전 정보가 없습니다.</div>';
+    : '<div class="rx-empty-state">' +
+        '<div class="rx-empty-icon">📋</div>' +
+        '<div class="rx-empty-title">조제 가능한 처방전이 없습니다</div>' +
+        '<div class="rx-empty-sub">처방전을 선택하지 않아도 복약 상담을 진행할 수 있습니다.</div>' +
+      '</div>';
 
   document.getElementById('mbody').innerHTML = renderPolyAlertHtml(selectedPatient) + histHtml;
   document.getElementById('mfoot').innerHTML =
-    '<button class="btn-back" onclick="startWithoutRx()">처방전 없이 상담</button>' +
     '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="beginRecording()">상담 시작</button>';
 
   if(rxHist.length){
     initRxHistoryMonth();
     renderRxHistoryPanel();
   }
-}
-/* v2의 "처방전 없이 상담" 그대로 — 처방전을 참고하지 않고 바로 녹음 시작 */
-function startWithoutRx(){
-  currentRxId = null;
-  beginRecording();
 }
 
 /* ── 고객 정보 바 (v2 modal-pt 패턴: 아바타 + 이름(+수정, 신규만) + 정보 + 삭제(녹음 전까지)) ── */

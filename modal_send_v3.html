@@ -110,8 +110,9 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .recent-rx-card.empty{border-radius:10px;padding:14px 16px;margin-bottom:14px;color:var(--color-grey-500);font-size:14px;text-align:center;}
 /* component: new/rx-history-panel — 월 단위 날짜 내비게이션 + 행별 펼치기/처방전 원본 보기 */
 .rx-history-panel{padding:14px 0;margin-bottom:14px;}
-.rx-history-panel-hd{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-800);margin-bottom:4px;}
-.rx-history-panel-sub{font-size:13px;font-weight:400;color:var(--color-grey-500);margin-bottom:12px;}
+.rx-history-panel-hdrow{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.rx-history-panel-hd{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-800);}
+.rx-history-panel-sub{font-size:13px;font-weight:400;color:var(--color-grey-500);}
 .rx-month-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:12px;}
 .rx-month-arrow{width:28px;height:28px;border:1px solid var(--color-grey-250);background:var(--color-white);border-radius:50%;color:var(--color-grey-600);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
 .rx-month-arrow:hover{border-color:var(--color-primary);color:var(--color-primary);}
@@ -120,7 +121,8 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .rx-history-item{border:1px solid var(--color-grey-250);border-radius:8px;padding:10px 12px;}
 .rx-history-item.active{border-color:var(--color-primary);}
 .rx-history-row{display:flex;align-items:center;gap:10px;}
-.rx-history-main{display:flex;align-items:baseline;gap:8px;flex:1;min-width:0;cursor:pointer;}
+.rx-history-main{display:flex;align-items:center;gap:8px;flex:1;min-width:0;cursor:pointer;}
+.rx-history-check{width:16px;height:16px;accent-color:var(--color-primary);cursor:pointer;flex-shrink:0;}
 .rx-history-hospital{font-size:14px;font-weight:500;color:var(--color-grey-800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .rx-history-day{font-size:13px;color:var(--color-grey-500);flex-shrink:0;}
 .rx-history-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
@@ -907,7 +909,11 @@ function rxHistoryMonthShift(delta){
 }
 function toggleRxHistoryItem(id){
   expandedRxId = (expandedRxId === id) ? null : id;
-  currentRxId = id;
+  renderRxHistoryPanel();
+}
+/* 처방전이 여러 건일 때만 노출되는 선택 체크박스 — 상담에 참고할 처방전을 고르는 용도(선택 안 해도 상담 가능) */
+function selectRxHistoryItem(id){
+  currentRxId = (currentRxId === id) ? null : id;
   renderRxHistoryPanel();
 }
 function renderRxHistoryPanel(){
@@ -922,14 +928,19 @@ function renderRxHistoryPanel(){
     var ym = parseYM(rx.date);
     return ym.y === rxHistoryMonthCursor.y && ym.m === rxHistoryMonthCursor.m;
   });
+  var showCheckbox = hist.length > 1;
   var listEl = document.getElementById('rxMonthList');
   listEl.innerHTML = itemsInMonth.length
     ? itemsInMonth.map(function(rx){
         var isOpen = rx.id === expandedRxId;
         var expandHtml = isOpen ? renderDrugTableHTML(rx) : '';
+        var checkboxHtml = showCheckbox
+          ? '<input type="checkbox" class="rx-history-check" onclick="event.stopPropagation()" onchange="selectRxHistoryItem(\'' + rx.id + '\')"' + (rx.id === currentRxId ? ' checked' : '') + '>'
+          : '';
         return '<div class="rx-history-item' + (rx.id === currentRxId ? ' active' : '') + (isOpen ? ' open' : '') + '">' +
           '<div class="rx-history-row">' +
             '<div class="rx-history-main" onclick="toggleRxHistoryItem(\'' + rx.id + '\')">' +
+              checkboxHtml +
               '<span class="rx-history-hospital">' + rx.hospital + '</span>' +
               '<span class="rx-history-day">' + rx.date + '</span>' +
             '</div>' +
@@ -1111,8 +1122,10 @@ function beginRecording(){
     if(rxHist.length){
       histHtml =
         '<!-- component: new/rx-history-panel --><div class="rx-history-panel" id="rxHistoryPanel" data-figma="new/rx-history-panel">' +
-          '<div class="rx-history-panel-hd">처방전 이력</div>' +
-          '<div class="rx-history-panel-sub">복약 상담할 처방 이력을 골라 주세요. (처방전을 선택하지 않아도 상담이 가능합니다.)</div>' +
+          '<div class="rx-history-panel-hdrow">' +
+            '<span class="rx-history-panel-hd">처방전 이력</span>' +
+            '<span class="rx-history-panel-sub">복약 상담할 처방 이력을 골라 주세요. (처방전을 선택하지 않아도 상담이 가능합니다.)</span>' +
+          '</div>' +
           '<div class="rx-month-nav">' +
             '<button type="button" class="rx-month-arrow" onclick="rxHistoryMonthShift(-1)">' +
               '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +

@@ -59,8 +59,10 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .modal-pt-name{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);}
 .modal-pt-name-edit{width:22px;height:22px;padding:0;margin-left:2px;background:none;border:none;border-radius:5px;color:var(--color-grey-400);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;}
 .modal-pt-name-edit:hover{background:var(--color-blue-100);color:var(--color-primary);}
-.modal-pt-name-input{width:160px;height:26px;padding:0 6px;border:1.5px solid var(--color-primary);border-radius:5px;font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-700);font-family:inherit;outline:none;vertical-align:middle;}
-.name-edit-wrap{position:relative;display:inline-flex;align-items:center;gap:2px;}
+.modal-pt-name-input{width:220px;height:32px;padding:0 10px 0 30px;border:1.5px solid var(--color-grey-300);border-radius:16px;font-size:15px;font-weight:500;letter-spacing:-0.4px;color:var(--color-grey-800);font-family:inherit;outline:none;vertical-align:middle;background:var(--color-white);}
+.modal-pt-name-input:focus{border-color:var(--color-primary);}
+.name-edit-wrap{position:relative;display:inline-flex;align-items:center;gap:6px;}
+.name-edit-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--color-grey-400);pointer-events:none;display:flex;}
 .name-edit-dropdown{position:absolute;top:32px;left:0;z-index:50;width:260px;max-height:240px;overflow-y:auto;background:var(--color-white);border:1px solid var(--color-grey-250);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);}
 .name-edit-option{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;}
 .name-edit-option:hover{background:var(--color-blue-100);}
@@ -801,44 +803,28 @@ function resetFlow(){
   clearInterval(timerId);
   clearInterval(sttTimer);
 }
-/* 상담 시작 시 모두 신규로 진입 — 이름 부분을 검색으로 바꿔 기존 고객을 찾으면 단골로 전환됨(convertToExistingPatient) */
+/* 상담 시작 시 모두 신규로 진입, 이름은 아직 확정하지 않음(null) — 이름 자리를 검색으로 바꿔 기존 고객을 찾으면
+   단골로 전환되고(convertToExistingPatient), 끝까지 못 찾으면 "상담 종료" 시점에 닉네임을 생성함(endRecording) */
 function startAsNew(){
-  selectedPatient = {name:generateNickname(), phone:null, isNew:true};
+  selectedPatient = {name:null, phone:null, isNew:true};
   beginRecording();
 }
-/* 신규로 진행하다가 이름 옆 검색 결과에서 기존 고객을 선택하면 단골로 전환 — 진행 중이던 녹음은 중단하고 처방전 확인부터 다시 시작 */
-function resetPuzzlePanelIdle(){
-  document.getElementById('pzSub').textContent = '고객 확인 후 녹음이 시작됩니다';
-  document.getElementById('pzName').textContent = '고객 선택 대기 중';
-  var pzBodyReset = document.getElementById('pzBody');
-  pzBodyReset.style.alignItems = '';
-  pzBodyReset.style.justifyContent = '';
-  pzBodyReset.innerHTML = '<div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 고객을 먼저 확인해 주세요.</div>';
-  document.getElementById('pzFooter').innerHTML = '';
-}
+/* 녹음 중 이름 옆 검색 결과에서 기존 고객을 선택하면 단골로 전환 — 이미 진행 중인 녹음/타이머는 그대로 두고
+   처방전이 있으면 인라인으로 확인만 시키고, 확인이 끝나면 다시 원래 화면(약사 메모)으로 돌아감 */
 function convertToExistingPatient(i){
-  clearInterval(timerId);
-  clearInterval(sttTimer);
   selectedPatient = Object.assign({}, currentMatches[i], {isNew:false});
+  renderModalPtBar(false);
+  document.getElementById('pzName').textContent = selectedPatient.name;
   if((selectedPatient.rxHistory || []).length){
-    resetPuzzlePanelIdle();
-    showRxSelectionStep();
+    showInlineRxCheck();
   } else {
     selectedRxIds = [];
-    beginRecording();
+    renderMainRecordingContent();
   }
 }
 
-/* ── Step1 "처방전 선택" — 단골 고객 전용, 녹음 시작 전에 참고할 처방전을 먼저 고르는 화면 ── */
-function showRxSelectionStep(){
-  setStep(1);
-  document.getElementById('stepTabs').style.display = '';
-  renderModalPtBar(false);
-  document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 처방전 선택';
-  document.getElementById('st2').innerHTML = '<span class="step-num">2</span> 복약 상담';
-  document.getElementById('st3').style.display = '';
-  document.getElementById('st3').innerHTML = '<span class="step-num">3</span> 복약지도문 작성';
-
+/* ── 녹음 중 인라인 처방전 확인 — 단골 전환 시에만 잠깐 보여주고, 확인하면 다시 메모 화면으로 복귀(녹음은 계속 진행) ── */
+function showInlineRxCheck(){
   var recentRxs = getMostRecentDateRxs(selectedPatient);
   selectedRxIds = recentRxs.length === 1
     ? [recentRxs[0].id]
@@ -857,12 +843,19 @@ function showRxSelectionStep(){
 
   document.getElementById('mbody').innerHTML = renderPolyAlertHtml(selectedPatient) + histHtml;
   document.getElementById('mfoot').innerHTML =
-    '<button class="btn-back" onclick="beginConsultWithoutRx()">처방전 없이 상담하기</button>' +
-    '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="beginConsultWithRx()">이 처방전으로 상담하기</button>';
+    '<button class="btn-back" onclick="confirmRxCheckNone()">처방전 없이 상담하기</button>' +
+    '<!-- component: button/solid --><button class="btn-next" data-figma="button/solid" onclick="confirmRxCheckWithRx()">이 처방전으로 상담하기</button>';
 
   if(recentRxs.length){
     renderRxHistoryPanel();
   }
+}
+function confirmRxCheckWithRx(){
+  renderMainRecordingContent();
+}
+function confirmRxCheckNone(){
+  selectedRxIds = [];
+  renderMainRecordingContent();
 }
 
 /* ── 고객 정보 바 (v2 modal-pt 패턴: 아바타 + 이름(+수정, 신규만) + 정보 + 삭제(녹음 전까지)) ── */
@@ -889,7 +882,8 @@ function startEditName(){
   var pt = document.getElementById('modalPt');
   pt.innerHTML =
     '<div class="name-edit-wrap">' +
-      '<input id="ptNameInput" class="modal-pt-name-input" value="'+(selectedPatient.name||'')+'" placeholder="이름 검색 또는 입력" oninput="onNameEditSearch(this.value)" onkeydown="if(event.key===\'Enter\')commitEditName()" autocomplete="off">' +
+      '<span class="name-edit-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>' +
+      '<input id="ptNameInput" class="modal-pt-name-input" value="'+(selectedPatient.name||'')+'" placeholder="이름, 전화번호로 고객 검색" oninput="onNameEditSearch(this.value)" onkeydown="if(event.key===\'Enter\')commitEditName()" autocomplete="off">' +
       '<button class="modal-pt-name-edit" onclick="commitEditName()" title="확인"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2"/></svg></button>' +
       '<div class="name-edit-dropdown" id="nameEditDropdown" style="display:none"></div>' +
     '</div>';
@@ -1218,34 +1212,15 @@ function saveAddRow(rxId){
   refreshExpandedRxItem();
 }
 
-/* ── 처방전 선택 화면의 두 버튼 ── */
-function beginConsultWithRx(){
-  beginRecording(true);
-}
-function beginConsultWithoutRx(){
-  selectedRxIds = [];
-  beginRecording(true);
-}
-
-/* ── 고객 선택 즉시 녹음 시작 (검색/신규 선택 또는 처방전 선택 화면 → 녹음) ── */
-function beginRecording(fromSelectionStep){
-  document.getElementById('stepTabs').style.display = '';
-  renderModalPtBar(false);
-  var st3 = document.getElementById('st3');
+/* ── 녹음 화면 본문(약사 메모 + 다제약물 근거) — 신규는 참고할 이력이 없으므로 비워둠 ── */
+function renderMainRecordingContent(){
+  document.getElementById('mfoot').innerHTML = '';
   if(selectedPatient.isNew){
-    setStep(1);
-    document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
-    st3.style.display = '';
-    st3.innerHTML = '<span class="step-num">3</span> 전화번호 입력';
-  } else if(fromSelectionStep){
-    setStep(2);
-  } else {
-    /* 단골이지만 처방전 이력이 없어 "처방전 선택" 화면 없이 바로 진입한 경우 — 신규처럼 곧장 상담으로 */
-    setStep(1);
-    document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
-    st3.style.display = 'none';
+    document.getElementById('mbody').innerHTML = '';
+    return;
   }
   document.getElementById('mbody').innerHTML =
+    renderPolyAlertHtml(selectedPatient) +
     '<!-- component: new/pharmacist-memo --><div class="pharmacist-memo" data-figma="new/pharmacist-memo">' +
       '<div class="memo-hd">' +
         '<span class="memo-hd-title">' +
@@ -1258,10 +1233,25 @@ function beginRecording(fromSelectionStep){
       '<div class="memo-count" id="memoCount">0 / 1,000</div>' +
     '</div>' +
     renderPolyDrugTableHtml(selectedPatient);
-  document.getElementById('mfoot').innerHTML = '';
   var savedMemo = localStorage.getItem(getMemoKey());
   if(savedMemo !== null) document.getElementById('pharmacistMemo').value = savedMemo;
   updateMemoCount();
+}
+
+/* ── 고객 선택 즉시 녹음 시작 (신규는 이름 미확정 상태로, 단골 전환은 convertToExistingPatient가 처리) ── */
+function beginRecording(){
+  document.getElementById('stepTabs').style.display = '';
+  renderModalPtBar(false);
+  setStep(1);
+  document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
+  var st3 = document.getElementById('st3');
+  if(selectedPatient.isNew){
+    st3.style.display = '';
+    st3.innerHTML = '<span class="step-num">3</span> 전화번호 입력';
+  } else {
+    st3.style.display = 'none';
+  }
+  renderMainRecordingContent();
 
   document.getElementById('pzSub').textContent = '상담이 진행 중입니다 00:00';
   document.getElementById('pzName').textContent = selectedPatient.name || '신규 고객';
@@ -1308,11 +1298,17 @@ function endRecording(){
   if(cursor) cursor.remove();
   document.getElementById('btnStop').disabled = true;
   document.getElementById('recCircle').classList.add('done');
+  /* 끝까지 기존 고객으로 전환되지 않았다면 이 시점에 비로소 신규 고객의 표시용 이름(닉네임)을 생성 */
+  if(selectedPatient.isNew && !selectedPatient.name){
+    selectedPatient.name = generateNickname();
+    renderModalPtBar(ptShowRemove);
+  }
+  document.getElementById('pzName').textContent = selectedPatient.name;
   document.getElementById('pzSub').textContent = '상담 내용을 요약했습니다';
   goSummary();
 }
 function goSummary(){
-  setStep(selectedPatient.isNew ? 2 : 3);
+  setStep(2);
   var isKnown = selectedPatient.phone && !selectedPatient.isNew;
   var activeRxs = selectedPatient.isNew ? [] : getSelectedRxs();
   activeRxs.forEach(initReminderSettingsFor);

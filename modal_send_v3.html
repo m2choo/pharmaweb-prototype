@@ -491,7 +491,8 @@ function buildMsgDefault(){
   var name = (selectedPatient && selectedPatient.name) || '고객';
   var rx = selectedPatient && !selectedPatient.isNew ? getCurrentRx() : null;
   if(!rx){
-    return '[복약 상담 안내]\n안녕하세요, 웰체크약국입니다.\n' + name + ' 고객님, 지속적인 복약 관리를 위해 안내드립니다.\n';
+    return '안녕하세요, 웰체크약국입니다.\n' + name + ' 고객님, 지속적인 복약 관리를 위해 안내드립니다.' +
+      '\n\n[약사 메모]\n' + AI_SUMMARY_TEXT + '\n';
   }
   var drugs = editingDrugsMap[rx.id] || rx.drugs;
   var drugLines = drugs.map(function(d, i){
@@ -534,7 +535,7 @@ function buildNewCustomerDraft(){
 }
 function buildAiDraft(){
   if(selectedPatient && selectedPatient.isNew) return buildNewCustomerDraft();
-  return buildMsgDefault() + '\n\n[약사 메모]\n' + AI_SUMMARY_TEXT;
+  return buildMsgDefault();
 }
 
 /* ── 복약 알림 (v2 reminder.js 그대로 포팅, selectedRxIds 목록 대신 v3의 활성 처방전 1건 기준) ── */
@@ -931,7 +932,7 @@ function renderRxHistoryPanel(){
   var listEl = document.getElementById('rxMonthList');
   listEl.innerHTML = itemsInMonth.length
     ? itemsInMonth.map(function(rx){
-        var isOpen = rx.id === expandedRxId;
+        var isOpen = itemsInMonth.length === 1 ? true : rx.id === expandedRxId;
         var expandHtml = isOpen ? renderDrugTableHTML(rx) : '';
         var checkboxHtml = '<input type="checkbox" class="rx-history-check" onclick="event.stopPropagation()" onchange="selectRxHistoryItem(\'' + rx.id + '\')"' + (rx.id === currentRxId ? ' checked' : '') + '>';
         return '<div class="rx-history-item' + (rx.id === currentRxId ? ' active' : '') + (isOpen ? ' open' : '') + '">' +
@@ -1121,7 +1122,7 @@ function beginRecording(){
         '<!-- component: new/rx-history-panel --><div class="rx-history-panel" id="rxHistoryPanel" data-figma="new/rx-history-panel">' +
           '<div class="rx-history-panel-hdrow">' +
             '<span class="rx-history-panel-hd">처방전 이력</span>' +
-            '<span class="rx-history-panel-sub">복약 상담할 처방전을 골라 주세요.</span>' +
+            '<span class="rx-history-panel-sub">복약 상담할 처방 이력을 골라 주세요. 처방전을 선택하지 않아도 상담이 가능합니다.</span>' +
           '</div>' +
           '<div class="rx-month-nav">' +
             '<button type="button" class="rx-month-arrow" onclick="rxHistoryMonthShift(-1)">' +

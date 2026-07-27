@@ -110,9 +110,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
 .recent-rx-card.empty{border-radius:10px;padding:14px 16px;margin-bottom:14px;color:var(--color-grey-500);font-size:14px;text-align:center;}
 /* component: new/rx-history-panel — 월 단위 날짜 내비게이션 + 행별 펼치기/처방전 원본 보기 */
 .rx-history-panel{padding:14px 0;margin-bottom:14px;}
-.rx-history-panel-hdrow{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-.rx-history-panel-hd{font-size:18px;font-weight:500;letter-spacing:-0.72px;color:var(--color-grey-800);}
-.rx-history-panel-sub{font-size:13px;font-weight:400;color:var(--color-grey-500);}
 .rx-month-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:12px;}
 .rx-month-arrow{width:28px;height:28px;border:1px solid var(--color-grey-250);background:var(--color-white);border-radius:50%;color:var(--color-grey-600);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
 .rx-month-arrow:hover{border-color:var(--color-primary);color:var(--color-primary);}
@@ -780,6 +777,7 @@ function resetFlow(){
   pzBodyReset.innerHTML = '<div class="pz-idle">아직 녹음이 시작되지 않았습니다. 왼쪽에서 고객을 먼저 확인해 주세요.</div>';
   document.getElementById('pzFooter').innerHTML = '';
   document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
+  document.getElementById('st2').innerHTML = '<span class="step-num">2</span> 복약지도문 작성';
   var st3reset = document.getElementById('st3');
   st3reset.style.display = '';
   st3reset.innerHTML = '<span class="step-num">3</span> 메시지 확인';
@@ -845,7 +843,9 @@ function showRxSelectionStep(){
   document.getElementById('stepTabs').style.display = '';
   renderModalPtBar(false);
   document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 처방전 선택';
-  document.getElementById('st3').style.display = 'none';
+  document.getElementById('st2').innerHTML = '<span class="step-num">2</span> 상담 진행';
+  document.getElementById('st3').style.display = '';
+  document.getElementById('st3').innerHTML = '<span class="step-num">3</span> 복약지도문 작성';
 
   var rx = getDefaultActiveRx(selectedPatient);
   if(rx) currentRxId = rx.id;
@@ -854,10 +854,6 @@ function showRxSelectionStep(){
 
   var histHtml = rxHist.length
     ? '<!-- component: new/rx-history-panel --><div class="rx-history-panel" id="rxHistoryPanel" data-figma="new/rx-history-panel">' +
-        '<div class="rx-history-panel-hdrow">' +
-          '<span class="rx-history-panel-hd">처방전 이력</span>' +
-          '<span class="rx-history-panel-sub">복약 상담할 처방 이력을 골라 주세요. 처방전을 선택하지 않아도 상담이 가능합니다.</span>' +
-        '</div>' +
         '<div class="rx-month-nav">' +
           '<button type="button" class="rx-month-arrow" onclick="rxHistoryMonthShift(-1)">' +
             '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
@@ -1169,16 +1165,16 @@ function saveAddRow(rxId){
 
 /* ── 고객 선택 즉시 녹음 시작 (검색/신규 선택 → 바로 녹음) ── */
 function beginRecording(){
-  setStep(1);
   document.getElementById('stepTabs').style.display = '';
   renderModalPtBar(false);
   var st3 = document.getElementById('st3');
   if(selectedPatient.isNew){
+    setStep(1);
     document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 복약 상담';
     st3.style.display = '';
     st3.innerHTML = '<span class="step-num">3</span> 전화번호 입력';
   } else {
-    st3.style.display = 'none';
+    setStep(2);
   }
   document.getElementById('mbody').innerHTML =
     '<div class="wait-stage">' +
@@ -1223,7 +1219,7 @@ function endRecording(){
   goSummary();
 }
 function goSummary(){
-  setStep(2);
+  setStep(selectedPatient.isNew ? 2 : 3);
   var isKnown = selectedPatient.phone && !selectedPatient.isNew;
   var activeRx = selectedPatient.isNew ? null : getCurrentRx();
   if(activeRx) initReminderSettingsFor(activeRx);

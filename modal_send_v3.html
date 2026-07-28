@@ -32,7 +32,7 @@
 }
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@350;400;500;700&family=Poppins:wght@400;500;600&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-grey-100);min-height:100vh;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;min-height:100vh;}
 
 .ai-fab{position:fixed;bottom:32px;right:32px;background:var(--color-primary);border:none;border-radius:52px;padding:18px 30px 18px 20px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(62,113,240,.35);cursor:pointer;transition:transform .15s,box-shadow .15s;z-index:50;font-family:inherit;}
 .ai-fab:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(62,113,240,.5);}
@@ -321,10 +321,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
   .overlay-wrap{flex-direction:column;align-items:center;}
 }
 
-/* QA 전용: 케이스 전환 패널 (v2 qa-panel 포팅, 실서비스 반영 대상 아님) */
-.qa-panel{position:fixed;top:14px;left:14px;z-index:9999;background:var(--color-grey-900);color:#fff;padding:10px 12px;border-radius:10px;font-size:12px;font-family:inherit;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.3);}
-.qa-panel select{font-size:12px;padding:4px 6px;border-radius:6px;border:none;}
-.qa-panel span{opacity:.7;white-space:nowrap;}
 
 /* 처방전 원본 이미지 뷰어 (v2 rx-viewer 포팅) */
 .rx-viewer-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;align-items:center;justify-content:center;}
@@ -397,15 +393,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--color-
       </div>
     </div>
   </div>
-</div>
-
-<!-- QA 전용: 케이스 전환 패널 (실서비스 반영 대상 아님 — 리뷰용) -->
-<div class="qa-panel">
-  <span>QA 상태</span>
-  <select onchange="applyQaState(this.value)">
-    <option value="normal">정상</option>
-    <option value="rx-empty">처방전 없음 케이스 검색(이수진)</option>
-  </select>
 </div>
 
 <script>
@@ -807,15 +794,6 @@ function openModalAtStep2(customerData){
     : recentRxs.filter(function(rx){ return !rx.guidanceSent; }).map(function(rx){ return rx.id; });
   beginRecording();
   applyPostRxCheckStepLabels();
-}
-/* QA 전용: 리뷰 시 특정 케이스를 빠르게 찾아 검색해 주는 단축 기능 — 실제 진입(신규 시작 → 이름 검색으로 단골 전환) 과정은 그대로 보여줌 (실서비스 반영 대상 아님) */
-function applyQaState(v){
-  openModal();
-  if(v === 'rx-empty'){
-    startEditName();
-    document.getElementById('ptNameInput').value = '이수진';
-    onNameEditSearch('이수진');
-  }
 }
 /* 모달을 닫을 땐 확인 절차 없이 그냥 닫되, 진행 중이던 세션이 있으면 항상 "복약 상담함"에 임시저장 기록으로 남김
    (cl_note_v3.html이 사용하는 wcCLNotes localStorage와 동일한 스키마) */

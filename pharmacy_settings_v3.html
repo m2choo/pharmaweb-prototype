@@ -10,14 +10,14 @@
 body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#fff;min-height:100vh;display:flex;}
 
 /* ── LNB ── */
-.lnb{width:200px;min-height:100vh;background:#fff;border-right:1px solid #E8EAED;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:10;overflow:hidden;transition:width .2s;}
+.lnb{width:224px;min-height:100vh;background:#fff;border-right:1px solid #E8EAED;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:10;overflow:hidden;transition:width .2s;}
 .lnb.collapsed{width:0;border-right:none;}
-.lnb-collapse-btn{position:fixed;top:132px;left:200px;transform:translate(-50%,-50%);width:28.8px;height:28.8px;border-radius:50%;background:#fff;border:1px solid #E0E4EA;box-shadow:0 2px 6px rgba(20,30,50,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:20;color:#8B95A1;font-size:16.8px;transition:left .2s;}
+.lnb-collapse-btn{position:fixed;top:132px;left:224px;transform:translate(-50%,-50%);width:28.8px;height:28.8px;border-radius:50%;background:#fff;border:1px solid #E0E4EA;box-shadow:0 2px 6px rgba(20,30,50,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:20;color:#8B95A1;font-size:16.8px;transition:left .2s;}
 .lnb-collapse-btn.collapsed{left:0;}
 .lnb-logo{padding:20px 20px 16px;border-bottom:1px solid #E8EAED;}
 .lnb-logo svg{width:100px;}
 .lnb-nav{padding:8px 0;}
-.lnb-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:15.6px;color:#555;cursor:pointer;position:relative;text-decoration:none;transition:background .1s;}
+.lnb-item{display:flex;align-items:center;gap:6px;padding:10px 20px;font-size:14px;color:#555;cursor:pointer;position:relative;text-decoration:none;transition:background .1s;}
 .lnb-item:hover{background:#F4F5F7;}
 .lnb-item.active{background:#2563EB;color:#fff;font-weight:600;border-radius:6px;margin:0 8px;padding:10px 12px;}
 .lnb-item.active svg path,.lnb-item.active svg circle,.lnb-item.active svg rect{stroke:#fff;}
@@ -35,7 +35,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#fff;min-hei
 .lnb-btn-sm{flex:1;padding:6px;font-size:13.2px;color:#555;border:1px solid #E0E0E0;border-radius:6px;background:#fff;cursor:pointer;font-family:inherit;text-align:center;}
 
 /* ── MAIN ── */
-.main{margin-left:200px;flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left .2s;}
+.main{margin-left:224px;flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left .2s;}
 .main.expanded{margin-left:0;}
 .page-hd{padding:20px 32px 0;background:#fff;border-bottom:1px solid #E8EAED;}
 .page-title{font-size:24px;font-weight:700;color:#111;margin-bottom:16px;}

@@ -13,12 +13,12 @@
 body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-height:100vh;display:flex;}
 
 /* ── LNB (다른 v3 페이지와 동일) ── */
-.lnb{width:200px;min-height:100vh;background:#fff;border-right:1px solid #E8EAED;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:10;overflow:hidden;}
+.lnb{width:224px;min-height:100vh;background:#fff;border-right:1px solid #E8EAED;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:10;overflow:hidden;}
 .lnb-logo{padding:20px 20px 16px;border-bottom:1px solid #E8EAED;}
 .lnb-nav{padding:8px 0;}
 .lnb-secondary{border-top:1px solid #E8EAED;padding:8px 0;}
 .lnb-item.sub{font-size:15px;color:#888;padding:8px 20px;}
-.lnb-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:15.6px;color:#555;cursor:pointer;position:relative;text-decoration:none;transition:background .1s;}
+.lnb-item{display:flex;align-items:center;gap:6px;padding:10px 20px;font-size:14px;color:#555;cursor:pointer;position:relative;text-decoration:none;transition:background .1s;}
 .lnb-item:hover{background:#F4F5F7;}
 .lnb-item.active{background:#2563EB;color:#fff;font-weight:600;border-radius:6px;margin:0 8px;padding:10px 12px;}
 .lnb-item.active svg path,.lnb-item.active svg circle,.lnb-item.active svg rect{stroke:#fff;}
@@ -33,7 +33,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-
 .lnb-btn-sm{flex:1;padding:6px;font-size:13.2px;color:#555;border:1px solid #E0E0E0;border-radius:6px;background:#fff;cursor:pointer;font-family:inherit;text-align:center;}
 
 /* ── MAIN ── */
-.main{margin-left:200px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
+.main{margin-left:224px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
 .page-hd{padding:20px 32px 12px;background:#fff;border-bottom:1px solid #E8EAED;}
 .page-title{font-size:24px;font-weight:700;color:#111;}
 .page-sub{font-size:14.4px;color:#888;margin-top:4px;}
@@ -212,7 +212,7 @@ footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:
     <div class="record-modal-body" id="recordFormArea"></div>
     <div class="record-modal-ft">
       <button class="record-cancel-btn" onclick="closeRecordModal()">취소</button>
-      <button class="record-save-btn" onclick="saveRecordModal()">저장</button>
+      <button class="record-save-btn" onclick="saveRecordModal()">확인</button>
     </div>
   </div>
 </div>
@@ -304,7 +304,7 @@ function renderTable(){
     return;
   }
   wrap.innerHTML = '<table>' +
-    '<thead><tr><th>기록지 생성일시</th><th>이름</th><th>인쇄</th><th>웹팩스 전송</th></tr></thead>' +
+    '<thead><tr><th>기록지 생성일시</th><th>이름</th><th>수정</th><th>인쇄</th><th>웹팩스 전송</th></tr></thead>' +
     '<tbody>' + list.map(rowHTML).join('') + '</tbody>' +
   '</table>';
 }
@@ -312,7 +312,8 @@ function rowHTML(r){
   return '<tr>' +
     '<td class="td-date">' + (r.createdAt || '—') + '</td>' +
     '<td class="td-name">' + (r.name || '—') + '</td>' +
-    '<td><button class="mgmt-btn mgmt-btn-solid" onclick="openRecordModal(\'' + r.id + '\')">인쇄</button></td>' +
+    '<td><button class="mgmt-btn mgmt-btn-outline" onclick="openRecordModal(\'' + r.id + '\')">수정하기</button></td>' +
+    '<td><button class="mgmt-btn mgmt-btn-solid" onclick="printRecordById(\'' + r.id + '\')">인쇄하기</button></td>' +
     '<td><button class="mgmt-btn mgmt-btn-outline" onclick="sendFax(\'' + r.id + '\')">전송하기</button></td>' +
   '</tr>';
 }
@@ -440,10 +441,15 @@ function saveRecordModal(){
   readRecordFormInto(rec);
   saveRecords(list);
   closeRecordModal();
-  printRecord(rec);
   renderTable();
 }
 
+/* 테이블의 "인쇄하기" 버튼 — 모달을 거치지 않고 저장된 상태 그대로 바로 인쇄 팝업을 띄움 */
+function printRecordById(id){
+  const rec = loadRecords().find(r => r.id === id);
+  if (!rec) return;
+  printRecord(rec);
+}
 /* 저장된(읽기 전용) 상태 그대로 인쇄 영역을 채우고 시스템 인쇄 팝업을 띄움 */
 function printRecord(rec){
   document.getElementById('printArea').innerHTML = buildPrintHtml(rec);

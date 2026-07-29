@@ -330,7 +330,7 @@ function rowHTML(r){
   return '<tr>' +
     '<td class="td-date">' + (r.createdAt || '—') + '</td>' +
     '<td class="td-name">' + (r.name || '—') + '</td>' +
-    '<td><button class="mgmt-btn mgmt-btn-outline" onclick="openRecordModal(\'' + r.id + '\')">미리보기</button></td>' +
+    '<td><button class="mgmt-btn mgmt-btn-outline" onclick="openRecordModal(\'' + r.id + '\')">수정하기</button></td>' +
     '<td><button class="mgmt-btn mgmt-btn-solid" onclick="printRecordById(\'' + r.id + '\')">인쇄하기</button></td>' +
     '<td><button class="mgmt-btn mgmt-btn-outline" onclick="sendFax(\'' + r.id + '\')">전송하기</button></td>' +
   '</tr>';

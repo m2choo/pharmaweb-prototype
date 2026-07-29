@@ -331,6 +331,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .cpl-ttl{font-size:24px;font-weight:350;letter-spacing:-0.96px;color:var(--color-grey-900);}
 .cpl-sub{font-size:16px;font-weight:400;letter-spacing:-0.6px;color:var(--color-grey-600);}
 .btn-close-cpl{height:44px;padding:0 48px;background:var(--color-primary);border:none;border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-white);cursor:pointer;font-family:inherit;}
+.btn-poly-record{height:44px;padding:0 24px;background:var(--color-white);border:1.5px solid var(--color-primary);border-radius:8px;font-size:15px;font-weight:500;letter-spacing:-0.6px;color:var(--color-primary);cursor:pointer;font-family:inherit;margin-top:4px;}
 
 /* ── 퍼즐 AI 패널 (우측) — modal_send_v2.html의 패널 디자인(이름+나이/방문정보 바/채팅형 인식 영역/마이크+입력바)을 그대로 적용 ── */
 .puzzle-panel{width:360px;height:723px;max-height:90vh;flex-shrink:0;background:var(--color-white);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--color-grey-200);}
@@ -607,16 +608,14 @@ var PHARMACY_NAME = '웰체크약국';
 var AI_SUMMARY_TEXT = '오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편 가능함. 수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요. 밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능함.';
 /* 약사 메모 인풋란 데모용 기본 텍스트 — 저장된 메모가 없을 때만 채워짐(getMemoKey 기준으로 실제 저장되면 그 값이 우선) */
 var DEFAULT_PHARMACIST_MEMO = '공복 시 위장 불편감 호소, 식후 복용 권장 안내함.\n최근 수면 부족·카페인 과다 섭취 언급 — 생활습관 관리 필요성 설명함.';
-/* ── 복약지도문 초안 — AI 요약 내용/처방약 정보/다제약물 정보 3개 섹션을 goSummary()의 체크박스로 켜고 끌 수 있음.
-   각 섹션은 해당 데이터가 실제로 있을 때만(hasRxInfoAvailable/hasPolyInfoAvailable) 켠 상태로 반영됨 ── */
+/* ── 복약지도문 초안 — AI 요약 내용/처방약 정보 2개 섹션을 goSummary()의 체크박스로 켜고 끌 수 있음.
+   각 섹션은 해당 데이터가 실제로 있을 때만(hasRxInfoAvailable) 켠 상태로 반영됨.
+   복약점검 정보는 환자에게 보내는 지도문에는 넣지 않기로 해서 제외 — 복약 상담 화면의
+   "복약 점검 항목" 카드(renderPolyDrugTableHtml)는 약사 참고용으로만 남아있고 무관함 ── */
 var msgIncludeSummary = true;
 var msgIncludeRx = true;
-var msgIncludePoly = true;
 function hasRxInfoAvailable(){
   return !!(selectedPatient && !selectedPatient.isNew && getSelectedRxs().length);
-}
-function hasPolyInfoAvailable(){
-  return !!(selectedPatient && getPolyInfoFootnotes(selectedPatient).length);
 }
 function buildRxInfoBlock(){
   var freqSlotMap = { '1일 1회': ['아침'], '1일 2회': ['아침', '저녁'], '1일 3회': ['아침', '점심', '저녁'], '1일 4회': ['아침', '점심', '저녁', '취침 전'] };
@@ -653,12 +652,6 @@ function buildRxInfoBlock(){
   var methodBlock = methodSection ? '\n\n[복약 방법]\n' + methodSection : '';
   return '[처방약 정보]\n' + drugLines.join('\n') + methodBlock;
 }
-function buildPolyInfoBlock(){
-  var footnotes = getPolyInfoFootnotes(selectedPatient);
-  if(!footnotes.length) return '';
-  var lines = footnotes.map(function(f){ return '- [' + MED_CHECK_STAT_LABEL[f.type] + '] ' + f.html.replace(/<\/?b>/g, ''); });
-  return '[복약점검 정보]\n' + lines.join('\n');
-}
 function buildAiDraft(){
   var isNew = selectedPatient && selectedPatient.isNew;
   var name = (selectedPatient && selectedPatient.name) || '고객';
@@ -667,7 +660,6 @@ function buildAiDraft(){
     : '안녕하세요, 웰체크약국입니다.\n' + name + ' 고객님, 오늘 상담하신 내용을 보내드립니다.';
   if(msgIncludeSummary) out += '\n\n[상담 내용 요약]\n' + AI_SUMMARY_TEXT;
   if(msgIncludeRx && hasRxInfoAvailable()) out += '\n\n' + buildRxInfoBlock();
-  if(msgIncludePoly && hasPolyInfoAvailable()) out += '\n\n' + buildPolyInfoBlock();
   if(isNew) out += '\n\n[웰체크 앱 가입 안내]\n약사님과의 상담 내용을 보관하고 싶으신가요? 웰체크 앱에서 확인해 보세요.\n' + INVITE_LINK;
   return out + '\n';
 }
@@ -995,8 +987,8 @@ function resetFlow(){
   hadInlineRxCheck = false;
   msgIncludeSummary = true;
   msgIncludeRx = true;
-  msgIncludePoly = true;
   consultCompleted = false;
+  lastPolyRecordId = null;
   clearInterval(timerId);
   clearInterval(sttTimer);
   hideConsultHintBar();
@@ -1226,6 +1218,91 @@ function getPolyQualifyingDrugs(patient){
 }
 function computePolyQualifyingCount(patient){
   return getPolyQualifyingDrugs(patient).length;
+}
+/* ── 다제약물 상담기록지(poly_consult_record_v3.html) 연동 — 다제약물 대상 추정(10종 이상 90일 이상
+   처방)인 경우에만, 복약지도문 발송 완료 시점에 상담기록지 초안을 생성해 localStorage(wcPolyRecords)에
+   남김. "관련 요인" 체크박스는 처방 이력을 근거로 기본값만 채워두고, 실제 화면에서 약사가 직접 수정함 ── */
+var POLY_RECORD_FACTORS = [
+  { key: 'tenPlus', label: '10종 이상 약제 복용' },
+  { key: 'narcotic', label: '마약성 진통제' },
+  { key: 'tca', label: '삼환계항우울제' },
+  { key: 'cns3', label: '3종 이상 중추신경계 억제 약물' },
+  { key: 'anticholinergic2', label: '2종 이상 항콜린성 약제' },
+  { key: 'nsaid2', label: 'NSAIDs 2종' },
+  { key: 'digoxin', label: '디고신' },
+  { key: 'anticoagulant', label: '항응고제' },
+  { key: 'cardio3', label: '3종 이상 심혈관계 약제' },
+  { key: 'insulin', label: '인슐린' },
+  { key: 'oral3', label: '3종 이상 경구혈당강하제' },
+  { key: 'steroidLong', label: '장기간 코르티코스테로이드 사용' }
+];
+var POLY_RECORD_PLAN_ROWS = [
+  { key: 'dispose', label: '폐기필요 의약품', placeholder: '예) OO정 외 O종', interventions: ['회수', '별도 구분함'] },
+  { key: 'storage', label: '약물보관법', placeholder: '예) 별도 보관장소 없음, 인슐린 냉장 보관 등', interventions: ['교육'] },
+  { key: 'adherence', label: '복약순응도', placeholder: '예) 해당 의약품명', interventions: ['교육', '환자를 통해 의료진 알림'] },
+  { key: 'interactionOtc', label: '처방약물-일반의약품 상호작용', placeholder: '예) 해당 의약품명', interventions: ['교육', '의료진 알림'] },
+  { key: 'interactionFood', label: '약물-음식 상호작용', placeholder: '예) 해당 의약품명', interventions: ['교육', '의료진 알림'] },
+  { key: 'interactionDisease', label: '약물-질환 상호작용', placeholder: '예) 해당 의약품명-질환', interventions: ['교육', '의료진 알림'] },
+  { key: 'etc', label: '기타', placeholder: '명시되지 않은 중재 사항을 간단히 기술', interventions: ['교육', '의료진 알림'] }
+];
+/* 처방 이력만으로 판단 가능한 요인만 기본 체크 — 나머지(마약성 진통제 등)는 목업 약품 분류에 없어
+   항상 false로 두고, 약사가 상담기록지 화면에서 직접 체크하도록 함 */
+function computePolyDefaultFactors(patient){
+  var drugs = getPolyQualifyingDrugs(patient);
+  var categoryCount = {};
+  drugs.forEach(function(d){
+    var cat = DRUG_CATEGORY_MAP[d.name] || '';
+    categoryCount[cat] = (categoryCount[cat] || 0) + 1;
+  });
+  var cardioCount = (categoryCount['고혈압치료제'] || 0) + (categoryCount['고지혈증치료제'] || 0);
+  var factors = {};
+  POLY_RECORD_FACTORS.forEach(function(f){ factors[f.key] = false; });
+  factors.tenPlus = drugs.length >= 10;
+  factors.anticoagulant = !!(categoryCount['항혈전제'] || categoryCount['항혈소판제']);
+  factors.cardio3 = cardioCount >= 3;
+  factors.oral3 = (categoryCount['당뇨병용제'] || 0) >= 3;
+  return factors;
+}
+function buildPolyRecordPlanDefaults(){
+  var plan = {};
+  POLY_RECORD_PLAN_ROWS.forEach(function(row){
+    plan[row.key] = { detail: '', interventions: {} };
+  });
+  return plan;
+}
+/* 복약지도문 발송 완료 시점 호출 — 다제약물 대상일 때만 상담기록지를 새로 만들어 저장하고, id를
+   lastPolyRecordId에 남겨 완료 화면의 "다제약물 상담기록지 확인" 버튼이 그 기록으로 바로 이동하게 함 */
+var lastPolyRecordId = null;
+function savePolyRecordIfQualifying(){
+  lastPolyRecordId = null;
+  if(!selectedPatient || computePolyQualifyingCount(selectedPatient) < 10) return;
+  var now = new Date();
+  var pad = function(n){ return String(n).padStart(2, '0'); };
+  var ts = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+  var dateOnly = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+  var ongoingDates = {};
+  getOngoingOtherDrugs(selectedPatient, getSelectedRxs().map(function(rx){ return rx.id; })).forEach(function(r){ ongoingDates[r.date] = true; });
+  var rec = {
+    id: 'poly_' + now.getTime() + '_' + Math.floor(Math.random() * 1000),
+    name: selectedPatient.name,
+    phone: selectedPatient.phone || '',
+    birth: selectedPatient.birth || null,
+    createdAt: ts,
+    consultDate: dateOnly,
+    consultMethod: 'visit',
+    pharmacist: '김체크 약사',
+    rxCount: Object.keys(ongoingDates).length,
+    factors: computePolyDefaultFactors(selectedPatient),
+    plan: buildPolyRecordPlanDefaults(),
+    followup: { none: false, weeks: false, months: false },
+    followupMethod: { visit: true, home: false, phone: false }
+  };
+  var KEY = 'wcPolyRecords';
+  var list;
+  try { list = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e){ list = []; }
+  list.push(rec);
+  localStorage.setItem(KEY, JSON.stringify(list));
+  lastPolyRecordId = rec.id;
 }
 /* 다제약물 대상자에 한해, 오늘 확인 중인 처방전(excludeRxIds) 말고 다른 처방 중 아직 복용 기간이
    남아 있는(처방일+일수가 오늘 이후인) 약 — 지금 안 보이지만 같이 복용 중일 수 있는 약을 참고용으로 보여줌 */
@@ -1897,7 +1974,6 @@ function goSummary(){
   var chkRow = '<div class="msg-chk-row">' +
     buildMsgChipHtml('summary', 'AI 요약 내용', msgIncludeSummary) +
     (hasRxInfoAvailable() ? buildMsgChipHtml('rx', '처방약 정보', msgIncludeRx) : '') +
-    (hasPolyInfoAvailable() ? buildMsgChipHtml('poly', '복약점검 정보', msgIncludePoly) : '') +
   '</div>';
   document.getElementById('mbody').innerHTML =
     '<div class="msg-hdr"><span class="msg-ttl">복약지도문 작성</span></div>' +
@@ -1928,12 +2004,12 @@ function toggleMsgChip(btn){
   var key = btn.dataset.key;
   if(key === 'summary') msgIncludeSummary = on;
   else if(key === 'rx') msgIncludeRx = on;
-  else if(key === 'poly') msgIncludePoly = on;
   document.getElementById('draftText').value = buildAiDraft();
   updateMsgCount();
 }
 function sendKnownDirect(){
   currentDraft = document.getElementById('draftText').value;
+  savePolyRecordIfQualifying();
   renderComplete(selectedPatient.name+'님의 웰체크 앱으로 복약지도문이 발송되었습니다.');
 }
 
@@ -1974,14 +2050,24 @@ function checkSendEnabled(){
 }
 function doSend(){
   selectedPatient.phone = document.getElementById('sendPhone').value || selectedPatient.phone;
+  savePolyRecordIfQualifying();
   renderComplete(selectedPatient.phone+'로 복약지도문과 웰체크 앱 초대 링크가 문자(SMS)로 발송되었습니다.');
 }
+function goToPolyRecord(){
+  var target = 'poly_consult_record_v3.html?open=' + encodeURIComponent(lastPolyRecordId);
+  if(window.top && window.top !== window) window.top.location.href = target;
+  else window.location.href = target;
+}
 function renderComplete(cplSub){
+  var polyBtn = lastPolyRecordId
+    ? '<button class="btn-poly-record" onclick="goToPolyRecord()">다제약물 상담기록지 확인</button>'
+    : '';
   document.getElementById('mbody').innerHTML =
     '<div class="cpl-wrap">' +
       '<div class="cpl-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="#33AF2E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
       '<div class="cpl-ttl">전송이 완료되었습니다</div>' +
       '<div class="cpl-sub">'+cplSub+'</div>' +
+      polyBtn +
     '</div>';
   document.getElementById('mfoot').innerHTML =
     '<button class="btn-close-cpl" onclick="closeModal()">확인</button>';

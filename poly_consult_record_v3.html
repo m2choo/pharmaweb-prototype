@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>웰체크 약사웹 프로토타입</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:#F4F5F7;min-height:100vh;display:flex;}
+
+/* ── LNB (다른 v3 페이지와 동일) ── */
+.lnb{width:200px;min-height:100vh;background:#fff;border-right:1px solid #E8EAED;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:10;overflow:hidden;}
+.lnb-logo{padding:20px 20px 16px;border-bottom:1px solid #E8EAED;}
+.lnb-nav{padding:8px 0;}
+.lnb-secondary{border-top:1px solid #E8EAED;padding:8px 0;}
+.lnb-item.sub{font-size:15px;color:#888;padding:8px 20px;}
+.lnb-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:15.6px;color:#555;cursor:pointer;position:relative;text-decoration:none;transition:background .1s;}
+.lnb-item:hover{background:#F4F5F7;}
+.lnb-item.active{background:#2563EB;color:#fff;font-weight:600;border-radius:6px;margin:0 8px;padding:10px 12px;}
+.lnb-item.active svg path,.lnb-item.active svg circle,.lnb-item.active svg rect{stroke:#fff;}
+.lnb-icon{width:16px;height:16px;flex-shrink:0;opacity:.6;}
+.lnb-item.active .lnb-icon{opacity:1;}
+.lnb-bottom{border-top:1px solid #E8EAED;padding:12px 16px;margin-top:auto;}
+.lnb-user{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.lnb-avatar{width:32px;height:32px;border-radius:50%;background:#EBF2FF;display:flex;align-items:center;justify-content:center;font-size:14.4px;font-weight:700;color:#2563EB;flex-shrink:0;}
+.lnb-username{font-size:14.4px;font-weight:600;color:#111;}
+.lnb-pharmacy{font-size:13.2px;color:#888;}
+.lnb-btns{display:flex;gap:6px;}
+.lnb-btn-sm{flex:1;padding:6px;font-size:13.2px;color:#555;border:1px solid #E0E0E0;border-radius:6px;background:#fff;cursor:pointer;font-family:inherit;text-align:center;}
+
+/* ── MAIN ── */
+.main{margin-left:200px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
+.page-hd{padding:20px 32px 12px;background:#fff;border-bottom:1px solid #E8EAED;}
+.page-title{font-size:24px;font-weight:700;color:#111;}
+.page-sub{font-size:14.4px;color:#888;margin-top:4px;}
+.content{flex:1;padding:20px 32px;display:flex;flex-direction:column;gap:16px;}
+.content-card{background:#fff;border-radius:8px;border:1px solid #E8EAED;display:flex;flex-direction:column;flex:1;overflow:hidden;}
+.toolbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;}
+.total-count{font-size:16.8px;font-weight:600;color:#111;}
+.total-count-value{color:#2563EB;}
+
+table{width:100%;border-collapse:collapse;}
+thead tr{background:#F8F9FA;border-bottom:1px solid #E8EAED;}
+th{padding:10px 14px;font-size:13.8px;font-weight:600;color:#888;text-align:center;white-space:nowrap;}
+tbody tr{border-bottom:1px solid #F2F4F6;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:#F8FBFF;}
+td{padding:13px 14px;font-size:15px;color:#333;text-align:center;vertical-align:middle;}
+.td-date{color:#666;font-size:14.4px;white-space:nowrap;}
+.td-name{font-weight:600;color:#111;white-space:nowrap;}
+
+.mgmt-btn{width:96px;height:30px;padding:0;border-radius:6px;font-family:inherit;font-size:14.4px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.mgmt-btn-outline{background:#fff;border:1px solid #D1D7E0;color:#333D48;}
+.mgmt-btn-outline:hover{background:#F4F5F7;}
+.mgmt-btn-solid{background:#3E71F0;border:none;color:#fff;}
+.mgmt-btn-solid:hover{background:#2f5fd9;}
+
+.empty-wrap{padding:80px 20px;text-align:center;color:#AAA;}
+.empty-title{font-size:16.8px;font-weight:600;color:#888;margin-bottom:6px;}
+.empty-sub{font-size:15px;color:#AAA;line-height:1.7;}
+
+.toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(16px);background:#1E293B;color:#fff;padding:10px 22px;border-radius:24px;font-size:15.6px;font-weight:500;opacity:0;transition:opacity .22s,transform .22s;z-index:999;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+footer{background:#fff;border-top:1px solid #E8EAED;padding:14px 32px;font-size:12.6px;color:#999;display:flex;justify-content:space-between;align-items:flex-end;}
+.footer-links{display:flex;gap:12px;margin-bottom:6px;}
+.footer-links a{color:#999;text-decoration:none;}
+.footer-links a:hover{color:#555;}
+
+/* ── 상담기록지 편집/미리보기 모달 ── */
+.record-modal-layer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:center;justify-content:center;}
+.record-modal-layer.on{display:flex;}
+.record-modal-box{width:760px;max-width:94vw;max-height:90vh;background:#fff;border-radius:14px;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.28);}
+.record-modal-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 26px;border-bottom:1px solid #E8EAED;flex-shrink:0;}
+.record-modal-title{font-size:19.2px;font-weight:700;color:#111;}
+.record-modal-x{width:28px;height:28px;background:none;border:none;cursor:pointer;color:#888;font-size:19.2px;border-radius:6px;font-family:inherit;}
+.record-modal-x:hover{background:#F4F5F7;}
+.record-modal-body{padding:22px 26px;overflow-y:auto;flex:1;}
+.record-modal-ft{padding:16px 26px 22px;display:flex;justify-content:center;gap:10px;border-top:1px solid #E8EAED;flex-shrink:0;}
+.record-cancel-btn{flex:1;max-width:220px;height:44px;background:#fff;color:#555;border:1px solid #D9DEE8;border-radius:8px;font-family:inherit;font-size:15.6px;font-weight:600;cursor:pointer;}
+.record-cancel-btn:hover{background:#F4F5F7;}
+.record-save-btn{flex:1;max-width:220px;height:44px;background:#2563EB;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:15.6px;font-weight:700;cursor:pointer;}
+.record-save-btn:hover{background:#1d4fd1;}
+
+/* 기록지 폼(모달 안 편집용 + 인쇄용 공통) — 세로(portrait)로 필드를 한 줄씩 쌓는 구성 */
+.rf-title{font-size:18px;font-weight:700;color:#111;margin-bottom:10px;}
+.rf-band{background:#FDF3D8;font-size:14.4px;font-weight:600;color:#333;padding:8px 12px;border:1px solid #111;border-bottom:none;}
+.rf-field-table{width:100%;border-collapse:collapse;margin-bottom:14px;}
+.rf-field-table tr{border:1px solid #111;}
+.rf-field-table td{border:1px solid #111;padding:8px 12px;font-size:14px;vertical-align:middle;}
+.rf-field-label{background:#F5F5F5;font-weight:700;color:#333;width:150px;white-space:nowrap;}
+.rf-field-value{color:#111;}
+.rf-field-value input[type="text"],.rf-field-value input[type="tel"]{width:100%;border:1px solid #CBD3DC;border-radius:4px;padding:5px 8px;font-family:inherit;font-size:14px;}
+.rf-radio-group{display:flex;flex-wrap:wrap;gap:12px;font-size:13.6px;}
+.rf-radio-group label{display:flex;align-items:center;gap:5px;cursor:pointer;white-space:nowrap;}
+
+.rf-section-label{font-size:15px;font-weight:700;color:#111;margin:14px 0 8px;}
+.rf-factors{border:1px solid #111;padding:10px 14px;display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.rf-factor-row{display:flex;flex-wrap:wrap;gap:14px 20px;font-size:13.6px;}
+.rf-factor-row label{display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;}
+
+.rf-plan-note{font-size:13.6px;color:#555;margin-bottom:8px;}
+.rf-plan-note i{color:#888;}
+.rf-plan-table{width:100%;border-collapse:collapse;margin-bottom:14px;}
+.rf-plan-table th,.rf-plan-table td{border:1px solid #111;padding:8px 10px;font-size:13px;text-align:left;vertical-align:top;}
+.rf-plan-table th{background:#F5F5F5;text-align:center;font-weight:700;}
+.rf-plan-table td:first-child{font-weight:600;width:150px;}
+.rf-plan-table input[type="text"]{width:100%;border:1px solid #CBD3DC;border-radius:4px;padding:5px 8px;font-family:inherit;font-size:13px;}
+.rf-plan-table .rf-intv-list{display:flex;flex-direction:column;gap:4px;font-size:12.8px;}
+.rf-plan-table .rf-intv-list label{display:flex;align-items:center;gap:5px;cursor:pointer;white-space:nowrap;}
+
+.rf-followup-line{font-size:13.6px;margin-bottom:8px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
+.rf-followup-line b{white-space:nowrap;}
+
+/* 화면에서는 숨겨두고 인쇄될 때만 노출하는 읽기 전용 인쇄 영역 */
+#printArea{display:none;}
+@media print{
+  @page{ size: portrait; margin: 14mm; }
+  body *{ visibility:hidden; }
+  #printArea, #printArea *{ visibility:visible; }
+  #printArea{ display:block !important; position:absolute; top:0; left:0; width:100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- LNB -->
+<nav class="lnb">
+  <div class="lnb-logo">
+    <img src="wellcheck_bi.png" alt="Wellcheck" style="width:144px;display:block;">
+  </div>
+  <div class="lnb-nav">
+    <a class="lnb-item" href="customer_list_v3.html" style="text-decoration:none;color:inherit;">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="#555" stroke-width="1.4"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
+      약국 고객
+    </a>
+    <a class="lnb-item" href="prescription_list_v3.html" style="text-decoration:none;color:inherit;">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="14" rx="2" stroke="#555" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
+      접수 처방전
+    </a>
+    <a class="lnb-item" href="cl_note_v3.html" style="text-decoration:none;color:inherit;">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><path d="M4.5 1.5h5l3 3v9a1 1 0 01-1 1h-7a1 1 0 01-1-1v-11a1 1 0 011-1z" stroke="#555" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 7.5h4M6 10h4" stroke="#555" stroke-width="1.4" stroke-linecap="round"/></svg>
+      AI 상담 대기함
+    </a>
+    <a class="lnb-item active" href="poly_consult_record_v3.html" style="text-decoration:none;">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1.5" width="12" height="13" rx="1.5" stroke="#fff" stroke-width="1.4"/><path d="M5 5h6M5 7.5h6M5 10h3.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg>
+      다제약물 상담기록지
+    </a>
+    <div class="lnb-item">
+      <svg class="lnb-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="#555" stroke-width="1.4"/><path d="M1 6h14" stroke="#555" stroke-width="1.4"/></svg>
+      앱 설치 문자 발송
+    </div>
+  </div>
+  <div class="lnb-secondary">
+    <a class="lnb-item sub" href="pharmacy_settings_v3.html" style="text-decoration:none;color:inherit;justify-content:space-between;">약국설정 <span style="color:#aaa;">›</span></a>
+    <div class="lnb-item sub">1:1 채팅문의</div>
+    <div class="lnb-item sub">원격 지원 요청하기</div>
+  </div>
+  <div class="lnb-bottom">
+    <div class="lnb-user">
+      <div class="lnb-avatar">김</div>
+      <div>
+        <div class="lnb-username">김체크 약사</div>
+        <div class="lnb-pharmacy">웰체크약국</div>
+      </div>
+    </div>
+    <div class="lnb-btns">
+      <button class="lnb-btn-sm">내 정보</button>
+      <button class="lnb-btn-sm">로그아웃</button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="page-hd">
+    <div class="page-title">다제약물 상담기록지</div>
+    <div class="page-sub">다제약물관리사업 대상으로 추정되는 고객의 복약지도문 발송이 완료되면 이곳에 상담기록지가 자동으로 생성됩니다.</div>
+  </div>
+
+  <div class="content">
+    <div class="content-card">
+      <div class="toolbar">
+        <div class="total-count">총 기록지 <span class="total-count-value" id="totalCount">(0)</span></div>
+      </div>
+      <div id="tableWrap"></div>
+    </div>
+  </div>
+  <footer>
+    <div>
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+      </div>
+      <div>(주)엠서클 &nbsp;·&nbsp; 사업자등록번호: 288-87-03573 &nbsp;·&nbsp; 통신판매업신고번호: 제2009-서울강남-00209호 &nbsp;·&nbsp; 주소: 서울특별시 강남구 봉은사로 114길 12, 7층 &nbsp;·&nbsp; 대표자: 이찬란, 정윤미 &nbsp;·&nbsp; 대표번호: 1551-3633</div>
+    </div>
+    <div>Copyright © Mcircle Corp. All rights reserved.</div>
+  </footer>
+</main>
+
+<!-- 상담기록지 편집/미리보기 모달 -->
+<div class="record-modal-layer" id="recordModalLayer">
+  <div class="record-modal-box">
+    <div class="record-modal-hd">
+      <span class="record-modal-title">다제약물 상담기록지</span>
+      <button class="record-modal-x" onclick="closeRecordModal()">✕</button>
+    </div>
+    <div class="record-modal-body" id="recordFormArea"></div>
+    <div class="record-modal-ft">
+      <button class="record-cancel-btn" onclick="closeRecordModal()">취소</button>
+      <button class="record-save-btn" onclick="saveRecordModal()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 인쇄 전용 영역 -->
+<div id="printArea"></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const POLY_KEY = 'wcPolyRecords';
+const FACTORS = [
+  { key: 'tenPlus', label: '10종 이상 약제 복용' },
+  { key: 'narcotic', label: '마약성 진통제' },
+  { key: 'tca', label: '삼환계항우울제' },
+  { key: 'cns3', label: '3종 이상 중추신경계 억제 약물' },
+  { key: 'anticholinergic2', label: '2종 이상 항콜린성 약제' },
+  { key: 'nsaid2', label: 'NSAIDs 2종' },
+  { key: 'digoxin', label: '디고신' },
+  { key: 'anticoagulant', label: '항응고제' },
+  { key: 'cardio3', label: '3종 이상 심혈관계 약제' },
+  { key: 'insulin', label: '인슐린' },
+  { key: 'oral3', label: '3종 이상 경구혈당강하제' },
+  { key: 'steroidLong', label: '장기간 코르티코스테로이드 사용' }
+];
+const PLAN_ROWS = [
+  { key: 'dispose', label: '폐기필요 의약품', placeholder: '예) OO정 외 O종', interventions: ['회수', '별도 구분함'] },
+  { key: 'storage', label: '약물보관법', placeholder: '예) 별도 보관장소 없음, 인슐린 냉장 보관 등', interventions: ['교육'] },
+  { key: 'adherence', label: '복약순응도', placeholder: '예) 해당 의약품명', interventions: ['교육', '환자를 통해 의료진 알림'] },
+  { key: 'interactionOtc', label: '처방약물-일반의약품 상호작용', placeholder: '예) 해당 의약품명', interventions: ['교육', '의료진 알림'] },
+  { key: 'interactionFood', label: '약물-음식 상호작용', placeholder: '예) 해당 의약품명', interventions: ['교육', '의료진 알림'] },
+  { key: 'interactionDisease', label: '약물-질환 상호작용', placeholder: '예) 해당 의약품명-질환', interventions: ['교육', '의료진 알림'] },
+  { key: 'etc', label: '기타', placeholder: '명시되지 않은 중재 사항을 간단히 기술', interventions: ['교육', '의료진 알림'] }
+];
+
+function loadRecords(){
+  try { return JSON.parse(localStorage.getItem(POLY_KEY) || '[]'); } catch(e){ return []; }
+}
+function saveRecords(list){
+  localStorage.setItem(POLY_KEY, JSON.stringify(list));
+}
+function emptyPlan(){
+  const plan = {};
+  PLAN_ROWS.forEach(r => { plan[r.key] = { detail: '', interventions: {} }; });
+  return plan;
+}
+function seedDummyRecords(){
+  const list = loadRecords().filter(r => !(r.id || '').startsWith('seed_'));
+  const dummies = [
+    {
+      id: 'seed_1', name: '김미영', phone: '010-2233-4455', birth: '1985-03-12',
+      createdAt: '2026-07-20 15:30', consultDate: '2026-07-20', consultMethod: 'visit', pharmacist: '김체크 약사',
+      rxCount: 2,
+      factors: Object.assign({}, ...FACTORS.map(f => ({ [f.key]: false })), { tenPlus: true, anticoagulant: false, cardio3: true, oral3: false }),
+      plan: emptyPlan(),
+      followup: { none: false, weeks: true, months: false },
+      followupMethod: { visit: true, home: false, phone: false }
+    },
+    {
+      id: 'seed_2', name: '박정호', phone: '010-9012-3456', birth: '1968-01-30',
+      createdAt: '2026-07-08 11:20', consultDate: '2026-07-08', consultMethod: 'visit', pharmacist: '김체크 약사',
+      rxCount: 1,
+      factors: Object.assign({}, ...FACTORS.map(f => ({ [f.key]: false })), { tenPlus: true }),
+      plan: emptyPlan(),
+      followup: { none: false, weeks: false, months: true },
+      followupMethod: { visit: true, home: false, phone: false }
+    }
+  ];
+  saveRecords(list.concat(dummies));
+}
+function isPageReload(){
+  try {
+    const nav = performance.getEntriesByType('navigation')[0];
+    if (nav) return nav.type === 'reload';
+  } catch(e){}
+  return performance.navigation && performance.navigation.type === 1;
+}
+// TEMP-DEV-ONLY: cl_note_v3.html과 동일하게, 새로고침 시에만 실제 생성분을 지우고 데모 2건으로 되돌림
+if (isPageReload()) localStorage.removeItem(POLY_KEY);
+seedDummyRecords();
+
+function renderTable(){
+  const list = loadRecords().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+  document.getElementById('totalCount').textContent = '(' + list.length + ')';
+  const wrap = document.getElementById('tableWrap');
+  if (!list.length){
+    wrap.innerHTML = '<div class="empty-wrap"><div class="empty-title">생성된 상담기록지가 없습니다</div>' +
+      '<div class="empty-sub">다제약물관리사업 대상 고객에게 복약지도문 발송을 완료하면 자동으로 생성됩니다.</div></div>';
+    return;
+  }
+  wrap.innerHTML = '<table>' +
+    '<thead><tr><th>기록지 생성일시</th><th>이름</th><th>인쇄</th><th>웹팩스 전송</th></tr></thead>' +
+    '<tbody>' + list.map(rowHTML).join('') + '</tbody>' +
+  '</table>';
+}
+function rowHTML(r){
+  return '<tr>' +
+    '<td class="td-date">' + (r.createdAt || '—') + '</td>' +
+    '<td class="td-name">' + (r.name || '—') + '</td>' +
+    '<td><button class="mgmt-btn mgmt-btn-solid" onclick="openRecordModal(\'' + r.id + '\')">인쇄</button></td>' +
+    '<td><button class="mgmt-btn mgmt-btn-outline" onclick="sendFax(\'' + r.id + '\')">전송하기</button></td>' +
+  '</tr>';
+}
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+function sendFax(id){
+  const rec = loadRecords().find(r => r.id === id);
+  if (!rec) return;
+  showToast(rec.name + '님의 다제약물 상담기록지가 웹팩스로 전송되었습니다.');
+}
+
+/* ── 기록지 편집 모달 ── */
+let currentRecordId = null;
+const METHOD_LABEL = { visit: '약국 방문', home: '자택 방문', phone: '전화 상담' };
+
+function radioGroup(name, options, current){
+  return '<div class="rf-radio-group">' + options.map(function(o){
+    return '<label><input type="radio" name="' + name + '" value="' + o.value + '"' + (current === o.value ? ' checked' : '') + '> ' + o.label + '</label>';
+  }).join('') + '</div>';
+}
+
+function openRecordModal(id){
+  const rec = loadRecords().find(r => r.id === id);
+  if (!rec) return;
+  currentRecordId = id;
+  document.getElementById('recordFormArea').innerHTML = buildRecordFormHtml(rec, true);
+  document.getElementById('recordModalLayer').classList.add('on');
+}
+function closeRecordModal(){
+  document.getElementById('recordModalLayer').classList.remove('on');
+  currentRecordId = null;
+}
+
+function buildRecordFormHtml(rec, editable){
+  const dis = editable ? '' : ' disabled';
+  const factorsHtml = FACTORS.map(function(f){
+    return '<label><input type="checkbox" data-factor="' + f.key + '"' + (rec.factors && rec.factors[f.key] ? ' checked' : '') + dis + '> ' + f.label + '</label>';
+  }).join('');
+  const planRowsHtml = PLAN_ROWS.map(function(row){
+    const cur = (rec.plan && rec.plan[row.key]) || { detail: '', interventions: {} };
+    const intvHtml = row.interventions.map(function(name){
+      return '<label><input type="checkbox" data-plan-int="' + row.key + '|' + name + '"' + (cur.interventions && cur.interventions[name] ? ' checked' : '') + dis + '> ' + name + '</label>';
+    }).join('');
+    return '<tr>' +
+      '<td>' + row.label + '</td>' +
+      '<td><input type="text" data-plan-detail="' + row.key + '" placeholder="' + row.placeholder + '" value="' + (cur.detail || '') + '"' + dis + '></td>' +
+      '<td><div class="rf-intv-list">' + intvHtml + '</div></td>' +
+    '</tr>';
+  }).join('');
+  const rxInfo = rec.rxCount ? ('있음 (' + rec.rxCount + '개)') : '없음';
+  return (
+    '<div class="rf-title">1차 상담</div>' +
+    '<div class="rf-band">환자 정보 및 상담 정보 (가능한 부분 기록)</div>' +
+    '<table class="rf-field-table">' +
+      '<tr><td class="rf-field-label">상담 환자</td><td class="rf-field-value">' + rec.name + '</td>' +
+        '<td class="rf-field-label">확인한 보관중인 처방전</td><td class="rf-field-value">' + rxInfo + '</td></tr>' +
+      '<tr><td class="rf-field-label">상담일자</td><td class="rf-field-value">' + rec.consultDate + '</td>' +
+        '<td class="rf-field-label">상담 방법</td><td class="rf-field-value">' +
+          radioGroup('consultMethod', [{value:'visit',label:'약국 방문'},{value:'home',label:'자택 방문'},{value:'phone',label:'전화 상담'}], rec.consultMethod) +
+        '</td></tr>' +
+      '<tr><td class="rf-field-label">상담 약사</td><td class="rf-field-value" colspan="3">' + rec.pharmacist + '</td></tr>' +
+    '</table>' +
+    '<div class="rf-section-label">관련 요인 <span style="font-weight:400;color:#888;font-size:12.8px;">(처방·복약 기록 기반 기본값 — 필요 시 직접 수정)</span></div>' +
+    '<div class="rf-factors"><div class="rf-factor-row">' + factorsHtml + '</div></div>' +
+    '<div class="rf-plan-note">약물요법 최적화 계획: <i>방문 완료 후 작성</i></div>' +
+    '<table class="rf-plan-table">' +
+      '<thead><tr><th>범주</th><th>"있음"에 해당하는 약물 상세</th><th>중재 방법</th></tr></thead>' +
+      '<tbody>' + planRowsHtml + '</tbody>' +
+    '</table>' +
+    '<div class="rf-followup-line"><b>2. 추가상담:</b>' +
+      radioGroup('followup', [{value:'none',label:'종료 (추가상담 불필요)'},{value:'weeks',label:'3~4주 이내'},{value:'months',label:'3개월 이내'}], followupCurrent(rec)) +
+    '</div>' +
+    '<div class="rf-followup-line"><b>추가상담 방법:</b>' +
+      radioGroup('followupMethod', [{value:'visit',label:'약국 방문'},{value:'home',label:'자택 방문'},{value:'phone',label:'전화 상담'}], followupMethodCurrent(rec)) +
+    '</div>'
+  );
+}
+function followupCurrent(rec){
+  if (!rec.followup) return '';
+  if (rec.followup.weeks) return 'weeks';
+  if (rec.followup.months) return 'months';
+  if (rec.followup.none) return 'none';
+  return '';
+}
+function followupMethodCurrent(rec){
+  if (!rec.followupMethod) return 'visit';
+  if (rec.followupMethod.home) return 'home';
+  if (rec.followupMethod.phone) return 'phone';
+  return 'visit';
+}
+
+/* 모달의 실제 입력값을 record 객체로 읽어들여 저장 — 취소를 누르면 이 단계 자체가 실행되지 않아 원본이 보존됨 */
+function readRecordFormInto(rec){
+  const area = document.getElementById('recordFormArea');
+  FACTORS.forEach(function(f){
+    const el = area.querySelector('[data-factor="' + f.key + '"]');
+    rec.factors[f.key] = !!(el && el.checked);
+  });
+  PLAN_ROWS.forEach(function(row){
+    const detailEl = area.querySelector('[data-plan-detail="' + row.key + '"]');
+    rec.plan[row.key].detail = detailEl ? detailEl.value.trim() : '';
+    row.interventions.forEach(function(name){
+      const el = area.querySelector('[data-plan-int="' + row.key + '|' + name + '"]');
+      rec.plan[row.key].interventions[name] = !!(el && el.checked);
+    });
+  });
+  const methodEl = area.querySelector('input[name="consultMethod"]:checked');
+  if (methodEl) rec.consultMethod = methodEl.value;
+  const fuEl = area.querySelector('input[name="followup"]:checked');
+  rec.followup = { none: fuEl && fuEl.value === 'none', weeks: fuEl && fuEl.value === 'weeks', months: fuEl && fuEl.value === 'months' };
+  const fuMethodEl = area.querySelector('input[name="followupMethod"]:checked');
+  const fmVal = fuMethodEl ? fuMethodEl.value : 'visit';
+  rec.followupMethod = { visit: fmVal === 'visit', home: fmVal === 'home', phone: fmVal === 'phone' };
+}
+
+function saveRecordModal(){
+  if (!currentRecordId) return;
+  const list = loadRecords();
+  const rec = list.find(r => r.id === currentRecordId);
+  if (!rec) return;
+  readRecordFormInto(rec);
+  saveRecords(list);
+  closeRecordModal();
+  printRecord(rec);
+  renderTable();
+}
+
+/* 저장된(읽기 전용) 상태 그대로 인쇄 영역을 채우고 시스템 인쇄 팝업을 띄움 */
+function printRecord(rec){
+  document.getElementById('printArea').innerHTML = buildPrintHtml(rec);
+  setTimeout(function(){ window.print(); }, 50);
+}
+function checkMark(v){ return v ? '☑' : '☐'; }
+function buildPrintHtml(rec){
+  const factorsHtml = FACTORS.map(function(f){
+    return '<span style="margin-right:14px;white-space:nowrap;">' + checkMark(rec.factors && rec.factors[f.key]) + ' ' + f.label + '</span>';
+  }).join('');
+  const tdStyle = 'border:1px solid #111;padding:8px;vertical-align:top;';
+  const planRowsHtml = PLAN_ROWS.map(function(row){
+    const cur = (rec.plan && rec.plan[row.key]) || { detail: '', interventions: {} };
+    const intvHtml = row.interventions.map(function(name){
+      return '<div>' + checkMark(cur.interventions && cur.interventions[name]) + ' ' + name + '</div>';
+    }).join('');
+    return '<tr>' +
+      '<td style="' + tdStyle + 'font-weight:600;">' + row.label + '</td>' +
+      '<td style="' + tdStyle + '">' + (cur.detail || '&nbsp;') + '</td>' +
+      '<td style="' + tdStyle + '">' + intvHtml + '</td>' +
+    '</tr>';
+  }).join('');
+  const rxInfo = rec.rxCount ? ('있음 (' + rec.rxCount + '개)') : '없음';
+  const methodHtml = ['visit', 'home', 'phone'].map(function(v){
+    return checkMark(rec.consultMethod === v) + ' ' + METHOD_LABEL[v];
+  }).join('&nbsp;&nbsp;');
+  const followupHtml = checkMark(rec.followup && rec.followup.none) + ' 종료(추가상담 불필요) &nbsp;&nbsp;' +
+    checkMark(rec.followup && rec.followup.weeks) + ' 3~4주 이내 &nbsp;&nbsp;' +
+    checkMark(rec.followup && rec.followup.months) + ' 3개월 이내';
+  const followupMethodHtml = ['visit', 'home', 'phone'].map(function(v){
+    return checkMark(rec.followupMethod && rec.followupMethod[v]) + ' ' + METHOD_LABEL[v];
+  }).join('&nbsp;&nbsp;');
+  return (
+    '<div style="font-family:\'Noto Sans KR\',sans-serif;font-size:13px;color:#111;">' +
+    '<div style="font-size:18px;font-weight:700;margin-bottom:10px;">1차 상담</div>' +
+    '<div style="background:#FDF3D8;font-weight:600;padding:8px 12px;border:1px solid #111;border-bottom:none;">환자 정보 및 상담 정보 (가능한 부분 기록)</div>' +
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:14px;">' +
+      '<tr><td style="border:1px solid #111;background:#F5F5F5;font-weight:700;padding:8px 12px;width:150px;">상담 환자</td><td style="border:1px solid #111;padding:8px 12px;">' + rec.name + '</td>' +
+        '<td style="border:1px solid #111;background:#F5F5F5;font-weight:700;padding:8px 12px;width:170px;">확인한 보관중인 처방전</td><td style="border:1px solid #111;padding:8px 12px;">' + rxInfo + '</td></tr>' +
+      '<tr><td style="border:1px solid #111;background:#F5F5F5;font-weight:700;padding:8px 12px;">상담일자</td><td style="border:1px solid #111;padding:8px 12px;">' + rec.consultDate + '</td>' +
+        '<td style="border:1px solid #111;background:#F5F5F5;font-weight:700;padding:8px 12px;">상담 방법</td><td style="border:1px solid #111;padding:8px 12px;">' + methodHtml + '</td></tr>' +
+      '<tr><td style="border:1px solid #111;background:#F5F5F5;font-weight:700;padding:8px 12px;">상담 약사</td><td style="border:1px solid #111;padding:8px 12px;" colspan="3">' + rec.pharmacist + '</td></tr>' +
+    '</table>' +
+    '<div style="font-weight:700;margin-bottom:8px;">관련 요인</div>' +
+    '<div style="border:1px solid #111;padding:10px 14px;margin-bottom:14px;line-height:2;">' + factorsHtml + '</div>' +
+    '<div style="margin-bottom:8px;">약물요법 최적화 계획: <i style="color:#666;">방문 완료 후 작성</i></div>' +
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:14px;">' +
+      '<tr><th style="border:1px solid #111;background:#F5F5F5;padding:8px;">범주</th><th style="border:1px solid #111;background:#F5F5F5;padding:8px;">"있음"에 해당하는 약물 상세</th><th style="border:1px solid #111;background:#F5F5F5;padding:8px;">중재 방법</th></tr>' +
+      planRowsHtml +
+    '</table>' +
+    '<div style="margin-bottom:6px;"><b>2. 추가상담:</b> ' + followupHtml + '</div>' +
+    '<div><b>추가상담 방법:</b> ' + followupMethodHtml + '</div>' +
+    '</div>'
+  );
+}
+
+/* poly_consult_record_v3.html?open=<id> — modal_send_v3.html의 "다제약물 상담기록지 확인" 버튼에서
+   넘어온 경우, 그 기록을 자동으로 열어서 편집/미리보기 팝업을 바로 띄워줌 */
+function openFromQuery(){
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('open');
+  if (id) openRecordModal(id);
+}
+
+renderTable();
+openFromQuery();
+</script>
+</body>
+</html>

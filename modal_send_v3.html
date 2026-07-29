@@ -115,9 +115,22 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .med-check-empty{text-align:center;color:var(--color-grey-400);padding:16px;}
 .med-check-group-box{border:1px solid var(--color-grey-250);border-radius:8px;overflow:hidden;}
 .med-check-group-label{background:#EEF0F3;color:#5F6E7D;font-size:14px;font-weight:700;letter-spacing:-0.48px;padding:8px 14px;border-bottom:1px solid var(--color-grey-250);}
-.med-check-card{padding:10px 14px;border-bottom:1px solid var(--color-grey-200);font-size:15px;color:var(--color-grey-800);line-height:1.5;}
+.med-check-card{padding:10px 14px;border-bottom:1px solid var(--color-grey-200);font-size:15px;color:var(--color-grey-800);line-height:1.5;cursor:pointer;}
 .med-check-card:last-child{border-bottom:none;}
 .med-check-card b{font-weight:700;margin-right:5px;}
+.med-check-card-row{display:flex;align-items:center;gap:8px;}
+.med-check-card-text{flex:1;}
+.med-check-chevron{flex-shrink:0;color:var(--color-grey-400);transition:transform .15s;}
+.med-check-chevron.open{transform:rotate(180deg);}
+.med-check-detail-wrap{margin-top:8px;}
+.med-detail{border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;}
+.med-detail-line{color:var(--color-grey-700);}
+.med-detail-warn{font-weight:700;}
+.med-detail-interaction{background:#FFF1F1;text-align:center;}
+.med-detail-interaction .med-detail-warn{color:var(--color-red);}
+.med-detail-caution{background:#FFF8E8;border:1px solid #FBE6B0;display:flex;gap:8px;align-items:flex-start;}
+.med-detail-caution .med-detail-icon{color:#FF8A00;font-size:14px;flex-shrink:0;margin-top:1px;}
+.med-detail-caution .med-detail-warn{color:var(--color-red);}
 
 /* component: new/rx-drug-list — "처방약 상담" 선택 시에만 노출되는 처방약 정보 표 */
 .rx-drug-list-section{flex-shrink:0;margin-bottom:16px;}
@@ -411,7 +424,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
   <span>QA 상태</span>
   <select onchange="setPzStyle(this.value)">
     <option value="v3">수정 시안</option>
-    <option value="v2">퍼즐 AI 기본</option>
+    <option value="v2" selected>퍼즐 AI 기본</option>
   </select>
 </div>
 
@@ -594,6 +607,8 @@ var PHARMACY_NAME = '웰체크약국';
 
 /* 상담(녹음) 중 대화를 AI가 요약한 내용 — 약사가 직접 쓴 게 아니라는 걸 명확히 하기 위해 [상담 내용 요약]로 초안 하단에 덧붙임 (v2 SUMMARY_TEXT 그대로 포팅) */
 var AI_SUMMARY_TEXT = '오메가3·헤모큐·임팩타민은 식후에 복용하고, 공복 시 위장 불편 가능함. 수면 부족·과다 카페인 시 효과 감소하므로 생활습관 관리 필요. 밀크시슬은 내일 12시 입고 예정이며, 방문 시 구입 가능함.';
+/* 약사 메모 인풋란 데모용 기본 텍스트 — 저장된 메모가 없을 때만 채워짐(getMemoKey 기준으로 실제 저장되면 그 값이 우선) */
+var DEFAULT_PHARMACIST_MEMO = '공복 시 위장 불편감 호소, 식후 복용 권장 안내함.\n최근 수면 부족·카페인 과다 섭취 언급 — 생활습관 관리 필요성 설명함.';
 /* ── 복약지도문 초안 — AI 요약 내용/처방약 정보/다제약물 정보 3개 섹션을 goSummary()의 체크박스로 켜고 끌 수 있음.
    각 섹션은 해당 데이터가 실제로 있을 때만(hasRxInfoAvailable/hasPolyInfoAvailable) 켠 상태로 반영됨 ── */
 var msgIncludeSummary = true;
@@ -814,7 +829,7 @@ var currentMatches = [];
 var selectedRxIds = [];
 var editingDrugsMap = {};
 /* QA로 전환 가능한 퍼즐 AI 패널 디자인 — 'v3'(원본, 전체너비 종료버튼) / 'v2'(이름+나이·방문정보 바+마이크·입력바), setPzStyle() 참고 */
-var pzStyle = 'v3';
+var pzStyle = 'v2';
 var recordingActive = false;
 /* "상담 종료"(endRecording) 이후 true — 신규 고객은 이 시점 이후에도 이름 영역이 계속 클릭 가능하지만,
    실제로 이름을 바꾸거나 삭제하면 지금까지 내용은 임시저장되고 새 녹음이 시작됨(commitEditName/removePatient
@@ -912,7 +927,9 @@ function openModalAtStep2(customerData){
     ? (selectedPatient.rxHistory || []).filter(function(rx){ return rx.date === customerData.rxDate; })
     : [];
   if(!targetRxs.length && customerData.rxDate){
-    var synthRx = { id: 'listRx_' + customerData.rxDate, hospital: customerData.rxHospital || '', date: customerData.rxDate, guidanceSent: false, drugs: [] };
+    /* 접수 처방전 목록에서 넘어온 처방약 정보(customerData.drugs)를 그대로 실어 보냄 —
+       PATIENTS mock에 없는 고객이라도 목록에서 확인했던 처방약이 화면에 그대로 보여야 하기 때문 */
+    var synthRx = { id: 'listRx_' + customerData.rxDate, hospital: customerData.rxHospital || '', date: customerData.rxDate, guidanceSent: false, drugs: customerData.drugs || [] };
     selectedPatient.rxHistory = (selectedPatient.rxHistory || []).concat([synthRx]);
     targetRxs = [synthRx];
   }
@@ -1265,10 +1282,14 @@ function renderPolyAlertHtml(patient){
 }
 /* 약물 상호작용/병용주의 mock 데이터 — 실제 서비스에서는 DUR(의약품 안전사용서비스) 연동 대상 */
 var DRUG_INTERACTIONS = [
-  { drugs: ['아스피린', '실로스타졸'], desc: '출혈 위험 증가' }
+  { drugs: ['아스피린', '실로스타졸'], desc: '출혈 위험 증가',
+    detailLead: '아스피린과 실로스타졸의 동시 복용은',
+    detailWarn: '출혈 위험이 증가할 수 있어 주의가 필요합니다.' }
 ];
 var DRUG_CAUTIONS = [
-  { drugs: ['아스피린', '오메프라졸'], desc: 'PPI 병용 시 아스피린 흡수 감소 가능' }
+  { drugs: ['아스피린', '오메프라졸'], desc: 'PPI 병용 시 아스피린 흡수 감소 가능',
+    detailLines: ['아스피린과 오메프라졸을 병용하면', '위산 분비가 억제되어 아스피린의 흡수가 줄어들 수 있습니다.'],
+    detailWarn: '증상 변화가 있는지 관찰이 필요합니다.' }
 ];
 var POLY_REF_TYPE_LABEL = { interaction: '상호작용', caution: '금기·주의', duplicate: '중복 성분' };
 /* 상품명은 달라도 주성분이 같은 약 — 동일 성분 중복 처방 판정에 사용(상품명이 같은 경우는
@@ -1286,6 +1307,32 @@ function medPeriodsOverlap(a, b){
   var bStart = new Date(b.date);
   var bEnd = new Date(b.date); bEnd.setDate(bEnd.getDate() + b.days);
   return aStart < bEnd && bStart < aEnd;
+}
+/* 복약 점검 항목 카드의 "더보기"를 눌렀을 때 펼쳐지는 상세 설명 — 유형별로 톤이 다름
+   (상호작용: 연한 핑크 + 가운데 정렬, 금기·주의/중복 성분: 연한 노랑 + 경고 아이콘) */
+function buildInteractionDetailHtml(it){
+  return '<div class="med-detail med-detail-interaction">' +
+    '<div class="med-detail-line">' + it.detailLead + '</div>' +
+    '<div class="med-detail-line med-detail-warn">' + it.detailWarn + '</div>' +
+  '</div>';
+}
+function buildCautionDetailHtml(it){
+  return '<div class="med-detail med-detail-caution">' +
+    '<div class="med-detail-icon">⚠</div>' +
+    '<div class="med-detail-body">' +
+      it.detailLines.map(function(l){ return '<div class="med-detail-line">' + l + '</div>'; }).join('') +
+      '<div class="med-detail-line med-detail-warn">' + it.detailWarn + '</div>' +
+    '</div>' +
+  '</div>';
+}
+function buildDuplicateDetailHtml(drugNames){
+  return '<div class="med-detail med-detail-caution">' +
+    '<div class="med-detail-icon">⚠</div>' +
+    '<div class="med-detail-body">' +
+      '<div class="med-detail-line">' + drugNames.join(' + ') + '은(는) 동일 성분이 중복 처방되었습니다.</div>' +
+      '<div class="med-detail-line med-detail-warn">과다복용 위험이 있으니 복용 여부를 확인해 주세요.</div>' +
+    '</div>' +
+  '</div>';
 }
 /* 각주 목록 생성 — 상호작용/금기·주의는 mock 페어에서, 중복 성분은 같은 주성분(상품명이 달라도
    DRUG_INGREDIENT로 매핑되는 성분 기준)의 복약 기간이 겹치는 경우에만 자동 판정 */
@@ -1312,18 +1359,18 @@ function buildPolyFootnotes(drugs){
     if(!overlapping.length) return;
     var drugNames = overlapping.map(function(d){ return d.name; }).filter(function(n, i, arr){ return arr.indexOf(n) === i; });
     var dates = overlapping.map(function(d){ return d.date; }).filter(function(d, i, arr){ return arr.indexOf(d) === i; });
-    footnotes.push({ type: 'duplicate', html: '<b>' + drugNames.join(' + ') + '</b> 동일 성분 중복 처방 (' + dates.join(', ') + ')' });
+    footnotes.push({ type: 'duplicate', html: '<b>' + drugNames.join(' + ') + '</b> 동일 성분 중복 처방 (' + dates.join(', ') + ')', detail: buildDuplicateDetailHtml(drugNames) });
   });
   DRUG_INTERACTIONS.forEach(function(it){
     if(it.drugs.every(function(d){ return names.indexOf(d) > -1; })){
       var dates = drugs.filter(function(d){ return it.drugs.indexOf(d.name) > -1; }).map(function(d){ return d.date; }).filter(function(d, i, arr){ return arr.indexOf(d) === i; });
-      footnotes.push({ type: 'interaction', html: '<b>' + it.drugs.join(' + ') + '</b> ' + it.desc + ' (' + dates.join(', ') + ')' });
+      footnotes.push({ type: 'interaction', html: '<b>' + it.drugs.join(' + ') + '</b> ' + it.desc + ' (' + dates.join(', ') + ')', detail: buildInteractionDetailHtml(it) });
     }
   });
   DRUG_CAUTIONS.forEach(function(it){
     if(it.drugs.every(function(d){ return names.indexOf(d) > -1; })){
       var dates = drugs.filter(function(d){ return it.drugs.indexOf(d.name) > -1; }).map(function(d){ return d.date; }).filter(function(d, i, arr){ return arr.indexOf(d) === i; });
-      footnotes.push({ type: 'caution', html: '<b>' + it.drugs.join(' + ') + '</b> ' + it.desc + ' (' + dates.join(', ') + ')' });
+      footnotes.push({ type: 'caution', html: '<b>' + it.drugs.join(' + ') + '</b> ' + it.desc + ' (' + dates.join(', ') + ')', detail: buildCautionDetailHtml(it) });
     }
   });
   return footnotes;
@@ -1331,6 +1378,7 @@ function buildPolyFootnotes(drugs){
 var MED_CHECK_STAT_LABEL = { duplicate: '동일 성분', interaction: '상호작용', caution: '금기·주의' };
 /* 복약 점검 항목 — 다제약물관리사업 대상 추정 근거(getPolyQualifyingDrugs)에서 나온 약물들의
    동일 성분/상호작용/금기·주의 각주를 유형별로 완전히 분리된 박스로 묶어서 보여줌 */
+var MED_CHECK_CHEVRON_SVG = '<svg class="med-check-chevron" width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function medCheckCardsHtml(footnotes){
   if(!footnotes.length) return '<div class="med-check-empty">해당하는 항목이 없습니다.</div>';
   return ['duplicate', 'interaction', 'caution'].map(function(t){
@@ -1338,9 +1386,22 @@ function medCheckCardsHtml(footnotes){
     if(!items.length) return '';
     return '<div class="med-check-group-box">' +
       '<div class="med-check-group-label">' + MED_CHECK_STAT_LABEL[t] + '</div>' +
-      items.map(function(f){ return '<div class="med-check-card">' + f.html + '</div>'; }).join('') +
+      items.map(function(f){
+        return '<div class="med-check-card" onclick="toggleMedDetail(this)">' +
+          '<div class="med-check-card-row"><span class="med-check-card-text">' + f.html + '</span>' + MED_CHECK_CHEVRON_SVG + '</div>' +
+          '<div class="med-check-detail-wrap" style="display:none;">' + f.detail + '</div>' +
+        '</div>';
+      }).join('') +
     '</div>';
   }).join('');
+}
+/* 복약 점검 카드 — 행 자체를 눌러서 그 항목에 대한 문제 상황 설명을 펼치고/접음 */
+function toggleMedDetail(card){
+  var wrap = card.querySelector('.med-check-detail-wrap');
+  var chevron = card.querySelector('.med-check-chevron');
+  var isOpen = wrap.style.display !== 'none';
+  wrap.style.display = isOpen ? 'none' : '';
+  if(chevron) chevron.classList.toggle('open', !isOpen);
 }
 /* "처방약 상담"을 선택했을 때만(getSelectedRxs().length>0) 노출하는 처방약 정보 표 —
    의약품 이미지(등록된 약품은 실물 사진, 없으면 자리표시용 캡슐 아이콘)/약 이름/분류/
@@ -1662,7 +1723,7 @@ function renderMainRecordingContent(){
       renderPolyDrugTableHtml(selectedPatient);
   }
   var savedMemo = localStorage.getItem(getMemoKey());
-  if(savedMemo !== null) document.getElementById('pharmacistMemo').value = savedMemo;
+  document.getElementById('pharmacistMemo').value = savedMemo !== null ? savedMemo : DEFAULT_PHARMACIST_MEMO;
   updateMemoCount();
 }
 

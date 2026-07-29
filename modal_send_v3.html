@@ -923,12 +923,11 @@ function openModalAtStep2(customerData){
     selectedPatient.rxHistory = (selectedPatient.rxHistory || []).concat([synthRx]);
     targetRxs = [synthRx];
   }
-  var recentRxs = targetRxs.length ? targetRxs : getMostRecentDateRxs(selectedPatient);
-  selectedRxIds = recentRxs.length === 1
-    ? [recentRxs[0].id]
-    : recentRxs.filter(function(rx){ return !rx.guidanceSent; }).map(function(rx){ return rx.id; });
-  beginRecording();
-  applyPostRxCheckStepLabels();
+  renderModalPtBar(true);
+  updatePzIdentity();
+  document.getElementById('stepTabs').style.display = '';
+  pendingStartRecording = true;
+  showInlineRxCheck(targetRxs);
 }
 /* 모달을 닫을 땐 확인 절차 없이 그냥 닫되, 진행 중이던 세션이 있으면 항상 "복약 상담함"에 임시저장 기록으로 남김
    (cl_note_v3.html이 사용하는 wcCLNotes localStorage와 동일한 스키마) */
@@ -1021,7 +1020,7 @@ function convertToExistingPatient(i){
 }
 
 /* ── 녹음 중 인라인 처방전 확인 — 단골 전환 시에만 잠깐 보여주고, 확인하면 다시 메모 화면으로 복귀(녹음은 계속 진행) ── */
-function showInlineRxCheck(){
+function showInlineRxCheck(explicitRxs){
   hadInlineRxCheck = true;
   document.getElementById('st1').innerHTML = '<span class="step-num">1</span> 처방전 확인';
   document.getElementById('st2').innerHTML = '<span class="step-num">2</span> 복약 상담';
@@ -1029,7 +1028,7 @@ function showInlineRxCheck(){
   document.getElementById('st3').innerHTML = '<span class="step-num">3</span> 복약지도문 작성';
   setStep(1);
 
-  var recentRxs = getMostRecentDateRxs(selectedPatient);
+  var recentRxs = (explicitRxs && explicitRxs.length) ? explicitRxs : getMostRecentDateRxs(selectedPatient);
   selectedRxIds = recentRxs.length === 1
     ? [recentRxs[0].id]
     : recentRxs.filter(function(rx){ return !rx.guidanceSent; }).map(function(rx){ return rx.id; });
@@ -1061,12 +1060,17 @@ function showInlineRxCheck(){
 function confirmRxCheckWithRx(){
   applyPostRxCheckStepLabels();
   renderMainRecordingContent();
+  if(pendingStartRecording){ pendingStartRecording = false; startRecordingEngine(); }
 }
 function confirmRxCheckNone(){
   selectedRxIds = [];
   applyPostRxCheckStepLabels();
   renderMainRecordingContent();
+  if(pendingStartRecording){ pendingStartRecording = false; startRecordingEngine(); }
 }
+/* 접수 처방전 목록(openModalAtStep2)처럼 녹음이 아직 시작 안 된 상태로 처방전 확인부터 보여줘야
+   하는 경우에만 true — 확인이 끝나는 시점(confirmRxCheckWithRx/None)에 그때 녹음을 시작시킨다 */
+var pendingStartRecording = false;
 /* 처방전 확인을 거친 단골은 확인 후에도 3단계를 유지 — ①는 숫자 그대로 유지,
    ②(복약 상담)가 현재 단계가 됨 */
 function applyPostRxCheckStepLabels(){
@@ -1900,7 +1904,12 @@ function beginRecording(){
   setStep(1);
   applyRecordingStepLabels();
   renderMainRecordingContent();
-
+  startRecordingEngine();
+}
+/* beginRecording()에서 실제 녹음 엔진(타이머·STT·우측 패널) 기동 부분만 분리 —
+   처방전 확인(showInlineRxCheck)을 먼저 거쳐야 하는 진입 경로(openModalAtStep2)에서
+   확인 전에는 녹음을 시작하지 않고, 확인 완료 시점에만 이 함수를 호출하기 위함 */
+function startRecordingEngine(){
   recordingActive = true;
   seconds = 0;
   renderPzRecordingChrome();

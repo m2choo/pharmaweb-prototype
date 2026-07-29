@@ -500,7 +500,6 @@ function confirmDeleteNote() {
   if (!pendingDeleteId) return;
   saveNotes(loadNotes().filter(n => n.id !== pendingDeleteId));
   closeDeleteConfirm();
-  renderFilterTabs();
   renderTable();
   showToast('임시저장 기록이 삭제되었습니다.');
 }
@@ -508,7 +507,6 @@ function confirmDeleteNote() {
 function saveResumeDraft() {
   updateModalRecord('임시저장');
   doCloseView();
-  renderFilterTabs();
   renderTable();
   showToast('복약지도가 임시저장되었습니다.');
 }
@@ -521,7 +519,6 @@ function sendResumeFinal() {
   }
   updateModalRecord('발송완료');
   doCloseView();
-  renderFilterTabs();
   renderTable();
   showToast('복약지도가 발송되었습니다.');
 }
@@ -566,7 +563,6 @@ function confirmClose() {
   doCloseView();
 }
 
-renderFilterTabs();
 renderTable();
 
 function toggleLnbCollapse() {

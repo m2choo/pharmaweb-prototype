@@ -126,8 +126,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:transparent;
 .med-detail{border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;}
 .med-detail-line{color:var(--color-grey-700);}
 .med-detail-warn{font-weight:700;}
-.med-detail-interaction{background:#FFF1F1;text-align:center;}
-.med-detail-interaction .med-detail-warn{color:var(--color-red);}
 .med-detail-caution{background:#FFF8E8;border:1px solid #FBE6B0;display:flex;gap:8px;align-items:flex-start;}
 .med-detail-caution .med-detail-icon{color:#FF8A00;font-size:14px;flex-shrink:0;margin-top:1px;}
 .med-detail-caution .med-detail-warn{color:var(--color-red);}
@@ -1308,12 +1306,15 @@ function medPeriodsOverlap(a, b){
   var bEnd = new Date(b.date); bEnd.setDate(bEnd.getDate() + b.days);
   return aStart < bEnd && bStart < aEnd;
 }
-/* 복약 점검 항목 카드의 "더보기"를 눌렀을 때 펼쳐지는 상세 설명 — 유형별로 톤이 다름
-   (상호작용: 연한 핑크 + 가운데 정렬, 금기·주의/중복 성분: 연한 노랑 + 경고 아이콘) */
+/* 복약 점검 항목 카드를 펼쳤을 때 나오는 상세 설명 — 상호작용/금기·주의/중복 성분 모두 같은 톤
+   (연한 노랑 + 경고 아이콘 + 좌측 정렬)으로 통일 */
 function buildInteractionDetailHtml(it){
-  return '<div class="med-detail med-detail-interaction">' +
-    '<div class="med-detail-line">' + it.detailLead + '</div>' +
-    '<div class="med-detail-line med-detail-warn">' + it.detailWarn + '</div>' +
+  return '<div class="med-detail med-detail-caution">' +
+    '<div class="med-detail-icon">⚠</div>' +
+    '<div class="med-detail-body">' +
+      '<div class="med-detail-line">' + it.detailLead + '</div>' +
+      '<div class="med-detail-line med-detail-warn">' + it.detailWarn + '</div>' +
+    '</div>' +
   '</div>';
 }
 function buildCautionDetailHtml(it){
@@ -1722,8 +1723,11 @@ function renderMainRecordingContent(){
       renderRxDrugListHtml() +
       renderPolyDrugTableHtml(selectedPatient);
   }
+  /* 기본 예시 메모는 이전 방문 이력이 있는 단골에게만 자연스러움 — 신규 고객은 참고할 이전 상담이
+     없으므로 빈 칸으로 둠 */
   var savedMemo = localStorage.getItem(getMemoKey());
-  document.getElementById('pharmacistMemo').value = savedMemo !== null ? savedMemo : DEFAULT_PHARMACIST_MEMO;
+  var fallbackMemo = selectedPatient.isNew ? '' : DEFAULT_PHARMACIST_MEMO;
+  document.getElementById('pharmacistMemo').value = savedMemo !== null ? savedMemo : fallbackMemo;
   updateMemoCount();
 }
 
